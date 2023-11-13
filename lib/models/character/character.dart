@@ -6,6 +6,7 @@ import 'package:amt/models/character/consumible_state.dart';
 import 'package:amt/models/character/character_ki.dart';
 import 'package:amt/models/character_profile.dart';
 import 'package:amt/models/combat_data.dart';
+import 'package:amt/models/mystical.dart';
 import 'package:amt/models/roll.dart';
 import 'package:amt/models/weapon.dart';
 import 'package:uuid/uuid.dart';
@@ -18,6 +19,7 @@ class Character {
   late CharacterState state;
   late CombatData combat;
   late CharacterKi? ki;
+  late Mystical? mystical;
 
   static int initiativeSort(Character a, Character b) {
     if (a.state.currentTurn.roll > b.state.currentTurn.roll) {
@@ -80,7 +82,6 @@ class Character {
 
     if (json['Ki'] != null) {
       ki = CharacterKi.fromJson(json['Ki']);
-      print(ki?.maximumPerAttribute.agility.toString());
 
       if (ki!.maximumPerAttribute.hasAValueWithMoreThanZero()) {
         var names = AttributesList.names();
@@ -106,6 +107,17 @@ class Character {
       }
     } else {
       ki = null;
+    }
+
+    if (json['Misticos'] != null) {
+      mystical = Mystical.fromJson(json['Misticos']);
+
+      consumibles.add(ConsumibleState(
+        name: "Zeon",
+        maxValue: mystical?.zeon ?? 0,
+        actualValue: mystical?.zeon ?? 0,
+        step: mystical?.act ?? 0,
+      ));
     }
 
     state = CharacterState(
