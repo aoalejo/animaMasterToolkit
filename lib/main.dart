@@ -2,10 +2,15 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:amt/models/character/character.dart';
+import 'package:amt/models/character/character_state.dart';
+import 'package:amt/models/character/status_modifier.dart';
+import 'package:amt/presentation/actions_card.dart';
 import 'package:amt/presentation/consumible_card.dart';
+import 'package:amt/presentation/modifiers_card.dart';
 import 'package:amt/presentation/text_card.dart';
 import 'package:amt/presentation/turn_card.dart';
 import 'package:amt/presentation/weapons_rack.dart';
+import 'package:amt/utils/assets.dart';
 import 'package:amt/utils/debouncer.dart';
 import 'package:enough_convert/windows.dart';
 import 'package:file_picker/file_picker.dart';
@@ -210,30 +215,30 @@ class GeneratorPage extends StatelessWidget {
                             crossAxisCount: 2,
                             childAspectRatio: 2,
                             children: [
-                              for (var consumible in item.state.consumibles)
+                              for (var consumible in item.state.consumables)
                                 ConsumibleCard(
                                   consumible,
                                   onChangedActual: (actual) {
-                                    int index = item.state.consumibles
+                                    int index = item.state.consumables
                                         .indexOf(consumible);
                                     consumible.actualValue =
                                         actual.interpret().toInt();
                                     _debouncer.run(
                                       () => {
-                                        item.state.consumibles[index] =
+                                        item.state.consumables[index] =
                                             consumible,
                                         appState.updateCharacter(item),
                                       },
                                     );
                                   },
                                   onChangedMax: (max) {
-                                    int index = item.state.consumibles
+                                    int index = item.state.consumables
                                         .indexOf(consumible);
                                     consumible.maxValue =
                                         max.interpret().toInt();
                                     _debouncer.run(
                                       () => {
-                                        item.state.consumibles[index] =
+                                        item.state.consumables[index] =
                                             consumible,
                                         appState.updateCharacter(item),
                                       },
@@ -243,22 +248,47 @@ class GeneratorPage extends StatelessWidget {
                             ],
                           ),
                         ),
-                        TextFormField(
-                          decoration: InputDecoration(
-                            isDense: true,
-                            border: OutlineInputBorder(),
-                            contentPadding: EdgeInsets.all(8),
+                        SizedBox(
+                          height: 100,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              SizedBox(
+                                height: 30,
+                                child: Center(
+                                  child: TextFormField(
+                                    decoration: InputDecoration(
+                                      isDense: true,
+                                      border: OutlineInputBorder(),
+                                      contentPadding: EdgeInsets.all(8),
+                                    ),
+                                    initialValue: item.state.notes,
+                                    onChanged: (newText) {
+                                      _debouncer.run(
+                                        () => {
+                                          item.state.notes = newText,
+                                          appState.updateCharacter(item),
+                                        },
+                                      );
+                                    },
+                                  ),
+                                ),
+                              ),
+                              Row(
+                                children: [
+                                  ActionsCard(
+                                    onAtack: () {},
+                                    onDodge: () {},
+                                    onParry: () {},
+                                    onChangeModifiers: () {},
+                                  ),
+                                  ModifiersCard(
+                                      modifiers: item.state.modifiers),
+                                ],
+                              )
+                            ],
                           ),
-                          initialValue: item.state.notes,
-                          onChanged: (newText) {
-                            _debouncer.run(
-                              () => {
-                                item.state.notes = newText,
-                                appState.updateCharacter(item),
-                              },
-                            );
-                          },
-                        )
+                        ),
                       ],
                     )
                 ],

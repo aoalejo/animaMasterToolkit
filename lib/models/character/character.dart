@@ -4,6 +4,7 @@ import 'package:amt/models/attributes_list.dart';
 import 'package:amt/models/character/character_state.dart';
 import 'package:amt/models/character/consumible_state.dart';
 import 'package:amt/models/character/character_ki.dart';
+import 'package:amt/models/character/status_modifier.dart';
 import 'package:amt/models/character_profile.dart';
 import 'package:amt/models/combat_data.dart';
 import 'package:amt/models/mystical.dart';
@@ -121,7 +122,16 @@ class Character {
     }
 
     state = CharacterState(
-      consumibles: consumibles,
+      consumables: consumibles,
+      modifiers: [
+        StatusModifier(name: "Derribado"),
+        StatusModifier(name: "Ceguera parcial"),
+        StatusModifier(name: "Paralisis parcial"),
+        StatusModifier(name: "Desenfundar"),
+        StatusModifier(name: "test4"),
+        StatusModifier(name: "test5"),
+        StatusModifier(name: "test6")
+      ],
       currentTurn: Roll.roll(base: combat.weapons.first.turn),
     );
   }

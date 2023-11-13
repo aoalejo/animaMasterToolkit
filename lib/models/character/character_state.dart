@@ -1,10 +1,12 @@
 import 'package:amt/models/character/consumible_state.dart';
+import 'package:amt/models/character/status_modifier.dart';
 import 'package:amt/models/roll.dart';
 
 class CharacterState {
   int selectedWeaponIndex = 0;
   bool hasAction = true;
-  List<ConsumibleState> consumibles = [];
+  List<ConsumibleState> consumables = [];
+  List<StatusModifier> modifiers = [];
   String notes = "";
   Roll currentTurn = Roll(description: "", roll: 0);
   int turnModifier = 0;
@@ -14,6 +16,7 @@ class CharacterState {
     this.hasAction = true,
     this.notes = "",
     required this.currentTurn,
-    required this.consumibles,
+    required this.consumables,
+    required this.modifiers,
   });
 }
