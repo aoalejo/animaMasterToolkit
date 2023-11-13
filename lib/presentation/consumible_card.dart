@@ -19,14 +19,34 @@ class ConsumibleCard extends StatelessWidget {
     final styleS = theme.textTheme.bodySmall;
     final styleM = theme.textTheme.bodyMedium;
 
+    var header = Row(
+      mainAxisAlignment: consumible.step > 0
+          ? MainAxisAlignment.spaceAround
+          : MainAxisAlignment.center,
+      children: [
+        Text(
+          consumible.name,
+          style: styleS,
+          textAlign: TextAlign.center,
+        ),
+        consumible.step > 0
+            ? Icon(
+                Icons.info,
+                size: 16,
+              )
+            : Container(),
+      ],
+    );
+
     return Card(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          Text(
-            consumible.name,
-            style: styleS,
-          ),
+          consumible.step > 0
+              ? Tooltip(
+                  message: 'incremento: ${consumible.step.toString()}',
+                  child: header)
+              : header,
           Row(
             children: [
               Expanded(
@@ -37,8 +57,8 @@ class ConsumibleCard extends StatelessWidget {
                     border: InputBorder.none,
                     contentPadding: EdgeInsets.all(4),
                   ),
-                  style: consumible.maxValue > 999 ? styleS : styleM,
-                  initialValue: consumible.maxValue.toString(),
+                  style: consumible.actualValue > 999 ? styleS : styleM,
+                  initialValue: consumible.actualValue.toString(),
                   onChanged: onChangedActual,
                 ),
               ),
@@ -51,8 +71,8 @@ class ConsumibleCard extends StatelessWidget {
                     border: InputBorder.none,
                     contentPadding: EdgeInsets.all(4),
                   ),
-                  style: consumible.actualValue > 999 ? styleS : styleM,
-                  initialValue: consumible.actualValue.toString(),
+                  style: consumible.maxValue > 999 ? styleS : styleM,
+                  initialValue: consumible.maxValue.toString(),
                   onChanged: onChangedMax,
                 ),
               )

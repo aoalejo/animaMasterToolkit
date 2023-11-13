@@ -226,7 +226,19 @@ class GeneratorPage extends StatelessWidget {
                                       },
                                     );
                                   },
-                                  onChangedMax: (max) {},
+                                  onChangedMax: (max) {
+                                    int index = item.state.consumibles
+                                        .indexOf(consumible);
+                                    consumible.maxValue =
+                                        max.interpret().toInt();
+                                    _debouncer.run(
+                                      () => {
+                                        item.state.consumibles[index] =
+                                            consumible,
+                                        appState.updateCharacter(item),
+                                      },
+                                    );
+                                  },
                                 ),
                             ],
                           ),

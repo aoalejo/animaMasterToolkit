@@ -1,8 +1,9 @@
 import 'package:amt/models/armour.dart';
 import 'package:amt/models/armour_data.dart';
-import 'package:amt/models/char_attributes.dart';
+import 'package:amt/models/attributes_list.dart';
 import 'package:amt/models/character/character_state.dart';
 import 'package:amt/models/character/consumible_state.dart';
+import 'package:amt/models/character/character_ki.dart';
 import 'package:amt/models/character_profile.dart';
 import 'package:amt/models/combat_data.dart';
 import 'package:amt/models/roll.dart';
@@ -16,6 +17,7 @@ class Character {
   late CharacterProfile profile;
   late CharacterState state;
   late CombatData combat;
+  late CharacterKi? ki;
 
   static int initiativeSort(Character a, Character b) {
     if (a.state.currentTurn.roll > b.state.currentTurn.roll) {
@@ -34,6 +36,7 @@ class Character {
     required this.profile,
     required this.combat,
     required this.state,
+    required this.ki,
   });
 
   Character.heading() {
@@ -59,22 +62,54 @@ class Character {
         ? CharacterProfile?.fromJson(json['datosElementales'])
         : CharacterProfile();
 
-    ConsumibleState hitPoints = ConsumibleState(
+    var consumibles = <ConsumibleState>[];
+
+    consumibles.add(ConsumibleState(
       name: "Vida",
       maxValue: profile.hitPoints,
       actualValue: profile.hitPoints,
-    );
+      step: 0,
+    ));
 
-    ConsumibleState fatigue = ConsumibleState(
+    consumibles.add(ConsumibleState(
       name: "Cansancio",
       maxValue: profile.fatigue,
       actualValue: profile.fatigue,
-    );
+      step: 0,
+    ));
 
-    if (json['Ki'] != null) {}
+    if (json['Ki'] != null) {
+      ki = CharacterKi.fromJson(json['Ki']);
+      print(ki?.maximumPerAttribute.agility.toString());
+
+      if (ki!.maximumPerAttribute.hasAValueWithMoreThanZero()) {
+        var names = AttributesList.names();
+        var max = ki!.maximumPerAttribute.orderedList();
+        var accum = ki!.acumulationsPerAttribute.orderedList();
+
+        for (var i = 0; i > max.length; i++) {
+          consumibles.add(
+            ConsumibleState(
+                name: "Ki/${names[i]}",
+                maxValue: max[i],
+                actualValue: 0,
+                step: accum[i]),
+          );
+        }
+      } else {
+        consumibles.add(ConsumibleState(
+          name: "Ki",
+          maxValue: ki?.maximumAccumulation ?? 0,
+          actualValue: 0,
+          step: ki?.genericAccumulation ?? 0,
+        ));
+      }
+    } else {
+      ki = null;
+    }
 
     state = CharacterState(
-      consumibles: [hitPoints, fatigue, fatigue, fatigue, fatigue],
+      consumibles: consumibles,
       currentTurn: Roll.roll(base: combat.weapons.first.turn),
     );
   }
