@@ -2,12 +2,16 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:amt/models/character/character.dart';
+import 'package:amt/models/character/character_state.dart';
+import 'package:amt/models/character/status_modifier.dart';
 import 'package:amt/presentation/actions_card.dart';
+import 'package:amt/presentation/bottom_sheet_custom.dart';
 import 'package:amt/presentation/consumible_card.dart';
 import 'package:amt/presentation/modifiers_card.dart';
 import 'package:amt/presentation/text_card.dart';
 import 'package:amt/presentation/turn_card.dart';
 import 'package:amt/presentation/weapons_rack.dart';
+import 'package:amt/resources/modifiers.dart';
 import 'package:amt/utils/debouncer.dart';
 import 'package:enough_convert/windows.dart';
 import 'package:file_picker/file_picker.dart';
@@ -274,12 +278,13 @@ class GeneratorPage extends StatelessWidget {
                                     onAtack: () {},
                                     onDodge: () {},
                                     onParry: () {},
-                                    onChangeModifiers: (modifiers) {
-                                      item.state.modifiers = modifiers;
-                                      appState.updateCharacter(item);
+                                    onChangeModifiers: () {
+                                      _showBottomSheetModalModifiers(
+                                          context, item.state, (newState) {
+                                        item.state = newState;
+                                        appState.updateCharacter(item);
+                                      });
                                     },
-                                    modifiers:
-                                        ValueNotifier(item.state.modifiers),
                                   ),
                                   ModifiersCard(
                                       modifiers: item.state.modifiers),
@@ -296,6 +301,72 @@ class GeneratorPage extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+
+  Future<void> _showBottomSheetModalModifiers(
+    BuildContext context,
+    CharacterState state,
+    void Function(CharacterState) onModifiersChanged,
+  ) {
+    void toggleModifier(StateSetter setState, StatusModifier modifier) {
+      setState(
+        () => {
+          if (state.containsModifier(modifier))
+            {state.removeModifier(modifier)}
+          else
+            {state.modifiers.add(modifier)},
+          onModifiersChanged(state)
+        },
+      );
+    }
+
+    final theme = Theme.of(context);
+    final subtitleButton = theme.textTheme.bodySmall;
+
+    return showModalBottomSheet<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return StatefulBuilder(
+          builder: (BuildContext context, StateSetter setState) {
+            return BottomSheetCustom(
+              text: 'Selección/Edición de arma',
+              children: [
+                for (var modifier in Modifiers.getModifiers())
+                  TextButton(
+                    onPressed: () => {toggleModifier(setState, modifier)},
+                    child: Padding(
+                      padding: EdgeInsets.all(4),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(modifier.name),
+                              Text(
+                                modifier.description(),
+                                overflow: TextOverflow.ellipsis,
+                                style: subtitleButton,
+                              ),
+                            ],
+                          ),
+                          Switch(
+                            value: state.containsModifier(modifier),
+                            onChanged: (v) {
+                              toggleModifier(setState, modifier);
+                            },
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+              ],
+            );
+          },
+        );
+      },
     );
   }
 }

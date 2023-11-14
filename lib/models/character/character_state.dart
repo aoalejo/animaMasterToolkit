@@ -20,6 +20,19 @@ class CharacterState {
     }
   }
 
+  bool containsModifier(StatusModifier modifier) {
+    for (var element in modifiers) {
+      if (element.name == modifier.name) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  void removeModifier(StatusModifier modifier) {
+    modifiers.removeWhere((element) => element.name == modifier.name);
+  }
+
   CharacterState({
     this.selectedWeaponIndex = 0,
     this.hasAction = true,

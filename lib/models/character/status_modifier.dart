@@ -46,4 +46,9 @@ class StatusModifier {
     }
     return description;
   }
+
+  @override
+  String toString() {
+    return name;
+  }
 }
