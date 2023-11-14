@@ -1,4 +1,5 @@
 import 'package:amt/models/weapon.dart';
+import 'package:amt/presentation/bottom_sheet_custom.dart';
 import 'package:flutter/material.dart';
 
 class WeaponsRack extends StatelessWidget {
@@ -22,7 +23,6 @@ class WeaponsRack extends StatelessWidget {
       color: theme.colorScheme.onPrimary,
     );
 
-    final titleStyle = theme.textTheme.titleSmall;
     final subtitleButton = theme.textTheme.bodySmall;
     final subtitleButtonOnPrimary = theme.textTheme.bodySmall!.copyWith(
       color: theme.colorScheme.onPrimary,
@@ -33,12 +33,9 @@ class WeaponsRack extends StatelessWidget {
         showModalBottomSheet<void>(
           context: context,
           builder: (BuildContext context) {
-            return Padding(
-              padding: EdgeInsets.all(16),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
+            return BottomSheetCustom(
+                text: 'Selección/Edición de arma',
                 children: [
-                  Text('Selección/Edición de arma', style: titleStyle),
                   Column(
                     children: [
                       for (var weapon in weapons)
@@ -91,24 +88,7 @@ class WeaponsRack extends StatelessWidget {
                         ),
                     ],
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      SizedBox(),
-                      ElevatedButton(
-                        child: const Text('Guardar'),
-                        onPressed: () => Navigator.pop(context),
-                      ),
-                      ElevatedButton(
-                        child: const Text('Cancelar'),
-                        onPressed: () => Navigator.pop(context),
-                      ),
-                      SizedBox(),
-                    ],
-                  ),
-                ],
-              ),
-            );
+                ]);
           },
         )
       },
@@ -120,7 +100,7 @@ class WeaponsRack extends StatelessWidget {
           child: Padding(
               padding: EdgeInsets.all(8),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Flexible(
                     child: Text(

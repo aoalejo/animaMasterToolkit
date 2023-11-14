@@ -20,16 +20,17 @@ class ConsumibleCard extends StatelessWidget {
     final styleM = theme.textTheme.bodyMedium;
 
     var header = Row(
-      mainAxisAlignment: consumible.step > 0
-          ? MainAxisAlignment.spaceAround
-          : MainAxisAlignment.center,
+      mainAxisAlignment:
+          consumible.step > 0 || consumible.description.isNotEmpty
+              ? MainAxisAlignment.spaceAround
+              : MainAxisAlignment.center,
       children: [
         Text(
           consumible.name,
           style: styleS,
           textAlign: TextAlign.center,
         ),
-        consumible.step > 0
+        consumible.step > 0 || consumible.description.isNotEmpty
             ? Icon(
                 Icons.info,
                 size: 16,
@@ -42,9 +43,10 @@ class ConsumibleCard extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          consumible.step > 0
+          consumible.step > 0 || consumible.description.isNotEmpty
               ? Tooltip(
-                  message: 'incremento: ${consumible.step.toString()}',
+                  message:
+                      '${consumible.step > 0 ? 'incremento: ${consumible.step.toString()}' : ''} ${consumible.description.isNotEmpty ? ', ${consumible.description}' : ''}',
                   child: header)
               : header,
           Row(

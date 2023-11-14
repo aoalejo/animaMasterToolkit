@@ -2,7 +2,7 @@ import 'package:amt/models/character/status_modifier.dart';
 import 'package:flutter/material.dart';
 
 class ModifiersCard extends StatelessWidget {
-  final List<StatusModifier> modifiers;
+  final Set<StatusModifier> modifiers;
 
   ModifiersCard({
     required this.modifiers,

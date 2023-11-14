@@ -6,7 +6,7 @@ class CharacterState {
   int selectedWeaponIndex = 0;
   bool hasAction = true;
   List<ConsumibleState> consumables = [];
-  List<StatusModifier> modifiers = [];
+  Set<StatusModifier> modifiers = {};
   String notes = "";
   Roll currentTurn = Roll(description: "", roll: 0);
   int turnModifier = 0;
@@ -19,4 +19,14 @@ class CharacterState {
     required this.consumables,
     required this.modifiers,
   });
+
+  int calculateTotalForTurn() {
+    var totalTurn = turnModifier;
+
+    for (var modifier in modifiers) {
+      totalTurn = totalTurn + modifier.turn;
+    }
+
+    return totalTurn;
+  }
 }

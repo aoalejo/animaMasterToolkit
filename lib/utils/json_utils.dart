@@ -81,9 +81,9 @@ class JsonUtils {
     return KnownType.known;
   }
 
-  static int integer(String? base, int placeholder) {
+  static int integer(dynamic base, int placeholder) {
     try {
-      return int.parse(base ?? placeholder.toString());
+      return int.parse(base.toString());
     } catch (e) {
       return placeholder;
     }

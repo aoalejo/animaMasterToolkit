@@ -2,15 +2,12 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:amt/models/character/character.dart';
-import 'package:amt/models/character/character_state.dart';
-import 'package:amt/models/character/status_modifier.dart';
 import 'package:amt/presentation/actions_card.dart';
 import 'package:amt/presentation/consumible_card.dart';
 import 'package:amt/presentation/modifiers_card.dart';
 import 'package:amt/presentation/text_card.dart';
 import 'package:amt/presentation/turn_card.dart';
 import 'package:amt/presentation/weapons_rack.dart';
-import 'package:amt/utils/assets.dart';
 import 'package:amt/utils/debouncer.dart';
 import 'package:enough_convert/windows.dart';
 import 'package:file_picker/file_picker.dart';
@@ -280,7 +277,12 @@ class GeneratorPage extends StatelessWidget {
                                     onAtack: () {},
                                     onDodge: () {},
                                     onParry: () {},
-                                    onChangeModifiers: () {},
+                                    onChangeModifiers: (modifiers) {
+                                      item.state.modifiers = modifiers;
+                                      appState.updateCharacter(item);
+                                    },
+                                    modifiers:
+                                        ValueNotifier(item.state.modifiers),
                                   ),
                                   ModifiersCard(
                                       modifiers: item.state.modifiers),
