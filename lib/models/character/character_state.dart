@@ -33,6 +33,20 @@ class CharacterState {
     modifiers.removeWhere((element) => element.name == modifier.name);
   }
 
+  String totalModifierDescription() {
+    StatusModifier totalModifier = StatusModifier(name: "total");
+    for (var modifier in modifiers) {
+      totalModifier.attack = totalModifier.attack + modifier.attack;
+      totalModifier.dodge = totalModifier.dodge + modifier.dodge;
+      totalModifier.parry = totalModifier.parry + modifier.parry;
+      totalModifier.turn = totalModifier.turn + modifier.turn;
+      totalModifier.physicalAction =
+          totalModifier.physicalAction + modifier.physicalAction;
+    }
+
+    return totalModifier.description();
+  }
+
   CharacterState({
     this.selectedWeaponIndex = 0,
     this.hasAction = true,

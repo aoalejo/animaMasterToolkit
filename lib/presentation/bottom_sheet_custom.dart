@@ -1,15 +1,13 @@
 import 'package:flutter/material.dart';
 
 class BottomSheetCustom extends StatelessWidget {
-  final String text;
+  final Widget title;
   final List<Widget> children;
 
-  BottomSheetCustom({required this.text, required this.children});
+  BottomSheetCustom({required this.title, required this.children});
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final titleStyle = theme.textTheme.titleSmall;
     var midHeight = MediaQuery.of(context).size.height / 2;
 
     return SizedBox(
@@ -21,7 +19,7 @@ class BottomSheetCustom extends StatelessWidget {
           children: [
             SizedBox(
               height: 40,
-              child: Text(text, style: titleStyle),
+              child: title,
             ),
             SizedBox(
               height: midHeight - 120,

@@ -330,7 +330,15 @@ class GeneratorPage extends StatelessWidget {
         return StatefulBuilder(
           builder: (BuildContext context, StateSetter setState) {
             return BottomSheetCustom(
-              text: 'Selección/Edición de arma',
+              title: Column(
+                children: [
+                  Text('Modificadores afectando al personaje'),
+                  Text(
+                    state.totalModifierDescription(),
+                    style: subtitleButton,
+                  )
+                ],
+              ),
               children: [
                 for (var modifier in Modifiers.getModifiers())
                   TextButton(

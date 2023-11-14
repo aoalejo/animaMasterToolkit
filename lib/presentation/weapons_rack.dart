@@ -34,7 +34,7 @@ class WeaponsRack extends StatelessWidget {
           context: context,
           builder: (BuildContext context) {
             return BottomSheetCustom(
-                text: 'Selección/Edición de arma',
+                title: Text('Selección/Edición de arma'),
                 children: [
                   Column(
                     children: [
