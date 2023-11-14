@@ -106,6 +106,7 @@ class ActionsCard extends StatelessWidget {
                                               Text(modifier.name),
                                               Text(
                                                 modifier.description(),
+                                                overflow: TextOverflow.ellipsis,
                                                 style: snapshot
                                                         .contains(modifier)
                                                     ? subtitleButtonOnPrimary

@@ -197,8 +197,7 @@ class GeneratorPage extends StatelessWidget {
                           onChanged: (newValue) {
                             _debouncer.run(
                               () => {
-                                item.state.turnModifier =
-                                    newValue.interpret().toInt(),
+                                item.state.updateTurn(newValue),
                                 appState.updateCharacter(item),
                               },
                             );
@@ -218,8 +217,7 @@ class GeneratorPage extends StatelessWidget {
                                   onChangedActual: (actual) {
                                     int index = item.state.consumables
                                         .indexOf(consumible);
-                                    consumible.actualValue =
-                                        actual.interpret().toInt();
+                                    consumible.updateActual(actual);
                                     _debouncer.run(
                                       () => {
                                         item.state.consumables[index] =
@@ -231,8 +229,7 @@ class GeneratorPage extends StatelessWidget {
                                   onChangedMax: (max) {
                                     int index = item.state.consumables
                                         .indexOf(consumible);
-                                    consumible.maxValue =
-                                        max.interpret().toInt();
+                                    consumible.updateMax(max);
                                     _debouncer.run(
                                       () => {
                                         item.state.consumables[index] =
