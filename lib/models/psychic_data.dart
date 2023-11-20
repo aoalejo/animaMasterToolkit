@@ -1,27 +1,27 @@
 import 'package:amt/utils/json_utils.dart';
 
-class PsichiqData {
+class PsychicData {
   int freeCvs;
   Map<String, dynamic> disciplines;
   Map<String, dynamic> patterns;
   Map<String, dynamic> powers;
-  Map<String, dynamic> innates;
+  Map<String, dynamic> innate;
 
-  PsichiqData({
+  PsychicData({
     this.freeCvs = 0,
     this.disciplines = const <String, dynamic>{},
     this.patterns = const <String, dynamic>{},
     this.powers = const <String, dynamic>{},
-    this.innates = const <String, dynamic>{},
+    this.innate = const <String, dynamic>{},
   });
 
-  factory PsichiqData.fromJson(Map<String, dynamic> json) {
-    return PsichiqData(
+  factory PsychicData.fromJson(Map<String, dynamic> json) {
+    return PsychicData(
       freeCvs: JsonUtils.integer(json['cvsLibres'], 0),
       disciplines: Map<String, String>.from(json['Disciplinas']),
       patterns: Map<String, String>.from(json['Patrones']),
       powers: Map<String, String>.from(json['Poderes']),
-      innates: Map<String, String>.from(json['Innatos']),
+      innate: Map<String, String>.from(json['Innatos']),
     );
   }
 }

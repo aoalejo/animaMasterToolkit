@@ -3,9 +3,11 @@ import 'package:flutter/material.dart';
 
 class ModifiersCard extends StatelessWidget {
   final Set<StatusModifier> modifiers;
+  final double aspectRatio;
 
   ModifiersCard({
     required this.modifiers,
+    this.aspectRatio = 0.4,
   });
 
   @override
@@ -17,6 +19,7 @@ class ModifiersCard extends StatelessWidget {
     );
 
     return Expanded(
+      flex: 1,
       child: SizedBox(
         height: 70,
         child: Card(
@@ -25,7 +28,7 @@ class ModifiersCard extends StatelessWidget {
             shrinkWrap: true,
             scrollDirection: Axis.horizontal,
             crossAxisCount: 2,
-            childAspectRatio: 0.4,
+            childAspectRatio: aspectRatio,
             children: [
               for (var modifier in modifiers)
                 Tooltip(

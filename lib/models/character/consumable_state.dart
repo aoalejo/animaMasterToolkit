@@ -1,6 +1,6 @@
 import 'package:function_tree/function_tree.dart';
 
-class ConsumibleState {
+class ConsumableState {
   String name = "";
   int maxValue = 100;
   int actualValue = 10;
@@ -23,7 +23,7 @@ class ConsumibleState {
     }
   }
 
-  ConsumibleState({
+  ConsumableState({
     required this.name,
     required this.maxValue,
     required this.actualValue,

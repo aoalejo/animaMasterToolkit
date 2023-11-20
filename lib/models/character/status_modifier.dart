@@ -1,6 +1,6 @@
 import 'package:amt/utils/json_utils.dart';
 
-class StatusModifier {
+class StatusModifier extends Object {
   late String name;
   late int attack;
   late int dodge;
@@ -51,4 +51,15 @@ class StatusModifier {
   String toString() {
     return name;
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (other is StatusModifier) {
+      return other.name == name;
+    }
+    return false;
+  }
+
+  @override
+  int get hashCode => name.hashCode;
 }

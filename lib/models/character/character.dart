@@ -2,12 +2,13 @@ import 'package:amt/models/armour.dart';
 import 'package:amt/models/armour_data.dart';
 import 'package:amt/models/attributes_list.dart';
 import 'package:amt/models/character/character_state.dart';
-import 'package:amt/models/character/consumible_state.dart';
+import 'package:amt/models/character/consumable_state.dart';
 import 'package:amt/models/character/character_ki.dart';
 import 'package:amt/models/character_profile.dart';
 import 'package:amt/models/combat_data.dart';
+import 'package:amt/models/modifier_state.dart';
 import 'package:amt/models/mystical.dart';
-import 'package:amt/models/psichiq_data.dart';
+import 'package:amt/models/psychic_data.dart';
 import 'package:amt/models/roll.dart';
 import 'package:amt/models/weapon.dart';
 import 'package:uuid/uuid.dart';
@@ -21,7 +22,7 @@ class Character {
   late CombatData combat;
   late CharacterKi? ki;
   late Mystical? mystical;
-  late PsichiqData? psichiq;
+  late PsychicData? psychic;
 
   static int initiativeSort(Character a, Character b) {
     if (a.state.currentTurn.roll > b.state.currentTurn.roll) {
@@ -66,9 +67,9 @@ class Character {
         ? CharacterProfile?.fromJson(json['datosElementales'])
         : CharacterProfile();
 
-    var consumibles = <ConsumibleState>[];
+    var consumables = <ConsumableState>[];
 
-    consumibles.add(ConsumibleState(
+    consumables.add(ConsumableState(
       name: "Vida",
       maxValue: profile.hitPoints,
       actualValue: profile.hitPoints,
@@ -77,7 +78,7 @@ class Character {
           "indice de regeneración: ${profile.regeneration}:\n${getRegenDescription()}",
     ));
 
-    consumibles.add(ConsumibleState(
+    consumables.add(ConsumableState(
       name: "Cansancio",
       maxValue: profile.fatigue,
       actualValue: profile.fatigue,
@@ -88,31 +89,25 @@ class Character {
     if (json['Ki'] != null) {
       ki = CharacterKi.fromJson(json['Ki']);
 
-      print(
-          'hasAValueWithMoreThanZero: ${ki!.maximumPerAttribute.hasAValueWithMoreThanZero()}');
-      print('maximumPerAttribute: ${ki!.maximumPerAttribute.orderedList()}');
-      print(
-          'acumulationsPerAttribute: ${ki!.acumulationsPerAttribute.toString()}');
-
       if (ki!.maximumPerAttribute.hasAValueWithMoreThanZero()) {
         var names = AttributesList.names();
         var max = ki!.maximumPerAttribute.orderedList();
-        var accum = ki!.acumulationsPerAttribute.orderedList();
+        var accumulation = ki!.accumulationsPerAttribute.orderedList();
 
         for (var i = 0; i < max.length; i++) {
           if (max[i] > 0) {
-            consumibles.add(
-              ConsumibleState(
+            consumables.add(
+              ConsumableState(
                   name: "Ki/${names[i]}",
                   maxValue: max[i],
                   actualValue: 0,
-                  step: accum[i],
+                  step: accumulation[i],
                   description: ""),
             );
           }
         }
       } else {
-        consumibles.add(ConsumibleState(
+        consumables.add(ConsumableState(
             name: "Ki",
             maxValue: ki?.maximumAccumulation ?? 0,
             actualValue: 0,
@@ -126,7 +121,7 @@ class Character {
     if (json['Misticos'] != null) {
       mystical = Mystical.fromJson(json['Misticos']);
 
-      consumibles.add(ConsumibleState(
+      consumables.add(ConsumableState(
           name: "Zeon",
           maxValue: mystical?.zeon ?? 0,
           actualValue: mystical?.zeon ?? 0,
@@ -135,20 +130,20 @@ class Character {
     }
 
     if (json['Psiquicos'] != null) {
-      psichiq = PsichiqData.fromJson(json['Psiquicos']);
+      psychic = PsychicData.fromJson(json['Psiquicos']);
 
-      consumibles.add(ConsumibleState(
+      consumables.add(ConsumableState(
         name: "CV",
-        maxValue: psichiq?.freeCvs ?? 0,
-        actualValue: psichiq?.freeCvs ?? 0,
+        maxValue: psychic?.freeCvs ?? 0,
+        actualValue: psychic?.freeCvs ?? 0,
         step: 0,
         description: "",
       ));
     }
 
     state = CharacterState(
-      consumables: consumibles,
-      modifiers: {},
+      consumables: consumables,
+      modifiers: ModifiersState(),
       currentTurn: Roll.roll(base: combat.weapons.first.turn),
     );
   }

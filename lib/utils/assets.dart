@@ -21,4 +21,9 @@ class Assets {
     'assets/parry.svg',
     semanticsLabel: "parry icon",
   );
+
+  static final Widget diceRoll = SvgPicture.asset(
+    'assets/d100_dice.svg',
+    semanticsLabel: "dice rolling icon",
+  );
 }

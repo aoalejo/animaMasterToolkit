@@ -9,6 +9,13 @@
             "program": "lib/main.dart",
             "request": "launch",
             "type": "dart"
+        }, 
+        {
+            "name": "amt - mac",
+            "program": "lib/main.dart",
+            "request": "launch",
+            "type": "dart",
+            "args": ["-dmacos"]
         },
         {
             "name": "amt (profile mode)",

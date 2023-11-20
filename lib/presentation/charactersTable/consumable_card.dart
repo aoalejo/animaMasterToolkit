@@ -1,13 +1,13 @@
-import 'package:amt/models/character/consumible_state.dart';
+import 'package:amt/models/character/consumable_state.dart';
 import 'package:flutter/material.dart';
 
-class ConsumibleCard extends StatelessWidget {
-  final ConsumibleState consumible;
+class ConsumableCard extends StatelessWidget {
+  final ConsumableState consumable;
   final void Function(String) onChangedMax;
   final void Function(String) onChangedActual;
 
-  ConsumibleCard(
-    this.consumible, {
+  ConsumableCard(
+    this.consumable, {
     required this.onChangedMax,
     required this.onChangedActual,
   });
@@ -21,16 +21,16 @@ class ConsumibleCard extends StatelessWidget {
 
     var header = Row(
       mainAxisAlignment:
-          consumible.step > 0 || consumible.description.isNotEmpty
+          consumable.step > 0 || consumable.description.isNotEmpty
               ? MainAxisAlignment.spaceAround
               : MainAxisAlignment.center,
       children: [
         Text(
-          consumible.name,
+          consumable.name,
           style: styleS,
           textAlign: TextAlign.center,
         ),
-        consumible.step > 0 || consumible.description.isNotEmpty
+        consumable.step > 0 || consumable.description.isNotEmpty
             ? Icon(
                 Icons.info,
                 size: 16,
@@ -43,10 +43,10 @@ class ConsumibleCard extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          consumible.step > 0 || consumible.description.isNotEmpty
+          consumable.step > 0 || consumable.description.isNotEmpty
               ? Tooltip(
                   message:
-                      '${consumible.step > 0 ? 'incremento: ${consumible.step.toString()}' : ''} ${consumible.description.isNotEmpty ? ', ${consumible.description}' : ''}',
+                      '${consumable.step > 0 ? 'incremento: ${consumable.step.toString()}' : ''} ${consumable.description.isNotEmpty ? ', ${consumable.description}' : ''}',
                   child: header)
               : header,
           Row(
@@ -59,8 +59,8 @@ class ConsumibleCard extends StatelessWidget {
                     border: InputBorder.none,
                     contentPadding: EdgeInsets.all(4),
                   ),
-                  style: consumible.actualValue > 999 ? styleS : styleM,
-                  initialValue: consumible.actualValue.toString(),
+                  style: consumable.actualValue > 999 ? styleS : styleM,
+                  initialValue: consumable.actualValue.toString(),
                   onChanged: onChangedActual,
                 ),
               ),
@@ -73,8 +73,8 @@ class ConsumibleCard extends StatelessWidget {
                     border: InputBorder.none,
                     contentPadding: EdgeInsets.all(4),
                   ),
-                  style: consumible.maxValue > 999 ? styleS : styleM,
-                  initialValue: consumible.maxValue.toString(),
+                  style: consumable.maxValue > 999 ? styleS : styleM,
+                  initialValue: consumable.maxValue.toString(),
                   onChanged: onChangedMax,
                 ),
               )

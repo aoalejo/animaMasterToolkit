@@ -2,14 +2,14 @@ import 'package:amt/models/attributes_list.dart';
 import 'package:amt/utils/json_utils.dart';
 
 class CharacterKi {
-  late AttributesList acumulationsPerAttribute;
+  late AttributesList accumulationsPerAttribute;
   late AttributesList maximumPerAttribute;
   late Map<String, dynamic> habilities;
   late int maximumAccumulation;
   late int genericAccumulation;
 
   CharacterKi({
-    required this.acumulationsPerAttribute,
+    required this.accumulationsPerAttribute,
     required this.maximumPerAttribute,
     required this.habilities,
     required this.maximumAccumulation,
@@ -17,7 +17,7 @@ class CharacterKi {
   });
 
   CharacterKi.empty() {
-    acumulationsPerAttribute = AttributesList.withDefault(0);
+    accumulationsPerAttribute = AttributesList.withDefault(0);
     maximumPerAttribute = AttributesList.withDefault(0);
     habilities = <String, String>{};
     maximumAccumulation = 0;
@@ -25,7 +25,7 @@ class CharacterKi {
   }
 
   CharacterKi.fromJson(Map<String, dynamic> json) {
-    acumulationsPerAttribute = json['Acumulaciones'] != null
+    accumulationsPerAttribute = json['Acumulaciones'] != null
         ? AttributesList.fromJson(json['Acumulaciones'])
         : AttributesList();
     maximumPerAttribute = json['Maximos'] != null

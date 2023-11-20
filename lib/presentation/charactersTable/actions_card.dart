@@ -2,13 +2,13 @@ import 'package:amt/utils/assets.dart';
 import 'package:flutter/material.dart';
 
 class ActionsCard extends StatelessWidget {
-  final void Function() onAtack;
+  final void Function() onAttack;
   final void Function() onParry;
   final void Function() onDodge;
   final void Function() onChangeModifiers;
 
   ActionsCard({
-    required this.onAtack,
+    required this.onAttack,
     required this.onParry,
     required this.onDodge,
     required this.onChangeModifiers,
@@ -30,7 +30,7 @@ class ActionsCard extends StatelessWidget {
           children: [
             Tooltip(
               message: "Atacar",
-              child: InkWell(onTap: onAtack, child: Assets.attack),
+              child: InkWell(onTap: onAttack, child: Assets.attack),
             ),
             Tooltip(
               message: "Parada",
