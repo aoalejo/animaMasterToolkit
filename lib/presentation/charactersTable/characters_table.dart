@@ -1,5 +1,7 @@
 import 'package:amt/main.dart';
+import 'package:amt/models/character/character.dart';
 import 'package:amt/models/modifier_state.dart';
+import 'package:amt/models/weapon.dart';
 import 'package:amt/presentation/bottom_sheet_modifiers.dart';
 import 'package:amt/presentation/charactersTable/actions_card.dart';
 import 'package:amt/presentation/charactersTable/consumable_card.dart';
@@ -9,6 +11,7 @@ import 'package:amt/presentation/charactersTable/weapons_rack.dart';
 import 'package:amt/presentation/text_card.dart';
 import 'package:amt/resources/modifiers.dart';
 import 'package:amt/utils/debouncer.dart';
+import 'package:amt/utils/json_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -168,21 +171,52 @@ class CharactersTable extends StatelessWidget {
                         children: [
                           ActionsCard(
                             onAttack: () {
+                              var index = appState.characters.indexOf(item);
+                              var weapon = item.selectedWeapon();
+
                               appState.updateCombatState(
-                                  attackingCharacter:
-                                      appState.characters.indexOf(item),
-                                  attackRoll: "0",
-                                  attackingModifiers: ModifiersState(),
-                                  baseAttack: "",
-                                  baseDamage: "");
-                            },
-                            onDodge: () {
-                              appState.updateCombatState(
-                                defendantCharacter:
-                                    appState.characters.indexOf(item),
+                                attackingCharacter: index,
+                                attackRoll: "0",
+                                attackingModifiers: ModifiersState(),
+                                baseAttack: _calculateAttack(item).toString(),
+                                baseDamage: weapon.damage.toString(),
+                                attackerTurn: item.state.currentTurn.roll,
                               );
                             },
-                            onParry: () {},
+                            onDodge: () {
+                              var index = appState.characters.indexOf(item);
+
+                              appState.updateCombatState(
+                                defendantCharacter: index,
+                                defenseRoll: "0",
+                                defenderModifiers: ModifiersState(),
+                                baseDefense:
+                                    _calculateDefense(item, DefenseType.dodge)
+                                        .toString(),
+                                armour: item.combat.armour.calculatedArmour.fil
+                                    .toString(),
+                                defenseType: DefenseType.dodge,
+                                defenseNumber: 0,
+                                defenseTurn: item.state.currentTurn.roll,
+                              );
+                            },
+                            onParry: () {
+                              var index = appState.characters.indexOf(item);
+
+                              appState.updateCombatState(
+                                defendantCharacter: index,
+                                defenseRoll: "0",
+                                defenderModifiers: ModifiersState(),
+                                baseDefense:
+                                    _calculateDefense(item, DefenseType.parry)
+                                        .toString(),
+                                armour: item.combat.armour.calculatedArmour.fil
+                                    .toString(),
+                                defenseType: DefenseType.parry,
+                                defenseNumber: 0,
+                                defenseTurn: item.state.currentTurn.roll,
+                              );
+                            },
                             onChangeModifiers: () {
                               BottomSheetModifiers.show(
                                   context,
@@ -206,5 +240,27 @@ class CharactersTable extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  int _calculateDefense(Character character, DefenseType type) {
+    var weapon = character.selectedWeapon();
+    var weaponDefense = weapon.defenseType;
+
+    var modifiers = character.state.modifiers.getAllModifiersForDefense(type);
+
+    if (weaponDefense == type) {
+      return weapon.defense + modifiers;
+    } else {
+      return weapon.defense - 60 + modifiers;
+    }
+  }
+
+  int _calculateAttack(Character character) {
+    var weapon = character.selectedWeapon();
+
+    var modifiers =
+        character.state.modifiers.getAllModifiersForType(ModifiersType.attack);
+
+    return weapon.attack + modifiers;
   }
 }

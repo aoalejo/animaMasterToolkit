@@ -1,4 +1,3 @@
-
 import 'package:amt/utils/json_utils.dart';
 
 class Weapon {
@@ -13,8 +12,8 @@ class Weapon {
   int? presence;
   late int turn;
   late int attack;
-  late int defence;
-  late DefenceType defenceType;
+  late int defense;
+  late DefenseType defenseType;
   late int damage;
   int? quality;
   String? characteristic;
@@ -34,8 +33,8 @@ class Weapon {
       this.presence,
       required this.turn,
       required this.attack,
-      required this.defence,
-      required this.defenceType,
+      required this.defense,
+      required this.defenseType,
       required this.damage,
       this.quality,
       this.characteristic,
@@ -55,8 +54,8 @@ class Weapon {
     presence = JsonUtils.integer(json['presencia'], 10);
     turn = JsonUtils.integer(json['turno'], 10);
     attack = JsonUtils.integer(json['ataque'], 10);
-    defence = JsonUtils.integer(json['defensa'], 10);
-    defenceType = JsonUtils.defenseType(json['defensaTipo']);
+    defense = JsonUtils.integer(json['defensa'], 10);
+    defenseType = JsonUtils.defenseType(json['defensaTipo']);
     damage = JsonUtils.integer(json['danio'], 25);
     quality = JsonUtils.integer(json['calidad'], 0);
     characteristic = json['caracteristica'];
@@ -66,6 +65,6 @@ class Weapon {
   }
 
   String description({bool lineBreak = false}) {
-    return "$name ${lineBreak ? '\n' : ''}HA: $attack ${lineBreak ? '\n' : ''}${defenceType == DefenceType.dodge ? "HE" : "HP"}: $defence ${lineBreak ? '\n' : ''}T: $turn ${lineBreak ? '\n' : ''}DMG: $damage";
+    return "$name ${lineBreak ? '\n' : ''}HA: $attack ${lineBreak ? '\n' : ''}${defenseType == DefenseType.dodge ? "HE" : "HP"}: $defense ${lineBreak ? '\n' : ''}T: $turn ${lineBreak ? '\n' : ''}DMG: $damage";
   }
 }

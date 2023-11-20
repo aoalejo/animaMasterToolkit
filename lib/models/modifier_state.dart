@@ -1,5 +1,6 @@
 import 'package:amt/models/character/status_modifier.dart';
 import 'package:amt/resources/modifiers.dart';
+import 'package:amt/utils/json_utils.dart';
 
 class ModifiersState {
   Set<StatusModifier> _modifiers = {};
@@ -38,6 +39,16 @@ class ModifiersState {
     return totalModifier.description();
   }
 
+  String totalDefendingDescription(DefenseType type) {
+    StatusModifier totalModifier = StatusModifier(name: "total");
+
+    for (var modifier in _modifiers) {
+      totalModifier.attack = totalModifier.attack + modifier.attack;
+    }
+
+    return totalModifier.description();
+  }
+
   int getAllModifiersForType(ModifiersType type) {
     var total = 0;
 
@@ -45,14 +56,29 @@ class ModifiersState {
       switch (type) {
         case ModifiersType.attack:
           total = total + modifier.attack;
-        case ModifiersType.parry:
-          total = total + modifier.parry;
-        case ModifiersType.dodge:
-          total = total + modifier.dodge;
         case ModifiersType.turn:
           total = total + modifier.turn;
         case ModifiersType.action:
           total = total + modifier.physicalAction;
+        case ModifiersType.parry:
+          total = total + modifier.parry;
+        case ModifiersType.dodge:
+          total = total + modifier.dodge;
+      }
+    }
+
+    return total;
+  }
+
+  int getAllModifiersForDefense(DefenseType type) {
+    var total = 0;
+
+    for (var modifier in _modifiers) {
+      switch (type) {
+        case DefenseType.parry:
+          total = total + modifier.parry;
+        case DefenseType.dodge:
+          total = total + modifier.dodge;
       }
     }
 

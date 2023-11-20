@@ -42,6 +42,7 @@ dependencies:
   enough_convert: ^1.6.0
   function_tree: ^0.9.0
   flutter_svg: ^2.0.9
+  hydrated_bloc: ^9.1.2
 
 dev_dependencies:
   flutter_test:

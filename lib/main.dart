@@ -1,14 +1,21 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:amt/models/armour.dart';
+import 'package:amt/models/armour_data.dart';
+import 'package:amt/models/attributes_list.dart';
 import 'package:amt/models/character/character.dart';
+import 'package:amt/models/character_profile.dart';
+import 'package:amt/models/combat_data.dart';
 import 'package:amt/models/modifier_state.dart';
 import 'package:amt/models/roll.dart';
+import 'package:amt/presentation/TextFormFieldCustom.dart';
 import 'package:amt/presentation/bottom_sheet_modifiers.dart';
 import 'package:amt/presentation/charactersTable/characters_table.dart';
 import 'package:amt/presentation/charactersTable/modifiers_card.dart';
 import 'package:amt/resources/modifiers.dart';
 import 'package:amt/utils/assets.dart';
+import 'package:amt/utils/json_utils.dart';
 import 'package:enough_convert/windows.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
@@ -50,6 +57,16 @@ class CombatState {
   var baseDamage = "";
   var baseAttack = "";
 
+  var defenseRoll = "";
+  var armour = "";
+  var baseDefense = "";
+
+  var finalTurnAttacker = 0;
+  var finalTurnDefense = 0;
+
+  var defenseType = DefenseType.parry;
+  var defenseNumber = 0;
+
   int attackingCharacter = 0;
   int defendantCharacter = 0;
 
@@ -76,6 +93,83 @@ class CombatState {
         roll +
         attack;
   }
+
+  int finalDefenseValue() {
+    var roll = 0;
+    var defense = 0;
+    var numberOfDefensesModifier = 0;
+    var surpriseModifier = isSurprised() ? -150 : 0;
+
+    try {
+      roll = defenseRoll.interpret().toInt();
+    } catch (e) {
+      // Defaults to 0
+    }
+
+    try {
+      defense = baseDefense.interpret().toInt();
+    } catch (e) {
+      // Defaults to 0
+    }
+
+    switch (defenseNumber) {
+      case 1:
+        numberOfDefensesModifier = -30;
+      case 2:
+        numberOfDefensesModifier = -50;
+      case 3:
+        numberOfDefensesModifier = -70;
+      case 4:
+        numberOfDefensesModifier = -90;
+    }
+
+    return defenderModifiers.getAllModifiersForDefense(defenseType) +
+        roll +
+        defense +
+        numberOfDefensesModifier +
+        surpriseModifier;
+  }
+
+  bool isSurprised() {
+    return finalTurnAttacker - 150 >= finalTurnDefense;
+  }
+
+  int calculateDamage() {
+    var attack = finalAttackValue();
+    var defense = finalDefenseValue();
+
+    var difference = attack - defense;
+
+    var baseDamageCalc = 0;
+    var armourType = 0;
+
+    try {
+      baseDamageCalc = baseDamage.interpret().toInt();
+    } catch (e) {
+      // Defaults to 0
+    }
+
+    try {
+      armourType = armour.interpret().toInt();
+    } catch (e) {
+      // Defaults to 0
+    }
+
+    return ((baseDamageCalc - armourType * 10) * (difference / 100)).toInt();
+  }
+
+  String combatTotal() {
+    var attack = finalAttackValue();
+    var defense = finalDefenseValue();
+
+    var difference = attack - defense;
+
+    if (difference > 0) {
+      return "Diferencia: $difference ${isSurprised() ? "(+80: ${difference + 80} Sorprendido!)" : ""}, Daño causado: ${calculateDamage()} ";
+    } else {
+      return "Diferencia: $difference ${isSurprised() ? "(+80: ${difference + 80} Sorprendido!)" : ""}, Contraataca con:  ${-difference ~/ 2}";
+    }
+  }
 }
 
 class CharactersPageState extends ChangeNotifier {
@@ -100,10 +194,23 @@ class CharactersPageState extends ChangeNotifier {
     int? defendantCharacter,
     ModifiersState? attackingModifiers,
     ModifiersState? defenderModifiers,
+    String? defenseRoll,
+    String? armour,
+    String? baseDefense,
+    DefenseType? defenseType,
+    int? defenseNumber,
+    int? attackerTurn,
+    int? defenseTurn,
   }) {
     combatState.attackRoll = attackRoll ?? combatState.attackRoll;
     combatState.baseDamage = baseDamage ?? combatState.baseDamage;
     combatState.baseAttack = baseAttack ?? combatState.baseAttack;
+
+    combatState.defenseRoll = defenseRoll ?? combatState.defenseRoll;
+    combatState.armour = armour ?? combatState.armour;
+    combatState.baseDefense = baseDefense ?? combatState.baseDefense;
+
+    combatState.defenseType = DefenseType.parry;
 
     combatState.attackingCharacter =
         attackingCharacter ?? combatState.attackingCharacter;
@@ -115,7 +222,30 @@ class CharactersPageState extends ChangeNotifier {
     combatState.defenderModifiers =
         defenderModifiers ?? combatState.defenderModifiers;
 
+    combatState.defenseNumber = defenseNumber ?? combatState.defenseNumber;
+
+    combatState.finalTurnAttacker =
+        attackerTurn ?? combatState.finalTurnAttacker;
+
+    combatState.finalTurnDefense = defenseTurn ?? combatState.finalTurnDefense;
+
     notifyListeners();
+  }
+
+  Character? characterAttacking() {
+    try {
+      return characters[combatState.attackingCharacter];
+    } catch (e) {
+      return null;
+    }
+  }
+
+  Character? characterDefending() {
+    try {
+      return characters[combatState.defendantCharacter];
+    } catch (e) {
+      return null;
+    }
   }
 
   void removeCharacter(Character character) {
@@ -127,6 +257,7 @@ class CharactersPageState extends ChangeNotifier {
     for (Character character in characters) {
       character.rollInitiative();
       character.state.hasAction = true;
+      character.state.defenseNumber = 0;
     }
 
     characters.sort(Character.initiativeSort);
@@ -201,13 +332,13 @@ class GeneratorPage extends StatelessWidget {
             direction: isLandscape ? Axis.horizontal : Axis.vertical,
             children: [
               SizedBox(
-                height: isLandscape ? height : height / 1.5,
-                width: isLandscape ? screenSize.width / 2 : screenSize.width,
+                height: isLandscape ? height : height / 3,
+                width: isLandscape ? screenSize.width / 1.5 : screenSize.width,
                 child: CharactersTable(),
               ),
               SizedBox(
-                height: isLandscape ? height : height / 3,
-                width: isLandscape ? screenSize.width / 2 : screenSize.width,
+                height: isLandscape ? height : height / 1.5, // 3
+                width: isLandscape ? screenSize.width / 3 : screenSize.width,
                 child: CombatSection(
                   isLandscape: true,
                 ),
@@ -239,7 +370,7 @@ class CombatSection extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             _createCard(
-              "Ataque",
+              "${appState.characterAttacking()?.profile.name} Ataca (Total: ${appState.combatState.finalAttackValue()})",
               theme,
               [
                 Row(
@@ -355,16 +486,167 @@ class CombatSection extends StatelessWidget {
                     ],
                   ),
                 ),
+              ],
+            ),
+
+            // Defense roll
+            _createCard(
+              "${appState.characterDefending()?.profile.name} ${appState.combatState.defenseType.name()} (Total: ${appState.combatState.finalDefenseValue()})",
+              theme,
+              [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Flexible(
+                      flex: 1,
+                      child: Column(
+                        children: [
+                          SizedBox(
+                            height: 40,
+                            child: TextFormFieldCustom(
+                              inputType: TextInputType.number,
+                              text: appState.combatState.defenseRoll,
+                              label: "Tirada de defensa",
+                              suffixIcon: IconButton(
+                                onPressed: () {
+                                  appState.updateCombatState(
+                                      defenseRoll: Roll.roll().roll.toString());
+                                },
+                                icon: SizedBox.square(
+                                  dimension: 24,
+                                  child: Assets.diceRoll,
+                                ),
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          SizedBox(
+                            height: 40,
+                            child: TextFormFieldCustom(
+                              key: Key("TextFormFieldBaseAttack"),
+                              inputType: TextInputType.number,
+                              label: "Defensa base",
+                              text: appState.combatState.baseDefense,
+                              onChanged: (value) => appState.updateCombatState(
+                                  baseDefense: value),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(
+                      width: 12,
+                    ),
+                    Flexible(
+                      flex: 1,
+                      child: Column(
+                        children: [
+                          SizedBox(
+                            height: 40,
+                            child: TextFormFieldCustom(
+                              onChanged: (value) {
+                                appState.updateCombatState(armour: value);
+                              },
+                              text: appState.combatState.armour,
+                              label: "Tabla de armadura",
+                              inputType: TextInputType.number,
+                            ),
+                          ),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          SizedBox(
+                            height: 40,
+                            child: TextButton(
+                              onPressed: () {
+                                var combat = appState.combatState;
+                                BottomSheetModifiers.show(
+                                    context,
+                                    combat.defenderModifiers,
+                                    Modifiers.getSituationalModifiers(
+                                        combat.defenseType.toModifierType()),
+                                    (newModifiers) {
+                                  appState.updateCombatState(
+                                      defenderModifiers: newModifiers);
+                                });
+                              },
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.stretch,
+                                children: [
+                                  Text(
+                                    "Situacionales",
+                                    textAlign: TextAlign.center,
+                                  ),
+                                  Text(
+                                    appState.combatState.defenderModifiers
+                                        .getAllModifiersForDefense(
+                                            appState.combatState.defenseType)
+                                        .toString(),
+                                    style: theme.textTheme.bodySmall,
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
                 SizedBox(
-                  height: 40,
-                  child: Text(
-                    "Resultado del ataque: ${appState.combatState.finalAttackValue()}",
-                    style: theme.textTheme.bodyLarge,
+                  height: 10,
+                ),
+                SizedBox(
+                  width: 8000,
+                  child: Row(
+                    children: [
+                      ModifiersCard(
+                        aspectRatio: 0.2,
+                        modifiers:
+                            appState.combatState.attackingModifiers.getAll(),
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(
+                  height: 60,
+                  child: Row(
+                    children: [
+                      Text(
+                          "Cantidad de defensas: (${appState.combatState.defenseNumber + 1})"),
+                      Expanded(
+                        child: Slider(
+                          value: appState.combatState.defenseNumber.toDouble(),
+                          max: 4,
+                          divisions: 5,
+                          label:
+                              "Defensa n° ${appState.combatState.defenseNumber + 1}",
+                          onChanged: (value) {
+                            appState.updateCombatState(
+                              defenseNumber: value.toInt(),
+                            );
+                          },
+                        ),
+                      )
+                    ],
                   ),
                 ),
               ],
             ),
-            //_createCard("Defensa", theme, []),
+
+            // Total
+            _createCard(
+              "Resultado",
+              theme,
+              [
+                Text(
+                  appState.combatState.combatTotal(),
+                ),
+              ],
+            ),
           ],
         ),
       ),
@@ -401,46 +683,6 @@ class CombatSection extends StatelessWidget {
             ),
           )
         ],
-      ),
-    );
-  }
-}
-
-class TextFormFieldCustom extends StatelessWidget {
-  final String? text;
-  final String? label;
-  final TextInputType? inputType;
-  final void Function(String)? onChanged;
-  final Widget? suffixIcon;
-
-  const TextFormFieldCustom({
-    super.key,
-    this.text,
-    this.label,
-    this.inputType,
-    this.onChanged,
-    this.suffixIcon,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return TextFormField(
-      onChanged: onChanged,
-      controller: TextEditingController.fromValue(
-        TextEditingValue(
-          text: text ?? "",
-          selection: TextSelection.collapsed(
-            offset: text?.length ?? 0,
-          ),
-        ),
-      ),
-      textInputAction: TextInputAction.done,
-      keyboardType: inputType,
-      decoration: InputDecoration(
-        labelText: label,
-        border: OutlineInputBorder(),
-        contentPadding: EdgeInsets.all(8),
-        suffixIcon: suffixIcon,
       ),
     );
   }

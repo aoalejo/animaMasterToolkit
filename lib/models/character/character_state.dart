@@ -11,6 +11,7 @@ class CharacterState {
   String notes = "";
   Roll currentTurn = Roll(description: "", roll: 0);
   int turnModifier = 0;
+  int defenseNumber = 0;
   ModifiersState modifiers = ModifiersState();
 
   void updateTurn(String newValue) {
@@ -25,6 +26,7 @@ class CharacterState {
     this.selectedWeaponIndex = 0,
     this.hasAction = true,
     this.notes = "",
+    this.defenseNumber = 0,
     required this.currentTurn,
     required this.consumables,
     required this.modifiers,

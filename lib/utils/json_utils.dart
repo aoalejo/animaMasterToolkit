@@ -1,4 +1,15 @@
-enum DefenceType { parry, dodge }
+enum DefenseType { parry, dodge }
+
+extension DefenseTypeDesc on DefenseType {
+  String name() {
+    switch (this) {
+      case DefenseType.parry:
+        return "Parada";
+      case DefenseType.dodge:
+        return "Esquiva";
+    }
+  }
+}
 
 enum DamageTypes { fil, pen, con, fri, cal, ele, ene }
 
@@ -57,15 +68,15 @@ class JsonUtils {
     return WeaponSize.normal;
   }
 
-  static DefenceType defenseType(String? base) {
+  static DefenseType defenseType(String? base) {
     switch (base?.toLowerCase()) {
       case "par":
-        return DefenceType.parry;
+        return DefenseType.parry;
       case "esq":
-        return DefenceType.dodge;
+        return DefenseType.dodge;
     }
 
-    return DefenceType.dodge;
+    return DefenseType.dodge;
   }
 
   static KnownType knownType(String? base) {

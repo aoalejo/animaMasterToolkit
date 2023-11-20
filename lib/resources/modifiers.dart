@@ -1,8 +1,20 @@
 import 'dart:convert';
 
 import 'package:amt/models/character/status_modifier.dart';
+import 'package:amt/utils/json_utils.dart';
 
 enum ModifiersType { attack, parry, dodge, turn, action }
+
+extension ToModifiersType on DefenseType {
+  ModifiersType toModifierType() {
+    switch (this) {
+      case DefenseType.parry:
+        return ModifiersType.parry;
+      case DefenseType.dodge:
+        return ModifiersType.dodge;
+    }
+  }
+}
 
 class Modifiers {
   static List<StatusModifier> getSituationalModifiers(ModifiersType type) {
