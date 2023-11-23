@@ -13,6 +13,27 @@ extension DefenseTypeDesc on DefenseType {
 
 enum DamageTypes { fil, pen, con, fri, cal, ele, ene }
 
+extension DamageTypesDesc on DamageTypes {
+  String name() {
+    switch (this) {
+      case DamageTypes.fil:
+        return "Fil";
+      case DamageTypes.pen:
+        return "Pen";
+      case DamageTypes.con:
+        return "Con";
+      case DamageTypes.fri:
+        return "Fri";
+      case DamageTypes.cal:
+        return "Cal";
+      case DamageTypes.ele:
+        return "Ele";
+      case DamageTypes.ene:
+        return "Ene";
+    }
+  }
+}
+
 enum WeaponSize { normal, big, giant }
 
 enum KnownType { known, similar, unknown }

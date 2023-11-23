@@ -17,20 +17,16 @@ class TurnCard extends StatelessWidget {
       contentPadding: EdgeInsets.all(8),
     );
 
-    final style = theme.textTheme.bodySmall!.copyWith(
-      color: theme.colorScheme.onPrimary,
-    );
+    final style = theme.textTheme.bodySmall;
 
-    final styleTotal = theme.textTheme.bodyLarge!.copyWith(
-      color: theme.colorScheme.onPrimary,
-    );
+    final styleTotal = theme.textTheme.bodyLarge;
 
     return Tooltip(
       message: character.state.currentTurn.description,
       child: SizedBox(
         height: 100,
         child: Card(
-          color: theme.colorScheme.primary,
+          color: theme.colorScheme.primaryContainer,
           child: Padding(
             padding: EdgeInsets.all(8),
             child: Column(

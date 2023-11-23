@@ -33,16 +33,16 @@ class ActionsCard extends StatelessWidget {
               child: InkWell(onTap: onAttack, child: Assets.attack),
             ),
             Tooltip(
+              message: "Cambiar modificadores",
+              child: InkWell(onTap: onChangeModifiers, child: Assets.anatomy),
+            ),
+            Tooltip(
               message: "Parada",
               child: InkWell(onTap: onParry, child: Assets.parry),
             ),
             Tooltip(
               message: "Esquiva",
               child: InkWell(onTap: onDodge, child: Assets.dodging),
-            ),
-            Tooltip(
-              message: "Cambiar modificadores",
-              child: InkWell(onTap: onChangeModifiers, child: Assets.anatomy),
             ),
           ],
         ),

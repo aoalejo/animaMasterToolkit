@@ -1,13 +1,16 @@
 import 'package:amt/models/character/status_modifier.dart';
+import 'package:amt/resources/modifiers.dart';
 import 'package:flutter/material.dart';
 
 class ModifiersCard extends StatelessWidget {
   final Set<StatusModifier> modifiers;
   final double aspectRatio;
+  final Function(StatusModifier)? onSelected;
 
   ModifiersCard({
     required this.modifiers,
     this.aspectRatio = 0.4,
+    this.onSelected,
   });
 
   @override
@@ -34,16 +37,20 @@ class ModifiersCard extends StatelessWidget {
                 Tooltip(
                   message:
                       '${modifier.name}:\nAtaque: ${modifier.attack}\nEsquiva: ${modifier.dodge}\nParada: ${modifier.parry}\nTurno: ${modifier.turn}\nAccion: ${modifier.physicalAction}',
-                  child: Card(
-                    color: theme.colorScheme.primary,
-                    child: Center(
-                      child: Padding(
-                        padding: EdgeInsets.fromLTRB(8, 0, 8, 0),
-                        child: Text(
-                          modifier.name,
-                          style: style,
-                          textAlign: TextAlign.center,
-                          overflow: TextOverflow.ellipsis,
+                  child: InkWell(
+                    onTap: () =>
+                        onSelected != null ? onSelected!(modifier) : null,
+                    child: Card(
+                      color: theme.colorScheme.primary,
+                      child: Center(
+                        child: Padding(
+                          padding: EdgeInsets.fromLTRB(8, 0, 8, 0),
+                          child: Text(
+                            modifier.name,
+                            style: style,
+                            textAlign: TextAlign.center,
+                            overflow: TextOverflow.ellipsis,
+                          ),
                         ),
                       ),
                     ),

@@ -9,6 +9,7 @@ import 'package:amt/models/character_profile.dart';
 import 'package:amt/models/combat_data.dart';
 import 'package:amt/models/modifier_state.dart';
 import 'package:amt/models/roll.dart';
+import 'package:amt/models/weapon.dart';
 import 'package:amt/presentation/TextFormFieldCustom.dart';
 import 'package:amt/presentation/bottom_sheet_modifiers.dart';
 import 'package:amt/presentation/charactersTable/characters_table.dart';
@@ -20,6 +21,8 @@ import 'package:enough_convert/windows.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:function_tree/function_tree.dart';
+import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 
 void main() {
@@ -56,6 +59,7 @@ class CombatState {
   var attackRoll = "";
   var baseDamage = "";
   var baseAttack = "";
+  var damageType = DamageTypes.ene;
 
   var defenseRoll = "";
   var armour = "";
@@ -69,6 +73,17 @@ class CombatState {
 
   int attackingCharacter = 0;
   int defendantCharacter = 0;
+
+  Weapon selectedWeapon = Weapon(
+      name: "",
+      turn: 0,
+      attack: 0,
+      defense: 0,
+      defenseType: DefenseType.dodge,
+      principalDamage: DamageTypes.pen,
+      damage: 0);
+
+  Armour selectedArmour = Armour();
 
   ModifiersState attackingModifiers = ModifiersState();
   ModifiersState defenderModifiers = ModifiersState();
@@ -201,6 +216,9 @@ class CharactersPageState extends ChangeNotifier {
     int? defenseNumber,
     int? attackerTurn,
     int? defenseTurn,
+    Weapon? selectedWeapon,
+    Armour? selectedArmour,
+    DamageTypes? damageType,
   }) {
     combatState.attackRoll = attackRoll ?? combatState.attackRoll;
     combatState.baseDamage = baseDamage ?? combatState.baseDamage;
@@ -210,7 +228,11 @@ class CharactersPageState extends ChangeNotifier {
     combatState.armour = armour ?? combatState.armour;
     combatState.baseDefense = baseDefense ?? combatState.baseDefense;
 
-    combatState.defenseType = DefenseType.parry;
+    combatState.defenseType = defenseType ?? combatState.defenseType;
+
+    combatState.selectedArmour = selectedArmour ?? combatState.selectedArmour;
+    combatState.selectedWeapon = selectedWeapon ?? combatState.selectedWeapon;
+    combatState.damageType = damageType ?? combatState.damageType;
 
     combatState.attackingCharacter =
         attackingCharacter ?? combatState.attackingCharacter;
@@ -281,11 +303,24 @@ class CharactersPageState extends ChangeNotifier {
     );
 
     if (result != null) {
-      List<File> files = result.paths.map((path) => File(path ?? "")).toList();
+      try {
+        // For web
+        List<String> files = result.files
+            .map((file) => Windows1252Codec().decode(file.bytes!.toList()))
+            .toList();
 
-      for (var file in files) {
-        final json = await file.readAsString(encoding: Windows1252Codec());
-        characters.add(Character.fromJson(jsonDecode(json)));
+        for (var file in files) {
+          characters.add(Character.fromJson(jsonDecode(file)));
+        }
+      } catch (e) {
+        // For desktop
+        List<File> files =
+            result.paths.map((path) => File(path ?? "")).toList();
+
+        for (var file in files) {
+          final json = await file.readAsString(encoding: Windows1252Codec());
+          characters.add(Character.fromJson(jsonDecode(json)));
+        }
       }
     }
 
@@ -324,7 +359,6 @@ class GeneratorPage extends StatelessWidget {
         ],
       ),
       body: ColoredBox(
-        key: Key("ContainerKey"),
         color: theme.colorScheme.background,
         child: Align(
           alignment: Alignment.topLeft,
@@ -363,14 +397,14 @@ class CombatSection extends StatelessWidget {
     return ColoredBox(
       color: theme.colorScheme.primaryContainer,
       child: Padding(
-        padding: EdgeInsets.all(16),
+        padding: EdgeInsets.all(8),
         child: Flex(
           direction: Axis.vertical,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             _createCard(
-              "${appState.characterAttacking()?.profile.name} Ataca (Total: ${appState.combatState.finalAttackValue()})",
+              "${appState.characterAttacking()?.profile.name ?? ""} Ataca (Total: ${appState.combatState.finalAttackValue()})",
               theme,
               [
                 Row(
@@ -423,16 +457,71 @@ class CombatSection extends StatelessWidget {
                       child: Column(
                         children: [
                           SizedBox(
-                            height: 40,
-                            child: TextFormFieldCustom(
-                              onChanged: (value) {
-                                appState.updateCombatState(baseDamage: value);
-                              },
-                              text: appState.combatState.baseDamage,
-                              label: "Daño base",
-                              inputType: TextInputType.number,
-                            ),
-                          ),
+                              height: 40,
+                              child: Row(
+                                children: [
+                                  Flexible(
+                                    flex: 1,
+                                    child: TextFormFieldCustom(
+                                      onChanged: (value) {
+                                        appState.updateCombatState(
+                                            baseDamage: value);
+                                      },
+                                      text: appState.combatState.baseDamage,
+                                      label:
+                                          "Daño base (${appState.combatState.selectedWeapon.name})",
+                                      inputType: TextInputType.number,
+                                      suffixIcon: Padding(
+                                        padding: EdgeInsets.all(8),
+                                        child: ToggleButtons(
+                                          isSelected: [
+                                            appState.combatState.selectedWeapon
+                                                    .principalDamage ==
+                                                appState.combatState.damageType,
+                                            appState.combatState.selectedWeapon
+                                                    .secondaryDamage ==
+                                                appState.combatState.damageType
+                                          ],
+                                          onPressed: (index) => {
+                                            appState.updateCombatState(
+                                                damageType: index == 0
+                                                    ? appState
+                                                        .combatState
+                                                        .selectedWeapon
+                                                        .principalDamage
+                                                    : appState
+                                                        .combatState
+                                                        .selectedWeapon
+                                                        .secondaryDamage)
+                                          },
+                                          borderRadius: const BorderRadius.all(
+                                              Radius.circular(8)),
+                                          children: [
+                                            Text(
+                                              appState
+                                                      .combatState
+                                                      .selectedWeapon
+                                                      .principalDamage
+                                                      ?.name() ??
+                                                  "con",
+                                              style: theme.textTheme.bodySmall,
+                                            ),
+                                            Text(
+                                              appState
+                                                      .combatState
+                                                      .selectedWeapon
+                                                      .secondaryDamage
+                                                      ?.name() ??
+                                                  "con",
+                                              style: theme.textTheme.bodySmall,
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              )),
                           SizedBox(
                             height: 20,
                           ),
@@ -491,7 +580,7 @@ class CombatSection extends StatelessWidget {
 
             // Defense roll
             _createCard(
-              "${appState.characterDefending()?.profile.name} ${appState.combatState.defenseType.name()} (Total: ${appState.combatState.finalDefenseValue()})",
+              "${appState.characterDefending()?.profile.name ?? ""} ${appState.combatState.defenseType.name()} (Total: ${appState.combatState.finalDefenseValue()})",
               theme,
               [
                 Row(
@@ -525,7 +614,6 @@ class CombatSection extends StatelessWidget {
                           SizedBox(
                             height: 40,
                             child: TextFormFieldCustom(
-                              key: Key("TextFormFieldBaseAttack"),
                               inputType: TextInputType.number,
                               label: "Defensa base",
                               text: appState.combatState.baseDefense,
