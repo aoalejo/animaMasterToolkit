@@ -1,12 +1,9 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:js';
 
 import 'package:amt/models/armour.dart';
-import 'package:amt/models/armour_data.dart';
-import 'package:amt/models/attributes_list.dart';
 import 'package:amt/models/character/character.dart';
-import 'package:amt/models/character_profile.dart';
-import 'package:amt/models/combat_data.dart';
 import 'package:amt/models/modifier_state.dart';
 import 'package:amt/models/roll.dart';
 import 'package:amt/models/weapon.dart';
@@ -21,9 +18,9 @@ import 'package:enough_convert/windows.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:function_tree/function_tree.dart';
-import 'package:hive/hive.dart';
-import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 void main() {
   runApp(MyApp());
@@ -37,6 +34,12 @@ class MyApp extends StatelessWidget {
     return ChangeNotifierProvider(
       create: (context) => CharactersPageState(),
       child: MaterialApp(
+        localizationsDelegates: [
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          AppLocalizations.delegate,
+        ],
+        supportedLocales: AppLocalizations.supportedLocales,
         title: 'Personajes',
         theme: ThemeData(
           useMaterial3: true,

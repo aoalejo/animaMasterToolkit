@@ -1,7 +1,6 @@
 import 'package:amt/models/character/status_modifier.dart';
 import 'package:amt/models/modifier_state.dart';
 import 'package:amt/presentation/bottom_sheet_custom.dart';
-import 'package:amt/resources/modifiers.dart';
 import 'package:flutter/material.dart';
 
 class BottomSheetModifiers {

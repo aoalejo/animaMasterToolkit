@@ -1,7 +1,6 @@
 import 'package:amt/main.dart';
 import 'package:amt/models/character/character.dart';
 import 'package:amt/models/modifier_state.dart';
-import 'package:amt/models/weapon.dart';
 import 'package:amt/presentation/bottom_sheet_modifiers.dart';
 import 'package:amt/presentation/charactersTable/actions_card.dart';
 import 'package:amt/presentation/charactersTable/consumable_card.dart';

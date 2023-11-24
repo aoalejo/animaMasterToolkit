@@ -1,5 +1,4 @@
 import 'package:amt/models/character/status_modifier.dart';
-import 'package:amt/resources/modifiers.dart';
 import 'package:flutter/material.dart';
 
 class ModifiersCard extends StatelessWidget {
