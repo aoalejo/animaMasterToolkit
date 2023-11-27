@@ -74,6 +74,7 @@ class Character {
       maxValue: profile.hitPoints,
       actualValue: profile.hitPoints,
       step: 0,
+      type: ConsumableType.hitPoints,
       description:
           "indice de regeneración: ${profile.regeneration}:\n${getRegenDescription()}",
     ));
@@ -82,6 +83,7 @@ class Character {
       name: "Cansancio",
       maxValue: profile.fatigue,
       actualValue: profile.fatigue,
+      type: ConsumableType.fatigue,
       step: 0,
       description: "",
     ));
@@ -127,6 +129,8 @@ class Character {
           actualValue: mystical?.zeon ?? 0,
           step: mystical?.act ?? 0,
           description: "Regenera ${mystical!.zeonRegeneration} por día"));
+    } else {
+      mystical = null;
     }
 
     if (json['Psiquicos'] != null) {
@@ -139,6 +143,8 @@ class Character {
         step: 0,
         description: "",
       ));
+    } else {
+      psychic = null;
     }
 
     state = CharacterState(
@@ -185,4 +191,30 @@ class Character {
     ];
     return values[profile.regeneration];
   }
+
+  void removeFrom(int value, ConsumableType type) {
+    state.consumables[0].actualValue -= value;
+  }
+}
+
+extension ListToKeyValue on Map<String, dynamic> {
+  List<KeyValue> list({bool interchange = false}) {
+    List<KeyValue> list = [];
+    for (final entry in entries) {
+      list.add(
+        KeyValue(
+          key: interchange ? entry.value.toString() : entry.key.toString(),
+          value: interchange ? entry.key.toString() : entry.value.toString(),
+        ),
+      );
+    }
+    return list;
+  }
+}
+
+class KeyValue {
+  final String key;
+  final String value;
+
+  KeyValue({required this.key, required this.value});
 }

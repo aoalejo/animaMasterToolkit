@@ -1,6 +1,6 @@
 import 'package:function_tree/function_tree.dart';
 
-enum ConsumableType { hitPoints, other }
+enum ConsumableType { hitPoints, fatigue, other }
 
 class ConsumableState {
   String name = "";

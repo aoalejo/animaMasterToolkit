@@ -1,12 +1,13 @@
-import 'package:amt/main.dart';
 import 'package:amt/models/character/character.dart';
 import 'package:amt/models/modifier_state.dart';
 import 'package:amt/presentation/bottom_sheet_modifiers.dart';
 import 'package:amt/presentation/charactersTable/actions_card.dart';
+import 'package:amt/presentation/charactersTable/character_info.dart';
 import 'package:amt/presentation/charactersTable/consumable_card.dart';
 import 'package:amt/presentation/charactersTable/modifiers_card.dart';
 import 'package:amt/presentation/charactersTable/turn_card.dart';
 import 'package:amt/presentation/charactersTable/weapons_rack.dart';
+import 'package:amt/presentation/states/characters_page_state.dart';
 import 'package:amt/presentation/text_card.dart';
 import 'package:amt/resources/modifiers.dart';
 import 'package:amt/utils/debouncer.dart';
@@ -46,20 +47,34 @@ class CharactersTable extends StatelessWidget {
               TableRow(
                 key: ValueKey("TableRow${item.uuid}"),
                 decoration: BoxDecoration(
-                    color: appState.characters.indexOf(item) % 2 == 0
-                        ? Colors.transparent
-                        : theme.colorScheme.tertiaryContainer.withAlpha(125)),
+                  color: appState.characters.indexOf(item) % 2 == 0
+                      ? Colors.transparent
+                      : theme.colorScheme.tertiaryContainer.withAlpha(125),
+                ),
                 children: [
                   SizedBox(
-                    height: 100,
-                    child: Switch(
-                      value: item.state.hasAction,
-                      onChanged: (state) => {
-                        item.state.hasAction = state,
-                        appState.updateCharacter(item),
-                      },
-                    ),
-                  ),
+                      height: 100,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          Switch(
+                            value: item.state.hasAction,
+                            onChanged: (state) => {
+                              item.state.hasAction = state,
+                              appState.updateCharacter(item),
+                            },
+                          ),
+                          InkWell(
+                            onTap: () {
+                              ShowCharacterInfo.call(context, item);
+                            },
+                            child: Icon(
+                              Icons.info_outline,
+                              color: theme.primaryColor,
+                            ),
+                          )
+                        ],
+                      )),
                   SizedBox(
                     height: 100,
                     child: Column(

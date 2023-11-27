@@ -1,3 +1,4 @@
+import 'package:amt/models/character/character.dart';
 import 'package:amt/utils/json_utils.dart';
 
 class AttributesList {
@@ -72,6 +73,21 @@ class AttributesList {
       return true;
     }
     return false;
+  }
+
+  List<KeyValue> toKeyValue() {
+    List<KeyValue> list = [];
+
+    list.add(KeyValue(key: "Agilidad", value: agility.toString()));
+    list.add(KeyValue(key: "Constitución", value: constitution.toString()));
+    list.add(KeyValue(key: "Destreza", value: dexterity.toString()));
+    list.add(KeyValue(key: "Fuerza", value: strength.toString()));
+    list.add(KeyValue(key: "Inteligencia", value: intelligence.toString()));
+    list.add(KeyValue(key: "Percepción", value: perception.toString()));
+    list.add(KeyValue(key: "Poder", value: might.toString()));
+    list.add(KeyValue(key: "Voluntad", value: willpower.toString()));
+
+    return list;
   }
 
   @override

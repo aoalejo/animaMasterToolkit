@@ -1,7 +1,7 @@
 enum DefenseType { parry, dodge }
 
 extension DefenseTypeDesc on DefenseType {
-  String name() {
+  String get string {
     switch (this) {
       case DefenseType.parry:
         return "Parada";

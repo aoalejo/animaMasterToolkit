@@ -6,7 +6,7 @@ class Mystical {
   int zeon;
   Map<String, String> paths;
   Map<String, String> subPaths;
-  Map<String, String> metamagia;
+  Map<String, String> metamagic;
   Map<String, String> spellsMaintained;
   Map<String, String> spellsPurchased;
 
@@ -16,7 +16,7 @@ class Mystical {
     required this.zeon,
     required this.paths,
     required this.subPaths,
-    required this.metamagia,
+    required this.metamagic,
     required this.spellsMaintained,
     required this.spellsPurchased,
   });
@@ -28,7 +28,7 @@ class Mystical {
       zeon: JsonUtils.integer(json['zeon'], 0),
       paths: Map<String, String>.from(json['Vias']),
       subPaths: Map<String, String>.from(json['SubVias']),
-      metamagia: Map<String, String>.from(json['Metamagia']),
+      metamagic: Map<String, String>.from(json['Metamagia']),
       spellsMaintained: Map<String, String>.from(json['Conjuros']),
       spellsPurchased: Map<String, String>.from(json['Libres']),
     );
