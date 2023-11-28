@@ -1,13 +1,23 @@
 import 'package:amt/utils/json_utils.dart';
+import 'package:hive/hive.dart';
 
+@HiveType(typeId: 2)
 class CharacterProfile {
+  @HiveField(0)
   late int fatigue;
+  @HiveField(1)
   late int hitPoints;
+  @HiveField(2)
   late int regeneration;
+  @HiveField(3)
   late String name;
+  @HiveField(4)
   late String category;
+  @HiveField(5)
   late String level;
+  @HiveField(6)
   late String kind;
+  @HiveField(7)
   late int speed;
 
   CharacterProfile(

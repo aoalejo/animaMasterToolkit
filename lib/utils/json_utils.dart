@@ -1,4 +1,4 @@
-enum DefenseType { parry, dodge }
+import 'package:amt/models/enums.dart';
 
 extension DefenseTypeDesc on DefenseType {
   String get string {
@@ -10,8 +10,6 @@ extension DefenseTypeDesc on DefenseType {
     }
   }
 }
-
-enum DamageTypes { fil, pen, con, fri, cal, ele, ene }
 
 extension DamageTypesDesc on DamageTypes {
   String name() {
@@ -33,12 +31,6 @@ extension DamageTypesDesc on DamageTypes {
     }
   }
 }
-
-enum WeaponSize { normal, big, giant }
-
-enum KnownType { known, similar, unknown }
-
-enum ArmourLocation { complete, breastplate, camisole, head }
 
 class JsonUtils {
   static ArmourLocation armourLocation(String? base) {

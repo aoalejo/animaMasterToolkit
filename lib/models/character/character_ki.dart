@@ -1,11 +1,18 @@
 import 'package:amt/models/attributes_list.dart';
 import 'package:amt/utils/json_utils.dart';
+import 'package:hive/hive.dart';
 
+@HiveType(typeId: 9)
 class CharacterKi {
+  @HiveField(0)
   late AttributesList accumulationsPerAttribute;
+  @HiveField(1)
   late AttributesList maximumPerAttribute;
+  @HiveField(2)
   late Map<String, dynamic> skills;
+  @HiveField(3)
   late int maximumAccumulation;
+  @HiveField(4)
   late int genericAccumulation;
 
   CharacterKi({

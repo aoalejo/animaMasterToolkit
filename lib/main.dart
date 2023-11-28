@@ -1,20 +1,46 @@
 import 'package:amt/models/character/consumable_state.dart';
+import 'package:amt/models/enums.dart';
+import 'package:amt/hiveAdapters/attributes_list_adapter.dart';
+import 'package:amt/hiveAdapters/character_adapter.dart';
+import 'package:amt/hiveAdapters/character_profile_adapter.dart';
+import 'package:amt/hiveAdapters/character_state_adapter.dart';
+import 'package:amt/hiveAdapters/roll_adapter.dart';
 import 'package:amt/presentation/charactersTable/characters_table.dart';
 import 'package:amt/presentation/combat/combat_attack_card.dart';
 import 'package:amt/presentation/combat/combat_defense_card.dart';
 import 'package:amt/presentation/combat/custom_combat_card.dart';
 import 'package:amt/presentation/states/characters_page_state.dart';
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-void main() {
+void main() async {
+  await Hive.initFlutter();
+  Hive.registerAdapter(CharacterAdapter());
+  Hive.registerAdapter(AttributesListAdapter());
+  Hive.registerAdapter(CharacterProfileAdapter());
+  Hive.registerAdapter(CharacterStateAdapter());
+  Hive.registerAdapter(RollAdapter());
+
   runApp(MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
+
+  @override
+  State<StatefulWidget> createState() {
+    return MyAppState();
+  }
+}
+
+class MyAppState extends State {
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {

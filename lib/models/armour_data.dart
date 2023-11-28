@@ -1,13 +1,22 @@
 import 'package:amt/models/armour.dart';
 import 'package:amt/utils/json_utils.dart';
+import 'package:hive/hive.dart';
 
+@HiveType(typeId: 7)
 class ArmourData {
+  @HiveField(0)
   int? movementRestriction;
+  @HiveField(1)
   int? naturalPenalty;
+  @HiveField(2)
   int? requeriment;
+  @HiveField(3)
   int? physicalPenalty;
+  @HiveField(4)
   int? finalNaturalPenalty;
+  @HiveField(5)
   late Armour calculatedArmour;
+  @HiveField(6)
   late List<Armour> armours;
 
   ArmourData(

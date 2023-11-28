@@ -1,24 +1,46 @@
+import 'package:amt/models/enums.dart';
 import 'package:amt/utils/json_utils.dart';
+import 'package:hive/hive.dart';
 
+@HiveType(typeId: 6)
 class Weapon {
+  @HiveField(0)
   late String name;
+  @HiveField(1)
   String? type;
+  @HiveField(2)
   KnownType? known;
+  @HiveField(3)
   WeaponSize? size;
+  @HiveField(4)
   DamageTypes? principalDamage;
+  @HiveField(5)
   DamageTypes? secondaryDamage;
+  @HiveField(6)
   int? endurance;
+  @HiveField(7)
   int? breakage;
+  @HiveField(8)
   int? presence;
+  @HiveField(9)
   late int turn;
+  @HiveField(10)
   late int attack;
+  @HiveField(11)
   late int defense;
+  @HiveField(12)
   late DefenseType defenseType;
+  @HiveField(13)
   late int damage;
+  @HiveField(14)
   int? quality;
+  @HiveField(15)
   String? characteristic;
+  @HiveField(16)
   String? warning;
+  @HiveField(17)
   String? ammunition;
+  @HiveField(18)
   String? special;
 
   Weapon(

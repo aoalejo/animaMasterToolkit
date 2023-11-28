@@ -1,4 +1,5 @@
 import 'package:amt/models/character/character.dart';
+import 'package:amt/models/enums.dart';
 import 'package:amt/models/modifier_state.dart';
 import 'package:amt/presentation/bottom_sheet_modifiers.dart';
 import 'package:amt/presentation/charactersTable/actions_card.dart';
@@ -11,7 +12,6 @@ import 'package:amt/presentation/states/characters_page_state.dart';
 import 'package:amt/presentation/text_card.dart';
 import 'package:amt/resources/modifiers.dart';
 import 'package:amt/utils/debouncer.dart';
-import 'package:amt/utils/json_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

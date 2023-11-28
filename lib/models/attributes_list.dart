@@ -1,14 +1,24 @@
 import 'package:amt/models/character/character.dart';
 import 'package:amt/utils/json_utils.dart';
+import 'package:hive/hive.dart';
 
+@HiveType(typeId: 1)
 class AttributesList {
+  @HiveField(0)
   late int agility;
+  @HiveField(1)
   late int constitution;
+  @HiveField(2)
   late int dexterity;
+  @HiveField(3)
   late int strength;
+  @HiveField(4)
   late int intelligence;
+  @HiveField(5)
   late int perception;
+  @HiveField(6)
   late int might;
+  @HiveField(7)
   late int willpower;
 
   AttributesList({

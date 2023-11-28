@@ -1,19 +1,36 @@
+import 'package:amt/models/enums.dart';
 import 'package:amt/utils/json_utils.dart';
+import 'package:hive/hive.dart';
 
+@HiveType(typeId: 8)
 class Armour {
+  @HiveField(0)
   String? name;
+  @HiveField(1)
   ArmourLocation? location;
+  @HiveField(2)
   int? quality;
+  @HiveField(3)
   late int fil;
+  @HiveField(4)
   late int con;
+  @HiveField(5)
   late int pen;
+  @HiveField(6)
   late int cal;
+  @HiveField(7)
   late int ele;
+  @HiveField(8)
   late int fri;
+  @HiveField(9)
   late int ene;
+  @HiveField(10)
   int? endurance;
+  @HiveField(11)
   int? presence;
+  @HiveField(12)
   int? movementRestriction;
+  @HiveField(13)
   bool? enchanted;
 
   Armour(

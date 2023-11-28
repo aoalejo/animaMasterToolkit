@@ -3,17 +3,29 @@ import 'dart:io';
 
 import 'package:amt/models/armour.dart';
 import 'package:amt/models/character/character.dart';
+import 'package:amt/models/enums.dart';
 import 'package:amt/models/modifier_state.dart';
 import 'package:amt/models/weapon.dart';
 import 'package:amt/presentation/states/combat_state.dart';
-import 'package:amt/utils/json_utils.dart';
 import 'package:enough_convert/windows.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
 class CharactersPageState extends ChangeNotifier {
   var characters = <Character>[];
   var combatState = ScreenCombatState();
+
+  late Box<Character> _box;
+
+  CharactersPageState() {
+    initAsync();
+  }
+
+  void initAsync() async {
+    _box = await Hive.openBox('characters');
+    characters = _box.values.toList();
+  }
 
   void updateAttackingModifiers(ModifiersState modifiers) {
     combatState.attackingModifiers = modifiers;
@@ -122,6 +134,7 @@ class CharactersPageState extends ChangeNotifier {
     characters[index] = character;
 
     notifyListeners();
+    character.save();
   }
 
   void getCharacters() async {
@@ -139,7 +152,9 @@ class CharactersPageState extends ChangeNotifier {
             .toList();
 
         for (var file in files) {
-          characters.add(Character.fromJson(jsonDecode(file)));
+          var character = Character.fromJson(jsonDecode(file));
+          characters.add(character);
+          _box.add(character);
         }
       } catch (e) {
         // For desktop
@@ -148,7 +163,9 @@ class CharactersPageState extends ChangeNotifier {
 
         for (var file in files) {
           final json = await file.readAsString(encoding: Windows1252Codec());
-          characters.add(Character.fromJson(jsonDecode(json)));
+          var character = Character.fromJson(jsonDecode(json));
+          characters.add(character);
+          _box.add(character);
         }
       }
     }

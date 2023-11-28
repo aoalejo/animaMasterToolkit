@@ -1,9 +1,19 @@
 import 'dart:math';
 
+import 'package:hive/hive.dart';
+
+@HiveType(typeId: 4)
 class Roll {
+  @HiveField(0)
   late final int roll;
+  @HiveField(1)
   late final String description;
+  @HiveField(2)
   late final List<int> rolls;
+
+  Roll.turn() {
+    Roll.roll(turnFumble: true);
+  }
 
   Roll.roll({
     int base = 0,
@@ -66,7 +76,7 @@ class Roll {
     roll = base + thisRoll;
   }
 
-  Roll({required this.description, required this.roll});
+  Roll({required this.description, required this.roll, required this.rolls});
 
   String getRollsAsString() {
     String output = "";

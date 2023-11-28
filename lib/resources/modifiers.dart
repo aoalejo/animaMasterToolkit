@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:amt/models/character/status_modifier.dart';
-import 'package:amt/utils/json_utils.dart';
+import 'package:amt/models/enums.dart';
 
 enum ModifiersType { attack, parry, dodge, turn, action }
 

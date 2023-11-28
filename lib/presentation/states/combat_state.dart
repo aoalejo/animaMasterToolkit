@@ -1,8 +1,8 @@
 import 'package:amt/models/armour.dart';
+import 'package:amt/models/enums.dart';
 import 'package:amt/models/modifier_state.dart';
 import 'package:amt/models/weapon.dart';
 import 'package:amt/resources/modifiers.dart';
-import 'package:amt/utils/json_utils.dart';
 import 'package:function_tree/function_tree.dart';
 
 class ScreenCombatState {

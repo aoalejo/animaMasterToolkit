@@ -1,11 +1,19 @@
 import 'package:amt/utils/json_utils.dart';
+import 'package:hive/hive.dart';
 
+@HiveType(typeId: 14)
 class StatusModifier extends Object {
+  @HiveField(0)
   late String name;
+  @HiveField(1)
   late int attack;
+  @HiveField(2)
   late int dodge;
+  @HiveField(3)
   late int parry;
+  @HiveField(4)
   late int turn;
+  @HiveField(5)
   late int physicalAction;
 
   StatusModifier(

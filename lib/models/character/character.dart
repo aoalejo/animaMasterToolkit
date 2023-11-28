@@ -6,22 +6,34 @@ import 'package:amt/models/character/consumable_state.dart';
 import 'package:amt/models/character/character_ki.dart';
 import 'package:amt/models/character_profile.dart';
 import 'package:amt/models/combat_data.dart';
+import 'package:amt/models/enums.dart';
 import 'package:amt/models/modifier_state.dart';
 import 'package:amt/models/mystical.dart';
 import 'package:amt/models/psychic_data.dart';
 import 'package:amt/models/roll.dart';
 import 'package:amt/models/weapon.dart';
+import 'package:hive/hive.dart';
 import 'package:uuid/uuid.dart';
 
-class Character {
+@HiveType(typeId: 0)
+class Character extends HiveObject {
+  @HiveField(0)
   late String uuid;
+  @HiveField(1)
   late AttributesList attributes;
+  @HiveField(2)
   late Map<String, dynamic> skills;
+  @HiveField(3)
   late CharacterProfile profile;
+  @HiveField(4)
   late CharacterState state;
+  @HiveField(5)
   late CombatData combat;
+  @HiveField(6)
   late CharacterKi? ki;
+  @HiveField(7)
   late Mystical? mystical;
+  @HiveField(8)
   late PsychicData? psychic;
 
   static int initiativeSort(Character a, Character b) {
@@ -42,6 +54,8 @@ class Character {
     required this.combat,
     required this.state,
     required this.ki,
+    required this.mystical,
+    required this.psychic,
   });
 
   Character.heading() {

@@ -1,13 +1,20 @@
+import 'package:amt/models/enums.dart';
 import 'package:function_tree/function_tree.dart';
+import 'package:hive/hive.dart';
 
-enum ConsumableType { hitPoints, fatigue, other }
-
+@HiveType(typeId: 12)
 class ConsumableState {
+  @HiveField(0)
   String name = "";
+  @HiveField(1)
   int maxValue = 100;
+  @HiveField(2)
   int actualValue = 10;
+  @HiveField(3)
   int step = 10;
+  @HiveField(4)
   String description = "";
+  @HiveField(5)
   ConsumableType type = ConsumableType.other;
 
   void updateMax(String newValue) {

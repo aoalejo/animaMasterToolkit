@@ -1,8 +1,11 @@
 import 'package:amt/models/character/status_modifier.dart';
+import 'package:amt/models/enums.dart';
 import 'package:amt/resources/modifiers.dart';
-import 'package:amt/utils/json_utils.dart';
+import 'package:hive/hive.dart';
 
+@HiveType(typeId: 13)
 class ModifiersState {
+  @HiveField(0)
   Set<StatusModifier> _modifiers = {};
 
   Set<StatusModifier> getAll() {
