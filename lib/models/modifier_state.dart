@@ -12,6 +12,10 @@ class ModifiersState {
     return _modifiers;
   }
 
+  void setAll(Set<StatusModifier> modifiers) {
+    _modifiers = modifiers;
+  }
+
   bool containsModifier(StatusModifier modifier) {
     for (var element in _modifiers) {
       if (element.name == modifier.name) {

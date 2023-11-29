@@ -1,4 +1,13 @@
-import 'package:amt/models/character/consumable_state.dart';
+import 'package:amt/hiveAdapters/armour_adapter.dart';
+import 'package:amt/hiveAdapters/armour_data_adapter.dart';
+import 'package:amt/hiveAdapters/character_ki_adapter.dart';
+import 'package:amt/hiveAdapters/combat_data_adapter.dart';
+import 'package:amt/hiveAdapters/consumable_state_adapter.dart';
+import 'package:amt/hiveAdapters/modifier_state_adapter.dart';
+import 'package:amt/hiveAdapters/mystical_adapter.dart';
+import 'package:amt/hiveAdapters/psychic_data_adapter.dart';
+import 'package:amt/hiveAdapters/status_modifier_adapter.dart';
+import 'package:amt/hiveAdapters/weapon_adapter.dart';
 import 'package:amt/models/enums.dart';
 import 'package:amt/hiveAdapters/attributes_list_adapter.dart';
 import 'package:amt/hiveAdapters/character_adapter.dart';
@@ -18,11 +27,21 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 void main() async {
   await Hive.initFlutter();
-  Hive.registerAdapter(CharacterAdapter());
+  Hive.registerAdapter(ArmourAdapter());
+  Hive.registerAdapter(ArmourDataAdapter());
   Hive.registerAdapter(AttributesListAdapter());
+  Hive.registerAdapter(CharacterAdapter());
+  Hive.registerAdapter(CharacterKiAdapter());
   Hive.registerAdapter(CharacterProfileAdapter());
   Hive.registerAdapter(CharacterStateAdapter());
+  Hive.registerAdapter(CombatDataAdapter());
+  Hive.registerAdapter(ConsumableStateAdapter());
+  Hive.registerAdapter(ModifiersStateAdapter());
+  Hive.registerAdapter(MysticalAdapter());
+  Hive.registerAdapter(PsychicDataAdapter());
   Hive.registerAdapter(RollAdapter());
+  Hive.registerAdapter(StatusModifierAdapter());
+  Hive.registerAdapter(WeaponAdapter());
 
   runApp(MyApp());
 }

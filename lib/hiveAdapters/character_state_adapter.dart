@@ -42,7 +42,7 @@ class CharacterStateAdapter extends TypeAdapter<CharacterState> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is CharacterState &&
+      other is CharacterStateAdapter &&
           runtimeType == other.runtimeType &&
           hashCode == other.hashCode;
 }

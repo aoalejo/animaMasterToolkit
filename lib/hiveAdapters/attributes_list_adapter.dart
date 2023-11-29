@@ -42,7 +42,7 @@ class AttributesListAdapter extends TypeAdapter<AttributesList> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is AttributesList &&
+      other is AttributesListAdapter &&
           runtimeType == other.runtimeType &&
           hashCode == other.hashCode;
 }

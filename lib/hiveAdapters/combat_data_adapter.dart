@@ -1,29 +1,27 @@
-import 'package:amt/models/roll.dart';
+import 'package:amt/models/combat_data.dart';
 import 'package:hive/hive.dart';
 
-class RollAdapter extends TypeAdapter<Roll> {
+class CombatDataAdapter extends TypeAdapter<CombatData> {
   @override
-  final int typeId = 4;
+  final int typeId = 3;
 
   @override
-  Roll read(BinaryReader reader) {
+  CombatData read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return Roll(
-      roll: fields[0],
-      description: fields[1],
-      rolls: fields[2],
+    return CombatData(
+      weapons: fields[0],
+      armour: fields[1],
     );
   }
 
   @override
-  void write(BinaryWriter writer, Roll obj) {
+  void write(BinaryWriter writer, CombatData obj) {
     writer
-      ..write(obj.roll)
-      ..write(obj.description)
-      ..write(obj.rolls);
+      ..write(obj.weapons)
+      ..write(obj.armour);
   }
 
   @override
@@ -32,7 +30,7 @@ class RollAdapter extends TypeAdapter<Roll> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is RollAdapter &&
+      other is CombatDataAdapter &&
           runtimeType == other.runtimeType &&
           hashCode == other.hashCode;
 }

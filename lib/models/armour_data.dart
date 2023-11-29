@@ -9,7 +9,7 @@ class ArmourData {
   @HiveField(1)
   int? naturalPenalty;
   @HiveField(2)
-  int? requeriment;
+  int? requirement;
   @HiveField(3)
   int? physicalPenalty;
   @HiveField(4)
@@ -22,7 +22,7 @@ class ArmourData {
   ArmourData(
       {this.movementRestriction,
       this.naturalPenalty,
-      this.requeriment,
+      this.requirement,
       this.physicalPenalty,
       this.finalNaturalPenalty,
       required this.calculatedArmour,
@@ -31,7 +31,7 @@ class ArmourData {
   ArmourData.fromJson(Map<String, dynamic> json) {
     movementRestriction = JsonUtils.integer(json['restriccionMov'], 0);
     naturalPenalty = JsonUtils.integer(json['penNatural'], 0);
-    requeriment = JsonUtils.integer(json['requisito'], 0);
+    requirement = JsonUtils.integer(json['requisito'], 0);
     physicalPenalty = JsonUtils.integer(json['penAccionFisica'], 0);
     finalNaturalPenalty = JsonUtils.integer(json['penNaturalFinal'], 0);
     calculatedArmour = json['armaduraTotal'] != null
