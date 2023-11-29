@@ -17,7 +17,7 @@ import 'package:amt/models/weapon.dart';
 import 'package:amt/presentation/charactersTable/characters_table.dart';
 import 'package:amt/presentation/combat/combat_attack_card.dart';
 import 'package:amt/presentation/combat/combat_defense_card.dart';
-import 'package:amt/presentation/combat/custom_combat_card.dart';
+import 'package:amt/presentation/combat/combat_result_card.dart';
 import 'package:amt/presentation/states/characters_page_state.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -116,6 +116,12 @@ class GeneratorPage extends StatelessWidget {
         foregroundColor: theme.colorScheme.onPrimary,
         actions: [
           IconButton(
+            icon: Icon(Icons.restore),
+            onPressed: () {
+              appState.resetConsumables();
+            },
+          ),
+          IconButton(
             icon: Icon(Icons.upload_file),
             onPressed: () {
               appState.getCharacters();
@@ -176,29 +182,7 @@ class CombatSection extends StatelessWidget {
           children: [
             CombatAttackCard(),
             CombatDefenseCard(),
-            // Total
-            CustomCombatCard(
-              title: "Resultado",
-              children: [
-                Text(
-                  appState.combatState.combatTotal(),
-                ),
-                TextButton(
-                  onPressed: () {
-                    var character = appState
-                        .characters[appState.combatState.defendantCharacter];
-
-                    character.removeFrom(
-                      appState.combatState.calculateDamage(),
-                      ConsumableType.hitPoints,
-                    );
-
-                    appState.updateCharacter(character);
-                  },
-                  child: Text("Aplicar daño"),
-                )
-              ],
-            ),
+            CombatReturnCard(),
           ],
         ),
       ),

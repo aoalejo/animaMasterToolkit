@@ -1,3 +1,4 @@
+import 'package:amt/models/enums.dart';
 import 'package:amt/models/roll.dart';
 import 'package:amt/presentation/TextFormFieldCustom.dart';
 import 'package:amt/presentation/bottom_sheet_modifiers.dart';
@@ -57,6 +58,21 @@ class CombatDefenseCard extends StatelessWidget {
                       text: appState.combatState.baseDefense,
                       onChanged: (value) =>
                           appState.updateCombatState(baseDefense: value),
+                      suffixIcon: TextButton(
+                        child: Text("+Can"),
+                        onPressed: () {
+                          var character = appState.characters[
+                              appState.combatState.defendantCharacter];
+
+                          character.removeFrom(
+                            1,
+                            ConsumableType.fatigue,
+                          );
+                          appState.combatState.baseDefense =
+                              "${appState.combatState.baseDefense}+15";
+                          appState.updateCharacter(character);
+                        },
+                      ),
                     ),
                   ),
                 ],
@@ -81,6 +97,12 @@ class CombatDefenseCard extends StatelessWidget {
                               text: appState.combatState.armour,
                               label: "Tabla de armadura",
                               inputType: TextInputType.number,
+                              suffixIcon: IconButton(
+                                icon: Icon(Icons.delete),
+                                onPressed: () {
+                                  appState.updateCombatState(armour: "0");
+                                },
+                              ),
                             ),
                           )
                         ],

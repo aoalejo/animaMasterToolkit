@@ -1,3 +1,4 @@
+import 'package:amt/models/enums.dart';
 import 'package:amt/models/roll.dart';
 import 'package:amt/presentation/TextFormFieldCustom.dart';
 import 'package:amt/presentation/bottom_sheet_modifiers.dart';
@@ -55,6 +56,21 @@ class CombatAttackCard extends StatelessWidget {
                       key: Key("TextFormFieldBaseAttack"),
                       inputType: TextInputType.number,
                       label: "Ataque base",
+                      suffixIcon: TextButton(
+                        child: Text("+Can"),
+                        onPressed: () {
+                          var character = appState.characters[
+                              appState.combatState.attackingCharacter];
+
+                          character.removeFrom(
+                            1,
+                            ConsumableType.fatigue,
+                          );
+                          appState.combatState.baseAttack =
+                              "${appState.combatState.baseAttack}+ 15";
+                          appState.updateCharacter(character);
+                        },
+                      ),
                       text: appState.combatState.baseAttack,
                       onChanged: (value) =>
                           appState.updateCombatState(baseAttack: value),

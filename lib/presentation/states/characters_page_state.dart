@@ -132,6 +132,16 @@ class CharactersPageState extends ChangeNotifier {
     notifyListeners();
   }
 
+  void resetConsumables() {
+    for (Character character in characters) {
+      for (var consumable in character.state.consumables) {
+        consumable.actualValue = consumable.maxValue;
+      }
+    }
+
+    notifyListeners();
+  }
+
   void updateCharacter(Character character) {
     int index =
         characters.indexWhere((element) => element.uuid == character.uuid);

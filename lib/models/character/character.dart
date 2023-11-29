@@ -209,7 +209,9 @@ class Character extends HiveObject {
   }
 
   void removeFrom(int value, ConsumableType type) {
-    state.consumables[0].actualValue -= value;
+    var firstOfType =
+        state.consumables.where((element) => element.type == type).first;
+    firstOfType.actualValue -= value;
   }
 }
 
