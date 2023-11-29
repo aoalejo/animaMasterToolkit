@@ -4,7 +4,11 @@ import 'package:amt/presentation/text_card.dart';
 import 'package:flutter/material.dart';
 
 class ShowCharacterInfo {
-  static call(BuildContext context, Character character) {
+  static call(
+    BuildContext context,
+    Character character,
+    Function(Character) onRemove,
+  ) {
     var theme = Theme.of(context);
     var skills = character.skills.list();
     var attributes = character.attributes.toKeyValue();
@@ -43,31 +47,61 @@ class ShowCharacterInfo {
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     SizedBox(
-                        height: 60,
-                        child: Padding(
-                          padding: EdgeInsets.fromLTRB(16, 8, 16, 8),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Expanded(
-                                child: TextFormFieldCustom(
-                                    text: search,
-                                    onChanged: (value) => {
-                                          setState(
-                                            () => search = value,
-                                          )
-                                        }),
-                              ),
-                              IconButton(
+                      height: 120,
+                      child: Padding(
+                        padding: EdgeInsets.fromLTRB(16, 8, 16, 8),
+                        child: Column(
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(character.profile.name),
+                                IconButton(
+                                  onPressed: () {
+                                    onRemove(character);
+                                    Navigator.pop(context);
+                                  },
+                                  icon: Row(children: [
+                                    Text(
+                                      "Eliminar!",
+                                      style: theme.textTheme.bodyMedium!
+                                          .copyWith(color: Colors.red),
+                                    ),
+                                    Icon(
+                                      Icons.delete,
+                                      color: Colors.red,
+                                    )
+                                  ]),
+                                ),
+                                IconButton(
                                   onPressed: () {
                                     Navigator.pop(context);
                                   },
-                                  icon: Icon(Icons.close))
-                            ],
-                          ),
-                        )),
+                                  icon: Icon(Icons.close),
+                                ),
+                              ],
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Expanded(
+                                  child: TextFormFieldCustom(
+                                      text: search,
+                                      suffixIcon: Icon(Icons.search),
+                                      onChanged: (value) => {
+                                            setState(
+                                              () => search = value,
+                                            )
+                                          }),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
                     SizedBox(
-                      height: 440,
+                      height: 380,
                       width: 400,
                       child: SingleChildScrollView(
                         scrollDirection: Axis.vertical,

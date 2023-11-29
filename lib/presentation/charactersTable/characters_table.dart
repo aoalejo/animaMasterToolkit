@@ -66,7 +66,11 @@ class CharactersTable extends StatelessWidget {
                           ),
                           InkWell(
                             onTap: () {
-                              ShowCharacterInfo.call(context, item);
+                              ShowCharacterInfo.call(
+                                  context,
+                                  item,
+                                  (character) =>
+                                      {appState.removeCharacter(character)});
                             },
                             child: Icon(
                               Icons.info_outline,

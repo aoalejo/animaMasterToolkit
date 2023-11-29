@@ -17,7 +17,7 @@ class CombatDefenseCard extends StatelessWidget {
 
     return CustomCombatCard(
       title:
-          "${appState.characterDefending()?.profile.name ?? ""} ${appState.combatState.defenseType.name} (Total: ${appState.combatState.finalDefenseValue()})",
+          "${appState.characterDefending()?.profile.name ?? ""} ${appState.combatState.defenseType.displayable} (Total: ${appState.combatState.finalDefenseValue()})",
       children: [
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,

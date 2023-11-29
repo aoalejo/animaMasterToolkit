@@ -7,7 +7,16 @@ enum DefenseType {
   @HiveField(0)
   parry,
   @HiveField(1)
-  dodge
+  dodge;
+
+  String get displayable {
+    switch (this) {
+      case DefenseType.parry:
+        return "Parada";
+      case DefenseType.dodge:
+        return "Esquiva";
+    }
+  }
 }
 
 @HiveType(typeId: 16)

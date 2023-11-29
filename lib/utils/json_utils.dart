@@ -1,16 +1,5 @@
 import 'package:amt/models/enums.dart';
 
-extension DefenseTypeDesc on DefenseType {
-  String get string {
-    switch (this) {
-      case DefenseType.parry:
-        return "Parada";
-      case DefenseType.dodge:
-        return "Esquiva";
-    }
-  }
-}
-
 extension DamageTypesDesc on DamageTypes {
   String name() {
     switch (this) {

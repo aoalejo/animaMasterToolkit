@@ -28,7 +28,6 @@ class CharactersPageState extends ChangeNotifier {
     print("opened box characters");
     characters = _box.values.toList();
     notifyListeners();
-
     print("characters");
   }
 
@@ -118,6 +117,7 @@ class CharactersPageState extends ChangeNotifier {
 
   void removeCharacter(Character character) {
     characters.remove(character);
+    character.delete();
     notifyListeners();
   }
 
