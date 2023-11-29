@@ -16,7 +16,7 @@ class CombatReturnCard extends StatelessWidget {
         Text(
           appState.combatState.combatTotal(),
         ),
-        appState.combatState.calculateDamage() > 0
+        appState.combatState.calculateDamage() > 10
             ? TextButton(
                 style: ButtonStyle(),
                 onPressed: () {
@@ -28,6 +28,8 @@ class CombatReturnCard extends StatelessWidget {
                     ConsumableType.hitPoints,
                   );
 
+                  character.state.defenseNumber += 1;
+
                   appState.updateCharacter(character);
                 },
                 child: Text("Aplicar daño"),
@@ -36,8 +38,14 @@ class CombatReturnCard extends StatelessWidget {
                 style: ButtonStyle(
                     foregroundColor:
                         MaterialStatePropertyAll(theme.disabledColor)),
-                onPressed: () {},
-                child: Text("Aplicar daño"),
+                onPressed: () {
+                  var character = appState
+                      .characters[appState.combatState.defendantCharacter];
+
+                  character.state.defenseNumber += 1;
+                  appState.updateCharacter(character);
+                },
+                child: Text("Añadir defensa"),
               )
       ],
     );

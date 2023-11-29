@@ -125,12 +125,16 @@ class Character extends HiveObject {
           }
         }
       } else {
-        consumables.add(ConsumableState(
-            name: "Ki",
-            maxValue: ki?.maximumAccumulation ?? 0,
-            actualValue: 0,
-            step: ki?.genericAccumulation ?? 0,
-            description: "Usando ki unificado"));
+        if (ki?.maximumAccumulation != 0) {
+          consumables.add(
+            ConsumableState(
+                name: "Ki",
+                maxValue: ki?.maximumAccumulation ?? 0,
+                actualValue: 0,
+                step: ki?.genericAccumulation ?? 0,
+                description: "Usando ki unificado"),
+          );
+        }
       }
     } else {
       ki = null;
@@ -139,12 +143,16 @@ class Character extends HiveObject {
     if (json['Misticos'] != null) {
       mystical = Mystical.fromJson(json['Misticos']);
 
-      consumables.add(ConsumableState(
-          name: "Zeon",
-          maxValue: mystical?.zeon ?? 0,
-          actualValue: mystical?.zeon ?? 0,
-          step: mystical?.act ?? 0,
-          description: "Regenera ${mystical!.zeonRegeneration} por día"));
+      if (mystical?.zeon != 0) {
+        consumables.add(
+          ConsumableState(
+              name: "Zeon",
+              maxValue: mystical?.zeon ?? 0,
+              actualValue: mystical?.zeon ?? 0,
+              step: mystical?.act ?? 0,
+              description: "Regenera ${mystical!.zeonRegeneration} por día"),
+        );
+      }
     } else {
       mystical = null;
     }
@@ -152,13 +160,15 @@ class Character extends HiveObject {
     if (json['Psiquicos'] != null) {
       psychic = PsychicData.fromJson(json['Psiquicos']);
 
-      consumables.add(ConsumableState(
-        name: "CV",
-        maxValue: psychic?.freeCvs ?? 0,
-        actualValue: psychic?.freeCvs ?? 0,
-        step: 0,
-        description: "",
-      ));
+      if (psychic?.freeCvs != 0) {
+        consumables.add(ConsumableState(
+          name: "CV",
+          maxValue: psychic?.freeCvs ?? 0,
+          actualValue: psychic?.freeCvs ?? 0,
+          step: 0,
+          description: "",
+        ));
+      }
     } else {
       psychic = null;
     }

@@ -206,7 +206,7 @@ class CharactersTable extends StatelessWidget {
                                       .combat.armour.calculatedArmour.fil
                                       .toString(),
                                   defenseType: DefenseType.dodge,
-                                  defenseNumber: 0,
+                                  defenseNumber: item.state.defenseNumber,
                                   damageType:
                                       item.selectedWeapon().principalDamage,
                                   selectedArmour:
@@ -228,7 +228,7 @@ class CharactersTable extends StatelessWidget {
                                       .combat.armour.calculatedArmour.fil
                                       .toString(),
                                   defenseType: DefenseType.parry,
-                                  defenseNumber: 0,
+                                  defenseNumber: item.state.defenseNumber,
                                   selectedArmour:
                                       item.combat.armour.calculatedArmour,
                                   defenseTurn: item.state.currentTurn.roll,

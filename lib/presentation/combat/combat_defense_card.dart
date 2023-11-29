@@ -61,10 +61,9 @@ class CombatDefenseCard extends StatelessWidget {
                       suffixIcon: TextButton(
                         child: Text("+Can"),
                         onPressed: () {
-                          var character = appState.characters[
-                              appState.combatState.defendantCharacter];
+                          var character = appState.characterDefending();
 
-                          character.removeFrom(
+                          character?.removeFrom(
                             1,
                             ConsumableType.fatigue,
                           );

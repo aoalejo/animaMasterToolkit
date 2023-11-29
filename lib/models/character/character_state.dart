@@ -22,7 +22,7 @@ class CharacterState {
   @HiveField(5)
   String turnModifier = '';
   @HiveField(6)
-  int defenseNumber = 0;
+  int defenseNumber = 1;
   @HiveField(7)
   ModifiersState modifiers = ModifiersState();
 
@@ -34,7 +34,7 @@ class CharacterState {
     this.selectedWeaponIndex = 0,
     this.hasAction = true,
     this.notes = "",
-    this.defenseNumber = 0,
+    this.defenseNumber = 1,
     this.turnModifier = '',
     required this.currentTurn,
     required this.consumables,

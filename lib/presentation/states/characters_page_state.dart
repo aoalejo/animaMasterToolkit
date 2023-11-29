@@ -125,7 +125,7 @@ class CharactersPageState extends ChangeNotifier {
     for (Character character in characters) {
       character.rollInitiative();
       character.state.hasAction = true;
-      character.state.defenseNumber = 0;
+      character.state.defenseNumber = 1;
     }
 
     characters.sort(Character.initiativeSort);
@@ -142,7 +142,9 @@ class CharactersPageState extends ChangeNotifier {
     notifyListeners();
   }
 
-  void updateCharacter(Character character) {
+  void updateCharacter(Character? character) {
+    if (character == null) return;
+
     int index =
         characters.indexWhere((element) => element.uuid == character.uuid);
 
