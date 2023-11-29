@@ -32,6 +32,8 @@ class CombatDefenseCard extends StatelessWidget {
                       inputType: TextInputType.number,
                       text: appState.combatState.defenseRoll,
                       label: "Tirada de defensa",
+                      onChanged: (value) =>
+                          {appState.updateCombatState(defenseRoll: value)},
                       suffixIcon: IconButton(
                         onPressed: () {
                           appState.updateCombatState(

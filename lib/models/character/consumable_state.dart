@@ -19,19 +19,21 @@ class ConsumableState {
   @HiveField(5)
   ConsumableType type = ConsumableType.other;
 
-  void updateMax(String newValue) {
-    try {
-      maxValue = newValue.interpret().toInt();
-    } catch (e) {
-      maxValue = 0;
+  void update({String? max, String? actual}) {
+    if (max != null) {
+      try {
+        maxValue = max.interpret().toInt();
+      } catch (e) {
+        maxValue = 0;
+      }
     }
-  }
 
-  void updateActual(String newValue) {
-    try {
-      actualValue = newValue.interpret().toInt();
-    } catch (e) {
-      actualValue = 0;
+    if (actual != null) {
+      try {
+        actualValue = actual.interpret().toInt();
+      } catch (e) {
+        actualValue = 0;
+      }
     }
   }
 

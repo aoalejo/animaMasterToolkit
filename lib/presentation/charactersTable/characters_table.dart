@@ -116,12 +116,8 @@ class CharactersTable extends StatelessWidget {
                   TurnCard(
                     item,
                     onChanged: (newValue) {
-                      _debouncer.run(
-                        () => {
-                          item.state.updateTurn(newValue),
-                          appState.updateCharacter(item),
-                        },
-                      );
+                      item.state.updateTurn(newValue);
+                      appState.updateCharacter(item);
                     },
                   ),
                   SizedBox(
@@ -138,24 +134,16 @@ class CharactersTable extends StatelessWidget {
                             onChangedActual: (actual) {
                               int index =
                                   item.state.consumables.indexOf(consumable);
-                              consumable.updateActual(actual);
-                              _debouncer.run(
-                                () => {
-                                  item.state.consumables[index] = consumable,
-                                  appState.updateCharacter(item),
-                                },
-                              );
+                              consumable.update(actual: actual);
+                              item.state.consumables[index] = consumable;
+                              appState.updateCharacter(item);
                             },
                             onChangedMax: (max) {
                               int index =
                                   item.state.consumables.indexOf(consumable);
-                              consumable.updateMax(max);
-                              _debouncer.run(
-                                () => {
-                                  item.state.consumables[index] = consumable,
-                                  appState.updateCharacter(item),
-                                },
-                              );
+                              consumable.update(max: max);
+                              item.state.consumables[index] = consumable;
+                              appState.updateCharacter(item);
                             },
                           ),
                       ],

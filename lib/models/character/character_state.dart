@@ -20,18 +20,14 @@ class CharacterState {
   @HiveField(4)
   Roll currentTurn = Roll(description: "", roll: 0, rolls: []);
   @HiveField(5)
-  int turnModifier = 0;
+  String turnModifier = '';
   @HiveField(6)
   int defenseNumber = 0;
   @HiveField(7)
   ModifiersState modifiers = ModifiersState();
 
   void updateTurn(String newValue) {
-    try {
-      turnModifier = newValue.interpret().toInt();
-    } catch (e) {
-      turnModifier = 0;
-    }
+    turnModifier = newValue;
   }
 
   CharacterState({
@@ -39,16 +35,24 @@ class CharacterState {
     this.hasAction = true,
     this.notes = "",
     this.defenseNumber = 0,
-    this.turnModifier = 0,
+    this.turnModifier = '',
     required this.currentTurn,
     required this.consumables,
     required this.modifiers,
   });
 
   int calculateTotalForTurn() {
-    var totalTurn = turnModifier;
+    var totalTurn = 0;
 
-    totalTurn = modifiers.getAllModifiersForType(ModifiersType.turn);
+    try {
+      totalTurn = turnModifier.interpret().toInt();
+      // ignore: empty_catches
+    } catch (e) {
+      print("cannot interpret modifier!");
+    }
+
+    totalTurn =
+        totalTurn + modifiers.getAllModifiersForType(ModifiersType.turn);
 
     return totalTurn;
   }

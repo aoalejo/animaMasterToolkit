@@ -1,4 +1,5 @@
 import 'package:amt/models/character/character.dart';
+import 'package:amt/presentation/TextFormFieldCustom.dart';
 import 'package:flutter/material.dart';
 
 class TurnCard extends StatelessWidget {
@@ -42,11 +43,12 @@ class TurnCard extends StatelessWidget {
                     SizedBox(
                       height: 4,
                     ),
-                    TextFormField(
-                      keyboardType: TextInputType.number,
-                      style: style,
+                    TextFormFieldCustom(
+                      text: character.state.turnModifier,
+                      inputType: TextInputType.number,
                       decoration: inputStyle,
                       onChanged: onChanged,
+                      style: style,
                     ),
                     SizedBox(
                       height: 4,
@@ -54,7 +56,7 @@ class TurnCard extends StatelessWidget {
                   ],
                 ),
                 Text(
-                  character.state.currentTurn.roll.toString(),
+                  '= ${character.state.currentTurn.roll.toString()}',
                   style: styleTotal,
                 ),
               ],

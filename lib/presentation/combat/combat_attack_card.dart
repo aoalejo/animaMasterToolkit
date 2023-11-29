@@ -32,6 +32,8 @@ class CombatAttackCard extends StatelessWidget {
                       inputType: TextInputType.number,
                       text: appState.combatState.attackRoll,
                       label: "Tirada de ataque",
+                      onChanged: (value) =>
+                          {appState.updateCombatState(attackRoll: value)},
                       suffixIcon: IconButton(
                         onPressed: () {
                           appState.updateCombatState(

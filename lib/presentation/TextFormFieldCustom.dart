@@ -6,6 +6,8 @@ class TextFormFieldCustom extends StatelessWidget {
   final TextInputType? inputType;
   final void Function(String)? onChanged;
   final Widget? suffixIcon;
+  final InputDecoration? decoration;
+  final TextStyle? style;
 
   const TextFormFieldCustom({
     super.key,
@@ -14,6 +16,8 @@ class TextFormFieldCustom extends StatelessWidget {
     this.inputType,
     this.onChanged,
     this.suffixIcon,
+    this.decoration,
+    this.style,
   });
 
   @override
@@ -30,12 +34,14 @@ class TextFormFieldCustom extends StatelessWidget {
       ),
       textInputAction: TextInputAction.done,
       keyboardType: inputType,
-      decoration: InputDecoration(
-        labelText: label,
-        border: OutlineInputBorder(),
-        contentPadding: EdgeInsets.all(8),
-        suffixIcon: suffixIcon,
-      ),
+      style: style,
+      decoration: decoration ??
+          InputDecoration(
+            labelText: label,
+            border: OutlineInputBorder(),
+            contentPadding: EdgeInsets.all(8),
+            suffixIcon: suffixIcon,
+          ),
     );
   }
 }

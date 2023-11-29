@@ -1,4 +1,5 @@
 import 'package:amt/models/character/consumable_state.dart';
+import 'package:amt/presentation/TextFormFieldCustom.dart';
 import 'package:flutter/material.dart';
 
 class ConsumableCard extends StatelessWidget {
@@ -45,25 +46,23 @@ class ConsumableCard extends StatelessWidget {
         children: [
           consumable.step > 0 || consumable.description.isNotEmpty
               ? Tooltip(
+                  textAlign: TextAlign.center,
                   message:
-                      '${consumable.step > 0 ? 'incremento: ${consumable.step.toString()}' : ''} ${consumable.description.isNotEmpty ? ', ${consumable.description}' : ''}',
+                      '${consumable.step > 0 ? 'incremento: ${consumable.step.toString()}\n' : ''}${consumable.description.isNotEmpty ? consumable.description : ''}',
                   child: header)
               : header,
           Row(
             children: [
               Expanded(
-                child: TextFormField(
-                  textAlign: TextAlign.center,
-                  decoration: InputDecoration(
-                    isDense: true,
-                    border: InputBorder.none,
-                    contentPadding: EdgeInsets.all(4),
-                  ),
-                  style: consumable.actualValue > 999 ? styleS : styleM,
-                  initialValue: consumable.actualValue.toString(),
-                  onChanged: onChangedActual,
+                  child: TextFormFieldCustom(
+                decoration: InputDecoration(
+                  isDense: true,
+                  border: InputBorder.none,
+                  contentPadding: EdgeInsets.all(4),
                 ),
-              ),
+                text: consumable.actualValue.toString(),
+                onChanged: onChangedActual,
+              )),
               Text("/"),
               Expanded(
                 child: TextFormField(
