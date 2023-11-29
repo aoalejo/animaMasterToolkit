@@ -23,8 +23,10 @@ class CharactersPageState extends ChangeNotifier {
   }
 
   void initAsync() async {
+    print("openBox");
     _box = await Hive.openBox('characters');
     characters = _box.values.toList();
+    print("characters");
   }
 
   void updateAttackingModifiers(ModifiersState modifiers) {

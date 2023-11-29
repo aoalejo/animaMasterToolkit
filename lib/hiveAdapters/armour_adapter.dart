@@ -16,7 +16,7 @@ class ArmourAdapter extends TypeAdapter<Armour> {
       name: fields[0],
       location: EnumConverter.from(fields[1], ArmourLocation.values),
       quality: fields[2],
-      fil: fields[3],
+      fil: fields[3] as int,
       con: fields[4],
       pen: fields[5],
       cal: fields[6],
@@ -33,20 +33,20 @@ class ArmourAdapter extends TypeAdapter<Armour> {
   @override
   void write(BinaryWriter writer, Armour obj) {
     writer
-      ..write(obj.name)
-      ..write(obj.location)
-      ..write(obj.quality)
-      ..write(obj.fil)
-      ..write(obj.con)
-      ..write(obj.pen)
-      ..write(obj.cal)
-      ..write(obj.ele)
-      ..write(obj.fri)
-      ..write(obj.ene)
-      ..write(obj.endurance)
-      ..write(obj.presence)
-      ..write(obj.movementRestriction)
-      ..write(obj.enchanted);
+      ..writeString(obj.name ?? '')
+      ..writeString(obj.location?.name ?? '')
+      ..writeInt(obj.quality ?? 0)
+      ..writeInt(obj.fil)
+      ..writeInt(obj.con)
+      ..writeInt(obj.pen)
+      ..writeInt(obj.cal)
+      ..writeInt(obj.ele)
+      ..writeInt(obj.fri)
+      ..writeInt(obj.ene)
+      ..writeInt(obj.endurance ?? 0)
+      ..writeInt(obj.presence ?? 0)
+      ..writeInt(obj.movementRestriction ?? 0)
+      ..writeBool(obj.enchanted ?? false);
   }
 
   @override

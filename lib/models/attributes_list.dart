@@ -2,7 +2,7 @@ import 'package:amt/models/character/character.dart';
 import 'package:amt/utils/json_utils.dart';
 import 'package:hive/hive.dart';
 
-@HiveType(typeId: 1)
+@HiveType(typeId: 1, adapterName: "AttributesListAdapter")
 class AttributesList {
   @HiveField(0)
   late int agility;

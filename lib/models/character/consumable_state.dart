@@ -2,7 +2,7 @@ import 'package:amt/models/enums.dart';
 import 'package:function_tree/function_tree.dart';
 import 'package:hive/hive.dart';
 
-@HiveType(typeId: 12)
+@HiveType(typeId: 12, adapterName: "ConsumableStateAdapter")
 class ConsumableState {
   @HiveField(0)
   String name = "";

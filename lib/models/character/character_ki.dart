@@ -2,7 +2,7 @@ import 'package:amt/models/attributes_list.dart';
 import 'package:amt/utils/json_utils.dart';
 import 'package:hive/hive.dart';
 
-@HiveType(typeId: 9)
+@HiveType(typeId: 9, adapterName: "CharacterKiAdapter")
 class CharacterKi {
   @HiveField(0)
   late AttributesList accumulationsPerAttribute;

@@ -1,7 +1,7 @@
 import 'package:amt/utils/json_utils.dart';
 import 'package:hive/hive.dart';
 
-@HiveType(typeId: 10)
+@HiveType(typeId: 10, adapterName: "MysticalAdapter")
 class Mystical {
   @HiveField(0)
   int zeonRegeneration;

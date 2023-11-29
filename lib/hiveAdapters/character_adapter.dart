@@ -8,9 +8,11 @@ class CharacterAdapter extends TypeAdapter<Character> {
   @override
   Character read(BinaryReader reader) {
     final numOfFields = reader.readByte();
+
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
+
     return Character(
       uuid: fields[0],
       attributes: fields[1],
@@ -27,9 +29,9 @@ class CharacterAdapter extends TypeAdapter<Character> {
   @override
   void write(BinaryWriter writer, Character obj) {
     writer
-      ..write(obj.uuid)
+      ..writeString(obj.uuid)
       ..write(obj.attributes)
-      ..write(obj.skills)
+      ..writeMap(obj.skills)
       ..write(obj.profile)
       ..write(obj.state)
       ..write(obj.combat)

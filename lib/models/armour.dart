@@ -2,7 +2,7 @@ import 'package:amt/models/enums.dart';
 import 'package:amt/utils/json_utils.dart';
 import 'package:hive/hive.dart';
 
-@HiveType(typeId: 8)
+@HiveType(typeId: 8, adapterName: "ArmourAdapter")
 class Armour {
   @HiveField(0)
   String? name;

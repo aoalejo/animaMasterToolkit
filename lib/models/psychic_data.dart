@@ -1,7 +1,7 @@
 import 'package:amt/utils/json_utils.dart';
 import 'package:hive/hive.dart';
 
-@HiveType(typeId: 11)
+@HiveType(typeId: 11, adapterName: "PsychicDataAdapter")
 class PsychicData {
   @HiveField(0)
   int freeCvs;

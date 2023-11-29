@@ -2,5 +2,6 @@
     "cSpell.words": [
         "debouncer",
         "zeon"
-    ]
+    ],
+    "cmake.configureOnOpen": true
 }

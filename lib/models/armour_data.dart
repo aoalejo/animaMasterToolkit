@@ -2,7 +2,7 @@ import 'package:amt/models/armour.dart';
 import 'package:amt/utils/json_utils.dart';
 import 'package:hive/hive.dart';
 
-@HiveType(typeId: 7)
+@HiveType(typeId: 7, adapterName: "ArmourDataAdapter")
 class ArmourData {
   @HiveField(0)
   int? movementRestriction;

@@ -3,7 +3,7 @@ import 'package:amt/models/enums.dart';
 import 'package:amt/resources/modifiers.dart';
 import 'package:hive/hive.dart';
 
-@HiveType(typeId: 13)
+@HiveType(typeId: 13, adapterName: "ModifiersStateAdapter")
 class ModifiersState {
   @HiveField(0)
   List<StatusModifier> _modifiers = [];

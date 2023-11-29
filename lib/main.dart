@@ -43,6 +43,7 @@ void main() async {
   Hive.registerAdapter(StatusModifierAdapter());
   Hive.registerAdapter(WeaponAdapter());
 
+  print("registered adapters");
   runApp(MyApp());
 }
 

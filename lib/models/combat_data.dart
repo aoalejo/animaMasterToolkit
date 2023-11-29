@@ -3,7 +3,7 @@ import 'package:amt/models/armour_data.dart';
 import 'package:amt/models/weapon.dart';
 import 'package:hive/hive.dart';
 
-@HiveType(typeId: 5)
+@HiveType(typeId: 5, adapterName: "CombatDataAdapter")
 class CombatData {
   @HiveField(0)
   late List<Weapon> weapons;

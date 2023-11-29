@@ -2,7 +2,7 @@ import 'dart:math';
 
 import 'package:hive/hive.dart';
 
-@HiveType(typeId: 4)
+@HiveType(typeId: 4, adapterName: "RollAdapter")
 class Roll {
   @HiveField(0)
   late final int roll;

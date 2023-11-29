@@ -2,7 +2,7 @@ import 'package:amt/models/enums.dart';
 import 'package:amt/utils/json_utils.dart';
 import 'package:hive/hive.dart';
 
-@HiveType(typeId: 6)
+@HiveType(typeId: 6, adapterName: "WeaponAdapter")
 class Weapon {
   @HiveField(0)
   late String name;

@@ -1,7 +1,7 @@
 import 'package:amt/utils/json_utils.dart';
 import 'package:hive/hive.dart';
 
-@HiveType(typeId: 14)
+@HiveType(typeId: 14, adapterName: "StatusModifierAdapter")
 class StatusModifier extends Object {
   @HiveField(0)
   late String name;

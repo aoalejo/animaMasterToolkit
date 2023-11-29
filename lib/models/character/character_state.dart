@@ -5,7 +5,7 @@ import 'package:amt/resources/modifiers.dart';
 import 'package:function_tree/function_tree.dart';
 import 'package:hive/hive.dart';
 
-@HiveType(typeId: 3)
+@HiveType(typeId: 3, adapterName: "CharacterStateAdapter")
 class CharacterState {
   @HiveField(0)
   int selectedWeaponIndex = 0;

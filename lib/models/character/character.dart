@@ -15,7 +15,7 @@ import 'package:amt/models/weapon.dart';
 import 'package:hive/hive.dart';
 import 'package:uuid/uuid.dart';
 
-@HiveType(typeId: 0)
+@HiveType(typeId: 0, adapterName: "CharacterAdapter")
 class Character extends HiveObject {
   @HiveField(0)
   late String uuid;
