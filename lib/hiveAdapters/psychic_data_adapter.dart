@@ -3,7 +3,7 @@ import 'package:hive/hive.dart';
 
 class PsychicDataAdapter extends TypeAdapter<PsychicData> {
   @override
-  final int typeId = 3;
+  final int typeId = 11;
 
   @override
   PsychicData read(BinaryReader reader) {

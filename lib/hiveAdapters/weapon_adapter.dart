@@ -4,7 +4,7 @@ import 'package:hive/hive.dart';
 
 class WeaponAdapter extends TypeAdapter<Weapon> {
   @override
-  final int typeId = 3;
+  final int typeId = 6;
 
   @override
   Weapon read(BinaryReader reader) {

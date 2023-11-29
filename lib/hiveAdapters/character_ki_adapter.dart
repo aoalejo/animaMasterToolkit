@@ -3,7 +3,7 @@ import 'package:hive/hive.dart';
 
 class CharacterKiAdapter extends TypeAdapter<CharacterKi> {
   @override
-  final int typeId = 3;
+  final int typeId = 9;
 
   @override
   CharacterKi read(BinaryReader reader) {

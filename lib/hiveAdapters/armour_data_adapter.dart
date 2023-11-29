@@ -3,7 +3,7 @@ import 'package:hive/hive.dart';
 
 class ArmourDataAdapter extends TypeAdapter<ArmourData> {
   @override
-  final int typeId = 0;
+  final int typeId = 7;
 
   @override
   ArmourData read(BinaryReader reader) {

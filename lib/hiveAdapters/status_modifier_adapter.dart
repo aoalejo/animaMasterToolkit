@@ -3,7 +3,7 @@ import 'package:hive/hive.dart';
 
 class StatusModifierAdapter extends TypeAdapter<StatusModifier> {
   @override
-  final int typeId = 3;
+  final int typeId = 14;
 
   @override
   StatusModifier read(BinaryReader reader) {

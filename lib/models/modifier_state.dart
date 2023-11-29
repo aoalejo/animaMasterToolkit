@@ -6,13 +6,13 @@ import 'package:hive/hive.dart';
 @HiveType(typeId: 13)
 class ModifiersState {
   @HiveField(0)
-  Set<StatusModifier> _modifiers = {};
+  List<StatusModifier> _modifiers = [];
 
-  Set<StatusModifier> getAll() {
+  List<StatusModifier> getAll() {
     return _modifiers;
   }
 
-  void setAll(Set<StatusModifier> modifiers) {
+  void setAll(List<StatusModifier> modifiers) {
     _modifiers = modifiers;
   }
 

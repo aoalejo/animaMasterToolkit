@@ -3,7 +3,7 @@ import 'package:hive/hive.dart';
 
 class CombatDataAdapter extends TypeAdapter<CombatData> {
   @override
-  final int typeId = 3;
+  final int typeId = 5;
 
   @override
   CombatData read(BinaryReader reader) {

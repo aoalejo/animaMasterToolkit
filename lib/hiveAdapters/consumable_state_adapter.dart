@@ -4,7 +4,7 @@ import 'package:hive/hive.dart';
 
 class ConsumableStateAdapter extends TypeAdapter<ConsumableState> {
   @override
-  final int typeId = 2;
+  final int typeId = 12;
 
   @override
   ConsumableState read(BinaryReader reader) {

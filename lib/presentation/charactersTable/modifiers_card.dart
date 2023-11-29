@@ -2,7 +2,7 @@ import 'package:amt/models/character/status_modifier.dart';
 import 'package:flutter/material.dart';
 
 class ModifiersCard extends StatelessWidget {
-  final Set<StatusModifier> modifiers;
+  final List<StatusModifier> modifiers;
   final double aspectRatio;
   final Function(StatusModifier)? onSelected;
 

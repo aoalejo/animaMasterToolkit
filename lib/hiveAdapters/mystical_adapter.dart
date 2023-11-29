@@ -3,7 +3,7 @@ import 'package:hive/hive.dart';
 
 class MysticalAdapter extends TypeAdapter<Mystical> {
   @override
-  final int typeId = 0;
+  final int typeId = 10;
 
   @override
   Mystical read(BinaryReader reader) {
