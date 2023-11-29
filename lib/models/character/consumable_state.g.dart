@@ -1,6 +1,10 @@
-import 'package:amt/models/character/consumable_state.dart';
-import 'package:amt/models/enums.dart';
-import 'package:hive/hive.dart';
+// GENERATED CODE - DO NOT MODIFY BY HAND
+
+part of 'consumable_state.dart';
+
+// **************************************************************************
+// TypeAdapterGenerator
+// **************************************************************************
 
 class ConsumableStateAdapter extends TypeAdapter<ConsumableState> {
   @override
@@ -13,24 +17,31 @@ class ConsumableStateAdapter extends TypeAdapter<ConsumableState> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return ConsumableState(
-      name: fields[0],
-      maxValue: fields[1],
-      actualValue: fields[2],
-      step: fields[3],
-      description: fields[4],
-      type: EnumConverter.from(fields[5], ConsumableType.values),
+      name: fields[0] as String,
+      maxValue: fields[1] as int,
+      actualValue: fields[2] as int,
+      step: fields[3] as int,
+      description: fields[4] as String,
+      type: fields[5] as ConsumableType,
     );
   }
 
   @override
   void write(BinaryWriter writer, ConsumableState obj) {
     writer
+      ..writeByte(6)
+      ..writeByte(0)
       ..write(obj.name)
+      ..writeByte(1)
       ..write(obj.maxValue)
+      ..writeByte(2)
       ..write(obj.actualValue)
+      ..writeByte(3)
       ..write(obj.step)
+      ..writeByte(4)
       ..write(obj.description)
-      ..write(obj.type.name);
+      ..writeByte(5)
+      ..write(obj.type);
   }
 
   @override
@@ -41,5 +52,5 @@ class ConsumableStateAdapter extends TypeAdapter<ConsumableState> {
       identical(this, other) ||
       other is ConsumableStateAdapter &&
           runtimeType == other.runtimeType &&
-          hashCode == other.hashCode;
+          typeId == other.typeId;
 }

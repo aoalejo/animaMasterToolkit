@@ -1,23 +1,25 @@
 import 'package:amt/utils/json_utils.dart';
 import 'package:hive/hive.dart';
 
-@HiveType(typeId: 10, adapterName: "MysticalAdapter")
+part 'mystical.g.dart';
+
+@HiveType(typeId: 10)
 class Mystical {
   @HiveField(0)
   int zeonRegeneration;
-  @HiveField(0)
-  int act;
   @HiveField(1)
-  int zeon;
+  int act;
   @HiveField(2)
-  Map<String, String> paths;
+  int zeon;
   @HiveField(3)
-  Map<String, String> subPaths;
+  Map<String, String> paths;
   @HiveField(4)
-  Map<String, String> metamagic;
+  Map<String, String> subPaths;
   @HiveField(5)
-  Map<String, String> spellsMaintained;
+  Map<String, String> metamagic;
   @HiveField(6)
+  Map<String, String> spellsMaintained;
+  @HiveField(7)
   Map<String, String> spellsPurchased;
 
   Mystical({

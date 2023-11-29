@@ -1,5 +1,10 @@
-import 'package:amt/models/character/character_ki.dart';
-import 'package:hive/hive.dart';
+// GENERATED CODE - DO NOT MODIFY BY HAND
+
+part of 'character_ki.dart';
+
+// **************************************************************************
+// TypeAdapterGenerator
+// **************************************************************************
 
 class CharacterKiAdapter extends TypeAdapter<CharacterKi> {
   @override
@@ -12,21 +17,27 @@ class CharacterKiAdapter extends TypeAdapter<CharacterKi> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return CharacterKi(
-      accumulationsPerAttribute: fields[0],
-      maximumPerAttribute: fields[1],
-      skills: fields[2],
-      maximumAccumulation: fields[3],
-      genericAccumulation: fields[4],
+      accumulationsPerAttribute: fields[0] as AttributesList,
+      maximumPerAttribute: fields[1] as AttributesList,
+      skills: (fields[2] as Map).cast<String, dynamic>(),
+      maximumAccumulation: fields[3] as int,
+      genericAccumulation: fields[4] as int,
     );
   }
 
   @override
   void write(BinaryWriter writer, CharacterKi obj) {
     writer
+      ..writeByte(5)
+      ..writeByte(0)
       ..write(obj.accumulationsPerAttribute)
+      ..writeByte(1)
       ..write(obj.maximumPerAttribute)
+      ..writeByte(2)
       ..write(obj.skills)
+      ..writeByte(3)
       ..write(obj.maximumAccumulation)
+      ..writeByte(4)
       ..write(obj.genericAccumulation);
   }
 
@@ -38,5 +49,5 @@ class CharacterKiAdapter extends TypeAdapter<CharacterKi> {
       identical(this, other) ||
       other is CharacterKiAdapter &&
           runtimeType == other.runtimeType &&
-          hashCode == other.hashCode;
+          typeId == other.typeId;
 }

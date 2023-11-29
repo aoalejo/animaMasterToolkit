@@ -1,5 +1,10 @@
-import 'package:amt/models/character/status_modifier.dart';
-import 'package:hive/hive.dart';
+// GENERATED CODE - DO NOT MODIFY BY HAND
+
+part of 'status_modifier.dart';
+
+// **************************************************************************
+// TypeAdapterGenerator
+// **************************************************************************
 
 class StatusModifierAdapter extends TypeAdapter<StatusModifier> {
   @override
@@ -12,23 +17,30 @@ class StatusModifierAdapter extends TypeAdapter<StatusModifier> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return StatusModifier(
-      name: fields[0],
-      attack: fields[1],
-      dodge: fields[2],
-      parry: fields[3],
-      turn: fields[4],
-      physicalAction: fields[5],
+      name: fields[0] as String,
+      attack: fields[1] as int,
+      dodge: fields[2] as int,
+      parry: fields[3] as int,
+      turn: fields[4] as int,
+      physicalAction: fields[5] as int,
     );
   }
 
   @override
   void write(BinaryWriter writer, StatusModifier obj) {
     writer
+      ..writeByte(6)
+      ..writeByte(0)
       ..write(obj.name)
+      ..writeByte(1)
       ..write(obj.attack)
+      ..writeByte(2)
       ..write(obj.dodge)
+      ..writeByte(3)
       ..write(obj.parry)
+      ..writeByte(4)
       ..write(obj.turn)
+      ..writeByte(5)
       ..write(obj.physicalAction);
   }
 
@@ -40,5 +52,5 @@ class StatusModifierAdapter extends TypeAdapter<StatusModifier> {
       identical(this, other) ||
       other is StatusModifierAdapter &&
           runtimeType == other.runtimeType &&
-          hashCode == other.hashCode;
+          typeId == other.typeId;
 }

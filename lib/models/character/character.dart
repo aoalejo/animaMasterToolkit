@@ -7,13 +7,15 @@ import 'package:amt/models/character/character_ki.dart';
 import 'package:amt/models/character_profile.dart';
 import 'package:amt/models/combat_data.dart';
 import 'package:amt/models/enums.dart';
-import 'package:amt/models/modifier_state.dart';
+import 'package:amt/models/modifiers_state.dart';
 import 'package:amt/models/mystical.dart';
 import 'package:amt/models/psychic_data.dart';
 import 'package:amt/models/roll.dart';
 import 'package:amt/models/weapon.dart';
 import 'package:hive/hive.dart';
 import 'package:uuid/uuid.dart';
+
+part 'character.g.dart';
 
 @HiveType(typeId: 0, adapterName: "CharacterAdapter")
 class Character extends HiveObject {

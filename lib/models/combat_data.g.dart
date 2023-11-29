@@ -1,5 +1,10 @@
-import 'package:amt/models/combat_data.dart';
-import 'package:hive/hive.dart';
+// GENERATED CODE - DO NOT MODIFY BY HAND
+
+part of 'combat_data.dart';
+
+// **************************************************************************
+// TypeAdapterGenerator
+// **************************************************************************
 
 class CombatDataAdapter extends TypeAdapter<CombatData> {
   @override
@@ -12,15 +17,18 @@ class CombatDataAdapter extends TypeAdapter<CombatData> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return CombatData(
-      weapons: fields[0],
-      armour: fields[1],
+      armour: fields[1] as ArmourData,
+      weapons: (fields[0] as List).cast<Weapon>(),
     );
   }
 
   @override
   void write(BinaryWriter writer, CombatData obj) {
     writer
+      ..writeByte(2)
+      ..writeByte(0)
       ..write(obj.weapons)
+      ..writeByte(1)
       ..write(obj.armour);
   }
 
@@ -32,5 +40,5 @@ class CombatDataAdapter extends TypeAdapter<CombatData> {
       identical(this, other) ||
       other is CombatDataAdapter &&
           runtimeType == other.runtimeType &&
-          hashCode == other.hashCode;
+          typeId == other.typeId;
 }

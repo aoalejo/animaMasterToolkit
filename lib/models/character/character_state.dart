@@ -1,9 +1,11 @@
 import 'package:amt/models/character/consumable_state.dart';
-import 'package:amt/models/modifier_state.dart';
+import 'package:amt/models/modifiers_state.dart';
 import 'package:amt/models/roll.dart';
 import 'package:amt/resources/modifiers.dart';
 import 'package:function_tree/function_tree.dart';
 import 'package:hive/hive.dart';
+
+part 'character_state.g.dart';
 
 @HiveType(typeId: 3, adapterName: "CharacterStateAdapter")
 class CharacterState {

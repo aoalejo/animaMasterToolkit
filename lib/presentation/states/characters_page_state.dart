@@ -4,7 +4,7 @@ import 'dart:io';
 import 'package:amt/models/armour.dart';
 import 'package:amt/models/character/character.dart';
 import 'package:amt/models/enums.dart';
-import 'package:amt/models/modifier_state.dart';
+import 'package:amt/models/modifiers_state.dart';
 import 'package:amt/models/weapon.dart';
 import 'package:amt/presentation/states/combat_state.dart';
 import 'package:enough_convert/windows.dart';
@@ -25,7 +25,10 @@ class CharactersPageState extends ChangeNotifier {
   void initAsync() async {
     print("openBox");
     _box = await Hive.openBox('characters');
+    print("opened box characters");
     characters = _box.values.toList();
+    notifyListeners();
+
     print("characters");
   }
 

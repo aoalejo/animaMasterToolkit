@@ -1,5 +1,10 @@
-import 'package:amt/models/roll.dart';
-import 'package:hive/hive.dart';
+// GENERATED CODE - DO NOT MODIFY BY HAND
+
+part of 'roll.dart';
+
+// **************************************************************************
+// TypeAdapterGenerator
+// **************************************************************************
 
 class RollAdapter extends TypeAdapter<Roll> {
   @override
@@ -12,17 +17,21 @@ class RollAdapter extends TypeAdapter<Roll> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return Roll(
-      roll: fields[0],
-      description: fields[1],
-      rolls: fields[2],
+      description: fields[1] as String,
+      roll: fields[0] as int,
+      rolls: (fields[2] as List).cast<int>(),
     );
   }
 
   @override
   void write(BinaryWriter writer, Roll obj) {
     writer
+      ..writeByte(3)
+      ..writeByte(0)
       ..write(obj.roll)
+      ..writeByte(1)
       ..write(obj.description)
+      ..writeByte(2)
       ..write(obj.rolls);
   }
 
@@ -34,5 +43,5 @@ class RollAdapter extends TypeAdapter<Roll> {
       identical(this, other) ||
       other is RollAdapter &&
           runtimeType == other.runtimeType &&
-          hashCode == other.hashCode;
+          typeId == other.typeId;
 }

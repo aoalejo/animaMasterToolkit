@@ -1,5 +1,10 @@
-import 'package:amt/models/modifier_state.dart';
-import 'package:hive/hive.dart';
+// GENERATED CODE - DO NOT MODIFY BY HAND
+
+part of 'modifiers_state.dart';
+
+// **************************************************************************
+// TypeAdapterGenerator
+// **************************************************************************
 
 class ModifiersStateAdapter extends TypeAdapter<ModifiersState> {
   @override
@@ -11,16 +16,16 @@ class ModifiersStateAdapter extends TypeAdapter<ModifiersState> {
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-
-    var state = ModifiersState();
-
-    state.setAll(fields[0]);
-    return state;
+    return ModifiersState()
+      .._modifiers = (fields[0] as List).cast<StatusModifier>();
   }
 
   @override
   void write(BinaryWriter writer, ModifiersState obj) {
-    writer.write(obj.getAll());
+    writer
+      ..writeByte(1)
+      ..writeByte(0)
+      ..write(obj._modifiers);
   }
 
   @override
@@ -31,5 +36,5 @@ class ModifiersStateAdapter extends TypeAdapter<ModifiersState> {
       identical(this, other) ||
       other is ModifiersStateAdapter &&
           runtimeType == other.runtimeType &&
-          hashCode == other.hashCode;
+          typeId == other.typeId;
 }

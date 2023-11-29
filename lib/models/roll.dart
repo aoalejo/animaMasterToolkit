@@ -2,6 +2,8 @@ import 'dart:math';
 
 import 'package:hive/hive.dart';
 
+part 'roll.g.dart';
+
 @HiveType(typeId: 4, adapterName: "RollAdapter")
 class Roll {
   @HiveField(0)

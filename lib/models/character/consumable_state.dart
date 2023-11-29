@@ -2,6 +2,8 @@ import 'package:amt/models/enums.dart';
 import 'package:function_tree/function_tree.dart';
 import 'package:hive/hive.dart';
 
+part 'consumable_state.g.dart';
+
 @HiveType(typeId: 12, adapterName: "ConsumableStateAdapter")
 class ConsumableState {
   @HiveField(0)

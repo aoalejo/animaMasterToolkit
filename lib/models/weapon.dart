@@ -2,6 +2,8 @@ import 'package:amt/models/enums.dart';
 import 'package:amt/utils/json_utils.dart';
 import 'package:hive/hive.dart';
 
+part 'weapon.g.dart';
+
 @HiveType(typeId: 6, adapterName: "WeaponAdapter")
 class Weapon {
   @HiveField(0)

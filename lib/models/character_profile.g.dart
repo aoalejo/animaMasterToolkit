@@ -1,5 +1,10 @@
-import 'package:amt/models/character_profile.dart';
-import 'package:hive/hive.dart';
+// GENERATED CODE - DO NOT MODIFY BY HAND
+
+part of 'character_profile.dart';
+
+// **************************************************************************
+// TypeAdapterGenerator
+// **************************************************************************
 
 class CharacterProfileAdapter extends TypeAdapter<CharacterProfile> {
   @override
@@ -12,27 +17,36 @@ class CharacterProfileAdapter extends TypeAdapter<CharacterProfile> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return CharacterProfile(
-      fatigue: fields[0],
-      hitPoints: fields[1],
-      regeneration: fields[2],
-      name: fields[3],
-      category: fields[4],
-      level: fields[5],
-      kind: fields[6],
-      speed: fields[7],
+      fatigue: fields[0] as int,
+      hitPoints: fields[1] as int,
+      regeneration: fields[2] as int,
+      name: fields[3] as String,
+      category: fields[4] as String,
+      level: fields[5] as String,
+      kind: fields[6] as String,
+      speed: fields[7] as int,
     );
   }
 
   @override
   void write(BinaryWriter writer, CharacterProfile obj) {
     writer
+      ..writeByte(8)
+      ..writeByte(0)
       ..write(obj.fatigue)
+      ..writeByte(1)
       ..write(obj.hitPoints)
+      ..writeByte(2)
       ..write(obj.regeneration)
+      ..writeByte(3)
       ..write(obj.name)
+      ..writeByte(4)
       ..write(obj.category)
+      ..writeByte(5)
       ..write(obj.level)
+      ..writeByte(6)
       ..write(obj.kind)
+      ..writeByte(7)
       ..write(obj.speed);
   }
 
@@ -44,5 +58,5 @@ class CharacterProfileAdapter extends TypeAdapter<CharacterProfile> {
       identical(this, other) ||
       other is CharacterProfileAdapter &&
           runtimeType == other.runtimeType &&
-          hashCode == other.hashCode;
+          typeId == other.typeId;
 }

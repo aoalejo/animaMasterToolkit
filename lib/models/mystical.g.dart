@@ -1,5 +1,10 @@
-import 'package:amt/models/mystical.dart';
-import 'package:hive/hive.dart';
+// GENERATED CODE - DO NOT MODIFY BY HAND
+
+part of 'mystical.dart';
+
+// **************************************************************************
+// TypeAdapterGenerator
+// **************************************************************************
 
 class MysticalAdapter extends TypeAdapter<Mystical> {
   @override
@@ -12,27 +17,36 @@ class MysticalAdapter extends TypeAdapter<Mystical> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return Mystical(
-      zeonRegeneration: fields[0],
-      act: fields[1],
-      zeon: fields[2],
-      paths: fields[3],
-      subPaths: fields[4],
-      metamagic: fields[5],
-      spellsMaintained: fields[6],
-      spellsPurchased: fields[7],
+      zeonRegeneration: fields[0] as int,
+      act: fields[1] as int,
+      zeon: fields[2] as int,
+      paths: (fields[3] as Map).cast<String, String>(),
+      subPaths: (fields[4] as Map).cast<String, String>(),
+      metamagic: (fields[5] as Map).cast<String, String>(),
+      spellsMaintained: (fields[6] as Map).cast<String, String>(),
+      spellsPurchased: (fields[7] as Map).cast<String, String>(),
     );
   }
 
   @override
   void write(BinaryWriter writer, Mystical obj) {
     writer
+      ..writeByte(8)
+      ..writeByte(0)
       ..write(obj.zeonRegeneration)
+      ..writeByte(1)
       ..write(obj.act)
+      ..writeByte(2)
       ..write(obj.zeon)
+      ..writeByte(3)
       ..write(obj.paths)
+      ..writeByte(4)
       ..write(obj.subPaths)
+      ..writeByte(5)
       ..write(obj.metamagic)
+      ..writeByte(6)
       ..write(obj.spellsMaintained)
+      ..writeByte(7)
       ..write(obj.spellsPurchased);
   }
 

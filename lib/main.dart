@@ -1,19 +1,19 @@
-import 'package:amt/hiveAdapters/armour_adapter.dart';
-import 'package:amt/hiveAdapters/armour_data_adapter.dart';
-import 'package:amt/hiveAdapters/character_ki_adapter.dart';
-import 'package:amt/hiveAdapters/combat_data_adapter.dart';
-import 'package:amt/hiveAdapters/consumable_state_adapter.dart';
-import 'package:amt/hiveAdapters/modifier_state_adapter.dart';
-import 'package:amt/hiveAdapters/mystical_adapter.dart';
-import 'package:amt/hiveAdapters/psychic_data_adapter.dart';
-import 'package:amt/hiveAdapters/status_modifier_adapter.dart';
-import 'package:amt/hiveAdapters/weapon_adapter.dart';
+import 'package:amt/models/armour.dart';
+import 'package:amt/models/armour_data.dart';
+import 'package:amt/models/attributes_list.dart';
+import 'package:amt/models/character/character.dart';
+import 'package:amt/models/character/character_ki.dart';
+import 'package:amt/models/character/character_state.dart';
+import 'package:amt/models/character/consumable_state.dart';
+import 'package:amt/models/character/status_modifier.dart';
+import 'package:amt/models/character_profile.dart';
+import 'package:amt/models/combat_data.dart';
 import 'package:amt/models/enums.dart';
-import 'package:amt/hiveAdapters/attributes_list_adapter.dart';
-import 'package:amt/hiveAdapters/character_adapter.dart';
-import 'package:amt/hiveAdapters/character_profile_adapter.dart';
-import 'package:amt/hiveAdapters/character_state_adapter.dart';
-import 'package:amt/hiveAdapters/roll_adapter.dart';
+import 'package:amt/models/modifiers_state.dart';
+import 'package:amt/models/mystical.dart';
+import 'package:amt/models/psychic_data.dart';
+import 'package:amt/models/roll.dart';
+import 'package:amt/models/weapon.dart';
 import 'package:amt/presentation/charactersTable/characters_table.dart';
 import 'package:amt/presentation/combat/combat_attack_card.dart';
 import 'package:amt/presentation/combat/combat_defense_card.dart';
@@ -43,7 +43,15 @@ void main() async {
   Hive.registerAdapter(StatusModifierAdapter());
   Hive.registerAdapter(WeaponAdapter());
 
+  Hive.registerAdapter(DefenseTypeAdapter());
+  Hive.registerAdapter(DamageTypesAdapter());
+  Hive.registerAdapter(WeaponSizeAdapter());
+  Hive.registerAdapter(KnownTypeAdapter());
+  Hive.registerAdapter(ArmourLocationAdapter());
+  Hive.registerAdapter(ConsumableTypeAdapter());
+
   print("registered adapters");
+
   runApp(MyApp());
 }
 

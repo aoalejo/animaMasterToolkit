@@ -1,6 +1,6 @@
 import 'package:amt/models/character/character.dart';
 import 'package:amt/models/enums.dart';
-import 'package:amt/models/modifier_state.dart';
+import 'package:amt/models/modifiers_state.dart';
 import 'package:amt/presentation/bottom_sheet_modifiers.dart';
 import 'package:amt/presentation/charactersTable/actions_card.dart';
 import 'package:amt/presentation/charactersTable/character_info.dart';

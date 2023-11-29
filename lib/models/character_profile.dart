@@ -1,6 +1,8 @@
 import 'package:amt/utils/json_utils.dart';
 import 'package:hive/hive.dart';
 
+part 'character_profile.g.dart';
+
 @HiveType(typeId: 2, adapterName: "CharacterProfileAdapter")
 class CharacterProfile {
   @HiveField(0)
