@@ -1,10 +1,13 @@
 import 'package:amt/models/weapon.dart';
+import 'package:amt/presentation/TextFormFieldCustom.dart';
 import 'package:amt/presentation/bottom_sheet_custom.dart';
 import 'package:flutter/material.dart';
+import 'package:function_tree/function_tree.dart';
 
 class WeaponsRack extends StatelessWidget {
-  final Function() onEdit;
+  final Function(Weapon) onEdit;
   final Function(Weapon) onSelect;
+
   final List<Weapon> weapons;
   final Weapon selectedWeapon;
 
@@ -72,13 +75,8 @@ class WeaponsRack extends StatelessWidget {
                                 IconButton(
                                   onPressed: () => {
                                     Navigator.pop(context),
-                                    showModalBottomSheet<void>(
-                                        context: context,
-                                        builder: (BuildContext context) {
-                                          return Padding(
-                                              padding: EdgeInsets.all(16),
-                                              child: Text("TO DO"));
-                                        }),
+                                    _showWeaponEditor(context,
+                                        weapon: weapon, onEdit: onEdit)
                                   },
                                   icon: Icon(Icons.edit),
                                 )
@@ -119,5 +117,68 @@ class WeaponsRack extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  void _showWeaponEditor(BuildContext context,
+      {required Weapon weapon, required Function(Weapon) onEdit}) {
+    showModalBottomSheet<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return BottomSheetCustom(
+          title: Text("Modificar ${weapon.name}"),
+          children: [
+            TextFormFieldCustom(
+              label: "Nombre",
+              text: weapon.name,
+              onChanged: (value) {
+                weapon.name = value;
+                onEdit(weapon);
+              },
+            ),
+            SizedBox(
+              height: 16,
+            ),
+            TextFormFieldCustom(
+              label: "Daño base",
+              text: weapon.damage.toString(),
+              onChanged: (value) {
+                weapon.damage = _parseInput(value);
+                onEdit(weapon);
+              },
+            ),
+            SizedBox(
+              height: 16,
+            ),
+            TextFormFieldCustom(
+              label: "Defensa",
+              text: weapon.defense.toString(),
+              onChanged: (value) {
+                weapon.defense = _parseInput(value);
+                onEdit(weapon);
+              },
+            ),
+            SizedBox(
+              height: 16,
+            ),
+            TextFormFieldCustom(
+              label: "Turno",
+              text: weapon.turn.toString(),
+              onChanged: (value) {
+                weapon.turn = _parseInput(value);
+                onEdit(weapon);
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  int _parseInput(String value) {
+    try {
+      return value.interpret().toInt();
+    } catch (e) {
+      return 0;
+    }
   }
 }

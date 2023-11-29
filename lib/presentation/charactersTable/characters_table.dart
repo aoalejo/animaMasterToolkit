@@ -103,7 +103,10 @@ class CharactersTable extends StatelessWidget {
                         WeaponsRack(
                           weapons: item.combat.weapons,
                           selectedWeapon: item.selectedWeapon(),
-                          onEdit: () => {},
+                          onEdit: (weapon) => {
+                            item.combat.updateWeapon(weapon),
+                            appState.updateCharacter(item),
+                          },
                           onSelect: (element) => {
                             item.state.selectedWeaponIndex =
                                 item.combat.weapons.indexOf(element),

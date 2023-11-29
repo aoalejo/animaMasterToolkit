@@ -12,6 +12,15 @@ class CombatData {
   @HiveField(1)
   late ArmourData armour;
 
+  updateWeapon(Weapon weapon) {
+    for (var i = 0; i > weapons.length; i++) {
+      if (weapons[i].name == weapon.name) {
+        weapons[i] = weapon;
+        return;
+      }
+    }
+  }
+
   CombatData({required this.armour, required this.weapons});
 
   CombatData.fromJson(Map<String, dynamic> json) {
