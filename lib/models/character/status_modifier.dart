@@ -17,14 +17,21 @@ class StatusModifier extends Object {
   late int turn;
   @HiveField(5)
   late int physicalAction;
+  @HiveField(6)
+  late bool? isOfCritical;
+  @HiveField(7)
+  late int? midValue;
 
-  StatusModifier(
-      {required this.name,
-      this.attack = 0,
-      this.dodge = 0,
-      this.parry = 0,
-      this.turn = 0,
-      this.physicalAction = 0});
+  StatusModifier({
+    required this.name,
+    this.attack = 0,
+    this.dodge = 0,
+    this.parry = 0,
+    this.turn = 0,
+    this.physicalAction = 0,
+    this.isOfCritical = false,
+    this.midValue = 0,
+  });
 
   StatusModifier.fromJson(Map<String, dynamic> json) {
     name = json['name'];
@@ -36,24 +43,35 @@ class StatusModifier extends Object {
     physicalAction = JsonUtils.integer(json['physicalAction'], 0);
   }
 
-  String description() {
+  String description({String separator = " "}) {
     var description = "";
 
     if (attack != 0) {
-      description = '$description Ataque: $attack';
+      description = '$description${separator}Ataque: $attack';
     }
     if (parry != 0) {
-      description = '$description Parada: $attack';
+      description = '$description${separator}Parada: $attack';
     }
     if (dodge != 0) {
-      description = '$description Esquiva: $dodge';
+      description = '$description${separator}Esquiva: $dodge';
     }
     if (turn != 0) {
-      description = '$description Turno: $turn';
+      description = '$description${separator}Turno: $turn';
     }
     if (physicalAction != 0) {
-      description = '$description, Acciones Fisicas: $physicalAction';
+      description = '$description${separator}Acciones Fisicas: $physicalAction';
     }
+
+    if (isOfCritical == true && midValue != null) {
+      if (attack == midValue) {
+        description =
+            '$description${separator}Se recuperó hasta la mitad de su valor';
+      } else {
+        description =
+            '$description${separator}Se recupera hasta: $midValue a 5/turno';
+      }
+    }
+
     return description;
   }
 

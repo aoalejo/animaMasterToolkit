@@ -35,7 +35,7 @@ class ModifiersCard extends StatelessWidget {
               for (var modifier in modifiers)
                 Tooltip(
                   message:
-                      '${modifier.name}:\nAtaque: ${modifier.attack}\nEsquiva: ${modifier.dodge}\nParada: ${modifier.parry}\nTurno: ${modifier.turn}\nAccion: ${modifier.physicalAction}',
+                      '${modifier.name}:\n${modifier.description(separator: "\n")}',
                   child: InkWell(
                     onTap: () =>
                         onSelected != null ? onSelected!(modifier) : null,

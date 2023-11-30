@@ -27,9 +27,11 @@ class ScreenCombatState {
   int defendantCharacter = 0;
 
   var criticalRoll = "";
+  var localizationRoll = "";
   var physicalResistanceBase = "";
   var physicalResistanceRoll = "";
   var damageDone = "";
+  var modifierReduction = "";
 
   var actualHitPoints = 0;
 
@@ -194,6 +196,18 @@ class ScreenCombatState {
     return result;
   }
 
+  int criticalResultWithReduction() {
+    var reduction = 0;
+    var calculated = criticalResult();
+    try {
+      reduction = modifierReduction.interpret().toInt();
+    } catch (e) {
+      return calculated;
+    }
+
+    return calculated - reduction;
+  }
+
   String criticalDescription() {
     var critical = criticalResult();
     var description = "Resultado de $critical";
@@ -217,15 +231,19 @@ class ScreenCombatState {
           '$description \nqueda además inconsciente automáticamente, y muere en un número de minutos equivalente a su Constitución si no recibe atención médica.';
     }
 
-    if (critical > 50) {
-      description = '$description \n\nGolpea en: ${_getCriticalLocalization()}';
-    }
-
     return description;
   }
 
-  String _getCriticalLocalization() {
-    var roll = Random().nextInt(100) + 1;
+  String getCriticalLocalization() {
+    var roll = -1;
+
+    try {
+      roll = localizationRoll.interpret().toInt();
+    } catch (e) {
+      return " - ";
+    }
+
+    if (roll == -1) return " - ";
 
     if (roll >= 91) return "($roll) Cabeza";
 

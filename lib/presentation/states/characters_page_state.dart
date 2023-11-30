@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:math';
 
 import 'package:amt/models/armour.dart';
 import 'package:amt/models/character/character.dart';
@@ -69,7 +70,13 @@ class CharactersPageState extends ChangeNotifier {
     String? physicalResistanceRoll,
     String? damageDone,
     int? actualHitPoints,
+    String? localizationRoll,
+    String? modifierReduction,
   }) {
+    combatState.modifierReduction =
+        modifierReduction ?? combatState.modifierReduction;
+    combatState.localizationRoll =
+        localizationRoll ?? combatState.localizationRoll;
     combatState.actualHitPoints =
         actualHitPoints ?? combatState.actualHitPoints;
 
@@ -143,6 +150,22 @@ class CharactersPageState extends ChangeNotifier {
 
   void rollTurns() {
     for (Character character in characters) {
+      var allModifiers = character.state.modifiers.getAll();
+
+      for (var element in allModifiers) {
+        if (element.isOfCritical ?? false) {
+          element.attack = min(element.attack + 5, element.midValue ?? 0);
+          element.dodge = min(element.dodge + 5, element.midValue ?? 0);
+          element.parry = min(element.parry + 5, element.midValue ?? 0);
+          element.physicalAction =
+              min(element.physicalAction + 5, element.midValue ?? 0);
+          element.turn = min(element.turn + 5, element.midValue ?? 0);
+        }
+      }
+
+      // character.state.modifiers.clear();
+      character.state.modifiers.setAll(allModifiers);
+
       character.rollInitiative();
       character.state.hasAction = true;
       character.state.defenseNumber = 1;

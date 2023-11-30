@@ -172,7 +172,6 @@ class CombatSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    var appState = context.watch<CharactersPageState>();
 
     return ColoredBox(
       color: theme.colorScheme.primaryContainer,
