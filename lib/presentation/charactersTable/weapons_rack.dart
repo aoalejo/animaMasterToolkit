@@ -73,13 +73,30 @@ class WeaponsRack extends StatelessWidget {
                                     ),
                                   ],
                                 ),
-                                IconButton(
-                                  onPressed: () => {
-                                    Navigator.pop(context),
-                                    _showWeaponEditor(context,
-                                        weapon: weapon, onEdit: onEdit)
-                                  },
-                                  icon: Icon(Icons.edit),
+                                Row(
+                                  children: [
+                                    IconButton(
+                                      onPressed: () {
+                                        var copy = weapon.copy();
+                                        weapons.add(copy);
+                                        Navigator.pop(context);
+                                        _showWeaponEditor(
+                                          context,
+                                          weapon: copy,
+                                          onEdit: onEdit,
+                                        );
+                                      },
+                                      icon: Icon(Icons.copy),
+                                    ),
+                                    IconButton(
+                                      onPressed: () => {
+                                        Navigator.pop(context),
+                                        _showWeaponEditor(context,
+                                            weapon: weapon, onEdit: onEdit)
+                                      },
+                                      icon: Icon(Icons.edit),
+                                    )
+                                  ],
                                 )
                               ],
                             ),

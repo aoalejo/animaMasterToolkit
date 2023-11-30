@@ -178,16 +178,18 @@ class CombatSection extends StatelessWidget {
       color: theme.colorScheme.primaryContainer,
       child: Padding(
         padding: EdgeInsets.all(8),
-        child: Flex(
-          direction: Axis.vertical,
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            CombatAttackCard(),
-            CombatDefenseCard(),
-            CombatReturnCard(),
-            CombatCriticalCard(),
-          ],
+        child: SingleChildScrollView(
+          child: Flex(
+            direction: Axis.vertical,
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              CombatAttackCard(),
+              CombatDefenseCard(),
+              CombatReturnCard(),
+              CombatCriticalCard(),
+            ],
+          ),
         ),
       ),
     );

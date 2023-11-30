@@ -196,51 +196,17 @@ class CharactersTable extends StatelessWidget {
                                 );
                               },
                               onDodge: () {
-                                var index = appState.characters.indexOf(item);
-
-                                appState.updateCombatState(
-                                  defendantCharacter: index,
-                                  defenseRoll: "0",
-                                  defenderModifiers: ModifiersState(),
-                                  baseDefense:
-                                      _calculateDefense(item, DefenseType.dodge)
-                                          .toString(),
-                                  armour: item
-                                      .combat.armour.calculatedArmour.fil
-                                      .toString(),
-                                  defenseType: DefenseType.dodge,
-                                  defenseNumber: item.state.defenseNumber,
-                                  damageType:
-                                      item.selectedWeapon().principalDamage,
-                                  selectedArmour:
-                                      item.combat.armour.calculatedArmour,
-                                  defenseTurn: item.state.currentTurn.roll,
-                                  physicalResistanceBase: item
-                                      .resistances.physicalResistance
-                                      .toString(),
+                                _updateDefense(
+                                  appState,
+                                  item,
+                                  DefenseType.dodge,
                                 );
                               },
                               onParry: () {
-                                var index = appState.characters.indexOf(item);
-
-                                appState.updateCombatState(
-                                  defendantCharacter: index,
-                                  defenseRoll: "0",
-                                  defenderModifiers: ModifiersState(),
-                                  baseDefense:
-                                      _calculateDefense(item, DefenseType.parry)
-                                          .toString(),
-                                  armour: item
-                                      .combat.armour.calculatedArmour.fil
-                                      .toString(),
-                                  defenseType: DefenseType.parry,
-                                  defenseNumber: item.state.defenseNumber,
-                                  selectedArmour:
-                                      item.combat.armour.calculatedArmour,
-                                  defenseTurn: item.state.currentTurn.roll,
-                                  physicalResistanceBase: item
-                                      .resistances.physicalResistance
-                                      .toString(),
+                                _updateDefense(
+                                  appState,
+                                  item,
+                                  DefenseType.parry,
                                 );
                               },
                               onChangeModifiers: () {
@@ -271,6 +237,30 @@ class CharactersTable extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+
+  void _updateDefense(
+    CharactersPageState appState,
+    Character character,
+    DefenseType type,
+  ) {
+    var index = appState.characters.indexOf(character);
+    var hitPoints = character.state.getConsumable(ConsumableType.hitPoints);
+    var physicalResistance = character.resistances.physicalResistance;
+
+    appState.updateCombatState(
+      defendantCharacter: index,
+      defenseRoll: "0",
+      defenderModifiers: ModifiersState(),
+      baseDefense: _calculateDefense(character, type).toString(),
+      armour: character.combat.armour.calculatedArmour.fil.toString(),
+      defenseType: type,
+      defenseNumber: character.state.defenseNumber,
+      selectedArmour: character.combat.armour.calculatedArmour,
+      defenseTurn: character.state.currentTurn.roll,
+      physicalResistanceBase: physicalResistance.toString(),
+      actualHitPoints: hitPoints?.actualValue ?? 0,
     );
   }
 

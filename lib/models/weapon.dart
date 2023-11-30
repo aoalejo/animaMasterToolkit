@@ -91,4 +91,15 @@ class Weapon {
   String description({bool lineBreak = false}) {
     return "$name ${lineBreak ? '\n' : ''}HA: $attack ${lineBreak ? '\n' : ''}${defenseType == DefenseType.dodge ? "HE" : "HP"}: $defense ${lineBreak ? '\n' : ''}T: $turn ${lineBreak ? '\n' : ''}DMG: $damage ${principalDamage?.name()}/${secondaryDamage?.name()} ";
   }
+
+  Weapon copy() {
+    return Weapon(
+      name: name,
+      turn: turn,
+      attack: attack,
+      defense: defense,
+      defenseType: defenseType,
+      damage: damage,
+    );
+  }
 }

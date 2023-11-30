@@ -45,7 +45,9 @@ class ModifiersState {
       totalModifier.attack = totalModifier.attack + modifier.attack;
     }
 
-    return totalModifier.description();
+    return totalModifier.description().isEmpty
+        ? "0"
+        : totalModifier.description();
   }
 
   String totalDefendingDescription(DefenseType type) {

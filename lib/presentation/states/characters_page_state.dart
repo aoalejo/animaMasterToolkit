@@ -68,7 +68,11 @@ class CharactersPageState extends ChangeNotifier {
     String? physicalResistanceBase,
     String? physicalResistanceRoll,
     String? damageDone,
+    int? actualHitPoints,
   }) {
+    combatState.actualHitPoints =
+        actualHitPoints ?? combatState.actualHitPoints;
+
     combatState.damageDone = damageDone ?? combatState.damageDone;
     combatState.physicalResistanceBase =
         physicalResistanceBase ?? combatState.physicalResistanceBase;
