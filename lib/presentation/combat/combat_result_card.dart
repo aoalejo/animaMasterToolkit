@@ -23,10 +23,14 @@ class CombatReturnCard extends StatelessWidget {
                   var character = appState
                       .characters[appState.combatState.defendantCharacter];
 
+                  var damage = appState.combatState.calculateDamage();
+
                   character.removeFrom(
-                    appState.combatState.calculateDamage(),
+                    damage,
                     ConsumableType.hitPoints,
                   );
+
+                  appState.updateCombatState(damageDone: damage.toString());
 
                   character.state.defenseNumber += 1;
 

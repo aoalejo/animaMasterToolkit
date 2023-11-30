@@ -26,13 +26,14 @@ class CharacterAdapter extends TypeAdapter<Character> {
       ki: fields[6] as CharacterKi?,
       mystical: fields[7] as Mystical?,
       psychic: fields[8] as PsychicData?,
+      resistances: fields[9] as CharacterResistances,
     );
   }
 
   @override
   void write(BinaryWriter writer, Character obj) {
     writer
-      ..writeByte(9)
+      ..writeByte(10)
       ..writeByte(0)
       ..write(obj.uuid)
       ..writeByte(1)
@@ -50,7 +51,9 @@ class CharacterAdapter extends TypeAdapter<Character> {
       ..writeByte(7)
       ..write(obj.mystical)
       ..writeByte(8)
-      ..write(obj.psychic);
+      ..write(obj.psychic)
+      ..writeByte(9)
+      ..write(obj.resistances);
   }
 
   @override

@@ -1,7 +1,9 @@
 import 'package:amt/models/character/character.dart';
+import 'package:amt/models/enums.dart';
 import 'package:amt/presentation/TextFormFieldCustom.dart';
 import 'package:amt/presentation/text_card.dart';
 import 'package:flutter/material.dart';
+import 'package:function_tree/function_tree.dart';
 
 class ShowCharacterInfo {
   static call(
@@ -12,6 +14,7 @@ class ShowCharacterInfo {
     var theme = Theme.of(context);
     var skills = character.skills.list();
     var attributes = character.attributes.toKeyValue();
+    var resistances = character.resistances.toKeyValue();
 
     // Optional lists:
 
@@ -37,12 +40,13 @@ class ShowCharacterInfo {
 
     return showBottomSheet(
       context: context,
+      constraints: BoxConstraints.tight(Size(1200, 600)),
       builder: (context) {
         return StatefulBuilder(
           builder: (BuildContext context, StateSetter setState) {
             return SizedBox(
-              height: 500,
-              width: 400,
+              height: 600,
+              width: 1200,
               child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
@@ -101,20 +105,38 @@ class ShowCharacterInfo {
                       ),
                     ),
                     SizedBox(
-                      height: 380,
-                      width: 400,
+                      height: 480,
+                      width: 1200,
                       child: SingleChildScrollView(
                         scrollDirection: Axis.vertical,
                         child: Padding(
                           padding: EdgeInsets.all(8),
                           child: Table(
                             columnWidths: const <int, TableColumnWidth>{
-                              0: FractionColumnWidth(0.7),
-                              1: FractionColumnWidth(0.3),
+                              0: FractionColumnWidth(0.3),
+                              1: FractionColumnWidth(0.1),
+                              2: FractionColumnWidth(0.05),
+                              3: FractionColumnWidth(0.05),
+                              4: FractionColumnWidth(0.05),
+                              5: FractionColumnWidth(0.05),
+                              6: FractionColumnWidth(0.05),
+                              7: FractionColumnWidth(0.05),
+                              8: FractionColumnWidth(0.05),
+                              9: FractionColumnWidth(0.05),
+                              10: FractionColumnWidth(0.05),
+                              11: FractionColumnWidth(0.05),
                             },
                             children: [
                               for (var row in _table(
-                                  "Atributo", attributes, theme, search))
+                                "Atributo",
+                                attributes,
+                                theme,
+                                search,
+                                diffDivisor: 10,
+                              ))
+                                row,
+                              for (var row in _table(
+                                  "Resistencias", resistances, theme, search))
                                 row,
                               for (var row
                                   in _table("Habilidad", skills, theme, search))
@@ -166,12 +188,22 @@ class ShowCharacterInfo {
     String name,
     List<KeyValue>? list,
     ThemeData theme,
-    String search,
-  ) {
+    String search, {
+    List<DifficultyEnum> difficulties = SecondaryDifficulties.values,
+    int diffDivisor = 1,
+  }) {
     var textTitle = theme.textTheme.bodyLarge!.copyWith(
       color: theme.colorScheme.onPrimary,
     );
+
+    var textTitleSecondary = theme.textTheme.labelSmall!.copyWith(
+      color: theme.colorScheme.onPrimary,
+    );
     var textItem = theme.textTheme.bodyLarge!.copyWith(
+      color: theme.colorScheme.primary,
+    );
+
+    var textItemSecondary = theme.textTheme.bodySmall!.copyWith(
       color: theme.colorScheme.primary,
     );
 
@@ -194,6 +226,12 @@ class ShowCharacterInfo {
           "Valor",
           style: textTitle,
         ),
+        for (var diff in difficulties)
+          TextCard(
+            "${diff.abbreviated}\n(${diff.difficulty / diffDivisor})",
+            maxLines: 2,
+            style: textTitleSecondary,
+          ),
       ]),
       for (var value in listFiltered)
         TableRow(children: [
@@ -207,8 +245,28 @@ class ShowCharacterInfo {
             background: _colorForBackground(theme, value, list),
             style: textItem,
           ),
+          for (var diff in difficulties)
+            TextCard(
+              _differenceTo(value.value, diff.difficulty ~/ diffDivisor),
+              background: _colorForBackground(theme, value, list),
+              style: textItemSecondary,
+            ),
         ])
     ];
+  }
+
+  static String _differenceTo(String value, int difficulty) {
+    try {
+      var numericValue = difficulty - value.interpret().toInt();
+
+      if (numericValue > 0) {
+        return numericValue.toString();
+      } else {
+        return "-";
+      }
+    } catch (e) {
+      return "-";
+    }
   }
 
   static Color _colorForBackground(

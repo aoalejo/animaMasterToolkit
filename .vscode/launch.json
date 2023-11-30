@@ -18,6 +18,13 @@
             "args": ["-dmacos"]
         },
         {
+            "name": "amt - chrome",
+            "program": "lib/main.dart",
+            "request": "launch",
+            "type": "dart",
+            "args": ["-dchrome"]
+        },
+        {
             "name": "amt (profile mode)",
             "request": "launch",
             "type": "dart",

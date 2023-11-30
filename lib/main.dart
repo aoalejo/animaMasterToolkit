@@ -3,6 +3,7 @@ import 'package:amt/models/armour_data.dart';
 import 'package:amt/models/attributes_list.dart';
 import 'package:amt/models/character/character.dart';
 import 'package:amt/models/character/character_ki.dart';
+import 'package:amt/models/character/character_resistances.dart';
 import 'package:amt/models/character/character_state.dart';
 import 'package:amt/models/character/consumable_state.dart';
 import 'package:amt/models/character/status_modifier.dart';
@@ -16,6 +17,7 @@ import 'package:amt/models/roll.dart';
 import 'package:amt/models/weapon.dart';
 import 'package:amt/presentation/charactersTable/characters_table.dart';
 import 'package:amt/presentation/combat/combat_attack_card.dart';
+import 'package:amt/presentation/combat/combat_critical_card.dart';
 import 'package:amt/presentation/combat/combat_defense_card.dart';
 import 'package:amt/presentation/combat/combat_result_card.dart';
 import 'package:amt/presentation/states/characters_page_state.dart';
@@ -49,6 +51,7 @@ void main() async {
   Hive.registerAdapter(KnownTypeAdapter());
   Hive.registerAdapter(ArmourLocationAdapter());
   Hive.registerAdapter(ConsumableTypeAdapter());
+  Hive.registerAdapter(CharacterResistancesAdapter());
 
   print("registered adapters");
 
@@ -183,6 +186,7 @@ class CombatSection extends StatelessWidget {
             CombatAttackCard(),
             CombatDefenseCard(),
             CombatReturnCard(),
+            CombatCriticalCard(),
           ],
         ),
       ),

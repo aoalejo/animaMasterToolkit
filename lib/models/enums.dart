@@ -79,6 +79,116 @@ enum ConsumableType {
   other
 }
 
+abstract class DifficultyEnum {
+  int get difficulty;
+  String get displayable;
+  String get abbreviated;
+}
+
+enum PrimaryDifficulties implements DifficultyEnum {
+  simple(6),
+  normal(10),
+  complex(15),
+  extreme(20);
+
+  final int difficulty;
+
+  String get displayable {
+    switch (this) {
+      case PrimaryDifficulties.simple:
+        return "Simple";
+      case PrimaryDifficulties.normal:
+        return "Normal";
+      case PrimaryDifficulties.complex:
+        return "Complejo";
+      case PrimaryDifficulties.extreme:
+        return "Extremo";
+    }
+  }
+
+  String get abbreviated {
+    switch (this) {
+      case PrimaryDifficulties.simple:
+        return "SMP";
+      case PrimaryDifficulties.normal:
+        return "NOR";
+      case PrimaryDifficulties.complex:
+        return "COM";
+      case PrimaryDifficulties.extreme:
+        return "EXT";
+    }
+  }
+
+  const PrimaryDifficulties(this.difficulty);
+}
+
+enum SecondaryDifficulties implements DifficultyEnum {
+  routine(20),
+  easy(40),
+  medium(80),
+  hard(120),
+  veryHard(140),
+  absurd(180),
+  almostImpossible(240),
+  impossible(280),
+  inhumane(320),
+  zen(440);
+
+  final int difficulty;
+
+  String get displayable {
+    switch (this) {
+      case SecondaryDifficulties.routine:
+        return "Rutinario";
+      case SecondaryDifficulties.easy:
+        return "Fácil";
+      case SecondaryDifficulties.medium:
+        return "Media";
+      case SecondaryDifficulties.hard:
+        return "Dificil";
+      case SecondaryDifficulties.veryHard:
+        return "Muy Dificil";
+      case SecondaryDifficulties.absurd:
+        return "Absurdo";
+      case SecondaryDifficulties.almostImpossible:
+        return "Casi Imposible";
+      case SecondaryDifficulties.impossible:
+        return "Imposible";
+      case SecondaryDifficulties.inhumane:
+        return "Inhumano";
+      case SecondaryDifficulties.zen:
+        return "Zen";
+    }
+  }
+
+  String get abbreviated {
+    switch (this) {
+      case SecondaryDifficulties.routine:
+        return "RUT";
+      case SecondaryDifficulties.easy:
+        return "FAC";
+      case SecondaryDifficulties.medium:
+        return "MED";
+      case SecondaryDifficulties.hard:
+        return "DIF";
+      case SecondaryDifficulties.veryHard:
+        return "MDF";
+      case SecondaryDifficulties.absurd:
+        return "ABS";
+      case SecondaryDifficulties.almostImpossible:
+        return "CIM";
+      case SecondaryDifficulties.impossible:
+        return "IMP";
+      case SecondaryDifficulties.inhumane:
+        return "UNH";
+      case SecondaryDifficulties.zen:
+        return "ZEN";
+    }
+  }
+
+  const SecondaryDifficulties(this.difficulty);
+}
+
 class EnumConverter {
   static T from<T extends Enum>(String name, List<T> types) {
     for (var type in types) {

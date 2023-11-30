@@ -6,6 +6,7 @@ class TextCard extends StatelessWidget {
   final Color? background;
   final Color? foreground;
   final TextStyle? style;
+  final int? maxLines;
 
   TextCard(
     this.text, {
@@ -13,6 +14,7 @@ class TextCard extends StatelessWidget {
     this.background,
     this.foreground,
     this.style,
+    this.maxLines,
   });
 
   @override
@@ -30,7 +32,7 @@ class TextCard extends StatelessWidget {
                 color: foreground ?? theme.colorScheme.onPrimary,
               ),
           overflow: TextOverflow.ellipsis,
-          maxLines: 1,
+          maxLines: maxLines ?? 1,
           textAlign: TextAlign.center,
         ),
       ),

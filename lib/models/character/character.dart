@@ -1,6 +1,7 @@
 import 'package:amt/models/armour.dart';
 import 'package:amt/models/armour_data.dart';
 import 'package:amt/models/attributes_list.dart';
+import 'package:amt/models/character/character_resistances.dart';
 import 'package:amt/models/character/character_state.dart';
 import 'package:amt/models/character/consumable_state.dart';
 import 'package:amt/models/character/character_ki.dart';
@@ -37,6 +38,8 @@ class Character extends HiveObject {
   late Mystical? mystical;
   @HiveField(8)
   late PsychicData? psychic;
+  @HiveField(9)
+  late CharacterResistances resistances;
 
   static int initiativeSort(Character a, Character b) {
     if (a.state.currentTurn.roll > b.state.currentTurn.roll) {
@@ -58,6 +61,7 @@ class Character extends HiveObject {
     required this.ki,
     required this.mystical,
     required this.psychic,
+    required this.resistances,
   });
 
   Character.heading() {
@@ -70,6 +74,10 @@ class Character extends HiveObject {
     attributes = json['Atributos'] != null
         ? AttributesList.fromJson(json['Atributos'])
         : AttributesList();
+
+    resistances = json['Resistencias'] != null
+        ? CharacterResistances.fromJson(json['Resistencias'])
+        : CharacterResistances();
 
     combat = json['Combate'] != null
         ? CombatData.fromJson(json['Combate'])

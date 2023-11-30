@@ -23,12 +23,17 @@ class CharactersPageState extends ChangeNotifier {
   }
 
   void initAsync() async {
-    print("openBox");
-    _box = await Hive.openBox('characters');
-    print("opened box characters");
-    characters = _box.values.toList();
-    notifyListeners();
-    print("characters");
+    try {
+      print("openBox");
+      _box = await Hive.openBox('characters');
+      print("opened box characters");
+      characters = _box.values.toList();
+      notifyListeners();
+      print("characters");
+    } catch (e) {
+      Hive.deleteBoxFromDisk('characters');
+      _box = await Hive.openBox('characters');
+    }
   }
 
   void updateAttackingModifiers(ModifiersState modifiers) {
@@ -59,7 +64,18 @@ class CharactersPageState extends ChangeNotifier {
     Weapon? selectedWeapon,
     Armour? selectedArmour,
     DamageTypes? damageType,
+    String? criticalRoll,
+    String? physicalResistanceBase,
+    String? physicalResistanceRoll,
+    String? damageDone,
   }) {
+    combatState.damageDone = damageDone ?? combatState.damageDone;
+    combatState.physicalResistanceBase =
+        physicalResistanceBase ?? combatState.physicalResistanceBase;
+    combatState.criticalRoll = criticalRoll ?? combatState.criticalRoll;
+    combatState.physicalResistanceRoll =
+        physicalResistanceRoll ?? combatState.physicalResistanceRoll;
+
     combatState.attackRoll = attackRoll ?? combatState.attackRoll;
     combatState.baseDamage = baseDamage ?? combatState.baseDamage;
     combatState.baseAttack = baseAttack ?? combatState.baseAttack;

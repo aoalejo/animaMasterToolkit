@@ -215,6 +215,9 @@ class CharactersTable extends StatelessWidget {
                                   selectedArmour:
                                       item.combat.armour.calculatedArmour,
                                   defenseTurn: item.state.currentTurn.roll,
+                                  physicalResistanceBase: item
+                                      .resistances.physicalResistance
+                                      .toString(),
                                 );
                               },
                               onParry: () {
@@ -235,6 +238,9 @@ class CharactersTable extends StatelessWidget {
                                   selectedArmour:
                                       item.combat.armour.calculatedArmour,
                                   defenseTurn: item.state.currentTurn.roll,
+                                  physicalResistanceBase: item
+                                      .resistances.physicalResistance
+                                      .toString(),
                                 );
                               },
                               onChangeModifiers: () {
