@@ -41,6 +41,8 @@ class StatusModifier extends Object {
     parry = JsonUtils.integer(json['parry'], 0);
     turn = JsonUtils.integer(json['turn'], 0);
     physicalAction = JsonUtils.integer(json['physicalAction'], 0);
+    isOfCritical = false;
+    midValue = 0;
   }
 
   String description({String separator = " "}) {
