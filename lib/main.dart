@@ -124,7 +124,7 @@ class GeneratorPage extends StatelessWidget {
         child: Align(
           alignment: Alignment.topLeft,
           child: Flex(
-            direction: isLandscape ? Axis.horizontal : Axis.vertical,
+            direction: Axis.horizontal,
             children: [
               SizedBox(
                 height: height,

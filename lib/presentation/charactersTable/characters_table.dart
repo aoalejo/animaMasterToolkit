@@ -20,29 +20,50 @@ class CharactersTable extends StatelessWidget {
       children: [
         spacer,
         // Actions
-        ButtonBar(
-          alignment: MainAxisAlignment.spaceBetween,
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            TextButton.icon(
-              onPressed: () {
-                appState.rollTurns();
-              },
-              icon: Icon(Icons.repeat),
-              label: Text("Iniciativas"),
+            Flexible(
+              flex: 1,
+              child: TextButton.icon(
+                onPressed: () {
+                  appState.rollTurns();
+                },
+                icon: Icon(Icons.repeat),
+                label: Text(
+                  "Iniciativas",
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 1,
+                ),
+              ),
             ),
-            TextButton.icon(
-              onPressed: () {
-                appState.getCharacters();
-              },
-              icon: Icon(Icons.upload_file),
-              label: Text("Cargar Personaje"),
+            Flexible(
+              flex: 1,
+              child: TextButton.icon(
+                onPressed: () {
+                  appState.getCharacters();
+                },
+                icon: Icon(Icons.upload_file),
+                label: Text(
+                  "Cargar Personaje",
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 1,
+                ),
+              ),
             ),
-            TextButton.icon(
-              onPressed: () {
-                appState.resetConsumables();
-              },
-              icon: Icon(Icons.restore),
-              label: Text("Restaurar consumibles"),
+            Flexible(
+              flex: 1,
+              child: TextButton.icon(
+                onPressed: () {
+                  appState.resetConsumables();
+                },
+                icon: Icon(Icons.restore),
+                label: Text(
+                  "Restaurar consumibles",
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 1,
+                ),
+              ),
             ),
           ],
         ),
@@ -96,95 +117,103 @@ class CharactersTable extends StatelessWidget {
                           child: Tooltip(
                             message: character.state.currentTurn.description,
                             child: Card(
+                              color: theme.colorScheme.primary,
                               child: Text(
                                 character.state.currentTurn.roll.toString(),
+                                style: theme.textTheme.bodyMedium!.copyWith(
+                                    color: theme.colorScheme.onPrimary),
                                 textAlign: TextAlign.center,
                               ),
                             ),
                           ),
                         ),
                         _cell(
-                          size: 5,
-                          child: ButtonBar(
-                            alignment: MainAxisAlignment.spaceAround,
-                            children: [
-                              Tooltip(
-                                message: "Info",
-                                child: IconButton(
-                                  icon: Icon(Icons.info),
-                                  onPressed: () {
-                                    ShowCharacterInfo.call(context, character,
-                                        onRemove: (character) => {
-                                              appState
-                                                  .removeCharacter(character)
-                                            });
-                                  },
-                                ),
-                              ),
-                              Tooltip(
-                                message: "Atacar",
-                                child: IconButton(
-                                  icon: SizedBox(
-                                    width: 24,
-                                    height: 24,
-                                    child: Assets.knife,
+                            size: 5,
+                            child: SingleChildScrollView(
+                              scrollDirection: Axis.horizontal,
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceAround,
+                                children: [
+                                  Tooltip(
+                                    message: "Info",
+                                    child: IconButton(
+                                      icon: Icon(Icons.info),
+                                      onPressed: () {
+                                        ShowCharacterInfo.call(
+                                            context, character,
+                                            onRemove: (character) => {
+                                                  appState.removeCharacter(
+                                                      character)
+                                                });
+                                      },
+                                    ),
                                   ),
-                                  onPressed: () {
-                                    var weapon = character.selectedWeapon();
+                                  Tooltip(
+                                    message: "Atacar",
+                                    child: IconButton(
+                                      icon: SizedBox(
+                                        width: 24,
+                                        height: 24,
+                                        child: Assets.knife,
+                                      ),
+                                      onPressed: () {
+                                        var weapon = character.selectedWeapon();
 
-                                    appState.updateCombatState(
-                                      attackingCharacter: character.uuid,
-                                      attackRoll: "0",
-                                      attackingModifiers: ModifiersState(),
-                                      baseAttack: _calculateAttack(character)
-                                          .toString(),
-                                      baseDamage: weapon.damage.toString(),
-                                      attackerTurn:
-                                          character.state.currentTurn.roll,
-                                      selectedWeapon:
-                                          character.selectedWeapon(),
-                                    );
-                                  },
-                                ),
-                              ),
-                              Tooltip(
-                                message: "Parada",
-                                child: IconButton(
-                                  icon: SizedBox(
-                                    width: 24,
-                                    height: 24,
-                                    child: Assets.shield,
+                                        appState.updateCombatState(
+                                          attackingCharacter: character.uuid,
+                                          attackRoll: "0",
+                                          attackingModifiers: ModifiersState(),
+                                          baseAttack:
+                                              _calculateAttack(character)
+                                                  .toString(),
+                                          baseDamage: weapon.damage.toString(),
+                                          attackerTurn:
+                                              character.state.currentTurn.roll,
+                                          selectedWeapon:
+                                              character.selectedWeapon(),
+                                        );
+                                      },
+                                    ),
                                   ),
-                                  onPressed: () {
-                                    _updateDefense(
-                                      appState,
-                                      character,
-                                      DefenseType.parry,
-                                    );
-                                  },
-                                ),
-                              ),
-                              Tooltip(
-                                message: "Esquiva",
-                                child: IconButton(
-                                  icon: SizedBox(
-                                    width: 24,
-                                    height: 24,
-                                    child: Assets.dodging,
+                                  Tooltip(
+                                    message: "Parada",
+                                    child: IconButton(
+                                      icon: SizedBox(
+                                        width: 24,
+                                        height: 24,
+                                        child: Assets.shield,
+                                      ),
+                                      onPressed: () {
+                                        _updateDefense(
+                                          appState,
+                                          character,
+                                          DefenseType.parry,
+                                        );
+                                      },
+                                    ),
                                   ),
-                                  iconSize: 12,
-                                  onPressed: () {
-                                    _updateDefense(
-                                      appState,
-                                      character,
-                                      DefenseType.dodge,
-                                    );
-                                  },
-                                ),
+                                  Tooltip(
+                                    message: "Esquiva",
+                                    child: IconButton(
+                                      icon: SizedBox(
+                                        width: 24,
+                                        height: 24,
+                                        child: Assets.dodging,
+                                      ),
+                                      iconSize: 12,
+                                      onPressed: () {
+                                        _updateDefense(
+                                          appState,
+                                          character,
+                                          DefenseType.dodge,
+                                        );
+                                      },
+                                    ),
+                                  ),
+                                ],
                               ),
-                            ],
-                          ),
-                        ),
+                            )),
                       ],
                     ),
                   )
