@@ -49,139 +49,147 @@ class CharacterInfoCard extends StatelessWidget {
                 ),
                 spacer,
                 Expanded(
-                    child: Padding(
-                  padding: EdgeInsets.all(8),
-                  child: Column(children: [
-                    _row(
-                      [
-                        Text("Arma:"),
-                        Expanded(
-                            child: WeaponsRack(
-                          weapons: _character.combat.weapons,
-                          selectedWeapon: _character.selectedWeapon(),
-                          onEdit: (weapon) => {
-                            _character.combat.updateWeapon(weapon),
-                            appState.updateCharacter(_character),
-                          },
-                          onSelect: (element) => {
-                            _character.state.selectedWeaponIndex =
-                                _character.combat.weapons.indexOf(element),
-                            appState.updateCharacter(_character),
-                          },
-                        ))
-                      ],
-                    ),
-                    spacer,
-                    _row([
-                      Expanded(
-                        flex: 2,
-                        child: Text(
-                            "Turno: ${_character.selectedWeapon().turn.toString()} + "),
-                      ),
-                      spacer,
-                      Expanded(
-                          flex: 2,
-                          child: TextFormFieldCustom(
-                            text: _character.state.turnModifier,
-                            onChanged: (value) {
-                              _character.state.turnModifier = value;
-                              appState.updateCharacter(_character);
-                            },
-                          )),
-                      spacer,
-                      Expanded(
-                        flex: 2,
-                        child: Text(
-                          '+ ${_character.state.currentTurn.getRollsAsString()}',
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
-                      Expanded(
-                        flex: 2,
-                        child: Text(
-                          '= ${_character.state.currentTurn.roll.toString()}',
-                          textAlign: TextAlign.end,
-                          style: theme.textTheme.titleMedium,
-                        ),
-                      ),
-                      spacer,
-                    ]),
-                    spacer,
-                    SizedBox(
-                      height: 150,
-                      child: GridView.count(
-                        scrollDirection: Axis.horizontal,
-                        crossAxisCount: 2,
-                        childAspectRatio: 0.4,
+                  child: Padding(
+                    padding: EdgeInsets.all(8),
+                    child: SingleChildScrollView(
+                      child: Column(
                         children: [
-                          for (var consumable in _character.state.consumables)
-                            ConsumableCard(
-                              consumable,
-                              onChangedActual: (actual) {
-                                int index = _character.state.consumables
-                                    .indexOf(consumable);
-                                consumable.update(actual: actual);
-                                _character.state.consumables[index] =
-                                    consumable;
-                                appState.updateCharacter(_character);
-                              },
-                              onChangedMax: (max) {
-                                int index = _character.state.consumables
-                                    .indexOf(consumable);
-                                consumable.update(max: max);
-                                _character.state.consumables[index] =
-                                    consumable;
-                                appState.updateCharacter(_character);
-                              },
+                          _row(
+                            [
+                              Text("Arma:"),
+                              Expanded(
+                                  child: WeaponsRack(
+                                weapons: _character.combat.weapons,
+                                selectedWeapon: _character.selectedWeapon(),
+                                onEdit: (weapon) => {
+                                  _character.combat.updateWeapon(weapon),
+                                  appState.updateCharacter(_character),
+                                },
+                                onSelect: (element) => {
+                                  _character.state.selectedWeaponIndex =
+                                      _character.combat.weapons
+                                          .indexOf(element),
+                                  appState.updateCharacter(_character),
+                                },
+                              ))
+                            ],
+                          ),
+                          spacer,
+                          _row([
+                            Expanded(
+                              flex: 2,
+                              child: Text(
+                                  "Turno: ${_character.selectedWeapon().turn.toString()} + "),
                             ),
+                            spacer,
+                            Expanded(
+                                flex: 2,
+                                child: TextFormFieldCustom(
+                                  text: _character.state.turnModifier,
+                                  onChanged: (value) {
+                                    _character.state.turnModifier = value;
+                                    appState.updateCharacter(_character);
+                                  },
+                                )),
+                            spacer,
+                            Expanded(
+                              flex: 2,
+                              child: Text(
+                                '+ ${_character.state.currentTurn.getRollsAsString()}',
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                            Expanded(
+                              flex: 2,
+                              child: Text(
+                                '= ${_character.state.currentTurn.roll.toString()}',
+                                textAlign: TextAlign.end,
+                                style: theme.textTheme.titleMedium,
+                              ),
+                            ),
+                            spacer,
+                          ]),
+                          spacer,
+                          SizedBox(
+                            height: 150,
+                            child: GridView.count(
+                              scrollDirection: Axis.horizontal,
+                              crossAxisCount: 2,
+                              childAspectRatio: 0.4,
+                              children: [
+                                for (var consumable
+                                    in _character.state.consumables)
+                                  ConsumableCard(
+                                    consumable,
+                                    onChangedActual: (actual) {
+                                      int index = _character.state.consumables
+                                          .indexOf(consumable);
+                                      consumable.update(actual: actual);
+                                      _character.state.consumables[index] =
+                                          consumable;
+                                      appState.updateCharacter(_character);
+                                    },
+                                    onChangedMax: (max) {
+                                      int index = _character.state.consumables
+                                          .indexOf(consumable);
+                                      consumable.update(max: max);
+                                      _character.state.consumables[index] =
+                                          consumable;
+                                      appState.updateCharacter(_character);
+                                    },
+                                  ),
+                              ],
+                            ),
+                          ),
+                          spacer,
+                          _row([
+                            Expanded(
+                                child: OutlinedButton(
+                              child: Column(children: [
+                                Text("Modificadores"),
+                                Text(
+                                  _character.state.modifiers
+                                      .totalModifierDescription(),
+                                  style: theme.textTheme.bodySmall,
+                                  textAlign: TextAlign.center,
+                                ),
+                              ]),
+                              onPressed: () {
+                                BottomSheetModifiers.show(
+                                    context,
+                                    _character.state.modifiers,
+                                    Modifiers.getStatusModifiers(),
+                                    (newModifiersState) {
+                                  _character.state.modifiers =
+                                      newModifiersState;
+                                  appState.updateCharacter(_character);
+                                });
+                              },
+                            ))
+                          ]),
+                          spacer,
+                          SizedBox(
+                            height: 70,
+                            width: 989,
+                            child: ModifiersCard(
+                                aspectRatio: 0.3,
+                                modifiers: _character.state.modifiers.getAll()),
+                          ),
+                          spacer,
+                          SizedBox(
+                              height: 40,
+                              child: TextFormFieldCustom(
+                                text: _character.state.notes,
+                                onChanged: (value) {
+                                  _character.state.notes = value;
+                                  appState.updateCharacter(_character);
+                                },
+                              ))
                         ],
                       ),
                     ),
-                    spacer,
-                    _row([
-                      Expanded(
-                          child: OutlinedButton(
-                        child: Column(children: [
-                          Text("Modificadores"),
-                          Text(
-                            _character.state.modifiers
-                                .totalModifierDescription(),
-                            style: theme.textTheme.bodySmall,
-                            textAlign: TextAlign.center,
-                          ),
-                        ]),
-                        onPressed: () {
-                          BottomSheetModifiers.show(
-                              context,
-                              _character.state.modifiers,
-                              Modifiers.getStatusModifiers(),
-                              (newModifiersState) {
-                            _character.state.modifiers = newModifiersState;
-                            appState.updateCharacter(_character);
-                          });
-                        },
-                      ))
-                    ]),
-                    spacer,
-                    SizedBox(
-                      height: 70,
-                      width: 989,
-                      child: ModifiersCard(
-                          aspectRatio: 0.3,
-                          modifiers: _character.state.modifiers.getAll()),
-                    ),
-                    spacer,
-                    SizedBox(
-                        height: 40,
-                        child: TextFormFieldCustom(
-                          text: _character.state.notes,
-                          onChanged: (value) {
-                            _character.state.notes = value;
-                            appState.updateCharacter(_character);
-                          },
-                        ))
-                  ]),
-                )),
+                  ),
+                ),
               ],
             ),
           )

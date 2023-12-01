@@ -97,7 +97,7 @@ class Character extends HiveObject {
       name: "Vida",
       maxValue: profile.hitPoints,
       actualValue: profile.hitPoints,
-      step: 0,
+      step: 10,
       type: ConsumableType.hitPoints,
       description:
           "indice de regeneración: ${profile.regeneration}:\n${getRegenDescription()}",
@@ -108,7 +108,7 @@ class Character extends HiveObject {
       maxValue: profile.fatigue,
       actualValue: profile.fatigue,
       type: ConsumableType.fatigue,
-      step: 0,
+      step: 1,
       description: "",
     ));
 
@@ -126,7 +126,7 @@ class Character extends HiveObject {
               ConsumableState(
                   name: "Ki/${names[i]}",
                   maxValue: max[i],
-                  actualValue: 0,
+                  actualValue: 1,
                   step: accumulation[i],
                   description: ""),
             );
@@ -138,7 +138,7 @@ class Character extends HiveObject {
             ConsumableState(
                 name: "Ki",
                 maxValue: ki?.maximumAccumulation ?? 0,
-                actualValue: 0,
+                actualValue: 01,
                 step: ki?.genericAccumulation ?? 0,
                 description: "Usando ki unificado"),
           );
@@ -173,7 +173,7 @@ class Character extends HiveObject {
           name: "CV",
           maxValue: psychic?.freeCvs ?? 0,
           actualValue: psychic?.freeCvs ?? 0,
-          step: 0,
+          step: 1,
           description: "",
         ));
       }
