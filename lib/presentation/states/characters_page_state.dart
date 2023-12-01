@@ -14,8 +14,9 @@ import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 class CharactersPageState extends ChangeNotifier {
-  var characters = <Character>[];
+  List<Character> characters = [];
   var combatState = ScreenCombatState();
+  String? errorMessage = null;
 
   late Box<Character> _box;
 
@@ -28,7 +29,7 @@ class CharactersPageState extends ChangeNotifier {
       print("openBox");
       _box = await Hive.openBox('characters');
       print("opened box characters");
-      characters = _box.values.toList();
+      characters.addAll(_box.values.toList());
       notifyListeners();
       print("characters");
     } catch (e) {
@@ -204,30 +205,43 @@ class CharactersPageState extends ChangeNotifier {
       allowMultiple: true,
     );
 
-    if (result != null) {
-      try {
-        // For web
-        List<String> files = result.files
-            .map((file) => Windows1252Codec().decode(file.bytes!.toList()))
-            .toList();
+    if (result?.files.isEmpty ?? true) {
+      errorMessage = "$errorMessage Sin archivos encontrados";
+    }
 
-        for (var file in files) {
-          var character = Character.fromJson(jsonDecode(file));
-          characters.add(character);
-          _box.add(character);
-        }
-      } catch (e) {
-        // For desktop
-        List<File> files =
-            result.paths.map((path) => File(path ?? "")).toList();
+    try {
+      if (result != null) {
+        if (result.files.first.bytes != null) {
+          // For web
+          List<String> files = result.files
+              .map((file) => Windows1252Codec().decode(file.bytes!.toList()))
+              .toList();
 
-        for (var file in files) {
-          final json = await file.readAsString(encoding: Windows1252Codec());
-          var character = Character.fromJson(jsonDecode(json));
-          characters.add(character);
-          _box.add(character);
+          for (var file in files) {
+            var character = Character.fromJson(jsonDecode(file));
+            characters.add(character);
+            _box.add(character);
+          }
+        } else {
+          // For desktop
+          List<File> files =
+              result.paths.map((path) => File(path ?? "")).toList();
+
+          for (var file in files) {
+            final json = await file.readAsString(encoding: Windows1252Codec());
+            var character = Character.fromJson(jsonDecode(json));
+            print(character.toString());
+            characters.add(character);
+            print("character added");
+
+            _box.add(character);
+          }
         }
+      } else {
+        errorMessage = "$errorMessage Error leyendo archivos";
       }
+    } catch (e) {
+      errorMessage = "$errorMessage ${e.toString()}";
     }
 
     notifyListeners();

@@ -114,7 +114,7 @@ class GeneratorPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: 50,
-        title: Text("Personajes"),
+        title: Text("Personajes ${appState.errorMessage ?? ''}"),
         backgroundColor: theme.primaryColor,
         foregroundColor: theme.colorScheme.onPrimary,
         actions: [

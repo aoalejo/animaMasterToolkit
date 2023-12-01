@@ -184,7 +184,7 @@ class Character extends HiveObject {
     state = CharacterState(
       consumables: consumables,
       modifiers: ModifiersState(),
-      currentTurn: Roll.roll(base: combat.weapons.first.turn),
+      currentTurn: Roll.roll(base: combat.weapons.firstOrNull?.turn ?? 0),
     );
   }
 

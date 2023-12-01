@@ -3,5 +3,6 @@
         "debouncer",
         "zeon"
     ],
-    "cmake.configureOnOpen": true
+    "cmake.configureOnOpen": true,
+    "java.configuration.updateBuildConfiguration": "interactive"
 }
