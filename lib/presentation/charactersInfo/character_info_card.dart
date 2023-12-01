@@ -7,6 +7,7 @@ import 'package:amt/presentation/charactersTable/weapons_rack.dart';
 import 'package:amt/presentation/states/characters_page_state.dart';
 import 'package:amt/resources/modifiers.dart';
 import 'package:flutter/material.dart';
+import 'package:function_tree/function_tree.dart';
 import 'package:provider/provider.dart';
 
 class CharacterInfoCard extends StatelessWidget {
@@ -88,8 +89,9 @@ class CharacterInfoCard extends StatelessWidget {
                                 child: TextFormFieldCustom(
                                   text: character.state.turnModifier,
                                   onChanged: (value) {
-                                    character.state.turnModifier = value;
-                                    appState.updateCharacter(character);
+                                    var newChar =
+                                        _calculateTurn(character, value);
+                                    appState.updateCharacter(newChar);
                                   },
                                 )),
                             spacer,
@@ -194,6 +196,24 @@ class CharacterInfoCard extends StatelessWidget {
             ),
           )
         : Card();
+  }
+
+  Character _calculateTurn(Character character, String value) {
+    var baseTurn = character.selectedWeapon().turn;
+    character.state.turnModifier = value;
+    var turn = character.state.currentTurn;
+    var modifier = 0;
+
+    try {
+      modifier = value.interpret().toInt();
+    } catch (e) {}
+
+    var total = baseTurn +
+        turn.rolls.reduce((value, element) => value + element) +
+        modifier;
+
+    character.state.currentTurn.roll = total;
+    return character;
   }
 
   _row(List<Widget> children) {
