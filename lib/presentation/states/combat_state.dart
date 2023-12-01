@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:amt/models/armour.dart';
 import 'package:amt/models/enums.dart';
 import 'package:amt/models/modifiers_state.dart';

@@ -106,7 +106,6 @@ class MyHomePage extends StatelessWidget {
 class GeneratorPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    var appState = context.watch<CharactersPageState>();
     var theme = Theme.of(context);
     var screenSize = MediaQuery.of(context).size;
     var height = screenSize.height - 50;
@@ -167,8 +166,6 @@ class CombatSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
     return Padding(
       padding: EdgeInsets.all(0),
       child: SingleChildScrollView(
