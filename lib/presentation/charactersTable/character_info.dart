@@ -59,8 +59,32 @@ class ShowCharacterInfo {
                                 Text(character.profile.name),
                                 IconButton(
                                   onPressed: () {
-                                    onRemove(character);
                                     Navigator.pop(context);
+
+                                    showDialog(
+                                        context: context,
+                                        builder: (context) {
+                                          return AlertDialog(
+                                            title: Text("Borrar personaje"),
+                                            content: Text(
+                                                "Seguro que desea borrar ${character.profile.name}?"),
+                                            actions: [
+                                              OutlinedButton(
+                                                onPressed: () {
+                                                  Navigator.pop(context);
+                                                  onRemove(character);
+                                                },
+                                                child: Text("Borrar"),
+                                              ),
+                                              TextButton(
+                                                onPressed: () {
+                                                  Navigator.pop(context);
+                                                },
+                                                child: Text("Cancelar"),
+                                              )
+                                            ],
+                                          );
+                                        });
                                   },
                                   icon: Row(children: [
                                     Text(

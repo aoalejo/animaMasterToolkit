@@ -185,6 +185,11 @@ class CombatAttackCard extends StatelessWidget {
           child: ModifiersCard(
             aspectRatio: 0.2,
             modifiers: appState.combatState.attackingModifiers.getAll(),
+            onSelected: (selected) {
+              appState.combatState.attackingModifiers.removeModifier(selected);
+              appState.updateCombatState(
+                  attackingModifiers: appState.combatState.attackingModifiers);
+            },
           ),
         ),
       ],
