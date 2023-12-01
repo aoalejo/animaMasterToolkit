@@ -207,6 +207,8 @@ class CharactersTable extends StatelessWidget {
           child: Text(
             text,
             textAlign: TextAlign.center,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
           ),
         ));
   }

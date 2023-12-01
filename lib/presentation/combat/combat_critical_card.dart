@@ -71,7 +71,10 @@ class CombatCriticalCard extends StatelessWidget {
                       suffixIcon: IconButton(
                         onPressed: () {
                           appState.updateCombatState(
-                              localizationRoll: Roll.roll().getRollsAsString());
+                              localizationRoll: Roll.roll(
+                            canCrit: false,
+                            canFumble: false,
+                          ).getRollsAsString());
                         },
                         icon: SizedBox.square(
                           dimension: 24,
@@ -190,6 +193,11 @@ class CombatCriticalCard extends StatelessWidget {
                       var result =
                           appState.combatState.criticalResultWithReduction();
 
+                      var midValue = -(result ~/ 2);
+                      if (result < 50) {
+                        midValue = 0;
+                      }
+
                       var criticalModifier = StatusModifier(
                         name: "Critico",
                         attack: -result,
@@ -198,7 +206,7 @@ class CombatCriticalCard extends StatelessWidget {
                         physicalAction: -result,
                         turn: -result,
                         isOfCritical: true,
-                        midValue: -(result ~/ 2),
+                        midValue: midValue,
                       );
 
                       character?.state.modifiers.add(criticalModifier);

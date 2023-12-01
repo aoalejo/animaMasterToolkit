@@ -174,8 +174,14 @@ class CharacterInfoCard extends StatelessWidget {
                             height: 70,
                             width: 989,
                             child: ModifiersCard(
-                                aspectRatio: 0.3,
-                                modifiers: character.state.modifiers.getAll()),
+                              aspectRatio: 0.3,
+                              modifiers: character.state.modifiers.getAll(),
+                              onSelected: (modifier) {
+                                character.state.modifiers
+                                    .removeModifier(modifier);
+                                appState.updateCharacter(character);
+                              },
+                            ),
                           ),
                           spacer,
                           SizedBox(
