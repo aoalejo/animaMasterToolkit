@@ -14,6 +14,7 @@ class CharactersTable extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var appState = context.watch<CharactersPageState>();
+    var theme = Theme.of(context);
 
     return Column(
       children: [
@@ -66,6 +67,11 @@ class CharactersTable extends StatelessWidget {
               children: [
                 for (var character in appState.characters)
                   Card(
+                    shape: appState.characterAttacking()?.uuid == character.uuid
+                        ? _border(theme.colorScheme.primary)
+                        : appState.characterDefending()?.uuid == character.uuid
+                            ? _border(theme.colorScheme.secondary)
+                            : null,
                     child: Row(
                       children: [
                         _cell(
@@ -188,6 +194,10 @@ class CharactersTable extends StatelessWidget {
         ),
       ],
     );
+  }
+
+  ShapeBorder _border(Color color) {
+    return StadiumBorder(side: BorderSide(color: color));
   }
 
   Widget _header(int size, String text) {
