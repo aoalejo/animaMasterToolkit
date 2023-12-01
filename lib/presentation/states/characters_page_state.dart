@@ -26,12 +26,9 @@ class CharactersPageState extends ChangeNotifier {
 
   void initAsync() async {
     try {
-      print("openBox");
       _box = await Hive.openBox('characters');
-      print("opened box characters");
       characters.addAll(_box.values.toList());
       notifyListeners();
-      print("characters");
     } catch (e) {
       Hive.deleteBoxFromDisk('characters');
       _box = await Hive.openBox('characters');

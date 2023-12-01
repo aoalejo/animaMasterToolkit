@@ -195,6 +195,7 @@ class Character extends HiveObject {
   void rollInitiative() {
     state.currentTurn = Roll.roll(
       base: selectedWeapon().turn + state.calculateTotalForTurn(),
+      turnFumble: true,
     );
   }
 
