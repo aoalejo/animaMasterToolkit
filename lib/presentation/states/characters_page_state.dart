@@ -16,7 +16,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 class CharactersPageState extends ChangeNotifier {
   List<Character> characters = [];
   var combatState = ScreenCombatState();
-  String? errorMessage = null;
+  String? errorMessage = "";
 
   late Box<Character> _box;
 
@@ -52,8 +52,8 @@ class CharactersPageState extends ChangeNotifier {
     String? attackRoll,
     String? baseDamage,
     String? baseAttack,
-    int? attackingCharacter,
-    int? defendantCharacter,
+    String? attackingCharacter,
+    String? defendantCharacter,
     ModifiersState? attackingModifiers,
     ModifiersState? defenderModifiers,
     String? defenseRoll,
@@ -129,7 +129,8 @@ class CharactersPageState extends ChangeNotifier {
 
   Character? characterAttacking() {
     try {
-      return characters[combatState.attackingCharacter];
+      return characters.firstWhere(
+          (element) => element.uuid == combatState.attackingCharacter);
     } catch (e) {
       return null;
     }
@@ -137,7 +138,8 @@ class CharactersPageState extends ChangeNotifier {
 
   Character? characterDefending() {
     try {
-      return characters[combatState.defendantCharacter];
+      return characters.firstWhere(
+          (element) => element.uuid == combatState.defendantCharacter);
     } catch (e) {
       return null;
     }

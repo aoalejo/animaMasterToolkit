@@ -15,6 +15,7 @@ import 'package:amt/models/mystical.dart';
 import 'package:amt/models/psychic_data.dart';
 import 'package:amt/models/roll.dart';
 import 'package:amt/models/weapon.dart';
+import 'package:amt/presentation/charactersInfo/character_info_card.dart';
 import 'package:amt/presentation/charactersTable/characters_table.dart';
 import 'package:amt/presentation/combat/combat_attack_card.dart';
 import 'package:amt/presentation/combat/combat_critical_card.dart';
@@ -114,29 +115,10 @@ class GeneratorPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: 50,
-        title: Text("Personajes ${appState.errorMessage ?? ''}"),
+        title: Text("Personajes"),
         backgroundColor: theme.primaryColor,
         foregroundColor: theme.colorScheme.onPrimary,
-        actions: [
-          IconButton(
-            icon: Icon(Icons.restore),
-            onPressed: () {
-              appState.resetConsumables();
-            },
-          ),
-          IconButton(
-            icon: Icon(Icons.upload_file),
-            onPressed: () {
-              appState.getCharacters();
-            },
-          ),
-          IconButton(
-            icon: Icon(Icons.repeat),
-            onPressed: () {
-              appState.rollTurns();
-            },
-          )
-        ],
+        actions: [],
       ),
       body: ColoredBox(
         color: theme.colorScheme.background,
@@ -146,13 +128,27 @@ class GeneratorPage extends StatelessWidget {
             direction: isLandscape ? Axis.horizontal : Axis.vertical,
             children: [
               SizedBox(
-                height: isLandscape ? height : height / 3,
-                width: isLandscape ? screenSize.width / 1.5 : screenSize.width,
+                height: height,
+                width: screenSize.width / 3,
                 child: CharactersTable(),
               ),
+              Column(
+                children: [
+                  SizedBox(
+                    height: height / 2,
+                    width: screenSize.width / 3,
+                    child: CharacterInfoCard(attacking: true),
+                  ),
+                  SizedBox(
+                    height: height / 2,
+                    width: screenSize.width / 3,
+                    child: CharacterInfoCard(attacking: false),
+                  ),
+                ],
+              ),
               SizedBox(
-                height: isLandscape ? height : height / 1.5, // 3
-                width: isLandscape ? screenSize.width / 3 : screenSize.width,
+                height: height, // 3
+                width: screenSize.width / 3,
                 child: CombatSection(
                   isLandscape: true,
                 ),
@@ -173,22 +169,19 @@ class CombatSection extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    return ColoredBox(
-      color: theme.colorScheme.primaryContainer,
-      child: Padding(
-        padding: EdgeInsets.all(8),
-        child: SingleChildScrollView(
-          child: Flex(
-            direction: Axis.vertical,
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              CombatAttackCard(),
-              CombatDefenseCard(),
-              CombatReturnCard(),
-              CombatCriticalCard(),
-            ],
-          ),
+    return Padding(
+      padding: EdgeInsets.all(0),
+      child: SingleChildScrollView(
+        child: Flex(
+          direction: Axis.vertical,
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            CombatAttackCard(),
+            CombatDefenseCard(),
+            CombatReturnCard(),
+            CombatCriticalCard(),
+          ],
         ),
       ),
     );

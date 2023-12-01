@@ -11,6 +11,7 @@ import 'package:amt/presentation/charactersTable/weapons_rack.dart';
 import 'package:amt/presentation/states/characters_page_state.dart';
 import 'package:amt/presentation/text_card.dart';
 import 'package:amt/resources/modifiers.dart';
+import 'package:amt/utils/assets.dart';
 import 'package:amt/utils/debouncer.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -18,12 +19,190 @@ import 'package:provider/provider.dart';
 class CharactersTable extends StatelessWidget {
   final _debouncer = Debouncer(milliseconds: 50);
 
+  final spacer = SizedBox(height: 8, width: 8);
+
   @override
   Widget build(BuildContext context) {
     var appState = context.watch<CharactersPageState>();
     var theme = Theme.of(context);
 
-    return SingleChildScrollView(
+    return Column(
+      children: [
+        spacer,
+        // Actions
+        ButtonBar(
+          alignment: MainAxisAlignment.spaceBetween,
+          children: [
+            TextButton.icon(
+              onPressed: () {
+                appState.rollTurns();
+              },
+              icon: Icon(Icons.repeat),
+              label: Text("Iniciativas"),
+            ),
+            TextButton.icon(
+              onPressed: () {
+                appState.getCharacters();
+              },
+              icon: Icon(Icons.upload_file),
+              label: Text("Cargar Personaje"),
+            ),
+            TextButton.icon(
+              onPressed: () {
+                appState.resetConsumables();
+              },
+              icon: Icon(Icons.restore),
+              label: Text("Restaurar consumibles"),
+            ),
+          ],
+        ),
+        spacer,
+        // Header
+        Padding(
+          padding: EdgeInsets.all(4),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              _header(1, ""),
+              _header(3, "Nombre"),
+              _header(1, "Turno"),
+              _header(5, "Acciones"),
+            ],
+          ),
+        ),
+
+        Expanded(
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                for (var character in appState.characters)
+                  Card(
+                    child: Row(
+                      children: [
+                        _cell(
+                          size: 1,
+                          child: Checkbox(
+                            value: character.state.hasAction,
+                            onChanged: (value) {
+                              character.state.hasAction = value ?? true;
+                              appState.updateCharacter(character);
+                            },
+                          ),
+                        ),
+                        _cell(
+                            size: 3,
+                            child: Row(
+                              children: [
+                                Text(character.profile.name),
+                              ],
+                            )),
+                        _cell(
+                          size: 1,
+                          child: Tooltip(
+                            message: character.state.currentTurn.description,
+                            child: Card(
+                              child: Text(
+                                character.state.currentTurn.roll.toString(),
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                          ),
+                        ),
+                        _cell(
+                          size: 5,
+                          child: ButtonBar(
+                            alignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              Tooltip(
+                                message: "Info",
+                                child: IconButton(
+                                  icon: Icon(Icons.info),
+                                  onPressed: () {
+                                    ShowCharacterInfo.call(context, character,
+                                        onRemove: (character) => {
+                                              appState
+                                                  .removeCharacter(character)
+                                            });
+                                  },
+                                ),
+                              ),
+                              Tooltip(
+                                message: "Atacar",
+                                child: IconButton(
+                                  icon: SizedBox(
+                                    width: 24,
+                                    height: 24,
+                                    child: Assets.knife,
+                                  ),
+                                  onPressed: () {
+                                    var index =
+                                        appState.characters.indexOf(character);
+                                    var weapon = character.selectedWeapon();
+
+                                    appState.updateCombatState(
+                                      attackingCharacter: character.uuid,
+                                      attackRoll: "0",
+                                      attackingModifiers: ModifiersState(),
+                                      baseAttack: _calculateAttack(character)
+                                          .toString(),
+                                      baseDamage: weapon.damage.toString(),
+                                      attackerTurn:
+                                          character.state.currentTurn.roll,
+                                      selectedWeapon:
+                                          character.selectedWeapon(),
+                                    );
+                                  },
+                                ),
+                              ),
+                              Tooltip(
+                                message: "Parada",
+                                child: IconButton(
+                                  icon: SizedBox(
+                                    width: 24,
+                                    height: 24,
+                                    child: Assets.shield,
+                                  ),
+                                  onPressed: () {
+                                    _updateDefense(
+                                      appState,
+                                      character,
+                                      DefenseType.parry,
+                                    );
+                                  },
+                                ),
+                              ),
+                              Tooltip(
+                                message: "Esquiva",
+                                child: IconButton(
+                                  icon: SizedBox(
+                                    width: 24,
+                                    height: 24,
+                                    child: Assets.dodging,
+                                  ),
+                                  iconSize: 12,
+                                  onPressed: () {
+                                    _updateDefense(
+                                      appState,
+                                      character,
+                                      DefenseType.dodge,
+                                    );
+                                  },
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  )
+              ],
+            ),
+          ),
+        ),
+      ],
+    );
+/*
+    SingleChildScrollView(
       scrollDirection: Axis.vertical,
       child: Padding(
         padding: EdgeInsets.all(8),
@@ -66,10 +245,8 @@ class CharactersTable extends StatelessWidget {
                           ),
                           InkWell(
                             onTap: () {
-                              ShowCharacterInfo.call(
-                                  context,
-                                  item,
-                                  (character) =>
+                              ShowCharacterInfo.call(context, item,
+                                  onRemove: (character) =>
                                       {appState.removeCharacter(character)});
                             },
                             child: Icon(
@@ -237,7 +414,22 @@ class CharactersTable extends StatelessWidget {
           ],
         ),
       ),
-    );
+    );*/
+  }
+
+  Widget _header(int size, String text) {
+    return Expanded(
+        flex: size,
+        child: Card(
+          child: Text(
+            text,
+            textAlign: TextAlign.center,
+          ),
+        ));
+  }
+
+  Widget _cell({required int size, required Widget child}) {
+    return Expanded(flex: size, child: child);
   }
 
   void _updateDefense(
@@ -250,7 +442,7 @@ class CharactersTable extends StatelessWidget {
     var physicalResistance = character.resistances.physicalResistance;
 
     appState.updateCombatState(
-      defendantCharacter: index,
+      defendantCharacter: character.uuid,
       defenseRoll: "0",
       defenderModifiers: ModifiersState(),
       baseDefense: _calculateDefense(character, type).toString(),

@@ -23,8 +23,8 @@ class ScreenCombatState {
   var defenseType = DefenseType.parry;
   var defenseNumber = 0;
 
-  int attackingCharacter = 0;
-  int defendantCharacter = 0;
+  String attackingCharacter = "";
+  String defendantCharacter = "";
 
   var criticalRoll = "";
   var localizationRoll = "";

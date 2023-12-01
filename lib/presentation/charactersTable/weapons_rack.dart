@@ -126,7 +126,7 @@ class WeaponsRack extends StatelessWidget {
                     ),
                   ),
                   Icon(
-                    Icons.info,
+                    Icons.edit,
                     color: theme.colorScheme.onPrimary,
                     size: 18,
                   )

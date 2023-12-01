@@ -20,27 +20,31 @@ class ConsumableCard extends StatelessWidget {
     final styleS = theme.textTheme.bodySmall;
     final styleM = theme.textTheme.bodyMedium;
 
-    var header = Row(
-      mainAxisAlignment:
+    var header = Padding(
+      padding: EdgeInsets.fromLTRB(8, 4, 8, 0),
+      child: Row(
+        mainAxisAlignment:
+            consumable.step > 0 || consumable.description.isNotEmpty
+                ? MainAxisAlignment.spaceBetween
+                : MainAxisAlignment.center,
+        children: [
+          Text(
+            consumable.name,
+            style: styleM,
+            textAlign: TextAlign.center,
+          ),
           consumable.step > 0 || consumable.description.isNotEmpty
-              ? MainAxisAlignment.spaceAround
-              : MainAxisAlignment.center,
-      children: [
-        Text(
-          consumable.name,
-          style: styleS,
-          textAlign: TextAlign.center,
-        ),
-        consumable.step > 0 || consumable.description.isNotEmpty
-            ? Icon(
-                Icons.info,
-                size: 16,
-              )
-            : Container(),
-      ],
+              ? Icon(
+                  Icons.info,
+                  size: 16,
+                )
+              : Container(),
+        ],
+      ),
     );
 
     return Card(
+      color: theme.colorScheme.secondaryContainer,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
@@ -53,30 +57,44 @@ class ConsumableCard extends StatelessWidget {
               : header,
           Row(
             children: [
+              IconButton(
+                  onPressed: () {
+                    onChangedActual(
+                        (consumable.actualValue - consumable.step).toString());
+                  },
+                  icon: Icon(Icons.remove)),
               Expanded(
                   child: TextFormFieldCustom(
+                align: TextAlign.center,
                 decoration: InputDecoration(
                   isDense: true,
                   border: InputBorder.none,
                   contentPadding: EdgeInsets.all(4),
                 ),
+                style: consumable.actualValue > 999 ? styleS : styleM,
                 text: consumable.actualValue.toString(),
                 onChanged: onChangedActual,
               )),
               Text("/"),
               Expanded(
-                child: TextFormField(
-                  textAlign: TextAlign.center,
+                child: TextFormFieldCustom(
+                  align: TextAlign.center,
                   decoration: InputDecoration(
                     isDense: true,
                     border: InputBorder.none,
                     contentPadding: EdgeInsets.all(4),
                   ),
                   style: consumable.maxValue > 999 ? styleS : styleM,
-                  initialValue: consumable.maxValue.toString(),
+                  text: consumable.maxValue.toString(),
                   onChanged: onChangedMax,
                 ),
-              )
+              ),
+              IconButton(
+                  onPressed: () {
+                    onChangedActual(
+                        (consumable.actualValue + consumable.step).toString());
+                  },
+                  icon: Icon(Icons.add)),
             ],
           )
         ],

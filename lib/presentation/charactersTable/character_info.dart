@@ -6,11 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:function_tree/function_tree.dart';
 
 class ShowCharacterInfo {
-  static call(
-    BuildContext context,
-    Character character,
-    Function(Character) onRemove,
-  ) {
+  static call(BuildContext context, Character character,
+      {required Function(Character) onRemove}) {
     var theme = Theme.of(context);
     var skills = character.skills.list();
     var attributes = character.attributes.toKeyValue();
@@ -228,7 +225,7 @@ class ShowCharacterInfo {
         ),
         for (var diff in difficulties)
           TextCard(
-            "${diff.abbreviated}\n(${diff.difficulty / diffDivisor})",
+            "${diff.abbreviated}\n(${(diff.difficulty / diffDivisor).toStringAsFixed(0)})",
             maxLines: 2,
             style: textTitleSecondary,
           ),

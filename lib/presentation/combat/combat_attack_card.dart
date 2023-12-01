@@ -59,10 +59,9 @@ class CombatAttackCard extends StatelessWidget {
                       suffixIcon: TextButton(
                         child: Text("+Can"),
                         onPressed: () {
-                          var character = appState.characters[
-                              appState.combatState.attackingCharacter];
+                          var character = appState.characterAttacking();
 
-                          character.removeFrom(
+                          character?.removeFrom(
                             1,
                             ConsumableType.fatigue,
                           );
@@ -183,13 +182,9 @@ class CombatAttackCard extends StatelessWidget {
         ),
         SizedBox(
           width: 8000,
-          child: Row(
-            children: [
-              ModifiersCard(
-                aspectRatio: 0.2,
-                modifiers: appState.combatState.attackingModifiers.getAll(),
-              ),
-            ],
+          child: ModifiersCard(
+            aspectRatio: 0.2,
+            modifiers: appState.combatState.attackingModifiers.getAll(),
           ),
         ),
       ],

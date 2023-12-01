@@ -26,4 +26,14 @@ class Assets {
     'assets/d100_dice.svg',
     semanticsLabel: "dice rolling icon",
   );
+
+  static final Widget shield = SvgPicture.asset(
+    'assets/shield.svg',
+    semanticsLabel: "shield icon",
+  );
+
+  static final Widget knife = SvgPicture.asset(
+    'assets/knife.svg',
+    semanticsLabel: "knife icon",
+  );
 }
