@@ -13,6 +13,7 @@ import 'package:amt/models/mystical.dart';
 import 'package:amt/models/psychic_data.dart';
 import 'package:amt/models/roll.dart';
 import 'package:amt/models/weapon.dart';
+import 'package:amt/resources/modifiers.dart';
 import 'package:hive/hive.dart';
 import 'package:uuid/uuid.dart';
 
@@ -231,6 +232,29 @@ class Character extends HiveObject {
     var firstOfType =
         state.consumables.where((element) => element.type == type).first;
     firstOfType.actualValue -= value;
+  }
+
+  String calculateAttack() {
+    var weapon = selectedWeapon();
+
+    var modifiers =
+        state.modifiers.getAllModifiersForTypeString(ModifiersType.attack);
+
+    return "${weapon.attack}$modifiers";
+  }
+
+  String calculateDefense(DefenseType type) {
+    var weapon = selectedWeapon();
+    var weaponDefense = weapon.defenseType;
+
+    var modifiers = state.modifiers.getAllModifiersForTypeString(
+        type == DefenseType.dodge ? ModifiersType.dodge : ModifiersType.parry);
+
+    if (weaponDefense == type) {
+      return '${weapon.defense}$modifiers';
+    } else {
+      return '${weapon.defense}-60$modifiers';
+    }
   }
 }
 

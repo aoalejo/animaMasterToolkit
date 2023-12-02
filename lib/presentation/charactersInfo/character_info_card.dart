@@ -23,7 +23,7 @@ class CharacterInfoCard extends StatelessWidget {
 
     Character? character = attacking
         ? appState.characterAttacking()
-        : appState.characterDefending();
+        : appState.defendingCharacter();
 
     return character != null
         ? Card(

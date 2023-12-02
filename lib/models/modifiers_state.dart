@@ -81,6 +81,42 @@ class ModifiersState {
     return total;
   }
 
+  String getAllModifiersForTypeString(ModifiersType type) {
+    var total = "";
+
+    for (var modifier in _modifiers) {
+      switch (type) {
+        case ModifiersType.attack:
+          if (modifier.attack != 0) {
+            total =
+                '$total${modifier.attack > 0 ? '+${modifier.attack}' : '${modifier.attack}'}';
+          }
+        case ModifiersType.turn:
+          if (modifier.turn != 0) {
+            total =
+                '$total${modifier.turn > 0 ? '+${modifier.turn}' : '${modifier.turn}'}';
+          }
+        case ModifiersType.action:
+          if (modifier.physicalAction != 0) {
+            total =
+                '$total${modifier.physicalAction > 0 ? '+${modifier.physicalAction}' : '${modifier.physicalAction}'}';
+          }
+        case ModifiersType.parry:
+          if (modifier.parry != 0) {
+            total =
+                '$total${modifier.parry > 0 ? '+${modifier.parry}' : '${modifier.parry}'}';
+          }
+        case ModifiersType.dodge:
+          if (modifier.dodge != 0) {
+            total =
+                '$total${modifier.dodge > 0 ? '+${modifier.dodge}' : '${modifier.dodge}'}';
+          }
+      }
+    }
+
+    return total;
+  }
+
   int getAllModifiersForDefense(DefenseType type) {
     var total = 0;
 

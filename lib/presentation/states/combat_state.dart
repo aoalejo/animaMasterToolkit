@@ -9,11 +9,13 @@ class ScreenCombatState {
   var attackRoll = "";
   var baseDamage = "";
   var baseAttack = "";
+  var baseAttackModifiers = "";
   var damageType = DamageTypes.ene;
 
   var defenseRoll = "";
   var armour = "";
   var baseDefense = "";
+  var baseDefenseModifiers = "";
 
   var finalTurnAttacker = 0;
   var finalTurnDefense = 0;
@@ -50,6 +52,7 @@ class ScreenCombatState {
   int finalAttackValue() {
     var roll = 0;
     var attack = 0;
+    var attackModifier = 0;
 
     try {
       roll = attackRoll.interpret().toInt();
@@ -63,15 +66,23 @@ class ScreenCombatState {
       // Defaults to 0
     }
 
+    try {
+      attackModifier = baseAttackModifiers.interpret().toInt();
+    } catch (e) {
+      // Defaults to 0
+    }
+
     return attackingModifiers.getAllModifiersForType(ModifiersType.attack) +
         roll +
-        attack;
+        attack +
+        attackModifier;
   }
 
   int finalDefenseValue() {
     var roll = 0;
     var defense = 0;
     var numberOfDefensesModifier = 0;
+    var defenseModifier = 0;
     var surpriseModifier = isSurprised() ? -150 : 0;
 
     try {
@@ -82,6 +93,12 @@ class ScreenCombatState {
 
     try {
       defense = baseDefense.interpret().toInt();
+    } catch (e) {
+      // Defaults to 0
+    }
+
+    try {
+      defenseModifier = baseDefenseModifiers.interpret().toInt();
     } catch (e) {
       // Defaults to 0
     }
@@ -103,7 +120,8 @@ class ScreenCombatState {
         roll +
         defense +
         numberOfDefensesModifier +
-        surpriseModifier;
+        surpriseModifier +
+        defenseModifier;
   }
 
   bool isSurprised() {

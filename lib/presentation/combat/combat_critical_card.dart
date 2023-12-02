@@ -188,7 +188,7 @@ class CombatCriticalCard extends StatelessWidget {
                 child: Center(
                   child: TextButton(
                     onPressed: () {
-                      var character = appState.characterDefending();
+                      var character = appState.defendingCharacter();
 
                       var result =
                           appState.combatState.criticalResultWithReduction();
@@ -199,7 +199,7 @@ class CombatCriticalCard extends StatelessWidget {
                       }
 
                       var criticalModifier = StatusModifier(
-                        name: "Critico",
+                        name: "Critico ($result)",
                         attack: -result,
                         dodge: -result,
                         parry: -result,

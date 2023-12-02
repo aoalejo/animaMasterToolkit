@@ -76,11 +76,19 @@ class CharactersPageState extends ChangeNotifier {
     int? actualHitPoints,
     String? localizationRoll,
     String? modifierReduction,
+    String? baseAttackModifiers,
+    String? baseDefenseModifiers,
   }) {
+    combatState.baseAttackModifiers =
+        baseAttackModifiers ?? combatState.baseAttackModifiers;
+    combatState.baseDefenseModifiers =
+        baseDefenseModifiers ?? combatState.baseDefenseModifiers;
+
     combatState.modifierReduction =
         modifierReduction ?? combatState.modifierReduction;
     combatState.localizationRoll =
         localizationRoll ?? combatState.localizationRoll;
+
     combatState.actualHitPoints =
         actualHitPoints ?? combatState.actualHitPoints;
 
@@ -139,7 +147,7 @@ class CharactersPageState extends ChangeNotifier {
     }
   }
 
-  Character? characterDefending() {
+  Character? defendingCharacter() {
     try {
       return characters.firstWhere(
           (element) => element.uuid == combatState.defendantCharacter);
@@ -198,6 +206,22 @@ class CharactersPageState extends ChangeNotifier {
         characters.indexWhere((element) => element.uuid == character.uuid);
 
     characters[index] = character;
+
+    if (character.uuid == combatState.attackingCharacter) {
+      var weapon = character.selectedWeapon();
+
+      updateCombatState(
+        baseAttack: character.calculateAttack(),
+        baseDamage: weapon.damage.toString(),
+        selectedWeapon: weapon,
+      );
+    }
+    if (character.uuid == combatState.defendantCharacter) {
+      updateCombatState(
+        baseDefense: character.calculateDefense(combatState.defenseType),
+        defenseNumber: character.state.defenseNumber,
+      );
+    }
 
     notifyListeners();
     character.save();

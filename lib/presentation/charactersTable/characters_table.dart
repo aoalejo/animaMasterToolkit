@@ -3,7 +3,6 @@ import 'package:amt/models/enums.dart';
 import 'package:amt/models/modifiers_state.dart';
 import 'package:amt/presentation/charactersTable/character_info.dart';
 import 'package:amt/presentation/states/characters_page_state.dart';
-import 'package:amt/resources/modifiers.dart';
 import 'package:amt/utils/assets.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -90,7 +89,7 @@ class CharactersTable extends StatelessWidget {
                   Card(
                     shape: appState.characterAttacking()?.uuid == character.uuid
                         ? _border(theme.colorScheme.primary)
-                        : appState.characterDefending()?.uuid == character.uuid
+                        : appState.defendingCharacter()?.uuid == character.uuid
                             ? _border(theme.colorScheme.secondary)
                             : null,
                     child: Row(
@@ -161,18 +160,19 @@ class CharactersTable extends StatelessWidget {
                                         var weapon = character.selectedWeapon();
 
                                         appState.updateCombatState(
-                                          attackingCharacter: character.uuid,
-                                          attackRoll: "0",
-                                          attackingModifiers: ModifiersState(),
-                                          baseAttack:
-                                              _calculateAttack(character)
-                                                  .toString(),
-                                          baseDamage: weapon.damage.toString(),
-                                          attackerTurn:
-                                              character.state.currentTurn.roll,
-                                          selectedWeapon:
-                                              character.selectedWeapon(),
-                                        );
+                                            attackingCharacter: character.uuid,
+                                            attackRoll: "0",
+                                            attackingModifiers:
+                                                ModifiersState(),
+                                            baseAttack:
+                                                character.calculateAttack(),
+                                            baseDamage:
+                                                weapon.damage.toString(),
+                                            attackerTurn: character
+                                                .state.currentTurn.roll,
+                                            selectedWeapon:
+                                                character.selectedWeapon(),
+                                            baseAttackModifiers: "");
                                       },
                                     ),
                                   ),
@@ -258,7 +258,7 @@ class CharactersTable extends StatelessWidget {
       defendantCharacter: character.uuid,
       defenseRoll: "0",
       defenderModifiers: ModifiersState(),
-      baseDefense: _calculateDefense(character, type).toString(),
+      baseDefense: character.calculateDefense(type),
       armour: character.combat.armour.calculatedArmour.fil.toString(),
       defenseType: type,
       defenseNumber: character.state.defenseNumber,
@@ -266,28 +266,7 @@ class CharactersTable extends StatelessWidget {
       defenseTurn: character.state.currentTurn.roll,
       physicalResistanceBase: physicalResistance.toString(),
       actualHitPoints: hitPoints?.actualValue ?? 0,
+      baseDefenseModifiers: "",
     );
-  }
-
-  int _calculateDefense(Character character, DefenseType type) {
-    var weapon = character.selectedWeapon();
-    var weaponDefense = weapon.defenseType;
-
-    var modifiers = character.state.modifiers.getAllModifiersForDefense(type);
-
-    if (weaponDefense == type) {
-      return weapon.defense + modifiers;
-    } else {
-      return weapon.defense - 60 + modifiers;
-    }
-  }
-
-  int _calculateAttack(Character character) {
-    var weapon = character.selectedWeapon();
-
-    var modifiers =
-        character.state.modifiers.getAllModifiersForType(ModifiersType.attack);
-
-    return weapon.attack + modifiers;
   }
 }
