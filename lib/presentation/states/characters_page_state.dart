@@ -214,12 +214,14 @@ class CharactersPageState extends ChangeNotifier {
         baseAttack: character.calculateAttack(),
         baseDamage: weapon.damage.toString(),
         selectedWeapon: weapon,
+        attackerTurn: character.state.calculateTotalForTurn(),
       );
     }
     if (character.uuid == combatState.defendantCharacter) {
       updateCombatState(
         baseDefense: character.calculateDefense(combatState.defenseType),
         defenseNumber: character.state.defenseNumber,
+        defenseTurn: character.state.calculateTotalForTurn(),
       );
     }
 
