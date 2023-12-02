@@ -108,8 +108,8 @@ class GeneratorPage extends StatelessWidget {
   Widget build(BuildContext context) {
     var theme = Theme.of(context);
     var screenSize = MediaQuery.of(context).size;
-    var height = screenSize.height - 50;
-    var isLandscape = screenSize.width > screenSize.height;
+    var small = screenSize.width < 1120;
+    var appState = context.watch<CharactersPageState>();
 
     return Scaffold(
       appBar: AppBar(
@@ -119,41 +119,77 @@ class GeneratorPage extends StatelessWidget {
         foregroundColor: theme.colorScheme.onPrimary,
         actions: [],
       ),
-      body: ColoredBox(
-        color: theme.colorScheme.background,
-        child: Align(
-          alignment: Alignment.topLeft,
-          child: Flex(
-            direction: Axis.horizontal,
-            children: [
-              SizedBox(
-                height: height,
-                width: screenSize.width / 3,
-                child: CharactersTable(),
-              ),
-              Column(
-                children: [
-                  SizedBox(
-                    height: height / 2,
-                    width: screenSize.width / 3,
-                    child: CharacterInfoCard(attacking: true),
-                  ),
-                  SizedBox(
-                    height: height / 2,
-                    width: screenSize.width / 3,
-                    child: CharacterInfoCard(attacking: false),
-                  ),
-                ],
-              ),
-              SizedBox(
-                height: height, // 3
-                width: screenSize.width / 3,
-                child: CombatSection(
-                  isLandscape: true,
-                ),
-              ),
-            ],
-          ),
+      body: Column(
+        children: [
+          Expanded(
+              child: _content(theme, screenSize, small, appState.pageSelected)),
+          small
+              ? BottomNavigationBar(
+                  items: [
+                    BottomNavigationBarItem(
+                        icon: Icon(Icons.list), label: "Listado"),
+                    BottomNavigationBarItem(
+                        icon: Icon(Icons.receipt), label: "Detalle"),
+                    BottomNavigationBarItem(
+                        icon: Icon(Icons.bolt), label: "Combate"),
+                  ],
+                  onTap: (index) {
+                    appState.updatePageSelected(index);
+                  },
+                  currentIndex: appState.pageSelected,
+                )
+              : Container()
+        ],
+      ),
+    );
+  }
+
+  Widget _content(
+      ThemeData theme, Size screenSize, bool small, int pageSelected) {
+    return ColoredBox(
+      color: theme.colorScheme.background,
+      child: Align(
+        alignment: Alignment.topLeft,
+        child: Flex(
+          direction: Axis.horizontal,
+          children: [
+            pageSelected == 0 || !small
+                ? SizedBox(
+                    height: screenSize.height,
+                    width: small ? screenSize.width : screenSize.width / 3,
+                    child: CharactersTable(),
+                  )
+                : Container(),
+            pageSelected == 1 || !small
+                ? Column(
+                    children: [
+                      SizedBox(
+                        height: small
+                            ? (screenSize.height / 2) - 54
+                            : (screenSize.height / 2) - 25,
+                        width: small ? screenSize.width : screenSize.width / 3,
+                        child: CharacterInfoCard(attacking: true),
+                      ),
+                      SizedBox(
+                        height: small
+                            ? (screenSize.height / 2) - 54
+                            : (screenSize.height / 2) - 25,
+                        width: small ? screenSize.width : screenSize.width / 3,
+                        child: CharacterInfoCard(attacking: false),
+                      ),
+                    ],
+                  )
+                : Container(),
+            pageSelected == 2 || !small
+                ? SizedBox(
+                    height: screenSize.height,
+                    width: small ? screenSize.width : screenSize.width / 3,
+                    child: CombatSection(
+                      isLandscape: true,
+                    ),
+                  )
+                : Container(),
+          ],
         ),
       ),
     );

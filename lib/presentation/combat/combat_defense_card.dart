@@ -168,7 +168,13 @@ class CombatDefenseCard extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text("Cantidad de defensas:"),
+              Flexible(
+                child: Text(
+                  "Cantidad de defensas:",
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
               ToggleButtons(
                 isSelected: [
                   appState.combatState.defenseNumber == 1,

@@ -17,8 +17,14 @@ class CharactersPageState extends ChangeNotifier {
   List<Character> characters = [];
   var combatState = ScreenCombatState();
   String? errorMessage = "";
+  int pageSelected = 0;
 
   late Box<Character> _box;
+
+  updatePageSelected(int index) {
+    pageSelected = index;
+    notifyListeners();
+  }
 
   CharactersPageState() {
     initAsync();
