@@ -215,7 +215,7 @@ class CharactersPageState extends ChangeNotifier {
       character.state.hasAction = true;
       character.state.defenseNumber = 1;
     }
-
+    combatState.defenseNumber = 1;
     characters.sort(Character.initiativeSort);
     notifyListeners();
   }
