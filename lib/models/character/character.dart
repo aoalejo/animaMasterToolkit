@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:amt/models/armour.dart';
 import 'package:amt/models/armour_data.dart';
 import 'package:amt/models/attributes_list.dart';
@@ -190,7 +192,17 @@ class Character extends HiveObject {
   }
 
   Weapon selectedWeapon() {
-    return combat.weapons[state.selectedWeaponIndex];
+    try {
+      return combat.weapons[state.selectedWeaponIndex];
+    } catch (e) {
+      return Weapon(
+          name: "-",
+          turn: 0,
+          attack: 0,
+          defense: 0,
+          defenseType: DefenseType.dodge,
+          damage: 0);
+    }
   }
 
   void rollInitiative() {
@@ -256,6 +268,59 @@ class Character extends HiveObject {
       return '${weapon.defense}-60$modifiers';
     }
   }
+
+  String getResumedCombatState() {
+    var weapon = selectedWeapon();
+    var pv = state.getConsumable(ConsumableType.hitPoints)?.maxValue ?? 0;
+    var defense = "HE ${weapon.defense}";
+
+    if (weapon.defenseType == DefenseType.parry) {
+      defense = "HP ${weapon.defense}";
+    }
+
+    return "Turno: ${weapon.turn} Pv: $pv HA: ${weapon.attack} $defense Arma: ${weapon.name} (${weapon.damage})";
+  }
+
+  String getResumedAttributes() {
+    var attr = attributes
+        .toKeyValue()
+        .map((e) => "${e.key.substring(0, 3)}: ${e.value}");
+    return attr.join(" ");
+  }
+
+  String getResumedSkills() {
+    var skillsStr = skills.list().where((element) {
+      var value = 0;
+      try {
+        value = int.parse(element.value);
+      } catch (e) {}
+      return value > 0;
+    }).map((e) => "${e.key}: ${e.value}");
+
+    return skillsStr.join(", ");
+  }
+
+  String getResumedResistances() {
+    var resistancesStr =
+        resistances.toKeyValue().map((e) => "${e.key}: ${e.value}");
+
+    return resistancesStr.join(" ");
+  }
+
+  Character copyWith({String? uuid, bool? isNpc, int? number}) {
+    return Character(
+      uuid: uuid ?? this.uuid,
+      attributes: attributes,
+      skills: skills,
+      profile: profile.copy(isNpc: isNpc, number: number),
+      combat: combat,
+      state: state,
+      ki: ki,
+      mystical: mystical,
+      psychic: psychic,
+      resistances: resistances,
+    );
+  }
 }
 
 extension ListToKeyValue on Map<String, dynamic> {
@@ -278,4 +343,20 @@ class KeyValue {
   final String value;
 
   KeyValue({required this.key, required this.value});
+}
+
+class CharacterList {
+  late List<Character> characters;
+
+  CharacterList({required this.characters});
+
+  CharacterList.fromJson(Map<String, dynamic> json) {
+    characters = [];
+
+    if (json['characters'] != null) {
+      json['characters'].forEach((v) {
+        characters.add(Character.fromJson(v));
+      });
+    }
+  }
 }

@@ -21,7 +21,9 @@ import 'package:amt/presentation/combat/combat_attack_card.dart';
 import 'package:amt/presentation/combat/combat_critical_card.dart';
 import 'package:amt/presentation/combat/combat_defense_card.dart';
 import 'package:amt/presentation/combat/combat_result_card.dart';
+import 'package:amt/presentation/npcSelection/npc_selector_view.dart';
 import 'package:amt/presentation/states/characters_page_state.dart';
+import 'package:amt/presentation/states/non_player_caracters_state.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
@@ -76,8 +78,11 @@ class MyAppState extends State {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (context) => CharactersPageState(),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => CharactersPageState()),
+        ChangeNotifierProvider(create: (context) => NonPlayerCharactersState())
+      ],
       child: MaterialApp(
         localizationsDelegates: [
           GlobalMaterialLocalizations.delegate,
@@ -110,6 +115,7 @@ class GeneratorPage extends StatelessWidget {
     var screenSize = MediaQuery.of(context).size;
     var small = screenSize.width < 1120;
     var appState = context.watch<CharactersPageState>();
+    var nonCharactersState = context.watch<NonPlayerCharactersState>();
 
     return Scaffold(
       appBar: AppBar(
@@ -117,7 +123,25 @@ class GeneratorPage extends StatelessWidget {
         title: Text("Personajes"),
         backgroundColor: theme.primaryColor,
         foregroundColor: theme.colorScheme.onPrimary,
-        actions: [],
+        actions: [
+          IconButton(
+            onPressed: () {
+              NPCSelector.open(
+                context,
+                theme,
+                characters: nonCharactersState.characters,
+                onSelected: (npc) {
+                  appState.addCharacter(npc, isNpc: true);
+                },
+                onRemoveAll: () => appState.removeAllNPC(),
+                onAddNpc: () => nonCharactersState.getCharacters(),
+                onRemove: (character) =>
+                    nonCharactersState.removeNPC(character),
+              );
+            },
+            icon: Icon(Icons.group),
+          ),
+        ],
       ),
       body: Column(
         children: [

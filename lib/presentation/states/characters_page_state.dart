@@ -12,6 +12,7 @@ import 'package:enough_convert/windows.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:uuid/uuid.dart';
 
 class CharactersPageState extends ChangeNotifier {
   List<Character> characters = [];
@@ -20,11 +21,6 @@ class CharactersPageState extends ChangeNotifier {
   int pageSelected = 0;
 
   late Box<Character> _box;
-
-  updatePageSelected(int index) {
-    pageSelected = index;
-    notifyListeners();
-  }
 
   CharactersPageState() {
     initAsync();
@@ -39,6 +35,41 @@ class CharactersPageState extends ChangeNotifier {
       Hive.deleteBoxFromDisk('characters');
       _box = await Hive.openBox('characters');
     }
+  }
+
+  addCharacter(Character character, {bool isNpc = false}) {
+    if (isNpc) {
+      var number =
+          characters.where((element) => element.profile.isNpc ?? false).length +
+              1;
+      var newChar = character.copyWith(
+        uuid: Uuid().v4(),
+        isNpc: isNpc,
+        number: number,
+      );
+      characters.add(newChar);
+      _box.add(newChar);
+    } else {
+      characters.add(character);
+      _box.add(character);
+    }
+
+    notifyListeners();
+  }
+
+  removeAllNPC() {
+    for (var char in characters) {
+      if (char.profile.isNpc == true) {
+        char.delete();
+      }
+    }
+    characters.removeWhere((element) => element.profile.isNpc == true);
+    notifyListeners();
+  }
+
+  updatePageSelected(int index) {
+    pageSelected = index;
+    notifyListeners();
   }
 
   void updateAttackingModifiers(ModifiersState modifiers) {

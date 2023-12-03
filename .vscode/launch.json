@@ -36,5 +36,6 @@
             "type": "dart",
             "flutterMode": "release"
         }
+       
     ]
 }

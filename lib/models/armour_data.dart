@@ -52,6 +52,8 @@ class ArmourData {
       json['armaduras'].forEach((v) {
         armours.add(Armour.fromJson(v));
       });
+    } else {
+      armours = <Armour>[];
     }
   }
 }
