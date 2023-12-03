@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:amt/models/armour.dart';
 import 'package:amt/models/armour_data.dart';
 import 'package:amt/models/attributes_list.dart';
