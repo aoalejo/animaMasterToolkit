@@ -1,0 +1,76 @@
+{
+  "characters": [
+    {
+      "Atributos": {
+        "AGI": "5",
+        "CON": "5",
+        "DES": "5",
+        "FUE": "5",
+        "INT": "5",
+        "PER": "6",
+        "POD": "5",
+        "VOL": "5"
+      },
+      "Habilidades": {
+        "Atletismo": "30",
+        "Trepar": "30",
+        "Intimidar": "20",
+        "Advertir": "60",
+        "Buscar": "40",
+        "Tasacion": "20",
+        "Ocultarse": "45",
+        "Sigilo": "30"
+      },
+      "datosElementales": {
+        "cansancio": "5",
+        "puntosDeVida": "80",
+        "regeneracion": "1",
+        "nombre": "Bandido",
+        "categoria": "Novel",
+        "nivel": "1",
+        "movimiento": "5"
+      },
+      "Resistencias": {
+        "Pres. Base": "30",
+        "RF": "30",
+        "RE": "30",
+        "RV": "30",
+        "RM": "30",
+        "RP": "30"
+      },
+      "Combate": {
+        "armas": [
+          {
+            "nombre": "Garrote",
+            "critPrincipal": "CON",
+            "turno": "25",
+            "ataque": "70",
+            "defensa": "60",
+            "defensaTipo": "Esq",
+            "danio": "30"
+          },
+          {
+            "nombre": "Desarmado",
+            "critPrincipal": "CON",
+            "turno": "45",
+            "ataque": "70",
+            "defensa": "60",
+            "defensaTipo": "Esq",
+            "danio": "15"
+          }
+        ],
+        "armadura": {
+          "armaduraTotal": {
+            "FIL": "2",
+            "CON": "2",
+            "PEN": "2",
+            "CAL": "2",
+            "ELE": "2",
+            "FRI": "2",
+            "ENE": "0"
+          }
+        }
+      }
+    }
+  ]
+}

@@ -12,11 +12,13 @@ import 'package:enough_convert/windows.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:uuid/uuid.dart';
 
 class CharactersPageState extends ChangeNotifier {
   List<Character> characters = [];
   var combatState = ScreenCombatState();
-  String? errorMessage = null;
+  String? errorMessage = "";
+  int pageSelected = 0;
 
   late Box<Character> _box;
 
@@ -26,16 +28,48 @@ class CharactersPageState extends ChangeNotifier {
 
   void initAsync() async {
     try {
-      print("openBox");
       _box = await Hive.openBox('characters');
-      print("opened box characters");
       characters.addAll(_box.values.toList());
       notifyListeners();
-      print("characters");
     } catch (e) {
       Hive.deleteBoxFromDisk('characters');
       _box = await Hive.openBox('characters');
     }
+  }
+
+  addCharacter(Character character, {bool isNpc = false}) {
+    if (isNpc) {
+      var number =
+          characters.where((element) => element.profile.isNpc ?? false).length +
+              1;
+      var newChar = character.copyWith(
+        uuid: Uuid().v4(),
+        isNpc: isNpc,
+        number: number,
+      );
+      characters.add(newChar);
+      _box.add(newChar);
+    } else {
+      characters.add(character);
+      _box.add(character);
+    }
+
+    notifyListeners();
+  }
+
+  removeAllNPC() {
+    for (var char in characters) {
+      if (char.profile.isNpc == true) {
+        char.delete();
+      }
+    }
+    characters.removeWhere((element) => element.profile.isNpc == true);
+    notifyListeners();
+  }
+
+  updatePageSelected(int index) {
+    pageSelected = index;
+    notifyListeners();
   }
 
   void updateAttackingModifiers(ModifiersState modifiers) {
@@ -52,8 +86,8 @@ class CharactersPageState extends ChangeNotifier {
     String? attackRoll,
     String? baseDamage,
     String? baseAttack,
-    int? attackingCharacter,
-    int? defendantCharacter,
+    String? attackingCharacter,
+    String? defendantCharacter,
     ModifiersState? attackingModifiers,
     ModifiersState? defenderModifiers,
     String? defenseRoll,
@@ -73,11 +107,19 @@ class CharactersPageState extends ChangeNotifier {
     int? actualHitPoints,
     String? localizationRoll,
     String? modifierReduction,
+    String? baseAttackModifiers,
+    String? baseDefenseModifiers,
   }) {
+    combatState.baseAttackModifiers =
+        baseAttackModifiers ?? combatState.baseAttackModifiers;
+    combatState.baseDefenseModifiers =
+        baseDefenseModifiers ?? combatState.baseDefenseModifiers;
+
     combatState.modifierReduction =
         modifierReduction ?? combatState.modifierReduction;
     combatState.localizationRoll =
         localizationRoll ?? combatState.localizationRoll;
+
     combatState.actualHitPoints =
         actualHitPoints ?? combatState.actualHitPoints;
 
@@ -129,15 +171,17 @@ class CharactersPageState extends ChangeNotifier {
 
   Character? characterAttacking() {
     try {
-      return characters[combatState.attackingCharacter];
+      return characters.firstWhere(
+          (element) => element.uuid == combatState.attackingCharacter);
     } catch (e) {
       return null;
     }
   }
 
-  Character? characterDefending() {
+  Character? defendingCharacter() {
     try {
-      return characters[combatState.defendantCharacter];
+      return characters.firstWhere(
+          (element) => element.uuid == combatState.defendantCharacter);
     } catch (e) {
       return null;
     }
@@ -171,7 +215,7 @@ class CharactersPageState extends ChangeNotifier {
       character.state.hasAction = true;
       character.state.defenseNumber = 1;
     }
-
+    combatState.defenseNumber = 1;
     characters.sort(Character.initiativeSort);
     notifyListeners();
   }
@@ -193,6 +237,24 @@ class CharactersPageState extends ChangeNotifier {
         characters.indexWhere((element) => element.uuid == character.uuid);
 
     characters[index] = character;
+
+    if (character.uuid == combatState.attackingCharacter) {
+      var weapon = character.selectedWeapon();
+
+      updateCombatState(
+        baseAttack: character.calculateAttack(),
+        baseDamage: weapon.damage.toString(),
+        selectedWeapon: weapon,
+        attackerTurn: character.state.calculateTotalForTurn(),
+      );
+    }
+    if (character.uuid == combatState.defendantCharacter) {
+      updateCombatState(
+        baseDefense: character.calculateDefense(combatState.defenseType),
+        defenseNumber: character.state.defenseNumber,
+        defenseTurn: character.state.calculateTotalForTurn(),
+      );
+    }
 
     notifyListeners();
     character.save();

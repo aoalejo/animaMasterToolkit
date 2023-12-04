@@ -20,7 +20,7 @@ class CombatReturnCard extends StatelessWidget {
             ? TextButton(
                 style: ButtonStyle(),
                 onPressed: () {
-                  var character = appState.characterDefending();
+                  var character = appState.defendingCharacter();
 
                   var damage = appState.combatState.calculateDamage();
 
@@ -42,7 +42,7 @@ class CombatReturnCard extends StatelessWidget {
                     foregroundColor:
                         MaterialStatePropertyAll(theme.disabledColor)),
                 onPressed: () {
-                  var character = appState.characterDefending();
+                  var character = appState.defendingCharacter();
 
                   character?.state.defenseNumber += 1;
                   appState.updateCharacter(character);

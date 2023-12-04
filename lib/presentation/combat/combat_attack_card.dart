@@ -52,28 +52,37 @@ class CombatAttackCard extends StatelessWidget {
                   ),
                   SizedBox(
                     height: 40,
-                    child: TextFormFieldCustom(
-                      key: Key("TextFormFieldBaseAttack"),
-                      inputType: TextInputType.number,
-                      label: "Ataque base",
-                      suffixIcon: TextButton(
-                        child: Text("+Can"),
-                        onPressed: () {
-                          var character = appState.characters[
-                              appState.combatState.attackingCharacter];
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Flexible(
+                            flex: 1,
+                            child: Text(appState.combatState.baseAttack)),
+                        Flexible(
+                          flex: 2,
+                          child: TextFormFieldCustom(
+                            inputType: TextInputType.number,
+                            label: "Ataque base",
+                            suffixIcon: TextButton(
+                              child: Text("+Can"),
+                              onPressed: () {
+                                var character = appState.characterAttacking();
 
-                          character.removeFrom(
-                            1,
-                            ConsumableType.fatigue,
-                          );
-                          appState.combatState.baseAttack =
-                              "${appState.combatState.baseAttack}+15";
-                          appState.updateCharacter(character);
-                        },
-                      ),
-                      text: appState.combatState.baseAttack,
-                      onChanged: (value) =>
-                          appState.updateCombatState(baseAttack: value),
+                                character?.removeFrom(
+                                  1,
+                                  ConsumableType.fatigue,
+                                );
+                                appState.combatState.baseAttackModifiers =
+                                    "${appState.combatState.baseAttackModifiers}+15";
+                                appState.updateCharacter(character);
+                              },
+                            ),
+                            text: appState.combatState.baseAttackModifiers,
+                            onChanged: (value) => appState.updateCombatState(
+                                baseAttackModifiers: value),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ],
@@ -183,13 +192,14 @@ class CombatAttackCard extends StatelessWidget {
         ),
         SizedBox(
           width: 8000,
-          child: Row(
-            children: [
-              ModifiersCard(
-                aspectRatio: 0.2,
-                modifiers: appState.combatState.attackingModifiers.getAll(),
-              ),
-            ],
+          child: ModifiersCard(
+            aspectRatio: 0.2,
+            modifiers: appState.combatState.attackingModifiers.getAll(),
+            onSelected: (selected) {
+              appState.combatState.attackingModifiers.removeModifier(selected);
+              appState.updateCombatState(
+                  attackingModifiers: appState.combatState.attackingModifiers);
+            },
           ),
         ),
       ],

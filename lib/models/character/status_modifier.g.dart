@@ -23,13 +23,15 @@ class StatusModifierAdapter extends TypeAdapter<StatusModifier> {
       parry: fields[3] as int,
       turn: fields[4] as int,
       physicalAction: fields[5] as int,
+      isOfCritical: fields[6] as bool?,
+      midValue: fields[7] as int?,
     );
   }
 
   @override
   void write(BinaryWriter writer, StatusModifier obj) {
     writer
-      ..writeByte(6)
+      ..writeByte(8)
       ..writeByte(0)
       ..write(obj.name)
       ..writeByte(1)
@@ -41,7 +43,11 @@ class StatusModifierAdapter extends TypeAdapter<StatusModifier> {
       ..writeByte(4)
       ..write(obj.turn)
       ..writeByte(5)
-      ..write(obj.physicalAction);
+      ..write(obj.physicalAction)
+      ..writeByte(6)
+      ..write(obj.isOfCritical)
+      ..writeByte(7)
+      ..write(obj.midValue);
   }
 
   @override

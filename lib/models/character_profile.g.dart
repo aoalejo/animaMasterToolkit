@@ -25,13 +25,14 @@ class CharacterProfileAdapter extends TypeAdapter<CharacterProfile> {
       level: fields[5] as String,
       kind: fields[6] as String,
       speed: fields[7] as int,
+      isNpc: fields[8] as bool?,
     );
   }
 
   @override
   void write(BinaryWriter writer, CharacterProfile obj) {
     writer
-      ..writeByte(8)
+      ..writeByte(9)
       ..writeByte(0)
       ..write(obj.fatigue)
       ..writeByte(1)
@@ -47,7 +48,9 @@ class CharacterProfileAdapter extends TypeAdapter<CharacterProfile> {
       ..writeByte(6)
       ..write(obj.kind)
       ..writeByte(7)
-      ..write(obj.speed);
+      ..write(obj.speed)
+      ..writeByte(8)
+      ..write(obj.isNpc);
   }
 
   @override

@@ -7,11 +7,11 @@ part 'roll.g.dart';
 @HiveType(typeId: 4, adapterName: "RollAdapter")
 class Roll {
   @HiveField(0)
-  late final int roll;
+  late int roll;
   @HiveField(1)
-  late final String description;
+  late String description;
   @HiveField(2)
-  late final List<int> rolls;
+  late List<int> rolls;
 
   Roll.turn() {
     Roll.roll(turnFumble: true);

@@ -18,7 +18,7 @@ class CombatDefenseCard extends StatelessWidget {
 
     return CustomCombatCard(
       title:
-          "${appState.characterDefending()?.profile.name ?? ""} ${appState.combatState.defenseType.displayable} (Total: ${appState.combatState.finalDefenseValue()})",
+          "${appState.defendingCharacter()?.profile.name ?? ""} ${appState.combatState.defenseType.displayable} (Total: ${appState.combatState.finalDefenseValue()})",
       children: [
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -52,26 +52,37 @@ class CombatDefenseCard extends StatelessWidget {
                   ),
                   SizedBox(
                     height: 40,
-                    child: TextFormFieldCustom(
-                      inputType: TextInputType.number,
-                      label: "Defensa base",
-                      text: appState.combatState.baseDefense,
-                      onChanged: (value) =>
-                          appState.updateCombatState(baseDefense: value),
-                      suffixIcon: TextButton(
-                        child: Text("+Can"),
-                        onPressed: () {
-                          var character = appState.characterDefending();
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Flexible(
+                            flex: 1,
+                            child: Text(appState.combatState.baseDefense)),
+                        Flexible(
+                          flex: 2,
+                          child: TextFormFieldCustom(
+                            inputType: TextInputType.number,
+                            label: "Defensa base",
+                            suffixIcon: TextButton(
+                              child: Text("+Can"),
+                              onPressed: () {
+                                var character = appState.defendingCharacter();
 
-                          character?.removeFrom(
-                            1,
-                            ConsumableType.fatigue,
-                          );
-                          appState.combatState.baseDefense =
-                              "${appState.combatState.baseDefense}+15";
-                          appState.updateCharacter(character);
-                        },
-                      ),
+                                character?.removeFrom(
+                                  1,
+                                  ConsumableType.fatigue,
+                                );
+                                appState.combatState.baseDefenseModifiers =
+                                    "${appState.combatState.baseDefenseModifiers}+15";
+                                appState.updateCharacter(character);
+                              },
+                            ),
+                            text: appState.combatState.baseDefenseModifiers,
+                            onChanged: (value) => appState.updateCombatState(
+                                baseDefenseModifiers: value),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ],
@@ -153,13 +164,14 @@ class CombatDefenseCard extends StatelessWidget {
         ),
         SizedBox(
           width: 8000,
-          child: Row(
-            children: [
-              ModifiersCard(
-                aspectRatio: 0.2,
-                modifiers: appState.combatState.attackingModifiers.getAll(),
-              ),
-            ],
+          child: ModifiersCard(
+            aspectRatio: 0.2,
+            modifiers: appState.combatState.defenderModifiers.getAll(),
+            onSelected: (selected) {
+              appState.combatState.defenderModifiers.removeModifier(selected);
+              appState.updateCombatState(
+                  defenderModifiers: appState.combatState.defenderModifiers);
+            },
           ),
         ),
         SizedBox(
@@ -167,7 +179,13 @@ class CombatDefenseCard extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text("Cantidad de defensas:"),
+              Flexible(
+                child: Text(
+                  "Cantidad de defensas:",
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
               ToggleButtons(
                 isSelected: [
                   appState.combatState.defenseNumber == 1,

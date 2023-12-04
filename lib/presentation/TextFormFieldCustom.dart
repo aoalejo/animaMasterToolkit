@@ -8,6 +8,7 @@ class TextFormFieldCustom extends StatelessWidget {
   final Widget? suffixIcon;
   final InputDecoration? decoration;
   final TextStyle? style;
+  final TextAlign? align;
 
   const TextFormFieldCustom({
     super.key,
@@ -18,6 +19,7 @@ class TextFormFieldCustom extends StatelessWidget {
     this.suffixIcon,
     this.decoration,
     this.style,
+    this.align,
   });
 
   @override
@@ -35,6 +37,7 @@ class TextFormFieldCustom extends StatelessWidget {
       textInputAction: TextInputAction.done,
       keyboardType: inputType,
       style: style,
+      textAlign: align ?? TextAlign.start,
       decoration: decoration ??
           InputDecoration(
             labelText: label,

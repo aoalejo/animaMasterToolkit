@@ -32,7 +32,17 @@ class CharacterState {
   }
 
   ConsumableState? getConsumable(ConsumableType type) {
-    return consumables.firstWhere((element) => element.type == type);
+    try {
+      return consumables.firstWhere((element) => element.type == type);
+    } catch (e) {
+      return ConsumableState(
+        actualValue: 0,
+        maxValue: 0,
+        name: '',
+        step: 2,
+        description: '',
+      );
+    }
   }
 
   CharacterState({

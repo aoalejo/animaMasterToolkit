@@ -15,12 +15,15 @@ import 'package:amt/models/mystical.dart';
 import 'package:amt/models/psychic_data.dart';
 import 'package:amt/models/roll.dart';
 import 'package:amt/models/weapon.dart';
+import 'package:amt/presentation/charactersInfo/character_info_card.dart';
 import 'package:amt/presentation/charactersTable/characters_table.dart';
 import 'package:amt/presentation/combat/combat_attack_card.dart';
 import 'package:amt/presentation/combat/combat_critical_card.dart';
 import 'package:amt/presentation/combat/combat_defense_card.dart';
 import 'package:amt/presentation/combat/combat_result_card.dart';
+import 'package:amt/presentation/npcSelection/npc_selector_view.dart';
 import 'package:amt/presentation/states/characters_page_state.dart';
+import 'package:amt/presentation/states/non_player_caracters_state.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
@@ -75,8 +78,11 @@ class MyAppState extends State {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (context) => CharactersPageState(),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => CharactersPageState()),
+        ChangeNotifierProvider(create: (context) => NonPlayerCharactersState())
+      ],
       child: MaterialApp(
         localizationsDelegates: [
           GlobalMaterialLocalizations.delegate,
@@ -105,60 +111,109 @@ class MyHomePage extends StatelessWidget {
 class GeneratorPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    var appState = context.watch<CharactersPageState>();
     var theme = Theme.of(context);
     var screenSize = MediaQuery.of(context).size;
-    var height = screenSize.height - 50;
-    var isLandscape = screenSize.width > screenSize.height;
+    var small = screenSize.width < 1120;
+    var appState = context.watch<CharactersPageState>();
+    var nonCharactersState = context.watch<NonPlayerCharactersState>();
 
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: 50,
-        title: Text("Personajes ${appState.errorMessage ?? ''}"),
+        title: Text("Personajes"),
         backgroundColor: theme.primaryColor,
         foregroundColor: theme.colorScheme.onPrimary,
         actions: [
           IconButton(
-            icon: Icon(Icons.restore),
             onPressed: () {
-              appState.resetConsumables();
+              NPCSelector.open(
+                context,
+                theme,
+                characters: nonCharactersState.characters,
+                onSelected: (npc) {
+                  appState.addCharacter(npc, isNpc: true);
+                },
+                onRemoveAll: () => appState.removeAllNPC(),
+                onAddNpc: () => nonCharactersState.getCharacters(),
+                onRemove: (character) =>
+                    nonCharactersState.removeNPC(character),
+              );
             },
+            icon: Icon(Icons.group),
           ),
-          IconButton(
-            icon: Icon(Icons.upload_file),
-            onPressed: () {
-              appState.getCharacters();
-            },
-          ),
-          IconButton(
-            icon: Icon(Icons.repeat),
-            onPressed: () {
-              appState.rollTurns();
-            },
-          )
         ],
       ),
-      body: ColoredBox(
-        color: theme.colorScheme.background,
-        child: Align(
-          alignment: Alignment.topLeft,
-          child: Flex(
-            direction: isLandscape ? Axis.horizontal : Axis.vertical,
-            children: [
-              SizedBox(
-                height: isLandscape ? height : height / 3,
-                width: isLandscape ? screenSize.width / 1.5 : screenSize.width,
-                child: CharactersTable(),
-              ),
-              SizedBox(
-                height: isLandscape ? height : height / 1.5, // 3
-                width: isLandscape ? screenSize.width / 3 : screenSize.width,
-                child: CombatSection(
-                  isLandscape: true,
-                ),
-              ),
-            ],
-          ),
+      body: Column(
+        children: [
+          Expanded(
+              child: _content(theme, screenSize, small, appState.pageSelected)),
+          small
+              ? BottomNavigationBar(
+                  items: [
+                    BottomNavigationBarItem(
+                        icon: Icon(Icons.list), label: "Listado"),
+                    BottomNavigationBarItem(
+                        icon: Icon(Icons.receipt), label: "Detalle"),
+                    BottomNavigationBarItem(
+                        icon: Icon(Icons.bolt), label: "Combate"),
+                  ],
+                  onTap: (index) {
+                    appState.updatePageSelected(index);
+                  },
+                  currentIndex: appState.pageSelected,
+                )
+              : Container()
+        ],
+      ),
+    );
+  }
+
+  Widget _content(
+      ThemeData theme, Size screenSize, bool small, int pageSelected) {
+    return ColoredBox(
+      color: theme.colorScheme.background,
+      child: Align(
+        alignment: Alignment.topLeft,
+        child: Flex(
+          direction: Axis.horizontal,
+          children: [
+            pageSelected == 0 || !small
+                ? SizedBox(
+                    height: screenSize.height,
+                    width: small ? screenSize.width : screenSize.width / 3,
+                    child: CharactersTable(),
+                  )
+                : Container(),
+            pageSelected == 1 || !small
+                ? Column(
+                    children: [
+                      SizedBox(
+                        height: small
+                            ? (screenSize.height / 2) - 54
+                            : (screenSize.height / 2) - 25,
+                        width: small ? screenSize.width : screenSize.width / 3,
+                        child: CharacterInfoCard(attacking: true),
+                      ),
+                      SizedBox(
+                        height: small
+                            ? (screenSize.height / 2) - 54
+                            : (screenSize.height / 2) - 25,
+                        width: small ? screenSize.width : screenSize.width / 3,
+                        child: CharacterInfoCard(attacking: false),
+                      ),
+                    ],
+                  )
+                : Container(),
+            pageSelected == 2 || !small
+                ? SizedBox(
+                    height: screenSize.height,
+                    width: small ? screenSize.width : screenSize.width / 3,
+                    child: CombatSection(
+                      isLandscape: true,
+                    ),
+                  )
+                : Container(),
+          ],
         ),
       ),
     );
@@ -171,24 +226,19 @@ class CombatSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
-    return ColoredBox(
-      color: theme.colorScheme.primaryContainer,
-      child: Padding(
-        padding: EdgeInsets.all(8),
-        child: SingleChildScrollView(
-          child: Flex(
-            direction: Axis.vertical,
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              CombatAttackCard(),
-              CombatDefenseCard(),
-              CombatReturnCard(),
-              CombatCriticalCard(),
-            ],
-          ),
+    return Padding(
+      padding: EdgeInsets.all(0),
+      child: SingleChildScrollView(
+        child: Flex(
+          direction: Axis.vertical,
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            CombatAttackCard(),
+            CombatDefenseCard(),
+            CombatReturnCard(),
+            CombatCriticalCard(),
+          ],
         ),
       ),
     );

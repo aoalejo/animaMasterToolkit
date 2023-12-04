@@ -13,6 +13,7 @@ import 'package:amt/models/mystical.dart';
 import 'package:amt/models/psychic_data.dart';
 import 'package:amt/models/roll.dart';
 import 'package:amt/models/weapon.dart';
+import 'package:amt/resources/modifiers.dart';
 import 'package:hive/hive.dart';
 import 'package:uuid/uuid.dart';
 
@@ -97,7 +98,7 @@ class Character extends HiveObject {
       name: "Vida",
       maxValue: profile.hitPoints,
       actualValue: profile.hitPoints,
-      step: 0,
+      step: 10,
       type: ConsumableType.hitPoints,
       description:
           "indice de regeneración: ${profile.regeneration}:\n${getRegenDescription()}",
@@ -108,7 +109,7 @@ class Character extends HiveObject {
       maxValue: profile.fatigue,
       actualValue: profile.fatigue,
       type: ConsumableType.fatigue,
-      step: 0,
+      step: 1,
       description: "",
     ));
 
@@ -126,7 +127,7 @@ class Character extends HiveObject {
               ConsumableState(
                   name: "Ki/${names[i]}",
                   maxValue: max[i],
-                  actualValue: 0,
+                  actualValue: 1,
                   step: accumulation[i],
                   description: ""),
             );
@@ -138,7 +139,7 @@ class Character extends HiveObject {
             ConsumableState(
                 name: "Ki",
                 maxValue: ki?.maximumAccumulation ?? 0,
-                actualValue: 0,
+                actualValue: 01,
                 step: ki?.genericAccumulation ?? 0,
                 description: "Usando ki unificado"),
           );
@@ -173,7 +174,7 @@ class Character extends HiveObject {
           name: "CV",
           maxValue: psychic?.freeCvs ?? 0,
           actualValue: psychic?.freeCvs ?? 0,
-          step: 0,
+          step: 1,
           description: "",
         ));
       }
@@ -189,12 +190,23 @@ class Character extends HiveObject {
   }
 
   Weapon selectedWeapon() {
-    return combat.weapons[state.selectedWeaponIndex];
+    try {
+      return combat.weapons[state.selectedWeaponIndex];
+    } catch (e) {
+      return Weapon(
+          name: "-",
+          turn: 0,
+          attack: 0,
+          defense: 0,
+          defenseType: DefenseType.dodge,
+          damage: 0);
+    }
   }
 
   void rollInitiative() {
     state.currentTurn = Roll.roll(
       base: selectedWeapon().turn + state.calculateTotalForTurn(),
+      turnFumble: true,
     );
   }
 
@@ -231,6 +243,82 @@ class Character extends HiveObject {
         state.consumables.where((element) => element.type == type).first;
     firstOfType.actualValue -= value;
   }
+
+  String calculateAttack() {
+    var weapon = selectedWeapon();
+
+    var modifiers =
+        state.modifiers.getAllModifiersForTypeString(ModifiersType.attack);
+
+    return "${weapon.attack}$modifiers";
+  }
+
+  String calculateDefense(DefenseType type) {
+    var weapon = selectedWeapon();
+    var weaponDefense = weapon.defenseType;
+
+    var modifiers = state.modifiers.getAllModifiersForTypeString(
+        type == DefenseType.dodge ? ModifiersType.dodge : ModifiersType.parry);
+
+    if (weaponDefense == type) {
+      return '${weapon.defense}$modifiers';
+    } else {
+      return '${weapon.defense}-60$modifiers';
+    }
+  }
+
+  String getResumedCombatState() {
+    var weapon = selectedWeapon();
+    var pv = state.getConsumable(ConsumableType.hitPoints)?.maxValue ?? 0;
+    var defense = "HE ${weapon.defense}";
+
+    if (weapon.defenseType == DefenseType.parry) {
+      defense = "HP ${weapon.defense}";
+    }
+
+    return "Turno: ${weapon.turn} Pv: $pv HA: ${weapon.attack} $defense Arma: ${weapon.name} (${weapon.damage})";
+  }
+
+  String getResumedAttributes() {
+    var attr = attributes
+        .toKeyValue()
+        .map((e) => "${e.key.substring(0, 3)}: ${e.value}");
+    return attr.join(" ");
+  }
+
+  String getResumedSkills() {
+    var skillsStr = skills.list().where((element) {
+      var value = 0;
+      try {
+        value = int.parse(element.value);
+      } catch (e) {}
+      return value > 0;
+    }).map((e) => "${e.key}: ${e.value}");
+
+    return skillsStr.join(", ");
+  }
+
+  String getResumedResistances() {
+    var resistancesStr =
+        resistances.toKeyValue().map((e) => "${e.key}: ${e.value}");
+
+    return resistancesStr.join(" ");
+  }
+
+  Character copyWith({String? uuid, bool? isNpc, int? number}) {
+    return Character(
+      uuid: uuid ?? this.uuid,
+      attributes: attributes,
+      skills: skills,
+      profile: profile.copy(isNpc: isNpc, number: number),
+      combat: combat,
+      state: state,
+      ki: ki,
+      mystical: mystical,
+      psychic: psychic,
+      resistances: resistances,
+    );
+  }
 }
 
 extension ListToKeyValue on Map<String, dynamic> {
@@ -253,4 +341,20 @@ class KeyValue {
   final String value;
 
   KeyValue({required this.key, required this.value});
+}
+
+class CharacterList {
+  late List<Character> characters;
+
+  CharacterList({required this.characters});
+
+  CharacterList.fromJson(Map<String, dynamic> json) {
+    characters = [];
+
+    if (json['characters'] != null) {
+      json['characters'].forEach((v) {
+        characters.add(Character.fromJson(v));
+      });
+    }
+  }
 }

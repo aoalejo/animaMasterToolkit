@@ -28,14 +28,14 @@ class CharacterResistances {
     physicResistance = JsonUtils.integer(json['RP'], 0);
   }
 
-  CharacterResistances() {
-    presence = 0;
-    physicalResistance = 0;
-    diseasesResistance = 0;
-    poisonResistance = 0;
-    magicalResistance = 0;
-    physicResistance = 0;
-  }
+  CharacterResistances({
+    this.presence = 0,
+    this.physicalResistance = 0,
+    this.diseasesResistance = 0,
+    this.poisonResistance = 0,
+    this.magicalResistance = 0,
+    this.physicResistance = 0,
+  });
 
   List<KeyValue> toKeyValue() {
     List<KeyValue> list = [];
