@@ -3,6 +3,7 @@ import 'package:amt/models/enums.dart';
 import 'package:amt/models/modifiers_state.dart';
 import 'package:amt/presentation/charactersTable/character_info.dart';
 import 'package:amt/presentation/states/characters_page_state.dart';
+import 'package:amt/utils/Int+Extension.dart';
 import 'package:amt/utils/assets.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -108,7 +109,32 @@ class CharactersTable extends StatelessWidget {
                             size: 3,
                             child: Row(
                               children: [
-                                Text(character.profile.name),
+                                Expanded(
+                                  child: Text(character.profile.name),
+                                ),
+                                Stack(
+                                  alignment: AlignmentDirectional.center,
+                                  children: [
+                                    Padding(
+                                      padding: EdgeInsets.all(8),
+                                      child: CircularProgressIndicator(
+                                        value: character.state
+                                                .getLifePointsPercentage()
+                                                .toDouble() /
+                                            100,
+                                        color: character.state
+                                            .getLifePointsPercentage()
+                                            .percentageColor,
+                                      ),
+                                    ),
+                                    Text(
+                                      "${character.state.getLifePointsPercentage()}%",
+                                      style: theme.textTheme.bodySmall!
+                                          .copyWith(
+                                              fontWeight: FontWeight.bold),
+                                    ),
+                                  ],
+                                )
                               ],
                             )),
                         _cell(

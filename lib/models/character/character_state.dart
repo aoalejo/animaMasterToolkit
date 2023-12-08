@@ -71,4 +71,12 @@ class CharacterState {
 
     return totalTurn;
   }
+
+  int getLifePointsPercentage() {
+    final hitPoints = getConsumable(ConsumableType.hitPoints);
+
+    if (hitPoints == null) return 100;
+
+    return ((hitPoints.actualValue / hitPoints.maxValue) * 100).toInt();
+  }
 }
