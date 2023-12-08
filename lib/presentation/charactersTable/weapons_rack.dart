@@ -145,6 +145,9 @@ class WeaponsRack extends StatelessWidget {
         return BottomSheetCustom(
           title: Text("Modificar ${weapon.name}"),
           children: [
+            SizedBox(
+              height: 16,
+            ),
             TextFormFieldCustom(
               label: "Nombre",
               text: weapon.name,
@@ -161,6 +164,17 @@ class WeaponsRack extends StatelessWidget {
               text: weapon.damage.toString(),
               onChanged: (value) {
                 weapon.damage = _parseInput(value);
+                onEdit(weapon);
+              },
+            ),
+            SizedBox(
+              height: 16,
+            ),
+            TextFormFieldCustom(
+              label: "Ataque",
+              text: weapon.attack.toString(),
+              onChanged: (value) {
+                weapon.defense = _parseInput(value);
                 onEdit(weapon);
               },
             ),
