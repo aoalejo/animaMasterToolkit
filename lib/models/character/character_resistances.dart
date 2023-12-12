@@ -40,7 +40,7 @@ class CharacterResistances {
   List<KeyValue> toKeyValue() {
     List<KeyValue> list = [];
 
-    list.add(KeyValue(key: "Pres. Base", value: presence.toString()));
+    list.add(KeyValue(key: "Pres", value: presence.toString()));
     list.add(KeyValue(key: "RF", value: physicalResistance.toString()));
     list.add(KeyValue(key: "RE", value: diseasesResistance.toString()));
     list.add(KeyValue(key: "RV", value: poisonResistance.toString()));

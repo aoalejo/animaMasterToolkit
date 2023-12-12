@@ -1,7 +1,10 @@
 import 'dart:convert';
 
+import 'package:amt/models/attributes_list.dart';
 import 'package:amt/models/character/character.dart';
 import 'package:amt/models/character_profile.dart';
+import 'package:amt/utils/Int+Extension.dart';
+import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_tags_x/flutter_tags_x.dart';
 
@@ -14,8 +17,7 @@ class CharacterNPCCard extends StatelessWidget {
   late final List<KeyValue> _skills;
   late final CharacterProfile _profile;
   late final List<KeyValue> _combat;
-  late final List<KeyValue> _attributes;
-  late final List<KeyValue> _resistances;
+  late final List<int> _attributes;
 
   CharacterNPCCard(
     this.character,
@@ -26,9 +28,82 @@ class CharacterNPCCard extends StatelessWidget {
     _skills = character.skills.list();
     _profile = character.profile;
     _combat = character.getCombatItems();
-    _attributes = character.attributes.toKeyValue(abbreviated: true);
-    _resistances = character.resistances.toKeyValue();
+    _combat.add(KeyValue(
+        key: "Presencia", value: character.resistances.presence.toString()));
+    _attributes = character.attributes.orderedList();
   }
+
+  BarTouchData get barTouchData => BarTouchData(
+        enabled: false,
+        touchTooltipData: BarTouchTooltipData(
+          tooltipBgColor: Colors.transparent,
+          tooltipPadding: EdgeInsets.zero,
+          tooltipMargin: 0,
+          getTooltipItem: (
+            BarChartGroupData group,
+            int groupIndex,
+            BarChartRodData rod,
+            int rodIndex,
+          ) {
+            return BarTooltipItem(
+              rod.toY.round().toString(),
+              const TextStyle(
+                color: Colors.black,
+                fontWeight: FontWeight.bold,
+              ),
+            );
+          },
+        ),
+      );
+
+  Widget getTitles(double value, TitleMeta meta) {
+    String text = AttributesList.names()[value.toInt()];
+
+    return SideTitleWidget(
+      axisSide: value.toInt() % 2 == 0 ? AxisSide.bottom : AxisSide.top,
+      space: 4,
+      child: Text(text, style: theme.textTheme.bodySmall),
+    );
+  }
+
+  FlTitlesData get titlesData => FlTitlesData(
+        show: true,
+        bottomTitles: AxisTitles(
+          sideTitles: SideTitles(
+            showTitles: true,
+            reservedSize: 40,
+            getTitlesWidget: getTitles,
+          ),
+        ),
+        leftTitles: AxisTitles(
+          sideTitles: SideTitles(showTitles: false),
+        ),
+        topTitles: AxisTitles(
+          sideTitles: SideTitles(showTitles: false),
+        ),
+        rightTitles: AxisTitles(
+          sideTitles: SideTitles(showTitles: false),
+        ),
+      );
+
+  FlBorderData get borderData => FlBorderData(
+        show: false,
+      );
+
+  List<BarChartGroupData> get barGroups => [
+        for (var i = 0; i < _attributes.length; i++)
+          BarChartGroupData(
+            x: i,
+            barRods: [
+              BarChartRodData(
+                toY: _attributes[i].toDouble(),
+                color: (_attributes[i].toInt() * 10)
+                    .percentageColor(lastTransparent: false),
+              )
+            ],
+            showingTooltipIndicators: [0],
+          )
+      ];
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +122,7 @@ class CharacterNPCCard extends StatelessWidget {
                 ),
                 Expanded(
                     child: Text(
-                  _profile.name,
+                  '${_profile.name} (${_profile.category})',
                   textAlign: TextAlign.center,
                   style: theme.textTheme.bodyLarge!.copyWith(
                     fontWeight: FontWeight.bold,
@@ -83,7 +158,6 @@ class CharacterNPCCard extends StatelessWidget {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 _pill('Lv. ${_profile.level}'),
-                                _pill(_profile.category),
                               ],
                             ),
                           )
@@ -92,73 +166,55 @@ class CharacterNPCCard extends StatelessWidget {
                     ],
                   ),
                 ),
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Tags(
-                      spacing: 4,
-                      runAlignment: WrapAlignment.start,
-                      alignment: WrapAlignment.start,
-                      itemCount: _combat.length,
-                      itemBuilder: (int index) {
-                        return ItemTags(
-                          textStyle: theme.textTheme.bodySmall!,
-                          pressEnabled: false,
-                          index: index,
-                          alignment: MainAxisAlignment.spaceBetween,
-                          padding:
-                              EdgeInsets.symmetric(vertical: 5, horizontal: 3),
-                          borderRadius: BorderRadius.circular(8),
-                          elevation: 1,
-                          title:
-                              "${_combat[index].key}: ${_combat[index].value}",
-                        );
-                      },
+                SizedBox(
+                  width: 8,
+                ),
+                SizedBox(
+                  width: 128,
+                  height: 128,
+                  child: BarChart(
+                    BarChartData(
+                      barTouchData: barTouchData,
+                      titlesData: titlesData,
+                      borderData: borderData,
+                      barGroups: barGroups,
+                      gridData: FlGridData(show: false),
+                      alignment: BarChartAlignment.spaceBetween,
+                      maxY: 20,
                     ),
-                    Tags(
-                      spacing: 4,
-                      runAlignment: WrapAlignment.start,
-                      alignment: WrapAlignment.start,
-                      itemCount: _attributes.length,
-                      itemBuilder: (int index) {
-                        return ItemTags(
-                          textStyle: theme.textTheme.bodySmall!,
-                          pressEnabled: false,
-                          index: index,
-                          alignment: MainAxisAlignment.spaceBetween,
-                          padding:
-                              EdgeInsets.symmetric(vertical: 5, horizontal: 3),
-                          borderRadius: BorderRadius.circular(8),
-                          elevation: 1,
-                          title:
-                              "${_attributes[index].key}: ${_attributes[index].value}",
-                        );
-                      },
-                    ),
-                    Tags(
-                      spacing: 4,
-                      runAlignment: WrapAlignment.start,
-                      alignment: WrapAlignment.start,
-                      itemCount: _resistances.length,
-                      itemBuilder: (int index) {
-                        return ItemTags(
-                          textStyle: theme.textTheme.bodySmall!,
-                          pressEnabled: false,
-                          index: index,
-                          alignment: MainAxisAlignment.spaceBetween,
-                          padding:
-                              EdgeInsets.symmetric(vertical: 5, horizontal: 3),
-                          borderRadius: BorderRadius.circular(8),
-                          elevation: 1,
-                          title:
-                              "${_resistances[index].key}: ${_resistances[index].value}",
-                        );
-                      },
-                    ),
-                  ],
-                )
+                  ),
+                ),
+                SizedBox(
+                  width: 16,
+                ),
+                Expanded(
+                  child: Tags(
+                    spacing: 2,
+                    runSpacing: 4,
+                    alignment: WrapAlignment.start,
+                    runAlignment: WrapAlignment.start,
+                    itemCount: _combat.length,
+                    itemBuilder: (int index) {
+                      return ItemTags(
+                        textStyle: theme.textTheme.bodySmall!,
+                        pressEnabled: false,
+                        index: index,
+                        activeColor: Colors.black54,
+                        textActiveColor: Colors.white,
+                        alignment: MainAxisAlignment.spaceBetween,
+                        padding:
+                            EdgeInsets.symmetric(vertical: 5, horizontal: 4),
+                        borderRadius: BorderRadius.circular(8),
+                        elevation: 1,
+                        title: "${_combat[index].key}: ${_combat[index].value}",
+                      );
+                    },
+                  ),
+                ),
               ],
+            ),
+            SizedBox(
+              height: 8,
             ),
             Expanded(
                 child: SingleChildScrollView(
@@ -174,7 +230,7 @@ class CharacterNPCCard extends StatelessWidget {
                     pressEnabled: false,
                     index: index,
                     alignment: MainAxisAlignment.spaceBetween,
-                    padding: EdgeInsets.symmetric(vertical: 5, horizontal: 3),
+                    padding: EdgeInsets.symmetric(vertical: 5, horizontal: 4),
                     borderRadius: BorderRadius.circular(8),
                     elevation: 1,
                     title: "${_skills[index].key}: ${_skills[index].value}",

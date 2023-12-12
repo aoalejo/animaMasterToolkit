@@ -73,6 +73,17 @@ class AttributesList {
     return ["AGI", "CON", "DES", "STR", "INT", "PER", "POD", "VOL"];
   }
 
+  List<int> get values => [
+        agility,
+        constitution,
+        dexterity,
+        strength,
+        intelligence,
+        perception,
+        might,
+        willpower,
+      ];
+
   bool hasAValueWithMoreThanZero() {
     if (agility > 0 ||
         constitution > 0 ||

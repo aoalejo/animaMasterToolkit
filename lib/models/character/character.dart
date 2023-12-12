@@ -279,8 +279,9 @@ class Character extends HiveObject {
     return [
       KeyValue(key: "Turno", value: weapon.turn.toString()),
       KeyValue(key: "Pv", value: pv.toString()),
+      KeyValue(key: "HA", value: weapon.attack.toString()),
       defense,
-      KeyValue(key: "Arma", value: '${weapon.name} (${weapon.damage})'),
+      KeyValue(key: weapon.name, value: '${weapon.damage}'),
     ];
   }
 

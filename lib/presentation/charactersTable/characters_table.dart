@@ -124,7 +124,7 @@ class CharactersTable extends StatelessWidget {
                                             100,
                                         color: character.state
                                             .getLifePointsPercentage()
-                                            .percentageColor,
+                                            .percentageColor(),
                                       ),
                                     ),
                                     Text(
