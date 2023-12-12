@@ -91,8 +91,10 @@ enum PrimaryDifficulties implements DifficultyEnum {
   complex(15),
   extreme(20);
 
+  @override
   final int difficulty;
 
+  @override
   String get displayable {
     switch (this) {
       case PrimaryDifficulties.simple:
@@ -106,6 +108,7 @@ enum PrimaryDifficulties implements DifficultyEnum {
     }
   }
 
+  @override
   String get abbreviated {
     switch (this) {
       case PrimaryDifficulties.simple:
@@ -134,8 +137,10 @@ enum SecondaryDifficulties implements DifficultyEnum {
   inhumane(320),
   zen(440);
 
+  @override
   final int difficulty;
 
+  @override
   String get displayable {
     switch (this) {
       case SecondaryDifficulties.routine:
@@ -161,6 +166,7 @@ enum SecondaryDifficulties implements DifficultyEnum {
     }
   }
 
+  @override
   String get abbreviated {
     switch (this) {
       case SecondaryDifficulties.routine:

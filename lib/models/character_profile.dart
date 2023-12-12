@@ -23,6 +23,8 @@ class CharacterProfile {
   late int speed;
   @HiveField(8)
   late bool? isNpc;
+  @HiveField(9)
+  late String? image;
 
   CharacterProfile(
       {this.fatigue = 6,
@@ -33,7 +35,8 @@ class CharacterProfile {
       this.level = "",
       this.kind = "",
       this.speed = 6,
-      this.isNpc = false});
+      this.isNpc = false,
+      this.image = ""});
 
   CharacterProfile.fromJson(Map<String, dynamic> json) {
     fatigue = JsonUtils.integer(json['cansancio'], 6);
@@ -45,6 +48,7 @@ class CharacterProfile {
     kind = json['clase'] ?? "";
     speed = JsonUtils.integer(json['movimiento'], 6);
     isNpc = false;
+    image = json['imagen'] ?? "";
   }
 
   CharacterProfile copy({bool? isNpc, int? number}) {

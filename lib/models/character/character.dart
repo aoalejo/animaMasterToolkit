@@ -267,23 +267,21 @@ class Character extends HiveObject {
     }
   }
 
-  String getResumedCombatState() {
+  List<KeyValue> getCombatItems() {
     var weapon = selectedWeapon();
     var pv = state.getConsumable(ConsumableType.hitPoints)?.maxValue ?? 0;
-    var defense = "HE ${weapon.defense}";
+    var defense = KeyValue(key: "HE", value: weapon.defense.toString());
 
     if (weapon.defenseType == DefenseType.parry) {
-      defense = "HP ${weapon.defense}";
+      defense = KeyValue(key: "HP", value: weapon.defense.toString());
     }
 
-    return "Turno: ${weapon.turn} Pv: $pv HA: ${weapon.attack} $defense Arma: ${weapon.name} (${weapon.damage})";
-  }
-
-  String getResumedAttributes() {
-    var attr = attributes
-        .toKeyValue()
-        .map((e) => "${e.key.substring(0, 3)}: ${e.value}");
-    return attr.join(" ");
+    return [
+      KeyValue(key: "Turno", value: weapon.turn.toString()),
+      KeyValue(key: "Pv", value: pv.toString()),
+      defense,
+      KeyValue(key: "Arma", value: '${weapon.name} (${weapon.damage})'),
+    ];
   }
 
   String getResumedSkills() {
@@ -296,13 +294,6 @@ class Character extends HiveObject {
     }).map((e) => "${e.key}: ${e.value}");
 
     return skillsStr.join(", ");
-  }
-
-  String getResumedResistances() {
-    var resistancesStr =
-        resistances.toKeyValue().map((e) => "${e.key}: ${e.value}");
-
-    return resistancesStr.join(" ");
   }
 
   Character copyWith({String? uuid, bool? isNpc, int? number}) {
