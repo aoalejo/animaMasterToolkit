@@ -5,25 +5,25 @@ import 'package:amt/resources/modifiers.dart';
 import 'package:function_tree/function_tree.dart';
 
 class ScreenCombatStateAttack {
-  var attackRoll = "";
-  var damageModifier = "";
-  var attackModifier = "";
+  var roll = "";
+  var damage = "";
+  var attack = "";
 
   var damageType = DamageTypes.ene;
-  Character? attacker;
+  Character? character;
 
-  ModifiersState attackingModifiers = ModifiersState();
+  ModifiersState modifiers = ModifiersState();
 }
 
 class ScreenCombatStateDefense {
-  var defenseRoll = "";
-  var armourModifier = "";
-  var baseDefenseModifiers = "";
+  var roll = "";
+  var armour = "";
+  var defense = "";
 
   var defenseType = DefenseType.parry;
-  Character? defendant;
+  Character? character;
 
-  ModifiersState defenderModifiers = ModifiersState();
+  ModifiersState modifiers = ModifiersState();
 }
 
 class ScreenCombatStateCritical {
@@ -35,39 +35,69 @@ class ScreenCombatStateCritical {
   var modifierReduction = "";
 }
 
+enum SurpriseType {
+  attacker,
+  defender,
+  none;
+
+  static calculate({
+    required Character? attacker,
+    required Character? defendant,
+  }) {
+    var attackerRoll = attacker?.state.currentTurn.roll ?? 0;
+    var defenderRoll = defendant?.state.currentTurn.roll ?? 0;
+
+    if (attackerRoll - 150 > defenderRoll) {
+      return SurpriseType.attacker;
+    }
+
+    if (defenderRoll - 150 > attackerRoll) {
+      return SurpriseType.defender;
+    }
+
+    return SurpriseType.none;
+  }
+}
+
 class ScreenCombatState {
   ScreenCombatStateAttack attack = ScreenCombatStateAttack();
   ScreenCombatStateDefense defense = ScreenCombatStateDefense();
   ScreenCombatStateCritical critical = ScreenCombatStateCritical();
+  SurpriseType surpriseType = SurpriseType.none;
 
   int finalAttackValue() {
     var roll = 0;
     var attackBase = 0;
     var modifier = 0;
+    var surprise = 0;
 
     try {
-      roll = attack.attackRoll.interpret().toInt();
+      roll = attack.roll.interpret().toInt();
     } catch (e) {
       // Defaults to 0
     }
 
     try {
-      attackBase = attack.attacker!.calculateAttack().interpret().toInt();
+      attackBase = attack.character!.calculateAttack().interpret().toInt();
     } catch (e) {
       // Defaults to 0
     }
 
     try {
-      modifier = attack.attackModifier.interpret().toInt();
+      modifier = attack.attack.interpret().toInt();
     } catch (e) {
       // Defaults to 0
     }
 
-    return attack.attackingModifiers
-            .getAllModifiersForType(ModifiersType.attack) +
+    if (surpriseType == SurpriseType.attacker) {
+      surprise = 90;
+    }
+
+    return attack.modifiers.getAllModifiersForType(ModifiersType.attack) +
         roll +
         attackBase +
-        modifier;
+        modifier +
+        surprise;
   }
 
   int finalDefenseValue() {
@@ -75,16 +105,16 @@ class ScreenCombatState {
     var defenseBase = 0;
     var numberOfDefensesModifier = 0;
     var defenseModifier = 0;
-    var surpriseModifier = isSurprised() ? -150 : 0;
+    var surprise = 0;
 
     try {
-      roll = defense.defenseRoll.interpret().toInt();
+      roll = defense.roll.interpret().toInt();
     } catch (e) {
       // Defaults to 0
     }
 
     try {
-      defenseBase = defense.defendant!
+      defenseBase = defense.character!
           .calculateDefense(defense.defenseType)
           .interpret()
           .toInt();
@@ -93,12 +123,16 @@ class ScreenCombatState {
     }
 
     try {
-      defenseModifier = defense.baseDefenseModifiers.interpret().toInt();
+      defenseModifier = defense.defense.interpret().toInt();
     } catch (e) {
       // Defaults to 0
     }
 
-    switch (defense.defendant?.state.defenseNumber ?? 1) {
+    if (surpriseType == SurpriseType.defender) {
+      surprise = 90;
+    }
+
+    switch (defense.character?.state.defenseNumber ?? 1) {
       case 1:
         numberOfDefensesModifier = 0;
       case 2:
@@ -111,20 +145,12 @@ class ScreenCombatState {
         numberOfDefensesModifier = -90;
     }
 
-    return defense.defenderModifiers
-            .getAllModifiersForDefense(defense.defenseType) +
+    return defense.modifiers.getAllModifiersForDefense(defense.defenseType) +
         roll +
         defenseBase +
         numberOfDefensesModifier +
-        surpriseModifier +
-        defenseModifier;
-  }
-
-  bool isSurprised() {
-    var attackerTurn = attack.attacker?.state.currentTurn.roll ?? 0;
-    var defendantTurn = defense.defendant?.state.currentTurn.roll ?? 0;
-
-    return attackerTurn - 150 >= defendantTurn;
+        defenseModifier +
+        surprise;
   }
 
   int calculateDamage() {
@@ -137,13 +163,13 @@ class ScreenCombatState {
     var armourType = 0;
 
     try {
-      baseDamageCalc = attack.damageModifier.interpret().toInt();
+      baseDamageCalc = attack.damage.interpret().toInt();
     } catch (e) {
       // Defaults to 0
     }
 
     try {
-      armourType = defense.armourModifier.interpret().toInt();
+      armourType = defense.armour.interpret().toInt();
     } catch (e) {
       // Defaults to 0
     }
@@ -160,8 +186,9 @@ class ScreenCombatState {
     var damage = calculateDamage();
 
     var critical = "";
+    var surpriseResult = "";
 
-    var hitPoints = defense.defendant!.state
+    var hitPoints = defense.character?.state
         .getConsumable(ConsumableType.hitPoints)
         ?.actualValue;
 
@@ -169,10 +196,19 @@ class ScreenCombatState {
       critical = " Realiza un daño critico";
     }
 
+    switch (surpriseType) {
+      case SurpriseType.attacker:
+        surpriseResult = "(El atacante sorprende al enemigo)";
+      case SurpriseType.defender:
+        surpriseResult = "(El defensor sorprende al enemigo)";
+      case SurpriseType.none:
+        surpriseResult = "";
+    }
+
     if (difference > 0) {
-      return "Diferencia: $difference ${isSurprised() ? "(+90: ${difference + 90} Sorprendido!)" : ""}, Daño causado: $damage. $critical";
+      return "Diferencia: $difference $surpriseResult, Daño causado: $damage. $critical";
     } else {
-      return "Diferencia: $difference ${isSurprised() ? "(+90: ${difference + 90} Sorprendido!)" : ""}, Contraataca con:  ${-difference ~/ 2}";
+      return "Diferencia: $difference $surpriseResult, Contraataca con:  ${-difference ~/ 2}";
     }
   }
 

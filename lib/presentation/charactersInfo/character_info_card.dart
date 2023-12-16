@@ -22,8 +22,8 @@ class CharacterInfoCard extends StatelessWidget {
     var theme = Theme.of(context);
 
     Character? character = attacking
-        ? appState.combatState.attack.attacker
-        : appState.combatState.defense.defendant;
+        ? appState.combatState.attack.character
+        : appState.combatState.defense.character;
 
     return character != null
         ? Card(

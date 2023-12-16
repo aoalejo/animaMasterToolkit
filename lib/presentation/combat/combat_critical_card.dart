@@ -190,7 +190,7 @@ class CombatCriticalCard extends StatelessWidget {
                 child: Center(
                   child: TextButton(
                     onPressed: () {
-                      var character = appState.combatState.defense.defendant;
+                      var character = appState.combatState.defense.character;
 
                       var result =
                           appState.combatState.criticalResultWithReduction();

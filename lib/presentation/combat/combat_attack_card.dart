@@ -15,11 +15,13 @@ class CombatAttackCard extends StatelessWidget {
   Widget build(BuildContext context) {
     var appState = context.watch<CharactersPageState>();
     final theme = Theme.of(context);
-    final attacker = appState.combatState.attack.attacker;
+    final attackState = appState.combatState.attack;
+    final character = attackState.character;
+    final weapon = character?.selectedWeapon();
 
     return CustomCombatCard(
       title:
-          "${attacker?.profile.name ?? ""} Ataca (Total: ${appState.combatState.finalAttackValue()})",
+          "${character?.profile.name ?? ""} Ataca (Total: ${appState.combatState.finalAttackValue()})",
       actionTitle: IconButton(
         icon: Icon(
           Icons.delete,
@@ -41,7 +43,7 @@ class CombatAttackCard extends StatelessWidget {
                     height: 40,
                     child: TextFormFieldCustom(
                       inputType: TextInputType.number,
-                      text: appState.combatState.attack.attackRoll,
+                      text: attackState.roll,
                       label: "Tirada de ataque",
                       onChanged: (value) =>
                           {appState.updateCombatState(attackRoll: value)},
@@ -65,40 +67,36 @@ class CombatAttackCard extends StatelessWidget {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        if (attacker != null)
+                        if (character != null)
                           Flexible(
                             flex: 1,
                             child: Tooltip(
-                              message: attacker?.calculateAttack() ?? "",
+                              message: character.calculateAttack(),
                               child: TextFormFieldCustom(
                                 enabled: false,
                                 label: "Ataque",
-                                text: attacker?.calculateAttack() ?? "0",
+                                text: character.calculateAttack(),
                               ),
                             ),
                           ),
-                        if (attacker != null) SizedBox(width: 4),
+                        if (character != null) SizedBox(width: 4),
                         Flexible(
                           flex: 2,
                           child: TextFormFieldCustom(
                             inputType: TextInputType.number,
-                            label: attacker != null ? "Modificador" : "Ataque",
+                            label: character != null ? "Modificador" : "Ataque",
                             suffixIcon: TextButton(
                               child: Text("+Can"),
                               onPressed: () {
-                                var character =
-                                    appState.combatState.attack.attacker;
-
                                 character?.removeFrom(
                                   1,
                                   ConsumableType.fatigue,
                                 );
-                                appState.combatState.attack.attackModifier =
-                                    "${appState.combatState.attack.attackModifier}+15";
+                                attackState.attack = "${attackState.attack}+15";
                                 appState.updateCharacter(character);
                               },
                             ),
-                            text: appState.combatState.attack.attackModifier,
+                            text: attackState.attack,
                             onChanged: (value) => appState.updateCombatState(
                                 baseAttackModifiers: value),
                           ),
@@ -120,71 +118,51 @@ class CombatAttackCard extends StatelessWidget {
                       height: 40,
                       child: Row(
                         children: [
-                          if (attacker != null)
+                          if (character != null)
                             Flexible(
                               flex: 1,
                               child: TextFormFieldCustom(
                                 enabled: false,
                                 label: "Daño",
-                                text:
-                                    attacker.selectedWeapon().damage.toString(),
+                                text: weapon?.damage.toString(),
                               ),
                             ),
-                          if (attacker != null) SizedBox(width: 4),
+                          if (character != null) SizedBox(width: 4),
                           Flexible(
                             flex: 2,
                             child: TextFormFieldCustom(
                               onChanged: (value) {
                                 appState.updateCombatState(baseDamage: value);
                               },
-                              text: appState.combatState.attack.damageModifier,
-                              label:
-                                  "(${appState.combatState.attack.attacker?.selectedWeapon().name ?? "Daño base"})",
+                              text: attackState.damage,
+                              label: "(${weapon?.name ?? "Daño base"})",
                               inputType: TextInputType.number,
-                              suffixIcon: attacker != null
+                              suffixIcon: character != null
                                   ? Padding(
                                       padding: EdgeInsets.all(8),
                                       child: ToggleButtons(
                                         isSelected: [
-                                          appState.combatState.attack.attacker
-                                                  ?.selectedWeapon()
-                                                  .principalDamage ==
-                                              appState.combatState.attack
-                                                  .damageType,
-                                          appState.combatState.attack.attacker
-                                                  ?.selectedWeapon()
-                                                  .secondaryDamage ==
-                                              appState
-                                                  .combatState.attack.damageType
+                                          weapon?.principalDamage ==
+                                              attackState.damageType,
+                                          weapon?.secondaryDamage ==
+                                              attackState.damageType,
                                         ],
                                         onPressed: (index) => {
                                           appState.updateCombatState(
                                               damageType: index == 0
-                                                  ? appState.combatState.attack
-                                                      .attacker
-                                                      ?.selectedWeapon()
-                                                      .principalDamage
-                                                  : appState.combatState.attack
-                                                      .attacker
-                                                      ?.selectedWeapon()
-                                                      .secondaryDamage)
+                                                  ? weapon?.principalDamage
+                                                  : weapon?.secondaryDamage)
                                         },
                                         borderRadius: const BorderRadius.all(
                                             Radius.circular(8)),
                                         children: [
                                           Text(
-                                            appState.combatState.attack.attacker
-                                                    ?.selectedWeapon()
-                                                    .principalDamage
-                                                    ?.name ??
+                                            weapon?.principalDamage?.name ??
                                                 "con",
                                             style: theme.textTheme.bodySmall,
                                           ),
                                           Text(
-                                            appState.combatState.attack.attacker
-                                                    ?.selectedWeapon()
-                                                    .secondaryDamage
-                                                    ?.name ??
+                                            weapon?.secondaryDamage?.name ??
                                                 "con",
                                             style: theme.textTheme.bodySmall,
                                           ),
@@ -205,7 +183,7 @@ class CombatAttackCard extends StatelessWidget {
                       onPressed: () {
                         BottomSheetModifiers.show(
                             context,
-                            appState.combatState.attack.attackingModifiers,
+                            attackState.modifiers,
                             Modifiers.getSituationalModifiers(
                                 ModifiersType.attack), (newModifiers) {
                           appState.updateAttackingModifiers(newModifiers);
@@ -219,8 +197,7 @@ class CombatAttackCard extends StatelessWidget {
                             textAlign: TextAlign.center,
                           ),
                           Text(
-                            appState.combatState.attack.attackingModifiers
-                                .totalAttackingDescription(),
+                            attackState.modifiers.totalAttackingDescription(),
                             style: theme.textTheme.bodySmall,
                             textAlign: TextAlign.center,
                           ),
@@ -240,13 +217,11 @@ class CombatAttackCard extends StatelessWidget {
           width: 8000,
           child: ModifiersCard(
             aspectRatio: 0.2,
-            modifiers: appState.combatState.attack.attackingModifiers.getAll(),
+            modifiers: attackState.modifiers.getAll(),
             onSelected: (selected) {
-              appState.combatState.attack.attackingModifiers
-                  .removeModifier(selected);
+              attackState.modifiers.removeModifier(selected);
               appState.updateCombatState(
-                  attackingModifiers:
-                      appState.combatState.attack.attackingModifiers);
+                  attackingModifiers: attackState.modifiers);
             },
           ),
         ),

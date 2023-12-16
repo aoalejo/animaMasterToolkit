@@ -72,23 +72,23 @@ class CharactersPageState extends ChangeNotifier {
   }
 
   void updateAttackingModifiers(ModifiersState modifiers) {
-    combatState.attack.attackingModifiers = modifiers;
+    combatState.attack.modifiers = modifiers;
     notifyListeners();
   }
 
   void updateDefenderModifiers(ModifiersState modifiers) {
-    combatState.defense.defenderModifiers = modifiers;
+    combatState.defense.modifiers = modifiers;
     notifyListeners();
   }
 
   void removeDefendant() {
-    combatState.defense.defendant = null;
+    combatState.defense.character = null;
 
     notifyListeners();
   }
 
   void removeAttacker() {
-    combatState.attack.attacker = null;
+    combatState.attack.character = null;
     notifyListeners();
   }
 
@@ -100,9 +100,8 @@ class CharactersPageState extends ChangeNotifier {
     ModifiersState? attackingModifiers,
     ModifiersState? defenderModifiers,
     String? defenseRoll,
-    String? armour,
+    String? armourModifier,
     DefenseType? defenseType,
-    Armour? selectedArmour,
     DamageTypes? damageType,
     String? criticalRoll,
     String? physicalResistanceBase,
@@ -112,11 +111,12 @@ class CharactersPageState extends ChangeNotifier {
     String? modifierReduction,
     String? baseAttackModifiers,
     String? baseDefenseModifiers,
+    SurpriseType? surprise,
   }) {
-    combatState.attack.attackModifier =
-        baseAttackModifiers ?? combatState.attack.attackModifier;
-    combatState.defense.baseDefenseModifiers =
-        baseDefenseModifiers ?? combatState.defense.baseDefenseModifiers;
+    combatState.attack.attack =
+        baseAttackModifiers ?? combatState.attack.attack;
+    combatState.defense.defense =
+        baseDefenseModifiers ?? combatState.defense.defense;
 
     combatState.critical.modifierReduction =
         modifierReduction ?? combatState.critical.modifierReduction;
@@ -132,27 +132,26 @@ class CharactersPageState extends ChangeNotifier {
     combatState.critical.physicalResistanceRoll =
         physicalResistanceRoll ?? combatState.critical.physicalResistanceRoll;
 
-    combatState.attack.attackRoll = attackRoll ?? combatState.attack.attackRoll;
-    combatState.attack.damageModifier =
-        baseDamage ?? combatState.attack.damageModifier;
+    combatState.attack.roll = attackRoll ?? combatState.attack.roll;
+    combatState.attack.damage = baseDamage ?? combatState.attack.damage;
 
-    combatState.defense.defenseRoll =
-        defenseRoll ?? combatState.defense.defenseRoll;
-    combatState.defense.armourModifier =
-        armour ?? combatState.defense.armourModifier;
+    combatState.defense.roll = defenseRoll ?? combatState.defense.roll;
+    combatState.defense.armour = armourModifier ?? combatState.defense.armour;
 
     combatState.defense.defenseType =
         defenseType ?? combatState.defense.defenseType;
 
     combatState.attack.damageType = damageType ?? combatState.attack.damageType;
 
-    combatState.attack.attacker = attacking ?? combatState.attack.attacker;
-    combatState.defense.defendant = defendant ?? combatState.defense.defendant;
+    combatState.attack.character = attacking ?? combatState.attack.character;
+    combatState.defense.character = defendant ?? combatState.defense.character;
 
-    combatState.attack.attackingModifiers =
-        attackingModifiers ?? combatState.attack.attackingModifiers;
-    combatState.defense.defenderModifiers =
-        defenderModifiers ?? combatState.defense.defenderModifiers;
+    combatState.attack.modifiers =
+        attackingModifiers ?? combatState.attack.modifiers;
+    combatState.defense.modifiers =
+        defenderModifiers ?? combatState.defense.modifiers;
+
+    combatState.surpriseType = surprise ?? combatState.surpriseType;
 
     notifyListeners();
   }
@@ -207,7 +206,7 @@ class CharactersPageState extends ChangeNotifier {
 
     characters[index] = character;
 
-    if (character.uuid == combatState.attack.attacker?.uuid) {
+    if (character.uuid == combatState.attack.character?.uuid) {
       var weapon = character.selectedWeapon();
 
       updateCombatState(
