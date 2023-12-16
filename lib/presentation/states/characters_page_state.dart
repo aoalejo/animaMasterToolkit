@@ -94,7 +94,7 @@ class CharactersPageState extends ChangeNotifier {
 
   void updateCombatState({
     String? attackRoll,
-    String? baseDamage,
+    String? damageModifier,
     Character? attacking,
     Character? defendant,
     ModifiersState? attackingModifiers,
@@ -133,7 +133,7 @@ class CharactersPageState extends ChangeNotifier {
         physicalResistanceRoll ?? combatState.critical.physicalResistanceRoll;
 
     combatState.attack.roll = attackRoll ?? combatState.attack.roll;
-    combatState.attack.damage = baseDamage ?? combatState.attack.damage;
+    combatState.attack.damage = damageModifier ?? combatState.attack.damage;
 
     combatState.defense.roll = defenseRoll ?? combatState.defense.roll;
     combatState.defense.armour = armourModifier ?? combatState.defense.armour;
@@ -205,14 +205,6 @@ class CharactersPageState extends ChangeNotifier {
         characters.indexWhere((element) => element.uuid == character.uuid);
 
     characters[index] = character;
-
-    if (character.uuid == combatState.attack.character?.uuid) {
-      var weapon = character.selectedWeapon();
-
-      updateCombatState(
-        baseDamage: weapon.damage.toString(),
-      );
-    }
 
     notifyListeners();
     character.save();

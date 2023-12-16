@@ -159,22 +159,31 @@ class ScreenCombatState {
 
     var difference = attackValue - defenseValue;
 
-    var baseDamageCalc = 0;
-    var armourType = 0;
+    var baseDamage = attack.character?.selectedWeapon().damage ?? 0;
+    var armourType = defense.character?.combat.armour.calculatedArmour
+            .armourFor(attack.damageType) ??
+        0;
+
+    var baseDamageModifier = 0;
+    var armourTypeModifier = 0;
 
     try {
-      baseDamageCalc = attack.damage.interpret().toInt();
+      baseDamageModifier = attack.damage.interpret().toInt();
     } catch (e) {
       // Defaults to 0
     }
 
     try {
-      armourType = defense.armour.interpret().toInt();
+      armourTypeModifier = defense.armour.interpret().toInt();
     } catch (e) {
       // Defaults to 0
     }
 
-    return ((baseDamageCalc - armourType * 10) * (difference / 100)).toInt();
+    return ((baseDamageModifier +
+                baseDamage -
+                (armourTypeModifier - armourType) * 10) *
+            (difference / 100))
+        .toInt();
   }
 
   String calculateResult() {

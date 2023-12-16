@@ -132,7 +132,8 @@ class CombatAttackCard extends StatelessWidget {
                             flex: 2,
                             child: TextFormFieldCustom(
                               onChanged: (value) {
-                                appState.updateCombatState(baseDamage: value);
+                                appState.updateCombatState(
+                                    damageModifier: value);
                               },
                               text: attackState.damage,
                               label: "(${weapon?.name ?? "Daño base"})",

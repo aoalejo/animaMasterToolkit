@@ -196,7 +196,7 @@ class CharactersTable extends StatelessWidget {
                                           attacking: character,
                                           attackRoll: "",
                                           attackingModifiers: ModifiersState(),
-                                          baseDamage: "",
+                                          damageModifier: "",
                                           baseAttackModifiers: "",
                                           surprise: surprise,
                                         );
