@@ -14,6 +14,8 @@ import 'package:amt/models/psychic_data.dart';
 import 'package:amt/models/roll.dart';
 import 'package:amt/models/weapon.dart';
 import 'package:amt/resources/modifiers.dart';
+import 'package:amt/utils/Key_value.dart';
+import 'package:function_tree/function_tree.dart';
 import 'package:hive/hive.dart';
 import 'package:uuid/uuid.dart';
 
@@ -205,7 +207,7 @@ class Character extends HiveObject {
 
   void rollInitiative() {
     state.currentTurn = Roll.roll(
-      base: selectedWeapon().turn + state.calculateTotalForTurn(),
+      base: calculateTurnBase(),
       turnFumble: true,
     );
   }
@@ -267,6 +269,21 @@ class Character extends HiveObject {
     }
   }
 
+  int calculateTurnBase() {
+    var totalTurn = selectedWeapon().turn;
+
+    try {
+      totalTurn = totalTurn + state.turnModifier.interpret().toInt();
+    } catch (e) {
+      print("cannot interpret modifier!");
+    }
+
+    totalTurn =
+        totalTurn + state.modifiers.getAllModifiersForType(ModifiersType.turn);
+
+    return totalTurn;
+  }
+
   List<KeyValue> getCombatItems() {
     var weapon = selectedWeapon();
     var pv = state.getConsumable(ConsumableType.hitPoints)?.maxValue ?? 0;
@@ -311,28 +328,6 @@ class Character extends HiveObject {
       resistances: resistances,
     );
   }
-}
-
-extension ListToKeyValue on Map<String, dynamic> {
-  List<KeyValue> list({bool interchange = false}) {
-    List<KeyValue> list = [];
-    for (final entry in entries) {
-      list.add(
-        KeyValue(
-          key: interchange ? entry.value.toString() : entry.key.toString(),
-          value: interchange ? entry.key.toString() : entry.value.toString(),
-        ),
-      );
-    }
-    return list;
-  }
-}
-
-class KeyValue {
-  final String key;
-  final String value;
-
-  KeyValue({required this.key, required this.value});
 }
 
 class CharacterList {

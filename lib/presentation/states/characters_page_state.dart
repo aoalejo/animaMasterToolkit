@@ -6,7 +6,6 @@ import 'package:amt/models/armour.dart';
 import 'package:amt/models/character/character.dart';
 import 'package:amt/models/enums.dart';
 import 'package:amt/models/modifiers_state.dart';
-import 'package:amt/models/weapon.dart';
 import 'package:amt/presentation/states/combat_state.dart';
 import 'package:enough_convert/windows.dart';
 import 'package:file_picker/file_picker.dart';
@@ -73,118 +72,89 @@ class CharactersPageState extends ChangeNotifier {
   }
 
   void updateAttackingModifiers(ModifiersState modifiers) {
-    combatState.attackingModifiers = modifiers;
+    combatState.attack.attackingModifiers = modifiers;
     notifyListeners();
   }
 
   void updateDefenderModifiers(ModifiersState modifiers) {
-    combatState.defenderModifiers = modifiers;
+    combatState.defense.defenderModifiers = modifiers;
+    notifyListeners();
+  }
+
+  void removeDefendant() {
+    combatState.defense.defendant = null;
+
+    notifyListeners();
+  }
+
+  void removeAttacker() {
+    combatState.attack.attacker = null;
     notifyListeners();
   }
 
   void updateCombatState({
     String? attackRoll,
     String? baseDamage,
-    String? baseAttack,
-    String? attackingCharacter,
-    String? defendantCharacter,
+    Character? attacking,
+    Character? defendant,
     ModifiersState? attackingModifiers,
     ModifiersState? defenderModifiers,
     String? defenseRoll,
     String? armour,
-    String? baseDefense,
     DefenseType? defenseType,
-    int? defenseNumber,
-    int? attackerTurn,
-    int? defenseTurn,
-    Weapon? selectedWeapon,
     Armour? selectedArmour,
     DamageTypes? damageType,
     String? criticalRoll,
     String? physicalResistanceBase,
     String? physicalResistanceRoll,
     String? damageDone,
-    int? actualHitPoints,
     String? localizationRoll,
     String? modifierReduction,
     String? baseAttackModifiers,
     String? baseDefenseModifiers,
   }) {
-    combatState.baseAttackModifiers =
-        baseAttackModifiers ?? combatState.baseAttackModifiers;
-    combatState.baseDefenseModifiers =
-        baseDefenseModifiers ?? combatState.baseDefenseModifiers;
+    combatState.attack.attackModifier =
+        baseAttackModifiers ?? combatState.attack.attackModifier;
+    combatState.defense.baseDefenseModifiers =
+        baseDefenseModifiers ?? combatState.defense.baseDefenseModifiers;
 
-    combatState.modifierReduction =
-        modifierReduction ?? combatState.modifierReduction;
-    combatState.localizationRoll =
-        localizationRoll ?? combatState.localizationRoll;
+    combatState.critical.modifierReduction =
+        modifierReduction ?? combatState.critical.modifierReduction;
+    combatState.critical.localizationRoll =
+        localizationRoll ?? combatState.critical.localizationRoll;
 
-    combatState.actualHitPoints =
-        actualHitPoints ?? combatState.actualHitPoints;
+    combatState.critical.damageDone =
+        damageDone ?? combatState.critical.damageDone;
+    combatState.critical.physicalResistanceBase =
+        physicalResistanceBase ?? combatState.critical.physicalResistanceBase;
+    combatState.critical.criticalRoll =
+        criticalRoll ?? combatState.critical.criticalRoll;
+    combatState.critical.physicalResistanceRoll =
+        physicalResistanceRoll ?? combatState.critical.physicalResistanceRoll;
 
-    combatState.damageDone = damageDone ?? combatState.damageDone;
-    combatState.physicalResistanceBase =
-        physicalResistanceBase ?? combatState.physicalResistanceBase;
-    combatState.criticalRoll = criticalRoll ?? combatState.criticalRoll;
-    combatState.physicalResistanceRoll =
-        physicalResistanceRoll ?? combatState.physicalResistanceRoll;
+    combatState.attack.attackRoll = attackRoll ?? combatState.attack.attackRoll;
+    combatState.attack.damageModifier =
+        baseDamage ?? combatState.attack.damageModifier;
 
-    combatState.attackRoll = attackRoll ?? combatState.attackRoll;
-    combatState.baseDamage = baseDamage ?? combatState.baseDamage;
-    combatState.baseAttack = baseAttack ?? combatState.baseAttack;
+    combatState.defense.defenseRoll =
+        defenseRoll ?? combatState.defense.defenseRoll;
+    combatState.defense.armourModifier =
+        armour ?? combatState.defense.armourModifier;
 
-    combatState.defenseRoll = defenseRoll ?? combatState.defenseRoll;
-    combatState.armour = armour ?? combatState.armour;
-    combatState.baseDefense = baseDefense ?? combatState.baseDefense;
+    combatState.defense.defenseType =
+        defenseType ?? combatState.defense.defenseType;
 
-    combatState.defenseType = defenseType ?? combatState.defenseType;
+    combatState.attack.damageType = damageType ?? combatState.attack.damageType;
 
-    combatState.selectedArmour = selectedArmour ?? combatState.selectedArmour;
-    combatState.selectedWeapon = selectedWeapon ?? combatState.selectedWeapon;
-    combatState.damageType = damageType ?? combatState.damageType;
+    combatState.attack.attacker = attacking ?? combatState.attack.attacker;
+    combatState.defense.defendant = defendant ?? combatState.defense.defendant;
 
-    if (damageType != null) {
-      combatState.armour =
-          combatState.selectedArmour.armourFor(damageType).toString();
-    }
-
-    combatState.attackingCharacter =
-        attackingCharacter ?? combatState.attackingCharacter;
-    combatState.defendantCharacter =
-        defendantCharacter ?? combatState.defendantCharacter;
-
-    combatState.attackingModifiers =
-        attackingModifiers ?? combatState.attackingModifiers;
-    combatState.defenderModifiers =
-        defenderModifiers ?? combatState.defenderModifiers;
-
-    combatState.defenseNumber = defenseNumber ?? combatState.defenseNumber;
-
-    combatState.finalTurnAttacker =
-        attackerTurn ?? combatState.finalTurnAttacker;
-
-    combatState.finalTurnDefense = defenseTurn ?? combatState.finalTurnDefense;
+    combatState.attack.attackingModifiers =
+        attackingModifiers ?? combatState.attack.attackingModifiers;
+    combatState.defense.defenderModifiers =
+        defenderModifiers ?? combatState.defense.defenderModifiers;
 
     notifyListeners();
-  }
-
-  Character? characterAttacking() {
-    try {
-      return characters.firstWhere(
-          (element) => element.uuid == combatState.attackingCharacter);
-    } catch (e) {
-      return null;
-    }
-  }
-
-  Character? defendingCharacter() {
-    try {
-      return characters.firstWhere(
-          (element) => element.uuid == combatState.defendantCharacter);
-    } catch (e) {
-      return null;
-    }
   }
 
   void removeCharacter(Character character) {
@@ -215,7 +185,6 @@ class CharactersPageState extends ChangeNotifier {
       character.state.hasAction = true;
       character.state.defenseNumber = 1;
     }
-    combatState.defenseNumber = 1;
     characters.sort(Character.initiativeSort);
     notifyListeners();
   }
@@ -238,21 +207,11 @@ class CharactersPageState extends ChangeNotifier {
 
     characters[index] = character;
 
-    if (character.uuid == combatState.attackingCharacter) {
+    if (character.uuid == combatState.attack.attacker?.uuid) {
       var weapon = character.selectedWeapon();
 
       updateCombatState(
-        baseAttack: character.calculateAttack(),
         baseDamage: weapon.damage.toString(),
-        selectedWeapon: weapon,
-        attackerTurn: character.state.calculateTotalForTurn(),
-      );
-    }
-    if (character.uuid == combatState.defendantCharacter) {
-      updateCombatState(
-        baseDefense: character.calculateDefense(combatState.defenseType),
-        defenseNumber: character.state.defenseNumber,
-        defenseTurn: character.state.calculateTotalForTurn(),
       );
     }
 

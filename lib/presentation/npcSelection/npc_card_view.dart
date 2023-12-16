@@ -4,6 +4,7 @@ import 'package:amt/models/attributes_list.dart';
 import 'package:amt/models/character/character.dart';
 import 'package:amt/models/character_profile.dart';
 import 'package:amt/utils/Int+Extension.dart';
+import 'package:amt/utils/Key_value.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_tags_x/flutter_tags_x.dart';

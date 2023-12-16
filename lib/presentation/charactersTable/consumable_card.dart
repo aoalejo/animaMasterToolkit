@@ -1,5 +1,5 @@
 import 'package:amt/models/character/consumable_state.dart';
-import 'package:amt/presentation/TextFormFieldCustom.dart';
+import 'package:amt/presentation/text_form_field_custom.dart';
 import 'package:flutter/material.dart';
 
 class ConsumableCard extends StatelessWidget {

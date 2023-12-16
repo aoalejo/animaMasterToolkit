@@ -88,9 +88,11 @@ class CharactersTable extends StatelessWidget {
               children: [
                 for (var character in appState.characters)
                   Card(
-                    shape: appState.characterAttacking()?.uuid == character.uuid
+                    shape: appState.combatState.attack.attacker?.uuid ==
+                            character.uuid
                         ? _border(theme.colorScheme.primary)
-                        : appState.defendingCharacter()?.uuid == character.uuid
+                        : appState.combatState.defense.defendant?.uuid ==
+                                character.uuid
                             ? _border(theme.colorScheme.secondary)
                             : null,
                     child: Row(
@@ -183,21 +185,12 @@ class CharactersTable extends StatelessWidget {
                                         child: Assets.knife,
                                       ),
                                       onPressed: () {
-                                        var weapon = character.selectedWeapon();
-
                                         appState.updateCombatState(
-                                            attackingCharacter: character.uuid,
-                                            attackRoll: "0",
+                                            attacking: character,
+                                            attackRoll: "",
                                             attackingModifiers:
                                                 ModifiersState(),
-                                            baseAttack:
-                                                character.calculateAttack(),
-                                            baseDamage:
-                                                weapon.damage.toString(),
-                                            attackerTurn: character
-                                                .state.currentTurn.roll,
-                                            selectedWeapon:
-                                                character.selectedWeapon(),
+                                            baseDamage: "",
                                             baseAttackModifiers: "");
                                       },
                                     ),
@@ -281,17 +274,13 @@ class CharactersTable extends StatelessWidget {
     var physicalResistance = character.resistances.physicalResistance;
 
     appState.updateCombatState(
-      defendantCharacter: character.uuid,
+      defendant: character,
       defenseRoll: "0",
       defenderModifiers: ModifiersState(),
-      baseDefense: character.calculateDefense(type),
       armour: character.combat.armour.calculatedArmour.fil.toString(),
       defenseType: type,
-      defenseNumber: character.state.defenseNumber,
       selectedArmour: character.combat.armour.calculatedArmour,
-      defenseTurn: character.state.currentTurn.roll,
       physicalResistanceBase: physicalResistance.toString(),
-      actualHitPoints: hitPoints?.actualValue ?? 0,
       baseDefenseModifiers: "",
     );
   }

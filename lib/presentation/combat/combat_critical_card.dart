@@ -1,6 +1,6 @@
 import 'package:amt/models/character/status_modifier.dart';
 import 'package:amt/models/roll.dart';
-import 'package:amt/presentation/TextFormFieldCustom.dart';
+import 'package:amt/presentation/text_form_field_custom.dart';
 import 'package:amt/presentation/combat/custom_combat_card.dart';
 import 'package:amt/presentation/states/characters_page_state.dart';
 import 'package:amt/utils/assets.dart';
@@ -29,7 +29,7 @@ class CombatCriticalCard extends StatelessWidget {
                       key: Key("TextFormFieldBaseAttack"),
                       inputType: TextInputType.number,
                       label: "Daño causado",
-                      text: appState.combatState.damageDone,
+                      text: appState.combatState.critical.damageDone,
                       onChanged: (value) =>
                           appState.updateCombatState(damageDone: value),
                     ),
@@ -41,7 +41,7 @@ class CombatCriticalCard extends StatelessWidget {
                     height: 40,
                     child: TextFormFieldCustom(
                       inputType: TextInputType.number,
-                      text: appState.combatState.criticalRoll,
+                      text: appState.combatState.critical.criticalRoll,
                       label: "Tirada de critico",
                       onChanged: (value) =>
                           {appState.updateCombatState(criticalRoll: value)},
@@ -64,7 +64,7 @@ class CombatCriticalCard extends StatelessWidget {
                     height: 40,
                     child: TextFormFieldCustom(
                       inputType: TextInputType.number,
-                      text: appState.combatState.localizationRoll,
+                      text: appState.combatState.critical.localizationRoll,
                       label: "Tirada de localización",
                       onChanged: (value) =>
                           {appState.updateCombatState(localizationRoll: value)},
@@ -99,7 +99,8 @@ class CombatCriticalCard extends StatelessWidget {
                       key: Key("TextFormFieldBaseAttack"),
                       inputType: TextInputType.number,
                       label: "RF Base",
-                      text: appState.combatState.physicalResistanceBase,
+                      text:
+                          appState.combatState.critical.physicalResistanceBase,
                       onChanged: (value) => appState.updateCombatState(
                           physicalResistanceBase: value),
                     ),
@@ -111,7 +112,8 @@ class CombatCriticalCard extends StatelessWidget {
                     height: 40,
                     child: TextFormFieldCustom(
                       inputType: TextInputType.number,
-                      text: appState.combatState.physicalResistanceRoll,
+                      text:
+                          appState.combatState.critical.physicalResistanceRoll,
                       label: "Tirada de RF",
                       onChanged: (value) => {
                         appState.updateCombatState(
@@ -178,7 +180,7 @@ class CombatCriticalCard extends StatelessWidget {
                   key: Key("TextFormFieldBaseAttack"),
                   inputType: TextInputType.number,
                   label: "Reducción de penalizador",
-                  text: appState.combatState.modifierReduction,
+                  text: appState.combatState.critical.modifierReduction,
                   onChanged: (value) =>
                       appState.updateCombatState(modifierReduction: value),
                 ),
@@ -188,7 +190,7 @@ class CombatCriticalCard extends StatelessWidget {
                 child: Center(
                   child: TextButton(
                     onPressed: () {
-                      var character = appState.defendingCharacter();
+                      var character = appState.combatState.defense.defendant;
 
                       var result =
                           appState.combatState.criticalResultWithReduction();

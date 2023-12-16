@@ -1,6 +1,6 @@
 import 'package:amt/models/character/status_modifier.dart';
 import 'package:amt/models/modifiers_state.dart';
-import 'package:amt/presentation/TextFormFieldCustom.dart';
+import 'package:amt/presentation/text_form_field_custom.dart';
 import 'package:amt/presentation/bottom_sheet_custom.dart';
 import 'package:flutter/material.dart';
 import 'package:function_tree/function_tree.dart';

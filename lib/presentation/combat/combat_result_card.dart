@@ -14,13 +14,13 @@ class CombatReturnCard extends StatelessWidget {
       title: "Resultado",
       children: [
         Text(
-          appState.combatState.combatTotal(),
+          appState.combatState.calculateResult(),
         ),
         appState.combatState.calculateDamage() > 10
             ? TextButton(
                 style: ButtonStyle(),
                 onPressed: () {
-                  var character = appState.defendingCharacter();
+                  var character = appState.combatState.defense.defendant;
 
                   var damage = appState.combatState.calculateDamage();
 
@@ -42,7 +42,7 @@ class CombatReturnCard extends StatelessWidget {
                     foregroundColor:
                         MaterialStatePropertyAll(theme.disabledColor)),
                 onPressed: () {
-                  var character = appState.defendingCharacter();
+                  var character = appState.combatState.defense.defendant;
 
                   character?.state.defenseNumber += 1;
                   appState.updateCharacter(character);
