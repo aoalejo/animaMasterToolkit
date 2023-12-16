@@ -134,4 +134,17 @@ class AttributesList {
     }
     return string;
   }
+
+  AttributesList copy() {
+    return AttributesList(
+      agility: agility,
+      constitution: constitution,
+      dexterity: dexterity,
+      strength: strength,
+      intelligence: intelligence,
+      perception: perception,
+      might: might,
+      willpower: willpower,
+    );
+  }
 }

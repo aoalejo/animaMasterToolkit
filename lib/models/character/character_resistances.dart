@@ -49,4 +49,15 @@ class CharacterResistances {
 
     return list;
   }
+
+  CharacterResistances copy() {
+    return CharacterResistances(
+      presence: presence,
+      physicResistance: physicResistance,
+      physicalResistance: physicalResistance,
+      diseasesResistance: diseasesResistance,
+      magicalResistance: magicalResistance,
+      poisonResistance: poisonResistance,
+    );
+  }
 }

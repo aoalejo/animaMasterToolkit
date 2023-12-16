@@ -1,5 +1,6 @@
 import 'package:amt/models/character/character.dart';
 import 'package:amt/presentation/npcSelection/npc_card_view.dart';
+import 'package:amt/presentation/text_form_field_custom.dart';
 import 'package:flutter/material.dart';
 
 class NPCSelector {
@@ -13,6 +14,8 @@ class NPCSelector {
     required Function(Character) onRemove,
   }) {
     var characters0 = characters;
+    var filter = "";
+
     showDialog(
       context: context,
       builder: (builder) {
@@ -22,6 +25,14 @@ class NPCSelector {
               title: Row(
                 children: [
                   Expanded(child: Text("Añadir NPC")),
+                  Flexible(
+                      flex: 1,
+                      child: TextFormFieldCustom(
+                        suffixIcon: Icon(Icons.search),
+                        text: filter,
+                        onChanged: (newFilter) =>
+                            setState(() => filter = newFilter),
+                      )),
                   IconButton(
                     onPressed: () {
                       Navigator.pop(context);
@@ -76,7 +87,8 @@ class NPCSelector {
                   crossAxisCount: 1,
                   childAspectRatio: 1.5,
                   children: [
-                    for (var character in characters0)
+                    for (var character
+                        in characters0.where((element) => element.isOn(filter)))
                       CharacterNPCCard(
                         character,
                         theme,

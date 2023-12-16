@@ -1,77 +1,3715 @@
 {
   "characters": [
     {
-      "Atributos": {
-        "AGI": "5",
-        "CON": "5",
-        "DES": "5",
-        "FUE": "5",
-        "INT": "5",
-        "PER": "6",
-        "POD": "5",
-        "VOL": "5"
-      },
-      "Habilidades": {
-        "Atletismo": "30",
-        "Trepar": "30",
-        "Intimidar": "20",
-        "Advertir": "60",
-        "Buscar": "40",
-        "Tasacion": "20",
-        "Ocultarse": "45",
-        "Sigilo": "30"
-      },
-      "datosElementales": {
-        "cansancio": "5",
-        "puntosDeVida": "80",
-        "regeneracion": "1",
-        "nombre": "Bandido",
-        "categoria": "Novel",
-        "nivel": "1",
-        "movimiento": "5",
-        "imagen": "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"
-      },
-      "Resistencias": {
-        "Pres. Base": "30",
-        "RF": "30",
-        "RE": "30",
-        "RV": "30",
-        "RM": "30",
-        "RP": "30"
-      },
-      "Combate": {
-        "armas": [
-          {
-            "nombre": "Garrote",
-            "critPrincipal": "CON",
-            "turno": "25",
-            "ataque": "70",
-            "defensa": "60",
-            "defensaTipo": "Esq",
-            "danio": "30"
-          },
-          {
-            "nombre": "Desarmado",
-            "critPrincipal": "CON",
-            "turno": "45",
-            "ataque": "70",
-            "defensa": "60",
-            "defensaTipo": "Esq",
-            "danio": "15"
-          }
-        ],
-        "armadura": {
-          "armaduraTotal": {
-            "FIL": "2",
-            "CON": "2",
-            "PEN": "2",
-            "CAL": "2",
-            "ELE": "2",
-            "FRI": "2",
-            "ENE": "0"
-          }
+        "Atributos": {
+            "AGI": "5",
+            "CON": "5",
+            "DES": "5",
+            "FUE": "5",
+            "INT": "5",
+            "PER": "5",
+            "POD": "5",
+            "VOL": "5"
+        },
+        "Habilidades": {
+            "Atletismo": "20",
+            "Saltar": "20",
+            "Trepar": "20",
+            "Advertir": "20",
+            "Buscar": "20",
+            "Animales": "30",
+            "Herbolaria": "30",
+            "Nadar": "20",
+            "Montar": "10"
+        },
+        "datosElementales": {
+            "cansancio": "2",
+            "puntosDeVida": "70",
+            "regeneracion": "1",
+            "nombre": "campesino",
+            "categoria": "Novel",
+            "nivel": "0",
+            "movimiento": "5",
+            "imagen": ""
+        },
+        "Resistencias": {
+            "Pres. Base": "30",
+            "RF": "20",
+            "RE": "20",
+            "RV": "20",
+            "RM": "20",
+            "RP": "20"
+        },
+        "Combate": {
+            "armas": [
+                {
+                    "nombre": "Desarmado",
+                    "critPrincipal": "20",
+                    "turno": "",
+                    "ataque": "20",
+                    "defensa": "20",
+                    "defensaTipo": "Esq",
+                    "danio": "10"
+                },
+                {
+                    "nombre": "Desarmado",
+                    "critPrincipal": "CON",
+                    "turno": "40",
+                    "ataque": "20",
+                    "defensa": "20",
+                    "defensaTipo": "Esq",
+                    "danio": "10"
+                }
+            ],
+            "armadura": {
+                "armaduraTotal": {
+                    "FIL": "2",
+                    "CON": "2",
+                    "PEN": "2",
+                    "CAL": "2",
+                    "ELE": "2",
+                    "FRI": "2",
+                    "ENE": "2"
+                }
+            }
         }
-      }
+    },
+    {
+        "Atributos": {
+            "AGI": "6",
+            "CON": "5",
+            "DES": "6",
+            "FUE": "5",
+            "INT": "5",
+            "PER": "6",
+            "POD": "5",
+            "VOL": "5"
+        },
+        "Habilidades": {
+            "Atletismo": "15",
+            "Saltar": "15",
+            "Trepar": "20",
+            "Advertir": "30",
+            "Buscar": "30",
+            "Animales": "35",
+            "Herbolaria": "35",
+            "Nadar": "10",
+            "Montar": "30",
+            "Rastrear": "35",
+            "Sigilo": "30",
+            "Ocultarse": "30",
+            "Trampería": "30"
+        },
+        "datosElementales": {
+            "cansancio": "2",
+            "puntosDeVida": "80",
+            "regeneracion": "1",
+            "nombre": "cazador",
+            "categoria": "Explorador",
+            "nivel": "0",
+            "movimiento": "6",
+            "imagen": ""
+        },
+        "Resistencias": {
+            "Pres. Base": "30",
+            "RF": "20",
+            "RE": "20",
+            "RV": "20",
+            "RM": "20",
+            "RP": "20"
+        },
+        "Combate": {
+            "armas": [
+                {
+                    "nombre": "Arco",
+                    "critPrincipal": "20",
+                    "turno": "0",
+                    "ataque": "40",
+                    "defensa": "30",
+                    "defensaTipo": "Esq",
+                    "danio": "30"
+                },
+                {
+                    "nombre": "Desarmado",
+                    "critPrincipal": "CON",
+                    "turno": "50",
+                    "ataque": "40",
+                    "defensa": "30",
+                    "defensaTipo": "Esq",
+                    "danio": "10"
+                }
+            ],
+            "armadura": {
+                "armaduraTotal": {
+                    "FIL": "2",
+                    "CON": "2",
+                    "PEN": "2",
+                    "CAL": "2",
+                    "ELE": "2",
+                    "FRI": "2",
+                    "ENE": "2"
+                }
+            }
+        }
+    },
+    {
+        "Atributos": {
+            "AGI": "5",
+            "CON": "5",
+            "DES": "5",
+            "FUE": "5",
+            "INT": "6",
+            "PER": "6",
+            "POD": "6",
+            "VOL": "5"
+        },
+        "Habilidades": {
+            "Advertir": "20",
+            "Buscar": "20",
+            "Animales": "5",
+            "Montar": "20",
+            "Sigilo": "5",
+            "Ocultarse": "5",
+            "Baile": "20",
+            "Arte": "15",
+            "Música": "10",
+            "Historia": "10",
+            "Memorizar": "10",
+            "Persuasión": "30",
+            "Tasación": "20",
+            "Frialdad": "5",
+            "Intimidar": "5",
+            "Estilo": "20",
+            "Liderazgo": "20"
+        },
+        "datosElementales": {
+            "cansancio": "2",
+            "puntosDeVida": "70",
+            "regeneracion": "1",
+            "nombre": "cortesano",
+            "categoria": "Novel",
+            "nivel": "0",
+            "movimiento": "5",
+            "imagen": ""
+        },
+        "Resistencias": {
+            "Pres. Base": "30",
+            "RF": "20",
+            "RE": "20",
+            "RV": "20",
+            "RM": "25",
+            "RP": "20"
+        },
+        "Combate": {
+            "armas": [
+                {
+                    "nombre": "Desarmado",
+                    "critPrincipal": "20",
+                    "turno": "",
+                    "ataque": "10",
+                    "defensa": "10",
+                    "defensaTipo": "Esq",
+                    "danio": "10"
+                },
+                {
+                    "nombre": "Desarmado",
+                    "critPrincipal": "CON",
+                    "turno": "40",
+                    "ataque": "10",
+                    "defensa": "10",
+                    "defensaTipo": "Esq",
+                    "danio": "10"
+                }
+            ],
+            "armadura": {
+                "armaduraTotal": {
+                    "FIL": "2",
+                    "CON": "2",
+                    "PEN": "2",
+                    "CAL": "2",
+                    "ELE": "2",
+                    "FRI": "2",
+                    "ENE": "2"
+                }
+            }
+        }
+    },
+    {
+        "Atributos": {
+            "AGI": "5",
+            "CON": "6",
+            "DES": "6",
+            "FUE": "6",
+            "INT": "5",
+            "PER": "5",
+            "POD": "5",
+            "VOL": "5"
+        },
+        "Habilidades": {
+            "Atletismo": "10",
+            "Advertir": "20",
+            "Buscar": "10",
+            "Montar": "10",
+            "Arte": "20",
+            "Tasación": "30",
+            "Forja": "60",
+            "Proezas de fuerza": "30"
+        },
+        "datosElementales": {
+            "cansancio": "0",
+            "puntosDeVida": "85",
+            "regeneracion": "1",
+            "nombre": "Herrero",
+            "categoria": "Novel",
+            "nivel": "0",
+            "movimiento": "5",
+            "imagen": ""
+        },
+        "Resistencias": {
+            "Pres. Base": "30",
+            "RF": "25",
+            "RE": "25",
+            "RV": "25",
+            "RM": "20",
+            "RP": "20"
+        },
+        "Combate": {
+            "armas": [
+                {
+                    "nombre": "Martillo",
+                    "critPrincipal": "25",
+                    "turno": "5",
+                    "ataque": "20",
+                    "defensa": "20",
+                    "defensaTipo": "Par",
+                    "danio": "35"
+                },
+                {
+                    "nombre": "Desarmado",
+                    "critPrincipal": "CON",
+                    "turno": "45",
+                    "ataque": "20",
+                    "defensa": "20",
+                    "defensaTipo": "Par",
+                    "danio": "15"
+                }
+            ],
+            "armadura": {
+                "armaduraTotal": {
+                    "FIL": "1",
+                    "CON": "0",
+                    "PEN": "2",
+                    "CAL": "1",
+                    "ELE": "2",
+                    "FRI": "1",
+                    "ENE": "0"
+                }
+            }
+        }
+    },
+    {
+        "Atributos": {
+            "AGI": "6",
+            "CON": "5",
+            "DES": "6",
+            "FUE": "5",
+            "INT": "6",
+            "PER": "5",
+            "POD": "6",
+            "VOL": "5"
+        },
+        "Habilidades": {
+            "Advertir": "30",
+            "Buscar": "30",
+            "Baile": "40",
+            "Arte": "40",
+            "Música": "55",
+            "Historia": "30",
+            "Persuasión": "40",
+            "Estilo": "45",
+            "Acrobacias": "40",
+            "Disfraz": "30",
+            "Trucos de manos": "50",
+            "Robo": "30"
+        },
+        "datosElementales": {
+            "cansancio": "2",
+            "puntosDeVida": "80",
+            "regeneracion": "1",
+            "nombre": "juglar",
+            "categoria": "Novel",
+            "nivel": "1",
+            "movimiento": "6",
+            "imagen": ""
+        },
+        "Resistencias": {
+            "Pres. Base": "35",
+            "RF": "30",
+            "RE": "30",
+            "RV": "30",
+            "RM": "36",
+            "RP": "30"
+        },
+        "Combate": {
+            "armas": [
+                {
+                    "nombre": "Daga",
+                    "critPrincipal": "30",
+                    "turno": "",
+                    "ataque": "10",
+                    "defensa": "20",
+                    "defensaTipo": "Esq",
+                    "danio": "30"
+                },
+                {
+                    "nombre": "Desarmado",
+                    "critPrincipal": "CON",
+                    "turno": "55",
+                    "ataque": "10",
+                    "defensa": "20",
+                    "defensaTipo": "Esq",
+                    "danio": "10"
+                }
+            ],
+            "armadura": {
+                "armaduraTotal": {
+                    "FIL": "2",
+                    "CON": "2",
+                    "PEN": "2",
+                    "CAL": "2",
+                    "ELE": "2",
+                    "FRI": "2",
+                    "ENE": "2"
+                }
+            }
+        }
+    },
+    {
+        "Atributos": {
+            "AGI": "5",
+            "CON": "5",
+            "DES": "5",
+            "FUE": "5",
+            "INT": "6",
+            "PER": "5",
+            "POD": "6",
+            "VOL": "6"
+        },
+        "Habilidades": {
+            "Advertir": "30",
+            "Buscar": "40",
+            "Herbolaria": "50",
+            "Música": "35",
+            "Historia": "50",
+            "Memorizar": "60",
+            "Persuasión": "55",
+            "Ciencia": "30",
+            "Medicina": "50"
+        },
+        "datosElementales": {
+            "cansancio": "2",
+            "puntosDeVida": "80",
+            "regeneracion": "1",
+            "nombre": "monje",
+            "categoria": "Novel",
+            "nivel": "1",
+            "movimiento": "5",
+            "imagen": ""
+        },
+        "Resistencias": {
+            "Pres. Base": "35",
+            "RF": "30",
+            "RE": "30",
+            "RV": "30",
+            "RM": "35",
+            "RP": "35"
+        },
+        "Combate": {
+            "armas": [
+                {
+                    "nombre": "Manos",
+                    "critPrincipal": "30",
+                    "turno": "",
+                    "ataque": "10",
+                    "defensa": "10",
+                    "defensaTipo": "Esq",
+                    "danio": "10"
+                },
+                {
+                    "nombre": "Desarmado",
+                    "critPrincipal": "CON",
+                    "turno": "45",
+                    "ataque": "10",
+                    "defensa": "10",
+                    "defensaTipo": "Esq",
+                    "danio": "10"
+                }
+            ],
+            "armadura": {
+                "armaduraTotal": {
+                    "FIL": "2",
+                    "CON": "2",
+                    "PEN": "2",
+                    "CAL": "2",
+                    "ELE": "2",
+                    "FRI": "2",
+                    "ENE": "2"
+                }
+            }
+        }
+    },
+    {
+        "Atributos": {
+            "AGI": "6",
+            "CON": "7",
+            "DES": "7",
+            "FUE": "6",
+            "INT": "5",
+            "PER": "6",
+            "POD": "5",
+            "VOL": "5"
+        },
+        "Habilidades": {
+            "Saltar": "20",
+            "Trepar": "40",
+            "Advertir": "60",
+            "Buscar": "50",
+            "Animales": "50",
+            "Herbolaria": "50",
+            "Nadar": "25",
+            "Montar": "50",
+            "Rastrear": "70",
+            "Sigilo": "40",
+            "Ocultarse": "50",
+            "Trampería:": "60",
+            "Venenos": "20"
+        },
+        "datosElementales": {
+            "cansancio": "0",
+            "puntosDeVida": "115",
+            "regeneracion": "1",
+            "nombre": "montaraz",
+            "categoria": "Explorador",
+            "nivel": "2",
+            "movimiento": "6",
+            "imagen": ""
+        },
+        "Resistencias": {
+            "Pres. Base": "40",
+            "RF": "40",
+            "RE": "40",
+            "RV": "40",
+            "RM": "35",
+            "RP": "35"
+        },
+        "Combate": {
+            "armas": [
+                {
+                    "nombre": "Esp;Corta",
+                    "critPrincipal": "40",
+                    "turno": "55",
+                    "ataque": "90",
+                    "defensa": "80",
+                    "defensaTipo": "Esq",
+                    "danio": "45"
+                },
+                {
+                    "nombre": "Desarmado",
+                    "critPrincipal": "CON",
+                    "turno": "60",
+                    "ataque": "90",
+                    "defensa": "80",
+                    "defensaTipo": "Esq",
+                    "danio": "15"
+                }
+            ],
+            "armadura": {
+                "armaduraTotal": {
+                    "FIL": "1",
+                    "CON": "0",
+                    "PEN": "2",
+                    "CAL": "1",
+                    "ELE": "2",
+                    "FRI": "1",
+                    "ENE": "0"
+                }
+            }
+        }
+    },
+    {
+        "Atributos": {
+            "AGI": "7",
+            "CON": "5",
+            "DES": "7",
+            "FUE": "5",
+            "INT": "6",
+            "PER": "5",
+            "POD": "7",
+            "VOL": "5"
+        },
+        "Habilidades": {
+            "Advertir": "60",
+            "Buscar": "50",
+            "Baile": "60",
+            "Arte": "50",
+            "Música": "100",
+            "Historia": "60",
+            "Persuasión": "65",
+            "Estilo": "55",
+            "Acrobacias": "60",
+            "Disfraz": "50",
+            "Trucos de manos": "70",
+            "Robo": "30"
+        },
+        "datosElementales": {
+            "cansancio": "2",
+            "puntosDeVida": "100",
+            "regeneracion": "1",
+            "nombre": "bardo célebre",
+            "categoria": "Novel",
+            "nivel": "3",
+            "movimiento": "7",
+            "imagen": ""
+        },
+        "Resistencias": {
+            "Pres. Base": "45",
+            "RF": "40",
+            "RE": "40",
+            "RV": "40",
+            "RM": "45",
+            "RP": "40"
+        },
+        "Combate": {
+            "armas": [
+                {
+                    "nombre": "Estilete",
+                    "critPrincipal": "40",
+                    "turno": "65",
+                    "ataque": "20",
+                    "defensa": "50",
+                    "defensaTipo": "Esq",
+                    "danio": "25"
+                },
+                {
+                    "nombre": "Desarmado",
+                    "critPrincipal": "CON",
+                    "turno": "65",
+                    "ataque": "20",
+                    "defensa": "50",
+                    "defensaTipo": "Esq",
+                    "danio": "10"
+                }
+            ],
+            "armadura": {
+                "armaduraTotal": {
+                    "FIL": "2",
+                    "CON": "2",
+                    "PEN": "2",
+                    "CAL": "2",
+                    "ELE": "2",
+                    "FRI": "2",
+                    "ENE": "2"
+                }
+            }
+        }
+    },
+    {
+        "Atributos": {
+            "AGI": "5",
+            "CON": "5",
+            "DES": "5",
+            "FUE": "5",
+            "INT": "8",
+            "PER": "6",
+            "POD": "6",
+            "VOL": "6"
+        },
+        "Habilidades": {
+            "Advertir": "60",
+            "Buscar": "50",
+            "Animales": "40",
+            "Herbolaria": "40",
+            "Arte": "75",
+            "Música": "75",
+            "Historia": "110",
+            "Memorizar": "70",
+            "Persuasión": "80",
+            "Tasación": "50",
+            "Ciencia": "120",
+            "Medicina": "70",
+            "Ocultismo": "50"
+        },
+        "datosElementales": {
+            "cansancio": "2",
+            "puntosDeVida": "70",
+            "regeneracion": "1",
+            "nombre": "erudito",
+            "categoria": "Novel",
+            "nivel": "3",
+            "movimiento": "5",
+            "imagen": ""
+        },
+        "Resistencias": {
+            "Pres. Base": "45",
+            "RF": "40",
+            "RE": "40",
+            "RV": "40",
+            "RM": "40",
+            "RP": "40"
+        },
+        "Combate": {
+            "armas": [
+                {
+                    "nombre": "Desarmado",
+                    "critPrincipal": "40",
+                    "turno": "",
+                    "ataque": "10",
+                    "defensa": "10",
+                    "defensaTipo": "Esq",
+                    "danio": "10"
+                },
+                {
+                    "nombre": "Desarmado",
+                    "critPrincipal": "CON",
+                    "turno": "55",
+                    "ataque": "10",
+                    "defensa": "10",
+                    "defensaTipo": "Esq",
+                    "danio": "10"
+                }
+            ],
+            "armadura": {
+                "armaduraTotal": {
+                    "FIL": "2",
+                    "CON": "2",
+                    "PEN": "2",
+                    "CAL": "2",
+                    "ELE": "2",
+                    "FRI": "2",
+                    "ENE": "2"
+                }
+            }
+        }
+    },
+    {
+        "Atributos": {
+            "AGI": "5",
+            "CON": "6",
+            "DES": "8",
+            "FUE": "7",
+            "INT": "6",
+            "PER": "5",
+            "POD": "6",
+            "VOL": "7"
+        },
+        "Habilidades": {
+            "Advertir": "70",
+            "Buscar": "70",
+            "Animales": "60",
+            "Arte": "80",
+            "Tasación": "145",
+            "Forja": "210",
+            "Proezas de fuerza": "70"
+        },
+        "datosElementales": {
+            "cansancio": "2",
+            "puntosDeVida": "105",
+            "regeneracion": "1",
+            "nombre": "maestro armero",
+            "categoria": "Novel",
+            "nivel": "3",
+            "movimiento": "5",
+            "imagen": ""
+        },
+        "Resistencias": {
+            "Pres. Base": "45",
+            "RF": "45",
+            "RE": "45",
+            "RV": "45",
+            "RM": "45",
+            "RP": "45"
+        },
+        "Combate": {
+            "armas": [
+                {
+                    "nombre": "Martillo",
+                    "critPrincipal": "45",
+                    "turno": "25",
+                    "ataque": "40",
+                    "defensa": "40",
+                    "defensaTipo": "Par",
+                    "danio": "35"
+                },
+                {
+                    "nombre": "Desarmado",
+                    "critPrincipal": "CON",
+                    "turno": "65",
+                    "ataque": "40",
+                    "defensa": "40",
+                    "defensaTipo": "Par",
+                    "danio": "15"
+                }
+            ],
+            "armadura": {
+                "armaduraTotal": {
+                    "FIL": "2",
+                    "CON": "2",
+                    "PEN": "2",
+                    "CAL": "2",
+                    "ELE": "2",
+                    "FRI": "2",
+                    "ENE": "0"
+                }
+            }
+        }
+    },
+    {
+        "Atributos": {
+            "AGI": "6",
+            "CON": "6",
+            "DES": "6",
+            "FUE": "6",
+            "INT": "7",
+            "PER": "7",
+            "POD": "7",
+            "VOL": "7"
+        },
+        "Habilidades": {
+            "Advertir": "40",
+            "Buscar": "50",
+            "Montar": "60",
+            "Sigilo": "10",
+            "Ocultarse": "10",
+            "Baile": "50",
+            "Arte": "30",
+            "Historia": "40",
+            "Memorizar": "40",
+            "Persuasión": "60",
+            "Tasación": "30",
+            "Frialdad": "20",
+            "Intimidar": "20",
+            "Estilo": "85",
+            "Liderazgo": "60"
+        },
+        "datosElementales": {
+            "cansancio": "2",
+            "puntosDeVida": "70",
+            "regeneracion": "1",
+            "nombre": "noble ilustre",
+            "categoria": "Novel",
+            "nivel": "3",
+            "movimiento": "6",
+            "imagen": ""
+        },
+        "Resistencias": {
+            "Pres. Base": "45",
+            "RF": "45",
+            "RE": "45",
+            "RV": "45",
+            "RM": "45",
+            "RP": "45"
+        },
+        "Combate": {
+            "armas": [
+                {
+                    "nombre": "Estoque",
+                    "critPrincipal": "45",
+                    "turno": "60",
+                    "ataque": "100",
+                    "defensa": "100",
+                    "defensaTipo": "Esq",
+                    "danio": "45"
+                },
+                {
+                    "nombre": "Desarmado",
+                    "critPrincipal": "CON",
+                    "turno": "65",
+                    "ataque": "100",
+                    "defensa": "100",
+                    "defensaTipo": "Esq",
+                    "danio": "15"
+                }
+            ],
+            "armadura": {
+                "armaduraTotal": {
+                    "FIL": "2",
+                    "CON": "2",
+                    "PEN": "2",
+                    "CAL": "2",
+                    "ELE": "2",
+                    "FRI": "2",
+                    "ENE": "2"
+                }
+            }
+        }
+    },
+    {
+        "Atributos": {
+            "AGI": "5",
+            "CON": "5",
+            "DES": "5",
+            "FUE": "5",
+            "INT": "5",
+            "PER": "6",
+            "POD": "5",
+            "VOL": "5"
+        },
+        "Habilidades": {
+            "Atletismo": "30",
+            "Trepar": "30",
+            "Advertir": "60",
+            "Buscar": "40",
+            "Sigilo": "30",
+            "Ocultarse": "45",
+            "Tasación": "20",
+            "Intimidar": "20"
+        },
+        "datosElementales": {
+            "cansancio": "2",
+            "puntosDeVida": "80",
+            "regeneracion": "1",
+            "nombre": "bandido",
+            "categoria": "Novel",
+            "nivel": "1",
+            "movimiento": "5",
+            "imagen": ""
+        },
+        "Resistencias": {
+            "Pres. Base": "35",
+            "RF": "30",
+            "RE": "30",
+            "RV": "30",
+            "RM": "30",
+            "RP": "30"
+        },
+        "Combate": {
+            "armas": [
+                {
+                    "nombre": "Garrote",
+                    "critPrincipal": "30",
+                    "turno": "25",
+                    "ataque": "70",
+                    "defensa": "60",
+                    "defensaTipo": "Esq",
+                    "danio": "30"
+                },
+                {
+                    "nombre": "Desarmado",
+                    "critPrincipal": "CON",
+                    "turno": "45",
+                    "ataque": "70",
+                    "defensa": "60",
+                    "defensaTipo": "Esq",
+                    "danio": "10"
+                }
+            ],
+            "armadura": {
+                "armaduraTotal": {
+                    "FIL": "2",
+                    "CON": "2",
+                    "PEN": "2",
+                    "CAL": "2",
+                    "ELE": "2",
+                    "FRI": "2",
+                    "ENE": "2"
+                }
+            }
+        }
+    },
+    {
+        "Atributos": {
+            "AGI": "5",
+            "CON": "6",
+            "DES": "5",
+            "FUE": "5",
+            "INT": "6",
+            "PER": "7",
+            "POD": "5",
+            "VOL": "6"
+        },
+        "Habilidades": {
+            "Atletismo": "50",
+            "Trepar": "10",
+            "Advertir": "70",
+            "Buscar": "60",
+            "Sigilo": "50",
+            "Ocultarse": "80",
+            "Tasación": "10",
+            "Frialdad": "20",
+            "Intimidar": "20"
+        },
+        "datosElementales": {
+            "cansancio": "2",
+            "puntosDeVida": "105",
+            "regeneracion": "1",
+            "nombre": "cabecilla de banda",
+            "categoria": "Novel",
+            "nivel": "2",
+            "movimiento": "5",
+            "imagen": ""
+        },
+        "Resistencias": {
+            "Pres. Base": "40",
+            "RF": "40",
+            "RE": "40",
+            "RV": "40",
+            "RM": "35",
+            "RP": "40"
+        },
+        "Combate": {
+            "armas": [
+                {
+                    "nombre": "Espada Corta",
+                    "critPrincipal": "40",
+                    "turno": "45",
+                    "ataque": "80",
+                    "defensa": "70",
+                    "defensaTipo": "Esq",
+                    "danio": "40"
+                },
+                {
+                    "nombre": "Desarmado",
+                    "critPrincipal": "CON",
+                    "turno": "50",
+                    "ataque": "80",
+                    "defensa": "70",
+                    "defensaTipo": "Esq",
+                    "danio": "10"
+                }
+            ],
+            "armadura": {
+                "armaduraTotal": {
+                    "FIL": "2",
+                    "CON": "2",
+                    "PEN": "2",
+                    "CAL": "2",
+                    "ELE": "2",
+                    "FRI": "2",
+                    "ENE": "2"
+                }
+            }
+        }
+    },
+    {
+        "Atributos": {
+            "AGI": "8",
+            "CON": "7",
+            "DES": "8",
+            "FUE": "5",
+            "INT": "7",
+            "PER": "8",
+            "POD": "5",
+            "VOL": "8"
+        },
+        "Habilidades": {
+            "Atletismo": "20",
+            "Trepar": "20",
+            "Advertir": "140",
+            "Buscar": "160",
+            "Nadar": "30",
+            "Sigilo": "160",
+            "Ocultarse": "160",
+            "Trampería": "60",
+            "Frialdad": "70",
+            "Acrobacias": "30",
+            "Disfraz": "30",
+            "Venenos": "70"
+        },
+        "datosElementales": {
+            "cansancio": "2",
+            "puntosDeVida": "115",
+            "regeneracion": "1",
+            "nombre": "asesino profesional",
+            "categoria": "Asesino",
+            "nivel": "4",
+            "movimiento": "8",
+            "imagen": ""
+        },
+        "Resistencias": {
+            "Pres. Base": "50",
+            "RF": "50",
+            "RE": "50",
+            "RV": "50",
+            "RM": "45",
+            "RP": "55"
+        },
+        "Combate": {
+            "armas": [
+                {
+                    "nombre": "Daga",
+                    "critPrincipal": "50",
+                    "turno": "",
+                    "ataque": "120",
+                    "defensa": "110",
+                    "defensaTipo": "Esq",
+                    "danio": "30"
+                },
+                {
+                    "nombre": "Desarmado",
+                    "critPrincipal": "CON",
+                    "turno": "100",
+                    "ataque": "120",
+                    "defensa": "110",
+                    "defensaTipo": "Esq",
+                    "danio": "10"
+                }
+            ],
+            "armadura": {
+                "armaduraTotal": {
+                    "FIL": "2",
+                    "CON": "2",
+                    "PEN": "2",
+                    "CAL": "2",
+                    "ELE": "2",
+                    "FRI": "2",
+                    "ENE": "2"
+                }
+            }
+        }
+    },
+    {
+        "Atributos": {
+            "AGI": "7",
+            "CON": "6",
+            "DES": "6",
+            "FUE": "5",
+            "INT": "8",
+            "PER": "10",
+            "POD": "6",
+            "VOL": "8"
+        },
+        "Habilidades": {
+            "Trepar": "20",
+            "Advertir": "175",
+            "Buscar": "140",
+            "Sigilo": "180",
+            "Ocultarse": "180",
+            "Trampería": "70",
+            "Memorizar": "100",
+            "Frialdad": "130",
+            "Disfraz": "210",
+            "Venenos": "70"
+        },
+        "datosElementales": {
+            "cansancio": "2",
+            "puntosDeVida": "105",
+            "regeneracion": "1",
+            "nombre": "espía profesional",
+            "categoria": "Asesino",
+            "nivel": "4",
+            "movimiento": "7",
+            "imagen": ""
+        },
+        "Resistencias": {
+            "Pres. Base": "50",
+            "RF": "50",
+            "RE": "50",
+            "RV": "50",
+            "RM": "50",
+            "RP": "55"
+        },
+        "Combate": {
+            "armas": [
+                {
+                    "nombre": "Daga",
+                    "critPrincipal": "50",
+                    "turno": "",
+                    "ataque": "100",
+                    "defensa": "60",
+                    "defensaTipo": "Esq",
+                    "danio": "30"
+                },
+                {
+                    "nombre": "Desarmado",
+                    "critPrincipal": "CON",
+                    "turno": "90",
+                    "ataque": "100",
+                    "defensa": "60",
+                    "defensaTipo": "Esq",
+                    "danio": "10"
+                }
+            ],
+            "armadura": {
+                "armaduraTotal": {
+                    "FIL": "2",
+                    "CON": "2",
+                    "PEN": "2",
+                    "CAL": "2",
+                    "ELE": "2",
+                    "FRI": "2",
+                    "ENE": "2"
+                }
+            }
+        }
+    },
+    {
+        "Atributos": {
+            "AGI": "9",
+            "CON": "7",
+            "DES": "9",
+            "FUE": "5",
+            "INT": "8",
+            "PER": "10",
+            "POD": "6",
+            "VOL": "8"
+        },
+        "Habilidades": {
+            "Atletismo": "70",
+            "Trepar": "20",
+            "Advertir": "180",
+            "Buscar": "160",
+            "Nadar": "20",
+            "Sigilo": "200",
+            "Ocultarse": "200",
+            "Trampería": "80",
+            "Frialdad": "90",
+            "Acrobacias": "70",
+            "Disfraz": "130",
+            "Venenos": "130"
+        },
+        "datosElementales": {
+            "cansancio": "2",
+            "puntosDeVida": "125",
+            "regeneracion": "1",
+            "nombre": "maestro ejecutor",
+            "categoria": "Asesino",
+            "nivel": "6",
+            "movimiento": "9",
+            "imagen": ""
+        },
+        "Resistencias": {
+            "Pres. Base": "60",
+            "RF": "60",
+            "RE": "60",
+            "RV": "60",
+            "RM": "60",
+            "RP": "65"
+        },
+        "Combate": {
+            "armas": [
+                {
+                    "nombre": "Espada Corta",
+                    "critPrincipal": "60",
+                    "turno": "",
+                    "ataque": "150",
+                    "defensa": "130",
+                    "defensaTipo": "Esq",
+                    "danio": "40"
+                },
+                {
+                    "nombre": "Desarmado",
+                    "critPrincipal": "CON",
+                    "turno": "120",
+                    "ataque": "150",
+                    "defensa": "130",
+                    "defensaTipo": "Esq",
+                    "danio": "10"
+                }
+            ],
+            "armadura": {
+                "armaduraTotal": {
+                    "FIL": "2",
+                    "CON": "2",
+                    "PEN": "2",
+                    "CAL": "2",
+                    "ELE": "2",
+                    "FRI": "2",
+                    "ENE": "2"
+                }
+            }
+        }
+    },
+    {
+        "Atributos": {
+            "AGI": "9",
+            "CON": "7",
+            "DES": "8",
+            "FUE": "5",
+            "INT": "7",
+            "PER": "9",
+            "POD": "6",
+            "VOL": "8"
+        },
+        "Habilidades": {
+            "Atletismo": "50",
+            "Trepar": "50",
+            "Advertir": "100",
+            "Buscar": "75",
+            "Nadar": "20",
+            "Sigilo": "130",
+            "Ocultarse": "100",
+            "Frialdad": "80",
+            "Acrobacias": "50",
+            "Venenos": "20"
+        },
+        "datosElementales": {
+            "cansancio": "2",
+            "puntosDeVida": "115",
+            "regeneracion": "1",
+            "nombre": "ninja",
+            "categoria": "Sombra",
+            "nivel": "3",
+            "movimiento": "9",
+            "imagen": ""
+        },
+        "Resistencias": {
+            "Pres. Base": "45",
+            "RF": "50",
+            "RE": "50",
+            "RV": "50",
+            "RM": "45",
+            "RP": "55"
+        },
+        "Combate": {
+            "armas": [
+                {
+                    "nombre": "Tanto",
+                    "critPrincipal": "50",
+                    "turno": "",
+                    "ataque": "100",
+                    "defensa": "100",
+                    "defensaTipo": "Esq",
+                    "danio": "40"
+                },
+                {
+                    "nombre": "Desarmado",
+                    "critPrincipal": "CON",
+                    "turno": "90",
+                    "ataque": "100",
+                    "defensa": "100",
+                    "defensaTipo": "Esq",
+                    "danio": "10"
+                }
+            ],
+            "armadura": {
+                "armaduraTotal": {
+                    "FIL": "2",
+                    "CON": "2",
+                    "PEN": "2",
+                    "CAL": "2",
+                    "ELE": "2",
+                    "FRI": "2",
+                    "ENE": "2"
+                }
+            }
+        }
+    },
+    {
+        "Atributos": {
+            "AGI": "10",
+            "CON": "7",
+            "DES": "9",
+            "FUE": "5",
+            "INT": "7",
+            "PER": "10",
+            "POD": "6",
+            "VOL": "8"
+        },
+        "Habilidades": {
+            "Atletismo": "90",
+            "Trepar": "40",
+            "Advertir": "130",
+            "Buscar": "100",
+            "Nadar": "70",
+            "Sigilo": "190",
+            "Ocultarse": "190",
+            "Frialdad": "90",
+            "Acrobacias": "100",
+            "Venenos": "30"
+        },
+        "datosElementales": {
+            "cansancio": "2",
+            "puntosDeVida": "125",
+            "regeneracion": "1",
+            "nombre": "maestro shinobi",
+            "categoria": "Sombra",
+            "nivel": "5",
+            "movimiento": "10",
+            "imagen": ""
+        },
+        "Resistencias": {
+            "Pres. Base": "55",
+            "RF": "55",
+            "RE": "55",
+            "RV": "55",
+            "RM": "55",
+            "RP": "60"
+        },
+        "Combate": {
+            "armas": [
+                {
+                    "nombre": "Tanto",
+                    "critPrincipal": "55",
+                    "turno": "",
+                    "ataque": "140",
+                    "defensa": "140",
+                    "defensaTipo": "Esq",
+                    "danio": "40"
+                },
+                {
+                    "nombre": "Desarmado",
+                    "critPrincipal": "CON",
+                    "turno": "115",
+                    "ataque": "140",
+                    "defensa": "140",
+                    "defensaTipo": "Esq",
+                    "danio": "10"
+                }
+            ],
+            "armadura": {
+                "armaduraTotal": {
+                    "FIL": "2",
+                    "CON": "2",
+                    "PEN": "2",
+                    "CAL": "2",
+                    "ELE": "2",
+                    "FRI": "2",
+                    "ENE": "2"
+                }
+            }
+        }
+    },
+    {
+        "Atributos": {
+            "AGI": "11",
+            "CON": "8",
+            "DES": "11",
+            "FUE": "6",
+            "INT": "9",
+            "PER": "11",
+            "POD": "7",
+            "VOL": "9"
+        },
+        "Habilidades": {
+            "Atletismo": "100",
+            "Trepar": "90",
+            "Advertir": "220",
+            "Buscar": "220",
+            "Nadar": "70",
+            "Montar": "90",
+            "Sigilo": "200",
+            "Ocultarse": "220",
+            "Frialdad": "130",
+            "Acrobacias": "100",
+            "Venenos": "90"
+        },
+        "datosElementales": {
+            "cansancio": "2",
+            "puntosDeVida": "150",
+            "regeneracion": "2",
+            "nombre": "shinobi legendario",
+            "categoria": "Sombra",
+            "nivel": "8",
+            "movimiento": "11",
+            "imagen": ""
+        },
+        "Resistencias": {
+            "Pres. Base": "70",
+            "RF": "75",
+            "RE": "75",
+            "RV": "75",
+            "RM": "70",
+            "RP": "75"
+        },
+        "Combate": {
+            "armas": [
+                {
+                    "nombre": "Tanto",
+                    "critPrincipal": "75",
+                    "turno": "",
+                    "ataque": "200",
+                    "defensa": "200",
+                    "defensaTipo": "Esq",
+                    "danio": "55"
+                },
+                {
+                    "nombre": "Desarmado",
+                    "critPrincipal": "CON",
+                    "turno": "155",
+                    "ataque": "200",
+                    "defensa": "200",
+                    "defensaTipo": "Esq",
+                    "danio": "15"
+                }
+            ],
+            "armadura": {
+                "armaduraTotal": {
+                    "FIL": "2",
+                    "CON": "2",
+                    "PEN": "2",
+                    "CAL": "2",
+                    "ELE": "2",
+                    "FRI": "2",
+                    "ENE": "2"
+                }
+            }
+        }
+    },
+    {
+        "Atributos": {
+            "AGI": "6",
+            "CON": "5",
+            "DES": "6",
+            "FUE": "5",
+            "INT": "5",
+            "PER": "6",
+            "POD": "5",
+            "VOL": "5"
+        },
+        "Habilidades": {
+            "Atletismo": "20",
+            "Trepar": "30",
+            "Advertir": "50",
+            "Buscar": "50",
+            "Nadar": "20",
+            "Sigilo": "60",
+            "Ocultarse": "55",
+            "Trampería": "30",
+            "Tasación": "20",
+            "Acrobacias": "30",
+            "Disfraz": "35",
+            "Trucos de manos": "30",
+            "Robar": "70",
+            "Abrir Cerraduras": "50"
+        },
+        "datosElementales": {
+            "cansancio": "2",
+            "puntosDeVida": "75",
+            "regeneracion": "1",
+            "nombre": "cortabolsas",
+            "categoria": "Ladrón",
+            "nivel": "1",
+            "movimiento": "6",
+            "imagen": ""
+        },
+        "Resistencias": {
+            "Pres. Base": "35",
+            "RF": "30",
+            "RE": "30",
+            "RV": "30",
+            "RM": "30",
+            "RP": "30"
+        },
+        "Combate": {
+            "armas": [
+                {
+                    "nombre": "Daga",
+                    "critPrincipal": "30",
+                    "turno": "",
+                    "ataque": "50",
+                    "defensa": "60",
+                    "defensaTipo": "Esq",
+                    "danio": "30"
+                },
+                {
+                    "nombre": "Desarmado",
+                    "critPrincipal": "CON",
+                    "turno": "60",
+                    "ataque": "50",
+                    "defensa": "60",
+                    "defensaTipo": "Esq",
+                    "danio": "10"
+                }
+            ],
+            "armadura": {
+                "armaduraTotal": {
+                    "FIL": "2",
+                    "CON": "2",
+                    "PEN": "2",
+                    "CAL": "2",
+                    "ELE": "2",
+                    "FRI": "2",
+                    "ENE": "2"
+                }
+            }
+        }
+    },
+    {
+        "Atributos": {
+            "AGI": "8",
+            "CON": "5",
+            "DES": "7",
+            "FUE": "5",
+            "INT": "6",
+            "PER": "7",
+            "POD": "5",
+            "VOL": "5"
+        },
+        "Habilidades": {
+            "Atletismo": "60",
+            "Trepar": "50",
+            "Advertir": "80",
+            "Buscar": "80",
+            "Nadar": "60",
+            "Sigilo": "100",
+            "Ocultarse": "80",
+            "Trampería": "40",
+            "Tasación": "55",
+            "Acrobacias": "60",
+            "Disfraz": "30",
+            "Trucos de manos": "60",
+            "Robar": "100",
+            "Abrir Cerraduras": "60"
+        },
+        "datosElementales": {
+            "cansancio": "2",
+            "puntosDeVida": "85",
+            "regeneracion": "1",
+            "nombre": "ladrón de guante blanco",
+            "categoria": "Ladrón",
+            "nivel": "3",
+            "movimiento": "8",
+            "imagen": ""
+        },
+        "Resistencias": {
+            "Pres. Base": "45",
+            "RF": "40",
+            "RE": "40",
+            "RV": "40",
+            "RM": "40",
+            "RP": "40"
+        },
+        "Combate": {
+            "armas": [
+                {
+                    "nombre": "Daga",
+                    "critPrincipal": "40",
+                    "turno": "",
+                    "ataque": "70",
+                    "defensa": "120",
+                    "defensaTipo": "Esq",
+                    "danio": "30"
+                },
+                {
+                    "nombre": "Desarmado",
+                    "critPrincipal": "CON",
+                    "turno": "85",
+                    "ataque": "70",
+                    "defensa": "120",
+                    "defensaTipo": "Esq",
+                    "danio": "10"
+                }
+            ],
+            "armadura": {
+                "armaduraTotal": {
+                    "FIL": "2",
+                    "CON": "2",
+                    "PEN": "2",
+                    "CAL": "2",
+                    "ELE": "2",
+                    "FRI": "2",
+                    "ENE": "2"
+                }
+            }
+        }
+    },
+    {
+        "Atributos": {
+            "AGI": "8",
+            "CON": "5",
+            "DES": "8",
+            "FUE": "5",
+            "INT": "6",
+            "PER": "8",
+            "POD": "5",
+            "VOL": "5"
+        },
+        "Habilidades": {
+            "Atletismo": "60",
+            "Trepar": "50",
+            "Advertir": "140",
+            "Buscar": "140",
+            "Nadar": "50",
+            "Montar": "40",
+            "Sigilo": "120",
+            "Ocultarse": "130",
+            "Trampería": "50",
+            "Tasación": "40",
+            "Acrobacias": "50",
+            "Disfraz": "50",
+            "Trucos de manos": "90",
+            "Robar": "220",
+            "Abrir Cerraduras": "100"
+        },
+        "datosElementales": {
+            "cansancio": "2",
+            "puntosDeVida": "95",
+            "regeneracion": "1",
+            "nombre": "maestro del robo",
+            "categoria": "Ladrón",
+            "nivel": "5",
+            "movimiento": "8",
+            "imagen": ""
+        },
+        "Resistencias": {
+            "Pres. Base": "55",
+            "RF": "50",
+            "RE": "50",
+            "RV": "50",
+            "RM": "50",
+            "RP": "50"
+        },
+        "Combate": {
+            "armas": [
+                {
+                    "nombre": "Estilete",
+                    "critPrincipal": "50",
+                    "turno": "",
+                    "ataque": "110",
+                    "defensa": "140",
+                    "defensaTipo": "Esq",
+                    "danio": "25"
+                },
+                {
+                    "nombre": "Desarmado",
+                    "critPrincipal": "CON",
+                    "turno": "115",
+                    "ataque": "110",
+                    "defensa": "140",
+                    "defensaTipo": "Esq",
+                    "danio": "10"
+                }
+            ],
+            "armadura": {
+                "armaduraTotal": {
+                    "FIL": "2",
+                    "CON": "2",
+                    "PEN": "2",
+                    "CAL": "2",
+                    "ELE": "2",
+                    "FRI": "2",
+                    "ENE": "2"
+                }
+            }
+        }
+    },
+    {
+        "Atributos": {
+            "AGI": "10",
+            "CON": "6",
+            "DES": "8",
+            "FUE": "5",
+            "INT": "8",
+            "PER": "11",
+            "POD": "6",
+            "VOL": "6"
+        },
+        "Habilidades": {
+            "Atletismo": "80",
+            "Trepar": "90",
+            "Advertir": "180",
+            "Buscar": "180",
+            "Nadar": "70",
+            "Montar": "80",
+            "Sigilo": "180",
+            "Ocultarse": "180",
+            "Trampería": "100",
+            "Tasación": "130",
+            "Acrobacias": "100",
+            "Disfraz": "110",
+            "Trucos de manos": "130",
+            "Robar": "230",
+            "Abrir Cerraduras": "150"
+        },
+        "datosElementales": {
+            "cansancio": "2",
+            "puntosDeVida": "125",
+            "regeneracion": "1",
+            "nombre": "príncipe de los ladrones",
+            "categoria": "Ladrón",
+            "nivel": "8",
+            "movimiento": "10",
+            "imagen": ""
+        },
+        "Resistencias": {
+            "Pres. Base": "70",
+            "RF": "70",
+            "RE": "70",
+            "RV": "70",
+            "RM": "70",
+            "RP": "70"
+        },
+        "Combate": {
+            "armas": [
+                {
+                    "nombre": "Espada Corta",
+                    "critPrincipal": "70",
+                    "turno": "140",
+                    "ataque": "150",
+                    "defensa": "200",
+                    "defensaTipo": "Esq",
+                    "danio": "40"
+                },
+                {
+                    "nombre": "Desarmado",
+                    "critPrincipal": "CON",
+                    "turno": "145",
+                    "ataque": "150",
+                    "defensa": "200",
+                    "defensaTipo": "Esq",
+                    "danio": "10"
+                }
+            ],
+            "armadura": {
+                "armaduraTotal": {
+                    "FIL": "2",
+                    "CON": "2",
+                    "PEN": "2",
+                    "CAL": "2",
+                    "ELE": "2",
+                    "FRI": "2",
+                    "ENE": "2"
+                }
+            }
+        }
+    },
+    {
+        "Atributos": {
+            "AGI": "5",
+            "CON": "5",
+            "DES": "5",
+            "FUE": "5",
+            "INT": "5",
+            "PER": "5",
+            "POD": "5",
+            "VOL": "5"
+        },
+        "Habilidades": {
+            "Atletismo": "30",
+            "Saltar": "20",
+            "Trepar": "20",
+            "Advertir": "40",
+            "Buscar": "30",
+            "Animales": "30",
+            "Herbolaria": "25",
+            "Nadar": "20",
+            "Frialdad": "20",
+            "Proezas de fuerza": "20"
+        },
+        "datosElementales": {
+            "cansancio": "0",
+            "puntosDeVida": "75",
+            "regeneracion": "1",
+            "nombre": "milicia / guardia de pueblo",
+            "categoria": "Novel",
+            "nivel": "1",
+            "movimiento": "5",
+            "imagen": ""
+        },
+        "Resistencias": {
+            "Pres. Base": "35",
+            "RF": "30",
+            "RE": "30",
+            "RV": "30",
+            "RM": "30",
+            "RP": "30"
+        },
+        "Combate": {
+            "armas": [
+                {
+                    "nombre": "Espada Larga",
+                    "critPrincipal": "30",
+                    "turno": "25",
+                    "ataque": "40",
+                    "defensa": "40",
+                    "defensaTipo": "Par",
+                    "danio": "50"
+                },
+                {
+                    "nombre": "Desarmado",
+                    "critPrincipal": "CON",
+                    "turno": "45",
+                    "ataque": "40",
+                    "defensa": "40",
+                    "defensaTipo": "Par",
+                    "danio": "10"
+                }
+            ],
+            "armadura": {
+                "armaduraTotal": {
+                    "FIL": "1",
+                    "CON": "0",
+                    "PEN": "2",
+                    "CAL": "1",
+                    "ELE": "2",
+                    "FRI": "1",
+                    "ENE": "0"
+                }
+            }
+        }
+    },
+    {
+        "Atributos": {
+            "AGI": "5",
+            "CON": "6",
+            "DES": "6",
+            "FUE": "6",
+            "INT": "5",
+            "PER": "5",
+            "POD": "5",
+            "VOL": "5"
+        },
+        "Habilidades": {
+            "Advertir": "40",
+            "Buscar": "30",
+            "Frialdad": "30",
+            "Intimidar": "20",
+            "Proezas de fuerza": "40",
+            "Resistir el dolor": "30"
+        },
+        "datosElementales": {
+            "cansancio": "2",
+            "puntosDeVida": "100",
+            "regeneracion": "1",
+            "nombre": "guardia",
+            "categoria": "Guerrero",
+            "nivel": "1",
+            "movimiento": "5",
+            "imagen": ""
+        },
+        "Resistencias": {
+            "Pres. Base": "35",
+            "RF": "35",
+            "RE": "35",
+            "RV": "35",
+            "RM": "30",
+            "RP": "30"
+        },
+        "Combate": {
+            "armas": [
+                {
+                    "nombre": "Espada Larga",
+                    "critPrincipal": "35",
+                    "turno": "30",
+                    "ataque": "70",
+                    "defensa": "70",
+                    "defensaTipo": "Par",
+                    "danio": "55"
+                },
+                {
+                    "nombre": "Desarmado",
+                    "critPrincipal": "CON",
+                    "turno": "50",
+                    "ataque": "70",
+                    "defensa": "70",
+                    "defensaTipo": "Par",
+                    "danio": "15"
+                }
+            ],
+            "armadura": {
+                "armaduraTotal": {
+                    "FIL": "2",
+                    "CON": "2",
+                    "PEN": "2",
+                    "CAL": "2",
+                    "ELE": "2",
+                    "FRI": "2",
+                    "ENE": "0"
+                }
+            }
+        }
+    },
+    {
+        "Atributos": {
+            "AGI": "5",
+            "CON": "7",
+            "DES": "7",
+            "FUE": "7",
+            "INT": "5",
+            "PER": "5",
+            "POD": "5",
+            "VOL": "5"
+        },
+        "Habilidades": {
+            "Advertir": "40",
+            "Buscar": "30",
+            "Frialdad": "45",
+            "Intimidar": "45",
+            "Proezas de fuerza": "60",
+            "Resistir el dolor": "45"
+        },
+        "datosElementales": {
+            "cansancio": "1",
+            "puntosDeVida": "125",
+            "regeneracion": "1",
+            "nombre": "soldado regular",
+            "categoria": "Guerrero",
+            "nivel": "2",
+            "movimiento": "5",
+            "imagen": ""
+        },
+        "Resistencias": {
+            "Pres. Base": "40",
+            "RF": "40",
+            "RE": "40",
+            "RV": "40",
+            "RM": "35",
+            "RP": "35"
+        },
+        "Combate": {
+            "armas": [
+                {
+                    "nombre": "Espada Larga",
+                    "critPrincipal": "40",
+                    "turno": "35",
+                    "ataque": "90",
+                    "defensa": "90",
+                    "defensaTipo": "Par",
+                    "danio": "50"
+                },
+                {
+                    "nombre": "Desarmado",
+                    "critPrincipal": "CON",
+                    "turno": "55",
+                    "ataque": "90",
+                    "defensa": "90",
+                    "defensaTipo": "Par",
+                    "danio": "15"
+                }
+            ],
+            "armadura": {
+                "armaduraTotal": {
+                    "FIL": "3",
+                    "CON": "1",
+                    "PEN": "2",
+                    "CAL": "2",
+                    "ELE": "1",
+                    "FRI": "2",
+                    "ENE": "0"
+                }
+            }
+        }
+    },
+    {
+        "Atributos": {
+            "AGI": "7",
+            "CON": "6",
+            "DES": "7",
+            "FUE": "5",
+            "INT": "5",
+            "PER": "7",
+            "POD": "5",
+            "VOL": "5"
+        },
+        "Habilidades": {
+            "Trepar": "50",
+            "Advertir": "75",
+            "Buscar": "75",
+            "Animales": "40",
+            "Herbolaria": "20",
+            "Nadar": "50",
+            "Montar": "50",
+            "Rastrear": "100",
+            "Sigilo": "60",
+            "Ocultarse": "40",
+            "Trampería": "40"
+        },
+        "datosElementales": {
+            "cansancio": "2",
+            "puntosDeVida": "105",
+            "regeneracion": "1",
+            "nombre": "batidor",
+            "categoria": "Explorador",
+            "nivel": "2",
+            "movimiento": "7",
+            "imagen": ""
+        },
+        "Resistencias": {
+            "Pres. Base": "40",
+            "RF": "40",
+            "RE": "40",
+            "RV": "40",
+            "RM": "35",
+            "RP": "35"
+        },
+        "Combate": {
+            "armas": [
+                {
+                    "nombre": "Arco Corto",
+                    "critPrincipal": "40",
+                    "turno": "20",
+                    "ataque": "80",
+                    "defensa": "80",
+                    "defensaTipo": "Esq",
+                    "danio": "40"
+                },
+                {
+                    "nombre": "Desarmado",
+                    "critPrincipal": "CON",
+                    "turno": "50",
+                    "ataque": "80",
+                    "defensa": "80",
+                    "defensaTipo": "Esq",
+                    "danio": "10"
+                }
+            ],
+            "armadura": {
+                "armaduraTotal": {
+                    "FIL": "2",
+                    "CON": "2",
+                    "PEN": "2",
+                    "CAL": "2",
+                    "ELE": "2",
+                    "FRI": "2",
+                    "ENE": "2"
+                }
+            }
+        }
+    },
+    {
+        "Atributos": {
+            "AGI": "5",
+            "CON": "7",
+            "DES": "8",
+            "FUE": "7",
+            "INT": "5",
+            "PER": "5",
+            "POD": "5",
+            "VOL": "6"
+        },
+        "Habilidades": {
+            "Advertir": "30",
+            "Buscar": "10",
+            "Montar": "60",
+            "Frialdad": "45",
+            "Intimidar": "45",
+            "Proezas de fuerza": "50",
+            "Resistir el dolor": "35"
+        },
+        "datosElementales": {
+            "cansancio": "4",
+            "puntosDeVida": "135",
+            "regeneracion": "1",
+            "nombre": "caballero",
+            "categoria": "Maestro de Armas",
+            "nivel": "2",
+            "movimiento": "5",
+            "imagen": ""
+        },
+        "Resistencias": {
+            "Pres. Base": "40",
+            "RF": "40",
+            "RE": "40",
+            "RV": "40",
+            "RM": "35",
+            "RP": "40"
+        },
+        "Combate": {
+            "armas": [
+                {
+                    "nombre": "Espada Larga",
+                    "critPrincipal": "40",
+                    "turno": "35",
+                    "ataque": "90",
+                    "defensa": "90",
+                    "defensaTipo": "Par",
+                    "danio": "55"
+                },
+                {
+                    "nombre": "Desarmado",
+                    "critPrincipal": "CON",
+                    "turno": "55",
+                    "ataque": "90",
+                    "defensa": "90",
+                    "defensaTipo": "Par",
+                    "danio": "15"
+                }
+            ],
+            "armadura": {
+                "armaduraTotal": {
+                    "FIL": "5",
+                    "CON": "4",
+                    "PEN": "5",
+                    "CAL": "3",
+                    "ELE": "0",
+                    "FRI": "3",
+                    "ENE": "1"
+                }
+            }
+        }
+    },
+    {
+        "Atributos": {
+            "AGI": "5",
+            "CON": "7",
+            "DES": "8",
+            "FUE": "7",
+            "INT": "5",
+            "PER": "6",
+            "POD": "5",
+            "VOL": "6"
+        },
+        "Habilidades": {
+            "Advertir": "60",
+            "Buscar": "50",
+            "Frialdad": "60",
+            "Intimidar": "60",
+            "Proezas de fuerza": "75",
+            "Resistir el dolor": "75"
+        },
+        "datosElementales": {
+            "cansancio": "2",
+            "puntosDeVida": "140",
+            "regeneracion": "1",
+            "nombre": "soldado veterano",
+            "categoria": "Guerrero",
+            "nivel": "3",
+            "movimiento": "5",
+            "imagen": ""
+        },
+        "Resistencias": {
+            "Pres. Base": "45",
+            "RF": "45",
+            "RE": "45",
+            "RV": "45",
+            "RM": "40",
+            "RP": "45"
+        },
+        "Combate": {
+            "armas": [
+                {
+                    "nombre": "Espada Larga",
+                    "critPrincipal": "45",
+                    "turno": "45",
+                    "ataque": "110",
+                    "defensa": "110",
+                    "defensaTipo": "Par",
+                    "danio": "55"
+                },
+                {
+                    "nombre": "Desarmado",
+                    "critPrincipal": "CON",
+                    "turno": "65",
+                    "ataque": "110",
+                    "defensa": "110",
+                    "defensaTipo": "Par",
+                    "danio": "15"
+                }
+            ],
+            "armadura": {
+                "armaduraTotal": {
+                    "FIL": "4",
+                    "CON": "2",
+                    "PEN": "1",
+                    "CAL": "2",
+                    "ELE": "0",
+                    "FRI": "1",
+                    "ENE": "0"
+                }
+            }
+        }
+    },
+    {
+        "Atributos": {
+            "AGI": "6",
+            "CON": "7",
+            "DES": "7",
+            "FUE": "7",
+            "INT": "5",
+            "PER": "6",
+            "POD": "5",
+            "VOL": "7"
+        },
+        "Habilidades": {
+            "Atletismo": "40",
+            "Saltar": "40",
+            "Advertir": "35",
+            "Buscar": "25",
+            "Montar": "40",
+            "Sigilo": "25",
+            "Frialdad": "75",
+            "Intimidar": "60",
+            "Estilo": "40",
+            "Proezas de fuerza": "20",
+            "Acrobacias": "45",
+            "Trucos de manos": "60",
+            "Resistir el dolor": "50",
+            "Esconderse": "20"
+        },
+        "datosElementales": {
+            "cansancio": "2",
+            "puntosDeVida": "125",
+            "regeneracion": "1",
+            "nombre": "samurai",
+            "categoria": "Guerrero acróbata",
+            "nivel": "3",
+            "movimiento": "6",
+            "imagen": ""
+        },
+        "Resistencias": {
+            "Pres. Base": "45",
+            "RF": "45",
+            "RE": "45",
+            "RV": "45",
+            "RM": "40",
+            "RP": "45"
+        },
+        "Combate": {
+            "armas": [
+                {
+                    "nombre": "Katana",
+                    "critPrincipal": "45",
+                    "turno": "",
+                    "ataque": "110",
+                    "defensa": "110",
+                    "defensaTipo": "Esq",
+                    "danio": "60"
+                },
+                {
+                    "nombre": "Desarmado",
+                    "critPrincipal": "CON",
+                    "turno": "60",
+                    "ataque": "110",
+                    "defensa": "110",
+                    "defensaTipo": "Esq",
+                    "danio": "15"
+                }
+            ],
+            "armadura": {
+                "armaduraTotal": {
+                    "FIL": "2",
+                    "CON": "2",
+                    "PEN": "2",
+                    "CAL": "2",
+                    "ELE": "2",
+                    "FRI": "2",
+                    "ENE": "2"
+                }
+            }
+        }
+    },
+    {
+        "Atributos": {
+            "AGI": "6",
+            "CON": "8",
+            "DES": "8",
+            "FUE": "8",
+            "INT": "6",
+            "PER": "6",
+            "POD": "5",
+            "VOL": "6"
+        },
+        "Habilidades": {
+            "Advertir": "70",
+            "Buscar": "70",
+            "Frialdad": "80",
+            "Intimidar": "70",
+            "Proezas de fuerza": "100",
+            "Resistir el dolor": "80"
+        },
+        "datosElementales": {
+            "cansancio": "5",
+            "puntosDeVida": "170",
+            "regeneracion": "2",
+            "nombre": "soldado de elite",
+            "categoria": "Guerrero",
+            "nivel": "4",
+            "movimiento": "6",
+            "imagen": ""
+        },
+        "Resistencias": {
+            "Pres. Base": "50",
+            "RF": "55",
+            "RE": "55",
+            "RV": "55",
+            "RM": "45",
+            "RP": "50"
+        },
+        "Combate": {
+            "armas": [
+                {
+                    "nombre": "Espada Larga",
+                    "critPrincipal": "55",
+                    "turno": "55",
+                    "ataque": "125",
+                    "defensa": "125",
+                    "defensaTipo": "Par",
+                    "danio": "60"
+                },
+                {
+                    "nombre": "Desarmado",
+                    "critPrincipal": "CON",
+                    "turno": "60",
+                    "ataque": "125",
+                    "defensa": "125",
+                    "defensaTipo": "Par",
+                    "danio": "20"
+                }
+            ],
+            "armadura": {
+                "armaduraTotal": {
+                    "FIL": "4",
+                    "CON": "5",
+                    "PEN": "4",
+                    "CAL": "1",
+                    "ELE": "0",
+                    "FRI": "1",
+                    "ENE": "0"
+                }
+            }
+        }
+    },
+    {
+        "Atributos": {
+            "AGI": "6",
+            "CON": "8",
+            "DES": "8",
+            "FUE": "8",
+            "INT": "6",
+            "PER": "6",
+            "POD": "5",
+            "VOL": "6"
+        },
+        "Habilidades": {
+            "Advertir": "60",
+            "Buscar": "60",
+            "Montar": "80",
+            "Frialdad": "60",
+            "Intimidar": "60",
+            "Proezas de fuerza": "70",
+            "Resistir el dolor": "70"
+        },
+        "datosElementales": {
+            "cansancio": "5",
+            "puntosDeVida": "170",
+            "regeneracion": "2",
+            "nombre": "caballero de elite",
+            "categoria": "Maestro de Armas",
+            "nivel": "4",
+            "movimiento": "6",
+            "imagen": ""
+        },
+        "Resistencias": {
+            "Pres. Base": "50",
+            "RF": "55",
+            "RE": "55",
+            "RV": "55",
+            "RM": "45",
+            "RP": "50"
+        },
+        "Combate": {
+            "armas": [
+                {
+                    "nombre": "Espada Larga",
+                    "critPrincipal": "55",
+                    "turno": "45",
+                    "ataque": "125",
+                    "defensa": "125",
+                    "defensaTipo": "Par",
+                    "danio": "60"
+                },
+                {
+                    "nombre": "Desarmado",
+                    "critPrincipal": "CON",
+                    "turno": "65",
+                    "ataque": "125",
+                    "defensa": "125",
+                    "defensaTipo": "Par",
+                    "danio": "20"
+                }
+            ],
+            "armadura": {
+                "armaduraTotal": {
+                    "FIL": "5",
+                    "CON": "5",
+                    "PEN": "5",
+                    "CAL": "4",
+                    "ELE": "0",
+                    "FRI": "4",
+                    "ENE": "2"
+                }
+            }
+        }
+    },
+    {
+        "Atributos": {
+            "AGI": "6",
+            "CON": "8",
+            "DES": "10",
+            "FUE": "8",
+            "INT": "6",
+            "PER": "6",
+            "POD": "5",
+            "VOL": "8"
+        },
+        "Habilidades": {
+            "Advertir": "110",
+            "Buscar": "100",
+            "Frialdad": "110",
+            "Intimidar": "110",
+            "Proezas de fuerza": "100",
+            "Resistir el dolor": "90"
+        },
+        "datosElementales": {
+            "cansancio": "4",
+            "puntosDeVida": "180",
+            "regeneracion": "2",
+            "nombre": "pretoriano",
+            "categoria": "Guerrero",
+            "nivel": "5",
+            "movimiento": "6",
+            "imagen": ""
+        },
+        "Resistencias": {
+            "Pres. Base": "55",
+            "RF": "60",
+            "RE": "60",
+            "RV": "60",
+            "RM": "50",
+            "RP": "55"
+        },
+        "Combate": {
+            "armas": [
+                {
+                    "nombre": "Espada Larga",
+                    "critPrincipal": "60",
+                    "turno": "65",
+                    "ataque": "145",
+                    "defensa": "145",
+                    "defensaTipo": "Par",
+                    "danio": "60"
+                },
+                {
+                    "nombre": "Desarmado",
+                    "critPrincipal": "CON",
+                    "turno": "60",
+                    "ataque": "145",
+                    "defensa": "145",
+                    "defensaTipo": "Par",
+                    "danio": "20"
+                }
+            ],
+            "armadura": {
+                "armaduraTotal": {
+                    "FIL": "4",
+                    "CON": "4",
+                    "PEN": "4",
+                    "CAL": "2",
+                    "ELE": "0",
+                    "FRI": "1",
+                    "ENE": "1"
+                }
+            }
+        }
+    },
+    {
+        "Atributos": {
+            "AGI": "5",
+            "CON": "7",
+            "DES": "8",
+            "FUE": "7",
+            "INT": "7",
+            "PER": "6",
+            "POD": "6",
+            "VOL": "8"
+        },
+        "Habilidades": {
+            "Advertir": "70",
+            "Buscar": "50",
+            "Montar": "50",
+            "Frialdad": "50",
+            "Intimidar": "40",
+            "Liderazgo": "90",
+            "Proezas de fuerza": "45",
+            "Resistir el dolor": "50"
+        },
+        "datosElementales": {
+            "cansancio": "5",
+            "puntosDeVida": "140",
+            "regeneracion": "1",
+            "nombre": "capitán / teniente",
+            "categoria": "Guerrero",
+            "nivel": "3",
+            "movimiento": "5",
+            "imagen": ""
+        },
+        "Resistencias": {
+            "Pres. Base": "45",
+            "RF": "45",
+            "RE": "45",
+            "RV": "45",
+            "RM": "45",
+            "RP": "50"
+        },
+        "Combate": {
+            "armas": [
+                {
+                    "nombre": "Espada Larga",
+                    "critPrincipal": "45",
+                    "turno": "45",
+                    "ataque": "110",
+                    "defensa": "110",
+                    "defensaTipo": "Par",
+                    "danio": "55"
+                },
+                {
+                    "nombre": "Desarmado",
+                    "critPrincipal": "CON",
+                    "turno": "50",
+                    "ataque": "110",
+                    "defensa": "110",
+                    "defensaTipo": "Par",
+                    "danio": "15"
+                }
+            ],
+            "armadura": {
+                "armaduraTotal": {
+                    "FIL": "4",
+                    "CON": "5",
+                    "PEN": "4",
+                    "CAL": "1",
+                    "ELE": "0",
+                    "FRI": "1",
+                    "ENE": "0"
+                }
+            }
+        }
+    },
+    {
+        "Atributos": {
+            "AGI": "6",
+            "CON": "7",
+            "DES": "8",
+            "FUE": "7",
+            "INT": "8",
+            "PER": "7",
+            "POD": "8",
+            "VOL": "8"
+        },
+        "Habilidades": {
+            "Advertir": "80",
+            "Buscar": "60",
+            "Montar": "90",
+            "Frialdad": "70",
+            "Intimidar": "60",
+            "Liderazgo": "180",
+            "Proezas de fuerza": "65",
+            "Resistir el dolor": "80"
+        },
+        "datosElementales": {
+            "cansancio": "5",
+            "puntosDeVida": "160",
+            "regeneracion": "1",
+            "nombre": "comandante",
+            "categoria": "Guerrero",
+            "nivel": "5",
+            "movimiento": "6",
+            "imagen": ""
+        },
+        "Resistencias": {
+            "Pres. Base": "55",
+            "RF": "55",
+            "RE": "55",
+            "RV": "55",
+            "RM": "60",
+            "RP": "60"
+        },
+        "Combate": {
+            "armas": [
+                {
+                    "nombre": "Espada Larga",
+                    "critPrincipal": "55",
+                    "turno": "60",
+                    "ataque": "130",
+                    "defensa": "130",
+                    "defensaTipo": "Par",
+                    "danio": "55"
+                },
+                {
+                    "nombre": "Desarmado",
+                    "critPrincipal": "CON",
+                    "turno": "65",
+                    "ataque": "130",
+                    "defensa": "130",
+                    "defensaTipo": "Par",
+                    "danio": "15"
+                }
+            ],
+            "armadura": {
+                "armaduraTotal": {
+                    "FIL": "4",
+                    "CON": "5",
+                    "PEN": "4",
+                    "CAL": "1",
+                    "ELE": "0",
+                    "FRI": "1",
+                    "ENE": "0"
+                }
+            }
+        }
+    },
+    {
+        "Atributos": {
+            "AGI": "5",
+            "CON": "5",
+            "DES": "6",
+            "FUE": "5",
+            "INT": "8",
+            "PER": "6",
+            "POD": "8",
+            "VOL": "6"
+        },
+        "Habilidades": {
+            "Advertir": "30",
+            "Buscar": "20",
+            "Historia": "35",
+            "Memorizar": "30",
+            "Ciencia": "30",
+            "Medicina": "20",
+            "Ocultismo": "50"
+        },
+        "datosElementales": {
+            "cansancio": "2",
+            "puntosDeVida": "75",
+            "regeneracion": "1",
+            "nombre": "aprendiz",
+            "categoria": "Hechicero",
+            "nivel": "1",
+            "movimiento": "5",
+            "imagen": ""
+        },
+        "Resistencias": {
+            "Pres. Base": "35",
+            "RF": "30",
+            "RE": "30",
+            "RV": "30",
+            "RM": "50",
+            "RP": "35"
+        },
+        "Combate": {
+            "armas": [
+                {
+                    "nombre": "Magia",
+                    "critPrincipal": "30",
+                    "turno": "",
+                    "ataque": "",
+                    "defensa": "",
+                    "defensaTipo": "Par",
+                    "danio": ""
+                },
+                {
+                    "nombre": "Desarmado",
+                    "critPrincipal": "CON",
+                    "turno": "50",
+                    "ataque": "",
+                    "defensa": "",
+                    "defensaTipo": "Par",
+                    "danio": "10"
+                }
+            ],
+            "armadura": {
+                "armaduraTotal": {
+                    "FIL": "2",
+                    "CON": "2",
+                    "PEN": "2",
+                    "CAL": "2",
+                    "ELE": "2",
+                    "FRI": "2",
+                    "ENE": "2"
+                }
+            }
+        }
+    },
+    {
+        "Atributos": {
+            "AGI": "5",
+            "CON": "5",
+            "DES": "6",
+            "FUE": "5",
+            "INT": "10",
+            "PER": "6",
+            "POD": "10",
+            "VOL": "7"
+        },
+        "Habilidades": {
+            "Advertir": "45",
+            "Buscar": "40",
+            "Historia": "65",
+            "Memorizar": "50",
+            "Ciencia": "55",
+            "Medicina": "45",
+            "Ocultismo": "55"
+        },
+        "datosElementales": {
+            "cansancio": "2",
+            "puntosDeVida": "85",
+            "regeneracion": "1",
+            "nombre": "mago experto",
+            "categoria": "Hechicero",
+            "nivel": "3",
+            "movimiento": "5",
+            "imagen": ""
+        },
+        "Resistencias": {
+            "Pres. Base": "45",
+            "RF": "40",
+            "RE": "40",
+            "RV": "40",
+            "RM": "65",
+            "RP": "45"
+        },
+        "Combate": {
+            "armas": [
+                {
+                    "nombre": "Magia",
+                    "critPrincipal": "40",
+                    "turno": "",
+                    "ataque": "",
+                    "defensa": "",
+                    "defensaTipo": "Par",
+                    "danio": ""
+                },
+                {
+                    "nombre": "Desarmado",
+                    "critPrincipal": "CON",
+                    "turno": "65",
+                    "ataque": "",
+                    "defensa": "",
+                    "defensaTipo": "Par",
+                    "danio": "10"
+                }
+            ],
+            "armadura": {
+                "armaduraTotal": {
+                    "FIL": "2",
+                    "CON": "2",
+                    "PEN": "2",
+                    "CAL": "2",
+                    "ELE": "2",
+                    "FRI": "2",
+                    "ENE": "2"
+                }
+            }
+        }
+    },
+    {
+        "Atributos": {
+            "AGI": "5",
+            "CON": "5",
+            "DES": "6",
+            "FUE": "5",
+            "INT": "11",
+            "PER": "7",
+            "POD": "12",
+            "VOL": "8"
+        },
+        "Habilidades": {
+            "Advertir": "80",
+            "Buscar": "70",
+            "Historia": "110",
+            "Memorizar": "120",
+            "Ciencia": "85",
+            "Medicina": "85",
+            "Ocultismo": "160"
+        },
+        "datosElementales": {
+            "cansancio": "2",
+            "puntosDeVida": "95",
+            "regeneracion": "1",
+            "nombre": "maestro Hechicero",
+            "categoria": "Hechicero",
+            "nivel": "5",
+            "movimiento": "5",
+            "imagen": ""
+        },
+        "Resistencias": {
+            "Pres. Base": "55",
+            "RF": "50",
+            "RE": "50",
+            "RV": "50",
+            "RM": "80",
+            "RP": "60"
+        },
+        "Combate": {
+            "armas": [
+                {
+                    "nombre": "Magia",
+                    "critPrincipal": "50",
+                    "turno": "",
+                    "ataque": "",
+                    "defensa": "",
+                    "defensaTipo": "Par",
+                    "danio": ""
+                },
+                {
+                    "nombre": "Desarmado",
+                    "critPrincipal": "CON",
+                    "turno": "70",
+                    "ataque": "",
+                    "defensa": "",
+                    "defensaTipo": "Par",
+                    "danio": "10"
+                }
+            ],
+            "armadura": {
+                "armaduraTotal": {
+                    "FIL": "2",
+                    "CON": "2",
+                    "PEN": "2",
+                    "CAL": "2",
+                    "ELE": "2",
+                    "FRI": "2",
+                    "ENE": "2"
+                }
+            }
+        }
+    },
+    {
+        "Atributos": {
+            "AGI": "5",
+            "CON": "5",
+            "DES": "6",
+            "FUE": "5",
+            "INT": "12",
+            "PER": "6",
+            "POD": "13",
+            "VOL": "8"
+        },
+        "Habilidades": {
+            "Advertir": "140",
+            "Buscar": "90",
+            "Historia": "120",
+            "Memorizar": "120",
+            "Ciencia": "120",
+            "Medicina": "100",
+            "Ocultismo": "180"
+        },
+        "datosElementales": {
+            "cansancio": "2",
+            "puntosDeVida": "110",
+            "regeneracion": "1",
+            "nombre": "archimago",
+            "categoria": "Hechicero",
+            "nivel": "8",
+            "movimiento": "5",
+            "imagen": ""
+        },
+        "Resistencias": {
+            "Pres. Base": "70",
+            "RF": "65",
+            "RE": "65",
+            "RV": "65",
+            "RM": "100",
+            "RP": "75"
+        },
+        "Combate": {
+            "armas": [
+                {
+                    "nombre": "Magia",
+                    "critPrincipal": "65",
+                    "turno": "",
+                    "ataque": "",
+                    "defensa": "",
+                    "defensaTipo": "Par",
+                    "danio": ""
+                },
+                {
+                    "nombre": "Desarmado",
+                    "critPrincipal": "CON",
+                    "turno": "86",
+                    "ataque": "",
+                    "defensa": "",
+                    "defensaTipo": "Par",
+                    "danio": "10"
+                }
+            ],
+            "armadura": {
+                "armaduraTotal": {
+                    "FIL": "2",
+                    "CON": "2",
+                    "PEN": "2",
+                    "CAL": "2",
+                    "ELE": "2",
+                    "FRI": "2",
+                    "ENE": "2"
+                }
+            }
+        }
+    },
+    {
+        "Atributos": {
+            "AGI": "6",
+            "CON": "5",
+            "DES": "5",
+            "FUE": "5",
+            "INT": "7",
+            "PER": "6",
+            "POD": "10",
+            "VOL": "9"
+        },
+        "Habilidades": {
+            "Advertir": "50",
+            "Buscar": "30",
+            "Animales": "40",
+            "Historia": "35",
+            "Memorizar": "25",
+            "Ciencia": "35",
+            "Medicina": "20",
+            "Ocultismo": "60"
+        },
+        "datosElementales": {
+            "cansancio": "2",
+            "puntosDeVida": "80",
+            "regeneracion": "1",
+            "nombre": "invocador",
+            "categoria": "Convocador",
+            "nivel": "2",
+            "movimiento": "6",
+            "imagen": ""
+        },
+        "Resistencias": {
+            "Pres. Base": "40",
+            "RF": "35",
+            "RE": "35",
+            "RV": "35",
+            "RM": "60",
+            "RP": "55"
+        },
+        "Combate": {
+            "armas": [
+                {
+                    "nombre": "Magia",
+                    "critPrincipal": "35",
+                    "turno": "",
+                    "ataque": "",
+                    "defensa": "",
+                    "defensaTipo": "Par",
+                    "danio": ""
+                },
+                {
+                    "nombre": "Desarmado",
+                    "critPrincipal": "CON",
+                    "turno": "55",
+                    "ataque": "",
+                    "defensa": "",
+                    "defensaTipo": "Par",
+                    "danio": "10"
+                }
+            ],
+            "armadura": {
+                "armaduraTotal": {
+                    "FIL": "2",
+                    "CON": "2",
+                    "PEN": "2",
+                    "CAL": "2",
+                    "ELE": "2",
+                    "FRI": "2",
+                    "ENE": "2"
+                }
+            }
+        }
+    },
+    {
+        "Atributos": {
+            "AGI": "6",
+            "CON": "5",
+            "DES": "5",
+            "FUE": "5",
+            "INT": "10",
+            "PER": "6",
+            "POD": "11",
+            "VOL": "10"
+        },
+        "Habilidades": {
+            "Advertir": "65",
+            "Buscar": "45",
+            "Animales": "60",
+            "Historia": "65",
+            "Memorizar": "75",
+            "Ciencia": "50",
+            "Medicina": "50",
+            "Ocultismo": "265"
+        },
+        "datosElementales": {
+            "cansancio": "2",
+            "puntosDeVida": "95",
+            "regeneracion": "1",
+            "nombre": "señor de las bestias",
+            "categoria": "Convocador",
+            "nivel": "5",
+            "movimiento": "6",
+            "imagen": ""
+        },
+        "Resistencias": {
+            "Pres. Base": "55",
+            "RF": "50",
+            "RE": "50",
+            "RV": "50",
+            "RM": "80",
+            "RP": "65"
+        },
+        "Combate": {
+            "armas": [
+                {
+                    "nombre": "Magia",
+                    "critPrincipal": "50",
+                    "turno": "",
+                    "ataque": "",
+                    "defensa": "",
+                    "defensaTipo": "Par",
+                    "danio": ""
+                },
+                {
+                    "nombre": "Desarmado",
+                    "critPrincipal": "CON",
+                    "turno": "70",
+                    "ataque": "",
+                    "defensa": "",
+                    "defensaTipo": "Par",
+                    "danio": "10"
+                }
+            ],
+            "armadura": {
+                "armaduraTotal": {
+                    "FIL": "2",
+                    "CON": "2",
+                    "PEN": "2",
+                    "CAL": "2",
+                    "ELE": "2",
+                    "FRI": "2",
+                    "ENE": "2"
+                }
+            }
+        }
+    },
+    {
+        "Atributos": {
+            "AGI": "8",
+            "CON": "7",
+            "DES": "6",
+            "FUE": "7",
+            "INT": "3",
+            "PER": "9",
+            "POD": "5",
+            "VOL": "5"
+        },
+        "Habilidades": {
+            "Saltar": "20",
+            "Trepar": "20",
+            "Advertir": "50",
+            "Buscar": "30",
+            "Nadar": "20",
+            "Rastrear": "50",
+            "Sigilo": "40",
+            "Ocultarse": "30",
+            "Intimidar": "20"
+        },
+        "datosElementales": {
+            "cansancio": "2",
+            "puntosDeVida": "95",
+            "regeneracion": "1",
+            "nombre": "mastín",
+            "categoria": "Novel",
+            "nivel": "0",
+            "movimiento": "8",
+            "imagen": ""
+        },
+        "Resistencias": {
+            "Pres. Base": "30",
+            "RF": "25",
+            "RE": "25",
+            "RV": "25",
+            "RM": "20",
+            "RP": "20"
+        },
+        "Combate": {
+            "armas": [
+                {
+                    "nombre": "Natural",
+                    "critPrincipal": "25",
+                    "turno": "",
+                    "ataque": "50",
+                    "defensa": "50",
+                    "defensaTipo": "Esq",
+                    "danio": "45"
+                },
+                {
+                    "nombre": "Desarmado",
+                    "critPrincipal": "CON",
+                    "turno": "55",
+                    "ataque": "50",
+                    "defensa": "50",
+                    "defensaTipo": "Esq",
+                    "danio": "15"
+                }
+            ],
+            "armadura": {
+                "armaduraTotal": {
+                    "FIL": "2",
+                    "CON": "2",
+                    "PEN": "2",
+                    "CAL": "2",
+                    "ELE": "2",
+                    "FRI": "2",
+                    "ENE": "2"
+                }
+            }
+        }
+    },
+    {
+        "Atributos": {
+            "AGI": "8",
+            "CON": "7",
+            "DES": "6",
+            "FUE": "8",
+            "INT": "3",
+            "PER": "10",
+            "POD": "5",
+            "VOL": "5"
+        },
+        "Habilidades": {
+            "Saltar": "20",
+            "Trepar": "20",
+            "Advertir": "80",
+            "Buscar": "45",
+            "Nadar": "20",
+            "Rastrear": "75",
+            "Sigilo": "60",
+            "Ocultarse": "60",
+            "Intimidar": "20"
+        },
+        "datosElementales": {
+            "cansancio": "2",
+            "puntosDeVida": "105",
+            "regeneracion": "1",
+            "nombre": "lobo",
+            "categoria": "Novel",
+            "nivel": "1",
+            "movimiento": "8",
+            "imagen": ""
+        },
+        "Resistencias": {
+            "Pres. Base": "35",
+            "RF": "35",
+            "RE": "35",
+            "RV": "35",
+            "RM": "30",
+            "RP": "30"
+        },
+        "Combate": {
+            "armas": [
+                {
+                    "nombre": "Natural",
+                    "critPrincipal": "35",
+                    "turno": "",
+                    "ataque": "60",
+                    "defensa": "50",
+                    "defensaTipo": "Esq",
+                    "danio": "50"
+                },
+                {
+                    "nombre": "Desarmado",
+                    "critPrincipal": "CON",
+                    "turno": "60",
+                    "ataque": "60",
+                    "defensa": "50",
+                    "defensaTipo": "Esq",
+                    "danio": "20"
+                }
+            ],
+            "armadura": {
+                "armaduraTotal": {
+                    "FIL": "2",
+                    "CON": "2",
+                    "PEN": "2",
+                    "CAL": "2",
+                    "ELE": "2",
+                    "FRI": "2",
+                    "ENE": "2"
+                }
+            }
+        }
+    },
+    {
+        "Atributos": {
+            "AGI": "10",
+            "CON": "8",
+            "DES": "3",
+            "FUE": "10",
+            "INT": "2",
+            "PER": "4",
+            "POD": "5",
+            "VOL": "2"
+        },
+        "Habilidades": {
+            "Atletismo": "100",
+            "Saltar": "20",
+            "Advertir": "25",
+            "Nadar": "20",
+            "Proezas de fuerza": "40"
+        },
+        "datosElementales": {
+            "cansancio": "3",
+            "puntosDeVida": "300",
+            "regeneracion": "2",
+            "nombre": "caballo",
+            "categoria": "Novel",
+            "nivel": "0",
+            "movimiento": "10",
+            "imagen": ""
+        },
+        "Resistencias": {
+            "Pres. Base": "30",
+            "RF": "30",
+            "RE": "30",
+            "RV": "30",
+            "RM": "20",
+            "RP": "5"
+        },
+        "Combate": {
+            "armas": [
+                {
+                    "nombre": "Natural",
+                    "critPrincipal": "30",
+                    "turno": "",
+                    "ataque": "40",
+                    "defensa": "",
+                    "defensaTipo": "Par",
+                    "danio": "55"
+                },
+                {
+                    "nombre": "Desarmado",
+                    "critPrincipal": "CON",
+                    "turno": "40",
+                    "ataque": "40",
+                    "defensa": "",
+                    "defensaTipo": "Par",
+                    "danio": "25"
+                }
+            ],
+            "armadura": {
+                "armaduraTotal": {
+                    "FIL": "3",
+                    "CON": "3",
+                    "PEN": "3",
+                    "CAL": "3",
+                    "ELE": "3",
+                    "FRI": "3",
+                    "ENE": "3"
+                }
+            }
+        }
+    },
+    {
+        "Atributos": {
+            "AGI": "11",
+            "CON": "8",
+            "DES": "3",
+            "FUE": "10",
+            "INT": "3",
+            "PER": "5",
+            "POD": "5",
+            "VOL": "5"
+        },
+        "Habilidades": {
+            "Atletismo": "175",
+            "Saltar": "65",
+            "Advertir": "50",
+            "Nadar": "25",
+            "Estilo": "40",
+            "Proezas de fuerza": "40"
+        },
+        "datosElementales": {
+            "cansancio": "3",
+            "puntosDeVida": "310",
+            "regeneracion": "2",
+            "nombre": "purasangre",
+            "categoria": "Novel",
+            "nivel": "1",
+            "movimiento": "11",
+            "imagen": ""
+        },
+        "Resistencias": {
+            "Pres. Base": "35",
+            "RF": "40",
+            "RE": "40",
+            "RV": "40",
+            "RM": "30",
+            "RP": "30"
+        },
+        "Combate": {
+            "armas": [
+                {
+                    "nombre": "Natural",
+                    "critPrincipal": "40",
+                    "turno": "",
+                    "ataque": "40",
+                    "defensa": "",
+                    "defensaTipo": "Par",
+                    "danio": "55"
+                },
+                {
+                    "nombre": "Desarmado",
+                    "critPrincipal": "CON",
+                    "turno": "50",
+                    "ataque": "40",
+                    "defensa": "",
+                    "defensaTipo": "Par",
+                    "danio": "25"
+                }
+            ],
+            "armadura": {
+                "armaduraTotal": {
+                    "FIL": "3",
+                    "CON": "3",
+                    "PEN": "3",
+                    "CAL": "3",
+                    "ELE": "3",
+                    "FRI": "3",
+                    "ENE": "3"
+                }
+            }
+        }
+    },
+    {
+        "Atributos": {
+            "AGI": "10",
+            "CON": "9",
+            "DES": "3",
+            "FUE": "11",
+            "INT": "3",
+            "PER": "5",
+            "POD": "5",
+            "VOL": "5"
+        },
+        "Habilidades": {
+            "Atletismo": "150",
+            "Saltar": "70",
+            "Advertir": "60",
+            "Nadar": "45",
+            "Proezas de fuerza": "140"
+        },
+        "datosElementales": {
+            "cansancio": "3",
+            "puntosDeVida": "620",
+            "regeneracion": "2",
+            "nombre": "caballo de guerra",
+            "categoria": "Novel",
+            "nivel": "2",
+            "movimiento": "10",
+            "imagen": ""
+        },
+        "Resistencias": {
+            "Pres. Base": "40",
+            "RF": "50",
+            "RE": "50",
+            "RV": "50",
+            "RM": "40",
+            "RP": "40"
+        },
+        "Combate": {
+            "armas": [
+                {
+                    "nombre": "Natural",
+                    "critPrincipal": "50",
+                    "turno": "",
+                    "ataque": "70",
+                    "defensa": "",
+                    "defensaTipo": "Par",
+                    "danio": "60"
+                },
+                {
+                    "nombre": "Desarmado",
+                    "critPrincipal": "CON",
+                    "turno": "50",
+                    "ataque": "70",
+                    "defensa": "",
+                    "defensaTipo": "Par",
+                    "danio": "30"
+                }
+            ],
+            "armadura": {
+                "armaduraTotal": {
+                    "FIL": "3",
+                    "CON": "3",
+                    "PEN": "3",
+                    "CAL": "3",
+                    "ELE": "3",
+                    "FRI": "3",
+                    "ENE": "3"
+                }
+            }
+        }
+    },
+    {
+        "Atributos": {
+            "AGI": "10",
+            "CON": "9",
+            "DES": "3",
+            "FUE": "11",
+            "INT": "3",
+            "PER": "5",
+            "POD": "5",
+            "VOL": "5"
+        },
+        "Habilidades": {
+            "Atletismo": "150",
+            "Saltar": "70",
+            "Advertir": "60",
+            "Nadar": "45",
+            "Proezas de fuerza": "140"
+        },
+        "datosElementales": {
+            "cansancio": "5",
+            "puntosDeVida": "620",
+            "regeneracion": "2",
+            "nombre": "caballo de guerra",
+            "categoria": "Novel",
+            "nivel": "2",
+            "movimiento": "10",
+            "imagen": ""
+        },
+        "Resistencias": {
+            "Pres. Base": "40",
+            "RF": "50",
+            "RE": "50",
+            "RV": "50",
+            "RM": "40",
+            "RP": "40"
+        },
+        "Combate": {
+            "armas": [
+                {
+                    "nombre": "Natural",
+                    "critPrincipal": "50",
+                    "turno": "",
+                    "ataque": "70",
+                    "defensa": "",
+                    "defensaTipo": "Par",
+                    "danio": "60"
+                },
+                {
+                    "nombre": "Desarmado",
+                    "critPrincipal": "CON",
+                    "turno": "50",
+                    "ataque": "70",
+                    "defensa": "",
+                    "defensaTipo": "Par",
+                    "danio": "30"
+                }
+            ],
+            "armadura": {
+                "armaduraTotal": {
+                    "FIL": "5",
+                    "CON": "5",
+                    "PEN": "5",
+                    "CAL": "5",
+                    "ELE": "5",
+                    "FRI": "5",
+                    "ENE": "5"
+                }
+            }
+        }
+    },
+    {
+        "Atributos": {
+            "AGI": "6",
+            "CON": "12",
+            "DES": "6",
+            "FUE": "11",
+            "INT": "3",
+            "PER": "5",
+            "POD": "5",
+            "VOL": "4"
+        },
+        "Habilidades": {
+            "Atletismo": "80",
+            "Saltar": "30",
+            "Trepar": "20",
+            "Advertir": "50",
+            "Nadar": "40",
+            "Rastrear": "60",
+            "Proezas de fuerza": "130"
+        },
+        "datosElementales": {
+            "cansancio": "4",
+            "puntosDeVida": "760",
+            "regeneracion": "5",
+            "nombre": "oso",
+            "categoria": "Novel",
+            "nivel": "2",
+            "movimiento": "6",
+            "imagen": ""
+        },
+        "Resistencias": {
+            "Pres. Base": "40",
+            "RF": "55",
+            "RE": "55",
+            "RV": "55",
+            "RM": "35",
+            "RP": "30"
+        },
+        "Combate": {
+            "armas": [
+                {
+                    "nombre": "Natural",
+                    "critPrincipal": "55",
+                    "turno": "",
+                    "ataque": "70",
+                    "defensa": "",
+                    "defensaTipo": "Par",
+                    "danio": "60"
+                },
+                {
+                    "nombre": "Desarmado",
+                    "critPrincipal": "CON",
+                    "turno": "50",
+                    "ataque": "70",
+                    "defensa": "",
+                    "defensaTipo": "Par",
+                    "danio": "30"
+                }
+            ],
+            "armadura": {
+                "armaduraTotal": {
+                    "FIL": "4",
+                    "CON": "4",
+                    "PEN": "4",
+                    "CAL": "4",
+                    "ELE": "4",
+                    "FRI": "4",
+                    "ENE": "4"
+                }
+            }
+        }
+    },
+    {
+        "Atributos": {
+            "AGI": "5",
+            "CON": "13",
+            "DES": "5",
+            "FUE": "13",
+            "INT": "2",
+            "PER": "4",
+            "POD": "5",
+            "VOL": "4"
+        },
+        "Habilidades": {
+            "Atletismo": "90",
+            "Advertir": "60",
+            "Nadar": "50",
+            "Rastrear": "45",
+            "Proezas de fuerza": "170"
+        },
+        "datosElementales": {
+            "cansancio": "6",
+            "puntosDeVida": "1600",
+            "regeneracion": "6",
+            "nombre": "elefante",
+            "categoria": "Novel",
+            "nivel": "3",
+            "movimiento": "5",
+            "imagen": ""
+        },
+        "Resistencias": {
+            "Pres. Base": "45",
+            "RF": "65",
+            "RE": "65",
+            "RV": "65",
+            "RM": "40",
+            "RP": "35"
+        },
+        "Combate": {
+            "armas": [
+                {
+                    "nombre": "Natural",
+                    "critPrincipal": "65",
+                    "turno": "",
+                    "ataque": "60",
+                    "defensa": "",
+                    "defensaTipo": "Par",
+                    "danio": "80"
+                },
+                {
+                    "nombre": "Desarmado",
+                    "critPrincipal": "CON",
+                    "turno": "26",
+                    "ataque": "60",
+                    "defensa": "",
+                    "defensaTipo": "Par",
+                    "danio": "35"
+                }
+            ],
+            "armadura": {
+                "armaduraTotal": {
+                    "FIL": "6",
+                    "CON": "6",
+                    "PEN": "6",
+                    "CAL": "6",
+                    "ELE": "6",
+                    "FRI": "6",
+                    "ENE": "6"
+                }
+            }
+        }
+    },
+    {
+        "Atributos": {
+            "AGI": "6",
+            "CON": "5",
+            "DES": "4",
+            "FUE": "7",
+            "INT": "3",
+            "PER": "11",
+            "POD": "5",
+            "VOL": "5"
+        },
+        "Habilidades": {
+            "Advertir": "130",
+            "Buscar": "90",
+            "Proezas de fuerza": "90"
+        },
+        "datosElementales": {
+            "cansancio": "4",
+            "puntosDeVida": "75",
+            "regeneracion": "1",
+            "nombre": "águila imperial",
+            "categoria": "Novel",
+            "nivel": "1",
+            "movimiento": "6",
+            "imagen": ""
+        },
+        "Resistencias": {
+            "Pres. Base": "35",
+            "RF": "30",
+            "RE": "30",
+            "RV": "30",
+            "RM": "30",
+            "RP": "30"
+        },
+        "Combate": {
+            "armas": [
+                {
+                    "nombre": "Natural",
+                    "critPrincipal": "30",
+                    "turno": "",
+                    "ataque": "60",
+                    "defensa": "40",
+                    "defensaTipo": "Esq",
+                    "danio": "40"
+                },
+                {
+                    "nombre": "Desarmado",
+                    "critPrincipal": "CON",
+                    "turno": "50",
+                    "ataque": "60",
+                    "defensa": "40",
+                    "defensaTipo": "Esq",
+                    "danio": "15"
+                }
+            ],
+            "armadura": {
+                "armaduraTotal": {
+                    "FIL": "4",
+                    "CON": "4",
+                    "PEN": "4",
+                    "CAL": "4",
+                    "ELE": "4",
+                    "FRI": "4",
+                    "ENE": "4"
+                }
+            }
+        }
     }
   ]
 }

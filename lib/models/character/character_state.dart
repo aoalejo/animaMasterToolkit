@@ -37,7 +37,7 @@ class CharacterState {
         actualValue: 0,
         maxValue: 0,
         name: '',
-        step: 2,
+        step: 1,
         description: '',
       );
     }
@@ -58,7 +58,16 @@ class CharacterState {
     final hitPoints = getConsumable(ConsumableType.hitPoints);
 
     if (hitPoints == null) return 100;
+    if (hitPoints.maxValue == 0) return 100;
 
     return ((hitPoints.actualValue / hitPoints.maxValue) * 100).toInt();
+  }
+
+  CharacterState copy() {
+    return CharacterState(
+      currentTurn: Roll(description: "", roll: 1, rolls: []),
+      consumables: consumables.map((e) => e.copy()).toList(),
+      modifiers: ModifiersState(),
+    );
   }
 }

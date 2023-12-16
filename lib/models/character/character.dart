@@ -317,16 +317,21 @@ class Character extends HiveObject {
   Character copyWith({String? uuid, bool? isNpc, int? number}) {
     return Character(
       uuid: uuid ?? this.uuid,
-      attributes: attributes,
+      attributes: attributes.copy(),
       skills: skills,
       profile: profile.copy(isNpc: isNpc, number: number),
-      combat: combat,
-      state: state,
-      ki: ki,
-      mystical: mystical,
-      psychic: psychic,
-      resistances: resistances,
+      combat: combat.copy(),
+      state: state.copy(),
+      ki: ki?.copy(),
+      mystical: mystical?.copy(),
+      psychic: psychic?.copy(),
+      resistances: resistances.copy(),
     );
+  }
+
+  bool isOn(String filter) {
+    var string = profile.name + profile.category + profile.level.toString();
+    return string.toLowerCase().contains(filter.toLowerCase());
   }
 }
 
