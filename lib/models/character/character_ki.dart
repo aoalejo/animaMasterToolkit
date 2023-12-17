@@ -45,4 +45,14 @@ class CharacterKi {
     maximumAccumulation = JsonUtils.integer(json['acumulacionMax'], 0);
     genericAccumulation = JsonUtils.integer(json['acumulacionGenerica'], 0);
   }
+
+  CharacterKi copy() {
+    return CharacterKi(
+      accumulationsPerAttribute: accumulationsPerAttribute.copy(),
+      maximumPerAttribute: maximumPerAttribute.copy(),
+      skills: skills,
+      maximumAccumulation: maximumAccumulation,
+      genericAccumulation: genericAccumulation,
+    );
+  }
 }

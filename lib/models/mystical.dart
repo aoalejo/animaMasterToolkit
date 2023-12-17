@@ -45,4 +45,17 @@ class Mystical {
       spellsPurchased: Map<String, String>.from(json['Libres']),
     );
   }
+
+  Mystical copy() {
+    return Mystical(
+      zeonRegeneration: zeonRegeneration,
+      act: act,
+      zeon: zeon,
+      paths: paths,
+      subPaths: subPaths,
+      metamagic: metamagic,
+      spellsMaintained: spellsMaintained,
+      spellsPurchased: spellsPurchased,
+    );
+  }
 }

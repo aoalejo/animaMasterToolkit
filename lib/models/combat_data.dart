@@ -35,4 +35,11 @@ class CombatData {
         ? ArmourData.fromJson(json['armadura'])
         : ArmourData(calculatedArmour: Armour(), armours: []);
   }
+
+  CombatData copy() {
+    return CombatData(
+      armour: armour,
+      weapons: weapons,
+    );
+  }
 }

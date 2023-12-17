@@ -33,4 +33,14 @@ class PsychicData {
       innate: Map<String, String>.from(json['Innatos']),
     );
   }
+
+  PsychicData copy() {
+    return PsychicData(
+      freeCvs: freeCvs,
+      disciplines: disciplines,
+      patterns: patterns,
+      powers: powers,
+      innate: innate,
+    );
+  }
 }

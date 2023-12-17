@@ -3,8 +3,10 @@ import 'package:flutter/material.dart';
 class CustomCombatCard extends StatelessWidget {
   final String title;
   final List<Widget> children;
+  final Widget? actionTitle;
 
-  CustomCombatCard({required this.title, required this.children});
+  CustomCombatCard(
+      {required this.title, required this.children, this.actionTitle});
 
   @override
   Widget build(BuildContext context) {
@@ -20,14 +22,20 @@ class CustomCombatCard extends StatelessWidget {
           SizedBox(
             width: 10000,
             child: ColoredBox(
-              color: theme.primaryColor,
-              child: Text(
-                title,
-                textAlign: TextAlign.center,
-                style: theme.textTheme.titleMedium!
-                    .copyWith(color: theme.colorScheme.onPrimary),
-              ),
-            ),
+                color: theme.primaryColor,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    SizedBox(width: 8),
+                    Text(
+                      title,
+                      textAlign: TextAlign.center,
+                      style: theme.textTheme.titleMedium!
+                          .copyWith(color: theme.colorScheme.onPrimary),
+                    ),
+                    actionTitle ?? SizedBox(width: 8),
+                  ],
+                )),
           ),
           SizedBox(
             height: 8,

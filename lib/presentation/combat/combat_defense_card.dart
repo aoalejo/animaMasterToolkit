@@ -1,6 +1,6 @@
 import 'package:amt/models/enums.dart';
 import 'package:amt/models/roll.dart';
-import 'package:amt/presentation/TextFormFieldCustom.dart';
+import 'package:amt/presentation/text_form_field_custom.dart';
 import 'package:amt/presentation/bottom_sheet_modifiers.dart';
 import 'package:amt/presentation/charactersTable/modifiers_card.dart';
 import 'package:amt/presentation/combat/custom_combat_card.dart';
@@ -15,10 +15,22 @@ class CombatDefenseCard extends StatelessWidget {
   Widget build(BuildContext context) {
     var appState = context.watch<CharactersPageState>();
     final theme = Theme.of(context);
+    final combatState = appState.combatState;
+    final defense = combatState.defense;
+    final character = defense.character;
 
     return CustomCombatCard(
       title:
-          "${appState.defendingCharacter()?.profile.name ?? ""} ${appState.combatState.defenseType.displayable} (Total: ${appState.combatState.finalDefenseValue()})",
+          "${character?.profile.name ?? ""} ${defense.defenseType.displayable} (Total: ${combatState.finalDefenseValue()})",
+      actionTitle: IconButton(
+        icon: Icon(
+          Icons.delete,
+          color: theme.colorScheme.onPrimary,
+        ),
+        onPressed: () {
+          appState.removeDefendant();
+        },
+      ),
       children: [
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -31,7 +43,7 @@ class CombatDefenseCard extends StatelessWidget {
                     height: 40,
                     child: TextFormFieldCustom(
                       inputType: TextInputType.number,
-                      text: appState.combatState.defenseRoll,
+                      text: defense.roll,
                       label: "Tirada de defensa",
                       onChanged: (value) =>
                           {appState.updateCombatState(defenseRoll: value)},
@@ -55,29 +67,41 @@ class CombatDefenseCard extends StatelessWidget {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Flexible(
+                        if (character != null)
+                          Flexible(
                             flex: 1,
-                            child: Text(appState.combatState.baseDefense)),
+                            child: Tooltip(
+                              message: character
+                                  .calculateDefense(defense.defenseType),
+                              child: TextFormFieldCustom(
+                                enabled: false,
+                                label: "Defensa",
+                                text: character
+                                    .calculateDefense(defense.defenseType),
+                              ),
+                            ),
+                          ),
+                        if (character != null) SizedBox(width: 4),
                         Flexible(
                           flex: 2,
                           child: TextFormFieldCustom(
                             inputType: TextInputType.number,
-                            label: "Defensa base",
+                            label:
+                                character != null ? "Modificador" : "Defensa",
                             suffixIcon: TextButton(
                               child: Text("+Can"),
                               onPressed: () {
-                                var character = appState.defendingCharacter();
-
                                 character?.removeFrom(
                                   1,
                                   ConsumableType.fatigue,
                                 );
-                                appState.combatState.baseDefenseModifiers =
-                                    "${appState.combatState.baseDefenseModifiers}+15";
+                                appState.updateCombatState(
+                                    baseDefenseModifiers:
+                                        "${defense.defense}+15");
                                 appState.updateCharacter(character);
                               },
                             ),
-                            text: appState.combatState.baseDefenseModifiers,
+                            text: defense.defense,
                             onChanged: (value) => appState.updateCombatState(
                                 baseDefenseModifiers: value),
                           ),
@@ -99,18 +123,35 @@ class CombatDefenseCard extends StatelessWidget {
                       height: 40,
                       child: Row(
                         children: [
-                          Expanded(
+                          if (character != null)
+                            Flexible(
+                              flex: 1,
+                              child: TextFormFieldCustom(
+                                enabled: false,
+                                label: "Armadura",
+                                text: character.combat.armour.calculatedArmour
+                                    .armourFor(combatState.attack.damageType)
+                                    .toString(),
+                              ),
+                            ),
+                          if (character != null) SizedBox(width: 4),
+                          Flexible(
+                            flex: 2,
                             child: TextFormFieldCustom(
                               onChanged: (value) {
-                                appState.updateCombatState(armour: value);
+                                appState.updateCombatState(
+                                    armourModifier: value);
                               },
-                              text: appState.combatState.armour,
-                              label: "Tabla de armadura",
+                              text: defense.armour,
+                              label: character != null
+                                  ? "Modificador"
+                                  : "Armadura",
                               inputType: TextInputType.number,
                               suffixIcon: IconButton(
                                 icon: Icon(Icons.delete),
                                 onPressed: () {
-                                  appState.updateCombatState(armour: "0");
+                                  appState.updateCombatState(
+                                      armourModifier: "0");
                                 },
                               ),
                             ),
@@ -124,12 +165,11 @@ class CombatDefenseCard extends StatelessWidget {
                     height: 40,
                     child: TextButton(
                       onPressed: () {
-                        var combat = appState.combatState;
                         BottomSheetModifiers.show(
                             context,
-                            combat.defenderModifiers,
+                            combatState.defense.modifiers,
                             Modifiers.getSituationalModifiers(
-                                combat.defenseType.toModifierType()),
+                                defense.defenseType.toModifierType()),
                             (newModifiers) {
                           appState.updateCombatState(
                               defenderModifiers: newModifiers);
@@ -143,9 +183,8 @@ class CombatDefenseCard extends StatelessWidget {
                             textAlign: TextAlign.center,
                           ),
                           Text(
-                            appState.combatState.defenderModifiers
-                                .getAllModifiersForDefense(
-                                    appState.combatState.defenseType)
+                            defense.modifiers
+                                .getAllModifiersForDefense(defense.defenseType)
                                 .toString(),
                             style: theme.textTheme.bodySmall,
                             textAlign: TextAlign.center,
@@ -166,48 +205,50 @@ class CombatDefenseCard extends StatelessWidget {
           width: 8000,
           child: ModifiersCard(
             aspectRatio: 0.2,
-            modifiers: appState.combatState.defenderModifiers.getAll(),
+            modifiers: defense.modifiers.getAll(),
             onSelected: (selected) {
-              appState.combatState.defenderModifiers.removeModifier(selected);
-              appState.updateCombatState(
-                  defenderModifiers: appState.combatState.defenderModifiers);
+              defense.modifiers.removeModifier(selected);
+              appState.updateCombatState(defenderModifiers: defense.modifiers);
             },
           ),
         ),
-        SizedBox(
-          height: 60,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Flexible(
-                child: Text(
-                  "Cantidad de defensas:",
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
+        if (character != null)
+          SizedBox(
+            height: 60,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Flexible(
+                  child: Text(
+                    "Cantidad de defensas:",
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                  ),
                 ),
-              ),
-              ToggleButtons(
-                isSelected: [
-                  appState.combatState.defenseNumber == 1,
-                  appState.combatState.defenseNumber == 2,
-                  appState.combatState.defenseNumber == 3,
-                  appState.combatState.defenseNumber == 4,
-                  appState.combatState.defenseNumber >= 5,
-                ],
-                onPressed: (index) =>
-                    {appState.updateCombatState(defenseNumber: index + 1)},
-                borderRadius: const BorderRadius.all(Radius.circular(8)),
-                children: [
-                  Text("1"),
-                  Text("2"),
-                  Text("3"),
-                  Text("4"),
-                  Text("5+"),
-                ],
-              ),
-            ],
+                ToggleButtons(
+                  isSelected: [
+                    character.state.defenseNumber == 1,
+                    character.state.defenseNumber == 2,
+                    character.state.defenseNumber == 3,
+                    character.state.defenseNumber == 4,
+                    character.state.defenseNumber >= 5,
+                  ],
+                  onPressed: (index) {
+                    character.state.defenseNumber = index + 1;
+                    appState.updateCharacter(character);
+                  },
+                  borderRadius: const BorderRadius.all(Radius.circular(8)),
+                  children: [
+                    Text("1"),
+                    Text("2"),
+                    Text("3"),
+                    Text("4"),
+                    Text("5+"),
+                  ],
+                ),
+              ],
+            ),
           ),
-        ),
       ],
     );
   }

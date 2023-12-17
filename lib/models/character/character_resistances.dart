@@ -1,4 +1,4 @@
-import 'package:amt/models/character/character.dart';
+import 'package:amt/utils/Key_value.dart';
 import 'package:amt/utils/json_utils.dart';
 import 'package:hive/hive.dart';
 
@@ -40,7 +40,7 @@ class CharacterResistances {
   List<KeyValue> toKeyValue() {
     List<KeyValue> list = [];
 
-    list.add(KeyValue(key: "Pres. Base", value: presence.toString()));
+    list.add(KeyValue(key: "Pres", value: presence.toString()));
     list.add(KeyValue(key: "RF", value: physicalResistance.toString()));
     list.add(KeyValue(key: "RE", value: diseasesResistance.toString()));
     list.add(KeyValue(key: "RV", value: poisonResistance.toString()));
@@ -48,5 +48,16 @@ class CharacterResistances {
     list.add(KeyValue(key: "RP", value: physicResistance.toString()));
 
     return list;
+  }
+
+  CharacterResistances copy() {
+    return CharacterResistances(
+      presence: presence,
+      physicResistance: physicResistance,
+      physicalResistance: physicalResistance,
+      diseasesResistance: diseasesResistance,
+      magicalResistance: magicalResistance,
+      poisonResistance: poisonResistance,
+    );
   }
 }

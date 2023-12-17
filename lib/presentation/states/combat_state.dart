@@ -1,109 +1,138 @@
-import 'package:amt/models/armour.dart';
+import 'package:amt/models/character/character.dart';
 import 'package:amt/models/enums.dart';
 import 'package:amt/models/modifiers_state.dart';
-import 'package:amt/models/weapon.dart';
 import 'package:amt/resources/modifiers.dart';
 import 'package:function_tree/function_tree.dart';
 
-class ScreenCombatState {
-  var attackRoll = "";
-  var baseDamage = "";
-  var baseAttack = "";
-  var baseAttackModifiers = "";
+class ScreenCombatStateAttack {
+  var roll = "";
+  var damage = "";
+  var attack = "";
+
   var damageType = DamageTypes.ene;
+  Character? character;
 
-  var defenseRoll = "";
+  ModifiersState modifiers = ModifiersState();
+}
+
+class ScreenCombatStateDefense {
+  var roll = "";
   var armour = "";
-  var baseDefense = "";
-  var baseDefenseModifiers = "";
-
-  var finalTurnAttacker = 0;
-  var finalTurnDefense = 0;
+  var defense = "";
 
   var defenseType = DefenseType.parry;
-  var defenseNumber = 0;
+  Character? character;
 
-  String attackingCharacter = "";
-  String defendantCharacter = "";
+  ModifiersState modifiers = ModifiersState();
+}
 
+class ScreenCombatStateCritical {
   var criticalRoll = "";
   var localizationRoll = "";
   var physicalResistanceBase = "";
   var physicalResistanceRoll = "";
   var damageDone = "";
   var modifierReduction = "";
+}
 
-  var actualHitPoints = 0;
+enum SurpriseType {
+  attacker,
+  defender,
+  none;
 
-  Weapon selectedWeapon = Weapon(
-      name: "",
-      turn: 0,
-      attack: 0,
-      defense: 0,
-      defenseType: DefenseType.dodge,
-      principalDamage: DamageTypes.pen,
-      damage: 0);
+  static calculate({
+    required Character? attacker,
+    required Character? defendant,
+  }) {
+    var attackerRoll = attacker?.state.currentTurn.roll ?? 0;
+    var defenderRoll = defendant?.state.currentTurn.roll ?? 0;
 
-  Armour selectedArmour = Armour();
+    if (attackerRoll - 150 > defenderRoll) {
+      return SurpriseType.attacker;
+    }
 
-  ModifiersState attackingModifiers = ModifiersState();
-  ModifiersState defenderModifiers = ModifiersState();
+    if (defenderRoll - 150 > attackerRoll) {
+      return SurpriseType.defender;
+    }
+
+    return SurpriseType.none;
+  }
+}
+
+class ScreenCombatState {
+  ScreenCombatStateAttack attack = ScreenCombatStateAttack();
+  ScreenCombatStateDefense defense = ScreenCombatStateDefense();
+  ScreenCombatStateCritical critical = ScreenCombatStateCritical();
+  SurpriseType surpriseType = SurpriseType.none;
 
   int finalAttackValue() {
     var roll = 0;
-    var attack = 0;
-    var attackModifier = 0;
+    var attackBase = 0;
+    var modifier = 0;
+    var surprise = 0;
 
     try {
-      roll = attackRoll.interpret().toInt();
+      roll = attack.roll.interpret().toInt();
     } catch (e) {
       // Defaults to 0
     }
 
     try {
-      attack = baseAttack.interpret().toInt();
+      attackBase = attack.character!.calculateAttack().interpret().toInt();
     } catch (e) {
       // Defaults to 0
     }
 
     try {
-      attackModifier = baseAttackModifiers.interpret().toInt();
+      modifier = attack.attack.interpret().toInt();
     } catch (e) {
       // Defaults to 0
     }
 
-    return attackingModifiers.getAllModifiersForType(ModifiersType.attack) +
+    if (surpriseType == SurpriseType.attacker) {
+      surprise = 90;
+    }
+
+    return attack.modifiers.getAllModifiersForType(ModifiersType.attack) +
         roll +
-        attack +
-        attackModifier;
+        attackBase +
+        modifier +
+        surprise;
   }
 
   int finalDefenseValue() {
     var roll = 0;
-    var defense = 0;
+    var defenseBase = 0;
     var numberOfDefensesModifier = 0;
     var defenseModifier = 0;
-    var surpriseModifier = isSurprised() ? -150 : 0;
+    var surprise = 0;
 
     try {
-      roll = defenseRoll.interpret().toInt();
+      roll = defense.roll.interpret().toInt();
     } catch (e) {
       // Defaults to 0
     }
 
     try {
-      defense = baseDefense.interpret().toInt();
+      defenseBase = defense.character!
+          .calculateDefense(defense.defenseType)
+          .interpret()
+          .toInt();
     } catch (e) {
       // Defaults to 0
     }
 
     try {
-      defenseModifier = baseDefenseModifiers.interpret().toInt();
+      defenseModifier = defense.defense.interpret().toInt();
     } catch (e) {
       // Defaults to 0
     }
 
-    switch (defenseNumber) {
+    if (surpriseType == SurpriseType.defender) {
+      surprise = 90;
+    }
+
+    switch (defense.character?.state.defenseNumber ?? 1) {
       case 1:
         numberOfDefensesModifier = 0;
       case 2:
@@ -116,60 +145,79 @@ class ScreenCombatState {
         numberOfDefensesModifier = -90;
     }
 
-    return defenderModifiers.getAllModifiersForDefense(defenseType) +
+    return defense.modifiers.getAllModifiersForDefense(defense.defenseType) +
         roll +
-        defense +
+        defenseBase +
         numberOfDefensesModifier +
-        surpriseModifier +
-        defenseModifier;
-  }
-
-  bool isSurprised() {
-    return finalTurnAttacker - 150 >= finalTurnDefense;
+        defenseModifier +
+        surprise;
   }
 
   int calculateDamage() {
-    var attack = finalAttackValue();
-    var defense = finalDefenseValue();
+    var attackValue = finalAttackValue();
+    var defenseValue = finalDefenseValue();
 
-    var difference = attack - defense;
+    var difference = attackValue - defenseValue;
 
-    var baseDamageCalc = 0;
-    var armourType = 0;
+    var baseDamage = attack.character?.selectedWeapon().damage ?? 0;
+    var armourType = defense.character?.combat.armour.calculatedArmour
+            .armourFor(attack.damageType) ??
+        0;
+
+    var baseDamageModifier = 0;
+    var armourTypeModifier = 0;
 
     try {
-      baseDamageCalc = baseDamage.interpret().toInt();
+      baseDamageModifier = attack.damage.interpret().toInt();
     } catch (e) {
       // Defaults to 0
     }
 
     try {
-      armourType = armour.interpret().toInt();
+      armourTypeModifier = defense.armour.interpret().toInt();
     } catch (e) {
       // Defaults to 0
     }
 
-    return ((baseDamageCalc - armourType * 10) * (difference / 100)).toInt();
+    return ((baseDamageModifier +
+                baseDamage -
+                (armourTypeModifier - armourType) * 10) *
+            (difference / 100))
+        .toInt();
   }
 
-  String combatTotal() {
-    var attack = finalAttackValue();
-    var defense = finalDefenseValue();
+  String calculateResult() {
+    var attackValue = finalAttackValue();
+    var defenseValue = finalDefenseValue();
 
-    var difference = attack - defense;
+    var difference = attackValue - defenseValue;
 
     var damage = calculateDamage();
 
     var critical = "";
+    var surpriseResult = "";
 
-    if (damage >= actualHitPoints / 2) {
+    var hitPoints = defense.character?.state
+        .getConsumable(ConsumableType.hitPoints)
+        ?.actualValue;
+
+    if (hitPoints != null && damage >= hitPoints / 2) {
       critical = " Realiza un daño critico";
     }
 
+    switch (surpriseType) {
+      case SurpriseType.attacker:
+        surpriseResult = "(El atacante sorprende al enemigo)";
+      case SurpriseType.defender:
+        surpriseResult = "(El defensor sorprende al enemigo)";
+      case SurpriseType.none:
+        surpriseResult = "";
+    }
+
     if (difference > 0) {
-      return "Diferencia: $difference ${isSurprised() ? "(+80: ${difference + 80} Sorprendido!)" : ""}, Daño causado: $damage. $critical";
+      return "Diferencia: $difference $surpriseResult, Daño causado: $damage. $critical";
     } else {
-      return "Diferencia: $difference ${isSurprised() ? "(+80: ${difference + 80} Sorprendido!)" : ""}, Contraataca con:  ${-difference ~/ 2}";
+      return "Diferencia: $difference $surpriseResult, Contraataca con:  ${-difference ~/ 2}";
     }
   }
 
@@ -181,25 +229,27 @@ class ScreenCombatState {
     var physicalResistanceRollInt = 0;
 
     try {
-      damageDoneInt = damageDone.interpret().toInt();
+      damageDoneInt = critical.damageDone.interpret().toInt();
     } catch (e) {
       // Defaults to 0
     }
 
     try {
-      criticalRollInt = criticalRoll.interpret().toInt();
+      criticalRollInt = critical.criticalRoll.interpret().toInt();
     } catch (e) {
       // Defaults to 0
     }
 
     try {
-      physicalResistanceBaseInt = physicalResistanceBase.interpret().toInt();
+      physicalResistanceBaseInt =
+          critical.physicalResistanceBase.interpret().toInt();
     } catch (e) {
       // Defaults to 0
     }
 
     try {
-      physicalResistanceRollInt = physicalResistanceRoll.interpret().toInt();
+      physicalResistanceRollInt =
+          critical.physicalResistanceRoll.interpret().toInt();
     } catch (e) {
       // Defaults to 0
     }
@@ -216,7 +266,7 @@ class ScreenCombatState {
     var reduction = 0;
     var calculated = criticalResult();
     try {
-      reduction = modifierReduction.interpret().toInt();
+      reduction = critical.modifierReduction.interpret().toInt();
     } catch (e) {
       return calculated;
     }
@@ -254,7 +304,7 @@ class ScreenCombatState {
     var roll = -1;
 
     try {
-      roll = localizationRoll.interpret().toInt();
+      roll = critical.localizationRoll.interpret().toInt();
     } catch (e) {
       return " - ";
     }

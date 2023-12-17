@@ -3,6 +3,8 @@ import 'package:amt/models/enums.dart';
 import 'package:amt/models/modifiers_state.dart';
 import 'package:amt/presentation/charactersTable/character_info.dart';
 import 'package:amt/presentation/states/characters_page_state.dart';
+import 'package:amt/presentation/states/combat_state.dart';
+import 'package:amt/utils/Int+Extension.dart';
 import 'package:amt/utils/assets.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -87,9 +89,11 @@ class CharactersTable extends StatelessWidget {
               children: [
                 for (var character in appState.characters)
                   Card(
-                    shape: appState.characterAttacking()?.uuid == character.uuid
+                    shape: appState.combatState.attack.character?.uuid ==
+                            character.uuid
                         ? _border(theme.colorScheme.primary)
-                        : appState.defendingCharacter()?.uuid == character.uuid
+                        : appState.combatState.defense.character?.uuid ==
+                                character.uuid
                             ? _border(theme.colorScheme.secondary)
                             : null,
                     child: Row(
@@ -108,7 +112,32 @@ class CharactersTable extends StatelessWidget {
                             size: 3,
                             child: Row(
                               children: [
-                                Text(character.profile.name),
+                                Expanded(
+                                  child: Text(character.profile.name),
+                                ),
+                                Stack(
+                                  alignment: AlignmentDirectional.center,
+                                  children: [
+                                    Padding(
+                                      padding: EdgeInsets.all(8),
+                                      child: CircularProgressIndicator(
+                                        value: character.state
+                                                .getLifePointsPercentage()
+                                                .toDouble() /
+                                            100,
+                                        color: character.state
+                                            .getLifePointsPercentage()
+                                            .percentageColor(),
+                                      ),
+                                    ),
+                                    Text(
+                                      "${character.state.getLifePointsPercentage()}%",
+                                      style: theme.textTheme.bodySmall!
+                                          .copyWith(
+                                              fontWeight: FontWeight.bold),
+                                    ),
+                                  ],
+                                )
                               ],
                             )),
                         _cell(
@@ -157,22 +186,20 @@ class CharactersTable extends StatelessWidget {
                                         child: Assets.knife,
                                       ),
                                       onPressed: () {
-                                        var weapon = character.selectedWeapon();
+                                        var surprise = SurpriseType.calculate(
+                                          attacker: character,
+                                          defendant: appState
+                                              .combatState.defense.character,
+                                        );
 
                                         appState.updateCombatState(
-                                            attackingCharacter: character.uuid,
-                                            attackRoll: "0",
-                                            attackingModifiers:
-                                                ModifiersState(),
-                                            baseAttack:
-                                                character.calculateAttack(),
-                                            baseDamage:
-                                                weapon.damage.toString(),
-                                            attackerTurn: character
-                                                .state.currentTurn.roll,
-                                            selectedWeapon:
-                                                character.selectedWeapon(),
-                                            baseAttackModifiers: "");
+                                          attacking: character,
+                                          attackRoll: "",
+                                          attackingModifiers: ModifiersState(),
+                                          damageModifier: "",
+                                          baseAttackModifiers: "",
+                                          surprise: surprise,
+                                        );
                                       },
                                     ),
                                   ),
@@ -251,22 +278,24 @@ class CharactersTable extends StatelessWidget {
     Character character,
     DefenseType type,
   ) {
-    var hitPoints = character.state.getConsumable(ConsumableType.hitPoints);
     var physicalResistance = character.resistances.physicalResistance;
+    var armour = character.combat.armour.calculatedArmour
+        .armourFor(appState.combatState.attack.damageType)
+        .toString();
+    var surprise = SurpriseType.calculate(
+      attacker: appState.combatState.attack.character,
+      defendant: character,
+    );
 
     appState.updateCombatState(
-      defendantCharacter: character.uuid,
+      defendant: character,
       defenseRoll: "0",
       defenderModifiers: ModifiersState(),
-      baseDefense: character.calculateDefense(type),
-      armour: character.combat.armour.calculatedArmour.fil.toString(),
+      armourModifier: armour,
       defenseType: type,
-      defenseNumber: character.state.defenseNumber,
-      selectedArmour: character.combat.armour.calculatedArmour,
-      defenseTurn: character.state.currentTurn.roll,
       physicalResistanceBase: physicalResistance.toString(),
-      actualHitPoints: hitPoints?.actualValue ?? 0,
       baseDefenseModifiers: "",
+      surprise: surprise,
     );
   }
 }

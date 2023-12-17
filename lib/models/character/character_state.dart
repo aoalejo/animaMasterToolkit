@@ -2,8 +2,6 @@ import 'package:amt/models/character/consumable_state.dart';
 import 'package:amt/models/enums.dart';
 import 'package:amt/models/modifiers_state.dart';
 import 'package:amt/models/roll.dart';
-import 'package:amt/resources/modifiers.dart';
-import 'package:function_tree/function_tree.dart';
 import 'package:hive/hive.dart';
 
 part 'character_state.g.dart';
@@ -39,7 +37,7 @@ class CharacterState {
         actualValue: 0,
         maxValue: 0,
         name: '',
-        step: 2,
+        step: 1,
         description: '',
       );
     }
@@ -48,7 +46,7 @@ class CharacterState {
   CharacterState({
     this.selectedWeaponIndex = 0,
     this.hasAction = true,
-    this.notes = "",
+    this.notes = '',
     this.defenseNumber = 1,
     this.turnModifier = '',
     required this.currentTurn,
@@ -56,19 +54,20 @@ class CharacterState {
     required this.modifiers,
   });
 
-  int calculateTotalForTurn() {
-    var totalTurn = 0;
+  int getLifePointsPercentage() {
+    final hitPoints = getConsumable(ConsumableType.hitPoints);
 
-    try {
-      totalTurn = turnModifier.interpret().toInt();
-      // ignore: empty_catches
-    } catch (e) {
-      print("cannot interpret modifier!");
-    }
+    if (hitPoints == null) return 100;
+    if (hitPoints.maxValue == 0) return 100;
 
-    totalTurn =
-        totalTurn + modifiers.getAllModifiersForType(ModifiersType.turn);
+    return ((hitPoints.actualValue / hitPoints.maxValue) * 100).toInt();
+  }
 
-    return totalTurn;
+  CharacterState copy() {
+    return CharacterState(
+      currentTurn: Roll(description: "", roll: 1, rolls: []),
+      consumables: consumables.map((e) => e.copy()).toList(),
+      modifiers: ModifiersState(),
+    );
   }
 }

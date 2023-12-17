@@ -1,5 +1,5 @@
 import 'package:amt/models/character/character.dart';
-import 'package:amt/presentation/TextFormFieldCustom.dart';
+import 'package:amt/presentation/text_form_field_custom.dart';
 import 'package:amt/presentation/bottom_sheet_modifiers.dart';
 import 'package:amt/presentation/charactersTable/consumable_card.dart';
 import 'package:amt/presentation/charactersTable/modifiers_card.dart';
@@ -22,8 +22,8 @@ class CharacterInfoCard extends StatelessWidget {
     var theme = Theme.of(context);
 
     Character? character = attacking
-        ? appState.characterAttacking()
-        : appState.defendingCharacter();
+        ? appState.combatState.attack.character
+        : appState.combatState.defense.character;
 
     return character != null
         ? Card(

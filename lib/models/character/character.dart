@@ -14,6 +14,8 @@ import 'package:amt/models/psychic_data.dart';
 import 'package:amt/models/roll.dart';
 import 'package:amt/models/weapon.dart';
 import 'package:amt/resources/modifiers.dart';
+import 'package:amt/utils/Key_value.dart';
+import 'package:function_tree/function_tree.dart';
 import 'package:hive/hive.dart';
 import 'package:uuid/uuid.dart';
 
@@ -205,7 +207,7 @@ class Character extends HiveObject {
 
   void rollInitiative() {
     state.currentTurn = Roll.roll(
-      base: selectedWeapon().turn + state.calculateTotalForTurn(),
+      base: calculateTurnBase(),
       turnFumble: true,
     );
   }
@@ -267,23 +269,37 @@ class Character extends HiveObject {
     }
   }
 
-  String getResumedCombatState() {
-    var weapon = selectedWeapon();
-    var pv = state.getConsumable(ConsumableType.hitPoints)?.maxValue ?? 0;
-    var defense = "HE ${weapon.defense}";
+  int calculateTurnBase() {
+    var totalTurn = selectedWeapon().turn;
 
-    if (weapon.defenseType == DefenseType.parry) {
-      defense = "HP ${weapon.defense}";
+    try {
+      totalTurn = totalTurn + state.turnModifier.interpret().toInt();
+    } catch (e) {
+      print("cannot interpret modifier!");
     }
 
-    return "Turno: ${weapon.turn} Pv: $pv HA: ${weapon.attack} $defense Arma: ${weapon.name} (${weapon.damage})";
+    totalTurn =
+        totalTurn + state.modifiers.getAllModifiersForType(ModifiersType.turn);
+
+    return totalTurn;
   }
 
-  String getResumedAttributes() {
-    var attr = attributes
-        .toKeyValue()
-        .map((e) => "${e.key.substring(0, 3)}: ${e.value}");
-    return attr.join(" ");
+  List<KeyValue> getCombatItems() {
+    var weapon = selectedWeapon();
+    var pv = state.getConsumable(ConsumableType.hitPoints)?.maxValue ?? 0;
+    var defense = KeyValue(key: "HE", value: weapon.defense.toString());
+
+    if (weapon.defenseType == DefenseType.parry) {
+      defense = KeyValue(key: "HP", value: weapon.defense.toString());
+    }
+
+    return [
+      KeyValue(key: "Turno", value: weapon.turn.toString()),
+      KeyValue(key: "Pv", value: pv.toString()),
+      KeyValue(key: "HA", value: weapon.attack.toString()),
+      defense,
+      KeyValue(key: weapon.name, value: '${weapon.damage}'),
+    ];
   }
 
   String getResumedSkills() {
@@ -298,49 +314,25 @@ class Character extends HiveObject {
     return skillsStr.join(", ");
   }
 
-  String getResumedResistances() {
-    var resistancesStr =
-        resistances.toKeyValue().map((e) => "${e.key}: ${e.value}");
-
-    return resistancesStr.join(" ");
-  }
-
   Character copyWith({String? uuid, bool? isNpc, int? number}) {
     return Character(
       uuid: uuid ?? this.uuid,
-      attributes: attributes,
+      attributes: attributes.copy(),
       skills: skills,
       profile: profile.copy(isNpc: isNpc, number: number),
-      combat: combat,
-      state: state,
-      ki: ki,
-      mystical: mystical,
-      psychic: psychic,
-      resistances: resistances,
+      combat: combat.copy(),
+      state: state.copy(),
+      ki: ki?.copy(),
+      mystical: mystical?.copy(),
+      psychic: psychic?.copy(),
+      resistances: resistances.copy(),
     );
   }
-}
 
-extension ListToKeyValue on Map<String, dynamic> {
-  List<KeyValue> list({bool interchange = false}) {
-    List<KeyValue> list = [];
-    for (final entry in entries) {
-      list.add(
-        KeyValue(
-          key: interchange ? entry.value.toString() : entry.key.toString(),
-          value: interchange ? entry.key.toString() : entry.value.toString(),
-        ),
-      );
-    }
-    return list;
+  bool isOn(String filter) {
+    var string = profile.name + profile.category + profile.level.toString();
+    return string.toLowerCase().contains(filter.toLowerCase());
   }
-}
-
-class KeyValue {
-  final String key;
-  final String value;
-
-  KeyValue({required this.key, required this.value});
 }
 
 class CharacterList {

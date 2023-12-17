@@ -45,4 +45,15 @@ class ConsumableState {
     required this.description,
     this.type = ConsumableType.other,
   });
+
+  ConsumableState copy() {
+    return ConsumableState(
+      name: name,
+      maxValue: maxValue,
+      actualValue: actualValue,
+      step: step,
+      description: description,
+      type: type,
+    );
+  }
 }
