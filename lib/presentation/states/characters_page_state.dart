@@ -19,6 +19,8 @@ class CharactersPageState extends ChangeNotifier {
   String? errorMessage = "";
   int pageSelected = 0;
 
+  Map<String, bool> explanationsExpanded = {};
+
   late Box<Character> _box;
 
   CharactersPageState() {
@@ -34,6 +36,15 @@ class CharactersPageState extends ChangeNotifier {
       Hive.deleteBoxFromDisk('characters');
       _box = await Hive.openBox('characters');
     }
+  }
+
+  toggleExplanationStatus(String name) {
+    if (explanationsExpanded.containsKey(name)) {
+      explanationsExpanded[name] = !explanationsExpanded[name]!;
+    } else {
+      explanationsExpanded[name] = true;
+    }
+    notifyListeners();
   }
 
   addCharacter(Character character, {bool isNpc = false}) {

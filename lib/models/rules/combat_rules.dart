@@ -44,6 +44,7 @@ class CombatRules {
     var total = attackBaseNumber + modifierNumber + rollNumber + modifiersNumber + surpriseNumber;
 
     return ExplainedText(
+      title: "Ataque final",
       text: "Resultado en ataque: $total",
       explanation:
           "Base: $attackBaseNumber + Modificador: $modifierNumber + Tirada: $rollNumber + Modificadores: $modifiersNumber + Sorpresa: $surpriseNumber",
@@ -70,6 +71,7 @@ class CombatRules {
     var total = modifiersNumber + rollNumber + baseDefenseNumber + numberOfDefensesModifier + modifierNumber + surpriseNumber;
 
     return ExplainedText(
+      title: "Defensa final",
       text: "Resultado en defensa: $total",
       explanation:
           "Base: $baseDefenseNumber + Modificador: $modifierNumber + Tirada: $rollNumber + Modificadores: $modifiersNumber + Sorpresa: $surpriseNumber + Penalizador por defensas: $numberOfDefensesModifier",
@@ -83,7 +85,7 @@ class CombatRules {
     required ExplainedText finalAbsorption,
     required int baseDamage,
   }) {
-    var info = ExplainedText();
+    var info = ExplainedText(title: "Daño");
 
     info.explanations.add(attackValue);
     info.explanations.add(defenseValue);
@@ -129,7 +131,7 @@ class CombatRules {
     required ExplainedText attackValue,
     required ExplainedText defenseValue,
   }) {
-    var info = ExplainedText();
+    var info = ExplainedText(title: "Contraataque");
 
     info.explanations.add(attackValue);
     info.explanations.add(defenseValue);
@@ -159,7 +161,7 @@ class CombatRules {
     required DamageTypes damageType,
     required String? armourTypeModifier,
   }) {
-    var info = ExplainedText();
+    var info = ExplainedText(title: "Absorción");
 
     var armourTypeBase = armour?.armourFor(damageType) ?? 0;
 
@@ -168,7 +170,7 @@ class CombatRules {
     var armourAbsorption = (armourTypeModifierNumber + armourTypeBase) * 10;
 
     info.add(
-      explanation: "Absorción de armadura = (($armourTypeBase + $armourTypeModifier) * 10) + 20",
+      explanation: "Absorción de armadura = (($armourTypeBase + $armourTypeModifier) * 10)",
     );
     var baseAbsorption = 20;
     info.result = armourAbsorption + baseAbsorption;
@@ -189,23 +191,32 @@ class CombatRules {
     return baseDamageOfWeapon + baseDamageModifier;
   }
 
-  static ExplainedText criticalDamage({required Character? defender, required int? damage}) {
-    var info = ExplainedText();
+  static ExplainedText? criticalDamage({required Character? defender, required int? damage}) {
+    var info = ExplainedText(title: "Critico");
     var actualLife = (defender?.state.getConsumable(ConsumableType.hitPoints)?.actualValue ?? 999);
     damage = damage ?? 0;
+
+    var porcentualDamage = ((damage / actualLife) * 100).toInt();
+
+    info.add(
+      explanation: "Vida actual: $actualLife, Daño: $porcentualDamage%",
+    );
 
     if (actualLife / 2 < damage) {
       info.add(
         text: "Realiza un daño crítico",
+        explanation: "Si un ataque daña más de la mitad de la vida actual del objetivo, se considera que realizó un crítico",
         reference: BookReference(page: 95, book: Books.coreExxet),
       );
     } else if (actualLife / 10 < damage) {
       info.add(
         text: "Realiza un daño crítico si fue apuntado a un punto vital",
+        explanation:
+            "Si un ataque apuntado a una zona vital daña más de un décimo de la vida actual del objetivo, se considera que realizó un crítico",
         reference: BookReference(page: 96, book: Books.coreExxet),
       );
     } else {
-      info.add(text: "No realiza daños críticos");
+      return null;
     }
 
     return info;
@@ -264,7 +275,7 @@ class CombatRules {
     required Character? defender,
     required DefenseType defenseType,
   }) {
-    var info = ExplainedText();
+    var info = ExplainedText(title: "Rotura");
     var weaponAttacker = attacker?.selectedWeapon();
     var weaponDefender = defender?.selectedWeapon();
     var armourDefender = (defender?.combat.armour.armours.firstOrNull?.endurance ?? 999);
@@ -288,6 +299,8 @@ class CombatRules {
 
     // Checks attacker weapon vs defender weapon if parry, and vs armour if dodge
     if (defenseType == DefenseType.parry) {
+      info.add(explanation: "Como hace una parada, se calcula la rotura de ambas armas entre sí");
+
       info.add(
         explanation: "Total rotura defensor: Rotura del arma ($breakageDefender) + tirada ($rollDefender) + Bono por fuerza ($modifierDefender)",
       );
@@ -295,20 +308,38 @@ class CombatRules {
       if (totalBreakageDefender > (weaponAttacker?.endurance ?? 999)) {
         info.add(
           text: "El arma del atacante baja una categoría de calidad",
-          explanation: "defensor: (${breakageDefender + modifierDefender} + $rollDefender vs atacante: ${(weaponAttacker?.endurance ?? 999)})",
+          explanation:
+              "defensor: (${breakageDefender + modifierDefender} + $rollDefender (=$totalBreakageDefender) vs atacante: ${(weaponAttacker?.endurance ?? 999)})",
+        );
+      } else {
+        info.add(
+          explanation:
+              "El arma del atacante resiste. defensor: (${breakageDefender + modifierDefender} + $rollDefender (=$totalBreakageDefender) vs atacante: ${(weaponAttacker?.endurance ?? 999)})",
         );
       }
       if (totalBreakageAttacker > (weaponDefender?.endurance ?? 999)) {
         info.add(
           text: "El arma del defensor baja una categoría de calidad",
-          explanation: "atacante: (${breakageAttacker + modifierAttacker} + $rollAttacker vs defensor: ${(weaponDefender?.endurance ?? 999)})",
+          explanation:
+              "atacante: (${breakageAttacker + modifierAttacker} + $rollAttacker (=$totalBreakageAttacker) vs defensor: ${(weaponDefender?.endurance ?? 999)})",
+        );
+      } else {
+        info.add(
+          explanation:
+              "El arma del defensor resiste. atacante: (${breakageAttacker + modifierAttacker} + $rollAttacker (=$totalBreakageAttacker) vs defensor: ${(weaponDefender?.endurance ?? 999)})",
         );
       }
     } else {
+      info.add(explanation: "Como hace una esquiva, se calcula la entereza contra la armadura del defensor solamente");
       if (totalBreakageAttacker > armourDefender) {
         info.add(
           text: "La armadura del defensor se desgasta",
-          explanation: "la armadura baja un nivel de TA (${breakageAttacker + modifierAttacker} + $rollAttacker vs $armourDefender)",
+          explanation:
+              "la armadura baja un nivel de TA (${breakageAttacker + modifierAttacker} + $rollAttacker (=$totalBreakageAttacker) vs $armourDefender)",
+        );
+      } else {
+        info.add(
+          explanation: "la armadura resiste: (${breakageAttacker + modifierAttacker} + $rollAttacker (=$totalBreakageAttacker) vs $armourDefender)",
         );
       }
     }

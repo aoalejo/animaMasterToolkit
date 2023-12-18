@@ -4,9 +4,9 @@ class CustomCombatCard extends StatelessWidget {
   final String title;
   final List<Widget> children;
   final Widget? actionTitle;
+  final double padding;
 
-  CustomCombatCard(
-      {required this.title, required this.children, this.actionTitle});
+  CustomCombatCard({required this.title, required this.children, this.actionTitle, this.padding = 16});
 
   @override
   Widget build(BuildContext context) {
@@ -30,8 +30,7 @@ class CustomCombatCard extends StatelessWidget {
                     Text(
                       title,
                       textAlign: TextAlign.center,
-                      style: theme.textTheme.titleMedium!
-                          .copyWith(color: theme.colorScheme.onPrimary),
+                      style: theme.textTheme.titleMedium!.copyWith(color: theme.colorScheme.onPrimary),
                     ),
                     actionTitle ?? SizedBox(width: 8),
                   ],
@@ -41,7 +40,7 @@ class CustomCombatCard extends StatelessWidget {
             height: 8,
           ),
           Padding(
-            padding: EdgeInsets.all(16),
+            padding: EdgeInsets.all(padding),
             child: Column(
               children: children,
             ),

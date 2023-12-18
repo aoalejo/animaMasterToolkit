@@ -77,10 +77,9 @@ class ScreenCombatState {
     );
   }
 
-  ExplainedText attackResult() {
+  List<ExplainedText> attackResult() {
     print("attackResult START");
-
-    var info = ExplainedText();
+    List<ExplainedText> result = [];
 
     var damage = CombatRules.calculateDamage(
       attackValue: finalAttackValue,
@@ -92,26 +91,18 @@ class ScreenCombatState {
       ),
     );
 
-    info.add(text: damage.text);
-    info.explanations.add(damage);
-
-    print("damage ${damage.text}");
+    result.add(damage);
 
     var critical = CombatRules.criticalDamage(
       defender: defense.character,
       damage: damage.result,
     );
-
-    info.add(text: critical.text);
-    info.explanations.add(critical);
-
-    print("critical ${critical.text}");
+    if (critical != null) result.add(critical);
 
     var counter = CombatRules.calculateCounterBonus(attackValue: finalAttackValue, defenseValue: finalDefenseValue);
 
     if (counter != null) {
-      info.add(text: counter.text);
-      info.explanations.add(counter);
+      result.add(counter);
     }
 
     print("counter ${counter?.text}");
@@ -122,12 +113,9 @@ class ScreenCombatState {
       defenseType: defense.defenseType,
     );
 
-    info.add(text: breakage.text);
-    info.explanations.add(breakage);
+    result.add(breakage);
 
-    print("breakage ${breakage.text}");
-    print("Final text ${info.text}");
-    return info;
+    return result;
   }
 
   int criticalResult() {

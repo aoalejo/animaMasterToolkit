@@ -1,11 +1,17 @@
 class ExplainedText {
+  String title;
   String text;
   String explanation;
   int? result;
   late List<ExplainedText> explanations;
   late List<BookReference> references;
 
-  ExplainedText({this.text = "", this.explanation = "", this.result}) {
+  ExplainedText({
+    required this.title,
+    this.text = "",
+    this.explanation = "",
+    this.result,
+  }) {
     explanations = [];
     references = [];
   }
