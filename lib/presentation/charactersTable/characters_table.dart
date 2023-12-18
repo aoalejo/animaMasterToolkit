@@ -262,7 +262,6 @@ class CharactersTable extends StatelessWidget {
     DefenseType type,
   ) {
     var physicalResistance = character.resistances.physicalResistance;
-    var armour = character.combat.armour.calculatedArmour.armourFor(appState.combatState.attack.damageType).toString();
     var surprise = SurpriseType.calculate(
       attacker: appState.combatState.attack.character,
       defendant: character,
@@ -272,7 +271,7 @@ class CharactersTable extends StatelessWidget {
       defendant: character,
       defenseRoll: "0",
       defenderModifiers: ModifiersState(),
-      armourModifier: armour,
+      armourModifier: "",
       defenseType: type,
       physicalResistanceBase: physicalResistance.toString(),
       baseDefenseModifiers: "",

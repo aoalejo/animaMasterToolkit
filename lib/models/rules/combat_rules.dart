@@ -15,16 +15,17 @@ import 'package:function_tree/function_tree.dart';
 class CombatRules {
   static int numberOfDefensesModifier(int? defenseNumber) {
     switch (defenseNumber ?? 1) {
+      case 0:
+      case 1:
+        return 0;
       case 2:
         return -30;
       case 3:
         return -50;
       case 4:
         return -70;
-      case 5:
-        return -90;
       default:
-        return 0;
+        return -90;
     }
   }
 

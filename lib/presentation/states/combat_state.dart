@@ -77,11 +77,8 @@ class ScreenCombatState {
     );
   }
 
-  List<ExplainedText> attackResult() {
-    print("attackResult START");
-    List<ExplainedText> result = [];
-
-    var damage = CombatRules.calculateDamage(
+  ExplainedText calculateDamage() {
+    return CombatRules.calculateDamage(
       attackValue: finalAttackValue,
       defenseValue: finalDefenseValue,
       finalAbsorption: calculateFinalAbsorption,
@@ -90,6 +87,13 @@ class ScreenCombatState {
         damageModifier: attack.damage,
       ),
     );
+  }
+
+  List<ExplainedText> attackResult() {
+    print("attackResult START");
+    List<ExplainedText> result = [];
+
+    var damage = calculateDamage();
 
     result.add(damage);
 

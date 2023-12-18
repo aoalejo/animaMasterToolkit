@@ -62,7 +62,9 @@ class CombatReturnCard extends StatelessWidget {
               onPressed: () {
                 var character = appState.combatState.defense.character;
 
-                var damage = 0; //appState.combatState.calculateDamage();
+                var damage = appState.combatState.calculateDamage().result ?? 0;
+
+                if (damage < 10) damage = 0;
 
                 character?.removeFrom(
                   damage,
