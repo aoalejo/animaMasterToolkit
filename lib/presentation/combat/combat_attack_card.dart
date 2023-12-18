@@ -21,15 +21,17 @@ class CombatAttackCard extends StatelessWidget {
 
     return CustomCombatCard(
       title: "${character?.profile.name ?? ""} Ataca (Total: ${appState.combatState.finalAttackValue.result})",
-      actionTitle: IconButton(
-        icon: Icon(
-          Icons.delete,
-          color: theme.colorScheme.onPrimary,
-        ),
-        onPressed: () {
-          appState.removeAttacker();
-        },
-      ),
+      actionTitle: character == null
+          ? null
+          : IconButton(
+              icon: Icon(
+                Icons.close,
+                color: theme.colorScheme.onPrimary,
+              ),
+              onPressed: () {
+                appState.removeAttacker();
+              },
+            ),
       children: [
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -156,7 +158,12 @@ class CombatAttackCard extends StatelessWidget {
                                         ],
                                       ),
                                     )
-                                  : null,
+                                  : IconButton(
+                                      icon: Icon(Icons.delete),
+                                      onPressed: () {
+                                        appState.updateCombatState(damageModifier: "");
+                                      },
+                                    ),
                             ),
                           ),
                         ],

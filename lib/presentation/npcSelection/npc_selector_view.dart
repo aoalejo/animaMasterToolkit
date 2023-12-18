@@ -30,8 +30,7 @@ class NPCSelector {
                       child: TextFormFieldCustom(
                         suffixIcon: Icon(Icons.search),
                         text: filter,
-                        onChanged: (newFilter) =>
-                            setState(() => filter = newFilter),
+                        onChanged: (newFilter) => setState(() => filter = newFilter),
                       )),
                   IconButton(
                     onPressed: () {
@@ -47,9 +46,8 @@ class NPCSelector {
                         context: context,
                         builder: (context) {
                           return AlertDialog(
-                            title: Text("Borrar personajes"),
-                            content:
-                                Text("Seguro que desea borrar todos los NPC?"),
+                            title: Text("Borrar todos los NPC"),
+                            content: Text("¿seguro que desea borrar todos los NPC de la lista de personajes activos?"),
                             actions: [
                               OutlinedButton(
                                 onPressed: () {
@@ -87,8 +85,7 @@ class NPCSelector {
                   crossAxisCount: 1,
                   childAspectRatio: 1.5,
                   children: [
-                    for (var character
-                        in characters0.where((element) => element.isOn(filter)))
+                    for (var character in characters0.where((element) => element.isOn(filter)))
                       CharacterNPCCard(
                         character,
                         theme,

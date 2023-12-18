@@ -1,6 +1,5 @@
 import 'package:amt/models/character/status_modifier.dart';
 import 'package:amt/models/roll.dart';
-import 'package:amt/models/rules/rules.dart';
 import 'package:amt/presentation/text_form_field_custom.dart';
 import 'package:amt/presentation/combat/custom_combat_card.dart';
 import 'package:amt/presentation/states/characters_page_state.dart';

@@ -21,15 +21,17 @@ class CombatDefenseCard extends StatelessWidget {
 
     return CustomCombatCard(
       title: "${character?.profile.name ?? ""} ${defense.defenseType.displayable} (Total: ${combatState.finalDefenseValue.result})",
-      actionTitle: IconButton(
-        icon: Icon(
-          Icons.delete,
-          color: theme.colorScheme.onPrimary,
-        ),
-        onPressed: () {
-          appState.removeDefendant();
-        },
-      ),
+      actionTitle: character == null
+          ? null
+          : IconButton(
+              icon: Icon(
+                Icons.close,
+                color: theme.colorScheme.onPrimary,
+              ),
+              onPressed: () {
+                appState.removeDefendant();
+              },
+            ),
       children: [
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -136,7 +138,7 @@ class CombatDefenseCard extends StatelessWidget {
                               suffixIcon: IconButton(
                                 icon: Icon(Icons.delete),
                                 onPressed: () {
-                                  appState.updateCombatState(armourModifier: "0");
+                                  appState.updateCombatState(armourModifier: "");
                                 },
                               ),
                             ),

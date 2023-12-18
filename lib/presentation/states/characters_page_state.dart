@@ -58,6 +58,12 @@ class CharactersPageState extends ChangeNotifier {
       characters.add(newChar);
       _box.add(newChar);
     } else {
+      var hasCharacterWithSameName = characters.where((element) => element.profile.name == character.profile.name);
+
+      if (hasCharacterWithSameName.isNotEmpty) {
+        character.profile.name = "${character.profile.name} #${hasCharacterWithSameName.length + 1}";
+      }
+
       characters.add(character);
       _box.add(character);
     }
@@ -225,8 +231,7 @@ class CharactersPageState extends ChangeNotifier {
 
           for (var file in files) {
             var character = Character.fromJson(jsonDecode(file));
-            characters.add(character);
-            _box.add(character);
+            addCharacter(character);
           }
         } else {
           // For desktop
@@ -235,11 +240,7 @@ class CharactersPageState extends ChangeNotifier {
           for (var file in files) {
             final json = await file.readAsString(encoding: Windows1252Codec());
             var character = Character.fromJson(jsonDecode(json));
-            print(character.toString());
-            characters.add(character);
-            print("character added");
-
-            _box.add(character);
+            addCharacter(character);
           }
         }
       } else {
@@ -248,7 +249,5 @@ class CharactersPageState extends ChangeNotifier {
     } catch (e) {
       errorMessage = "$errorMessage ${e.toString()}";
     }
-
-    notifyListeners();
   }
 }
