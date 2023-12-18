@@ -2,10 +2,10 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
 
-import 'package:amt/models/armour.dart';
 import 'package:amt/models/character/character.dart';
 import 'package:amt/models/enums.dart';
 import 'package:amt/models/modifiers_state.dart';
+import 'package:amt/models/rules/rules.dart';
 import 'package:amt/presentation/states/combat_state.dart';
 import 'package:enough_convert/windows.dart';
 import 'package:file_picker/file_picker.dart';
@@ -38,9 +38,7 @@ class CharactersPageState extends ChangeNotifier {
 
   addCharacter(Character character, {bool isNpc = false}) {
     if (isNpc) {
-      var number =
-          characters.where((element) => element.profile.isNpc ?? false).length +
-              1;
+      var number = characters.where((element) => element.profile.isNpc ?? false).length + 1;
       var newChar = character.copyWith(
         uuid: Uuid().v4(),
         isNpc: isNpc,
@@ -113,24 +111,16 @@ class CharactersPageState extends ChangeNotifier {
     String? baseDefenseModifiers,
     SurpriseType? surprise,
   }) {
-    combatState.attack.attack =
-        baseAttackModifiers ?? combatState.attack.attack;
-    combatState.defense.defense =
-        baseDefenseModifiers ?? combatState.defense.defense;
+    combatState.attack.attack = baseAttackModifiers ?? combatState.attack.attack;
+    combatState.defense.defense = baseDefenseModifiers ?? combatState.defense.defense;
 
-    combatState.critical.modifierReduction =
-        modifierReduction ?? combatState.critical.modifierReduction;
-    combatState.critical.localizationRoll =
-        localizationRoll ?? combatState.critical.localizationRoll;
+    combatState.critical.modifierReduction = modifierReduction ?? combatState.critical.modifierReduction;
+    combatState.critical.localizationRoll = localizationRoll ?? combatState.critical.localizationRoll;
 
-    combatState.critical.damageDone =
-        damageDone ?? combatState.critical.damageDone;
-    combatState.critical.physicalResistanceBase =
-        physicalResistanceBase ?? combatState.critical.physicalResistanceBase;
-    combatState.critical.criticalRoll =
-        criticalRoll ?? combatState.critical.criticalRoll;
-    combatState.critical.physicalResistanceRoll =
-        physicalResistanceRoll ?? combatState.critical.physicalResistanceRoll;
+    combatState.critical.damageDone = damageDone ?? combatState.critical.damageDone;
+    combatState.critical.physicalResistanceBase = physicalResistanceBase ?? combatState.critical.physicalResistanceBase;
+    combatState.critical.criticalRoll = criticalRoll ?? combatState.critical.criticalRoll;
+    combatState.critical.physicalResistanceRoll = physicalResistanceRoll ?? combatState.critical.physicalResistanceRoll;
 
     combatState.attack.roll = attackRoll ?? combatState.attack.roll;
     combatState.attack.damage = damageModifier ?? combatState.attack.damage;
@@ -138,18 +128,15 @@ class CharactersPageState extends ChangeNotifier {
     combatState.defense.roll = defenseRoll ?? combatState.defense.roll;
     combatState.defense.armour = armourModifier ?? combatState.defense.armour;
 
-    combatState.defense.defenseType =
-        defenseType ?? combatState.defense.defenseType;
+    combatState.defense.defenseType = defenseType ?? combatState.defense.defenseType;
 
     combatState.attack.damageType = damageType ?? combatState.attack.damageType;
 
     combatState.attack.character = attacking ?? combatState.attack.character;
     combatState.defense.character = defendant ?? combatState.defense.character;
 
-    combatState.attack.modifiers =
-        attackingModifiers ?? combatState.attack.modifiers;
-    combatState.defense.modifiers =
-        defenderModifiers ?? combatState.defense.modifiers;
+    combatState.attack.modifiers = attackingModifiers ?? combatState.attack.modifiers;
+    combatState.defense.modifiers = defenderModifiers ?? combatState.defense.modifiers;
 
     combatState.surpriseType = surprise ?? combatState.surpriseType;
 
@@ -171,8 +158,7 @@ class CharactersPageState extends ChangeNotifier {
           element.attack = min(element.attack + 5, element.midValue ?? 0);
           element.dodge = min(element.dodge + 5, element.midValue ?? 0);
           element.parry = min(element.parry + 5, element.midValue ?? 0);
-          element.physicalAction =
-              min(element.physicalAction + 5, element.midValue ?? 0);
+          element.physicalAction = min(element.physicalAction + 5, element.midValue ?? 0);
           element.turn = min(element.turn + 5, element.midValue ?? 0);
         }
       }
@@ -201,8 +187,7 @@ class CharactersPageState extends ChangeNotifier {
   void updateCharacter(Character? character) {
     if (character == null) return;
 
-    int index =
-        characters.indexWhere((element) => element.uuid == character.uuid);
+    int index = characters.indexWhere((element) => element.uuid == character.uuid);
 
     characters[index] = character;
 
@@ -225,9 +210,7 @@ class CharactersPageState extends ChangeNotifier {
       if (result != null) {
         if (result.files.first.bytes != null) {
           // For web
-          List<String> files = result.files
-              .map((file) => Windows1252Codec().decode(file.bytes!.toList()))
-              .toList();
+          List<String> files = result.files.map((file) => Windows1252Codec().decode(file.bytes!.toList())).toList();
 
           for (var file in files) {
             var character = Character.fromJson(jsonDecode(file));
@@ -236,8 +219,7 @@ class CharactersPageState extends ChangeNotifier {
           }
         } else {
           // For desktop
-          List<File> files =
-              result.paths.map((path) => File(path ?? "")).toList();
+          List<File> files = result.paths.map((path) => File(path ?? "")).toList();
 
           for (var file in files) {
             final json = await file.readAsString(encoding: Windows1252Codec());

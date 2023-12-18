@@ -4,5 +4,11 @@
         "zeon"
     ],
     "cmake.configureOnOpen": true,
-    "java.configuration.updateBuildConfiguration": "interactive"
+    "java.configuration.updateBuildConfiguration": "interactive",
+    "dart.lineLength": 150,
+    "[dart]": {
+        "editor.rulers": [
+            150
+        ],
+    }
 }

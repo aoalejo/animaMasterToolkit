@@ -1,7 +1,9 @@
 import 'package:amt/models/character/character.dart';
 import 'package:amt/models/enums.dart';
 import 'package:amt/models/modifiers_state.dart';
+import 'package:amt/models/rules/rules.dart';
 import 'package:amt/resources/modifiers.dart';
+import 'package:amt/utils/explained_text.dart';
 import 'package:function_tree/function_tree.dart';
 
 class ScreenCombatStateAttack {
@@ -35,190 +37,97 @@ class ScreenCombatStateCritical {
   var modifierReduction = "";
 }
 
-enum SurpriseType {
-  attacker,
-  defender,
-  none;
-
-  static calculate({
-    required Character? attacker,
-    required Character? defendant,
-  }) {
-    var attackerRoll = attacker?.state.currentTurn.roll ?? 0;
-    var defenderRoll = defendant?.state.currentTurn.roll ?? 0;
-
-    if (attackerRoll - 150 > defenderRoll) {
-      return SurpriseType.attacker;
-    }
-
-    if (defenderRoll - 150 > attackerRoll) {
-      return SurpriseType.defender;
-    }
-
-    return SurpriseType.none;
-  }
-}
-
 class ScreenCombatState {
   ScreenCombatStateAttack attack = ScreenCombatStateAttack();
   ScreenCombatStateDefense defense = ScreenCombatStateDefense();
   ScreenCombatStateCritical critical = ScreenCombatStateCritical();
   SurpriseType surpriseType = SurpriseType.none;
 
-  int finalAttackValue() {
-    var roll = 0;
-    var attackBase = 0;
-    var modifier = 0;
-    var surprise = 0;
-
-    try {
-      roll = attack.roll.interpret().toInt();
-    } catch (e) {
-      // Defaults to 0
-    }
-
-    try {
-      attackBase = attack.character!.calculateAttack().interpret().toInt();
-    } catch (e) {
-      // Defaults to 0
-    }
-
-    try {
-      modifier = attack.attack.interpret().toInt();
-    } catch (e) {
-      // Defaults to 0
-    }
-
-    if (surpriseType == SurpriseType.attacker) {
-      surprise = 90;
-    }
-
-    return attack.modifiers.getAllModifiersForType(ModifiersType.attack) +
-        roll +
-        attackBase +
-        modifier +
-        surprise;
+  String get criticalLocalization {
+    return CombatRules.getCriticalLocalization(critical.criticalRoll);
   }
 
-  int finalDefenseValue() {
-    var roll = 0;
-    var defenseBase = 0;
-    var numberOfDefensesModifier = 0;
-    var defenseModifier = 0;
-    var surprise = 0;
-
-    try {
-      roll = defense.roll.interpret().toInt();
-    } catch (e) {
-      // Defaults to 0
-    }
-
-    try {
-      defenseBase = defense.character!
-          .calculateDefense(defense.defenseType)
-          .interpret()
-          .toInt();
-    } catch (e) {
-      // Defaults to 0
-    }
-
-    try {
-      defenseModifier = defense.defense.interpret().toInt();
-    } catch (e) {
-      // Defaults to 0
-    }
-
-    if (surpriseType == SurpriseType.defender) {
-      surprise = 90;
-    }
-
-    switch (defense.character?.state.defenseNumber ?? 1) {
-      case 1:
-        numberOfDefensesModifier = 0;
-      case 2:
-        numberOfDefensesModifier = -30;
-      case 3:
-        numberOfDefensesModifier = -50;
-      case 4:
-        numberOfDefensesModifier = -70;
-      case 5:
-        numberOfDefensesModifier = -90;
-    }
-
-    return defense.modifiers.getAllModifiersForDefense(defense.defenseType) +
-        roll +
-        defenseBase +
-        numberOfDefensesModifier +
-        defenseModifier +
-        surprise;
+  ExplainedText get finalAttackValue {
+    return CombatRules.finalAttackValue(
+      roll: attack.roll,
+      baseAttack: attack.character?.calculateAttack(),
+      modifier: attack.attack,
+      surpriseType: surpriseType,
+      modifiers: attack.modifiers,
+    );
   }
 
-  int calculateDamage() {
-    var attackValue = finalAttackValue();
-    var defenseValue = finalDefenseValue();
-
-    var difference = attackValue - defenseValue;
-
-    var baseDamage = attack.character?.selectedWeapon().damage ?? 0;
-    var armourType = defense.character?.combat.armour.calculatedArmour
-            .armourFor(attack.damageType) ??
-        0;
-
-    var baseDamageModifier = 0;
-    var armourTypeModifier = 0;
-
-    try {
-      baseDamageModifier = attack.damage.interpret().toInt();
-    } catch (e) {
-      // Defaults to 0
-    }
-
-    try {
-      armourTypeModifier = defense.armour.interpret().toInt();
-    } catch (e) {
-      // Defaults to 0
-    }
-
-    return ((baseDamageModifier +
-                baseDamage -
-                (armourTypeModifier - armourType) * 10) *
-            (difference / 100))
-        .toInt();
+  ExplainedText get finalDefenseValue {
+    return CombatRules.finalDefenseValue(
+      roll: defense.roll,
+      baseDefense: defense.character?.calculateDefense(defense.defenseType),
+      modifier: defense.defense,
+      surpriseType: surpriseType,
+      modifiers: defense.modifiers,
+      defenseType: defense.defenseType.toModifierType(),
+      defensesNumber: defense.character?.state.defenseNumber,
+    );
   }
 
-  String calculateResult() {
-    var attackValue = finalAttackValue();
-    var defenseValue = finalDefenseValue();
+  ExplainedText get calculateFinalAbsorption {
+    return CombatRules.calculateFinalAbsorption(
+      armour: defense.character?.combat.armour.calculatedArmour,
+      damageType: attack.damageType,
+      armourTypeModifier: defense.armour,
+    );
+  }
 
-    var difference = attackValue - defenseValue;
+  ExplainedText attackResult() {
+    print("attackResult START");
 
-    var damage = calculateDamage();
+    var info = ExplainedText();
 
-    var critical = "";
-    var surpriseResult = "";
+    var damage = CombatRules.calculateDamage(
+      attackValue: finalAttackValue,
+      defenseValue: finalDefenseValue,
+      finalAbsorption: calculateFinalAbsorption,
+      baseDamage: CombatRules.calculateBaseDamage(
+        weapon: attack.character?.selectedWeapon(),
+        damageModifier: attack.damage,
+      ),
+    );
 
-    var hitPoints = defense.character?.state
-        .getConsumable(ConsumableType.hitPoints)
-        ?.actualValue;
+    info.add(text: damage.text);
+    info.explanations.add(damage);
 
-    if (hitPoints != null && damage >= hitPoints / 2) {
-      critical = " Realiza un daño critico";
+    print("damage ${damage.text}");
+
+    var critical = CombatRules.criticalDamage(
+      defender: defense.character,
+      damage: damage.result,
+    );
+
+    info.add(text: critical.text);
+    info.explanations.add(critical);
+
+    print("critical ${critical.text}");
+
+    var counter = CombatRules.calculateCounterBonus(attackValue: finalAttackValue, defenseValue: finalDefenseValue);
+
+    if (counter != null) {
+      info.add(text: counter.text);
+      info.explanations.add(counter);
     }
 
-    switch (surpriseType) {
-      case SurpriseType.attacker:
-        surpriseResult = "(El atacante sorprende al enemigo)";
-      case SurpriseType.defender:
-        surpriseResult = "(El defensor sorprende al enemigo)";
-      case SurpriseType.none:
-        surpriseResult = "";
-    }
+    print("counter ${counter?.text}");
 
-    if (difference > 0) {
-      return "Diferencia: $difference $surpriseResult, Daño causado: $damage. $critical";
-    } else {
-      return "Diferencia: $difference $surpriseResult, Contraataca con:  ${-difference ~/ 2}";
-    }
+    var breakage = CombatRules.calculateBreakage(
+      attacker: attack.character,
+      defender: defense.character,
+      defenseType: defense.defenseType,
+    );
+
+    info.add(text: breakage.text);
+    info.explanations.add(breakage);
+
+    print("breakage ${breakage.text}");
+    print("Final text ${info.text}");
+    return info;
   }
 
   int criticalResult() {
@@ -241,23 +150,18 @@ class ScreenCombatState {
     }
 
     try {
-      physicalResistanceBaseInt =
-          critical.physicalResistanceBase.interpret().toInt();
+      physicalResistanceBaseInt = critical.physicalResistanceBase.interpret().toInt();
     } catch (e) {
       // Defaults to 0
     }
 
     try {
-      physicalResistanceRollInt =
-          critical.physicalResistanceRoll.interpret().toInt();
+      physicalResistanceRollInt = critical.physicalResistanceRoll.interpret().toInt();
     } catch (e) {
       // Defaults to 0
     }
 
-    var result = damageDoneInt +
-        criticalRollInt -
-        physicalResistanceBaseInt -
-        physicalResistanceRollInt;
+    var result = damageDoneInt + criticalRollInt - physicalResistanceBaseInt - physicalResistanceRollInt;
 
     return result;
   }
@@ -279,8 +183,7 @@ class ScreenCombatState {
     var description = "Resultado de $critical";
 
     if (critical > 1) {
-      description =
-          '$description:\nSe recibe un negativo a toda acción de $critical. El penalizador se recupera a un ritmo de 5 puntos por asalto.';
+      description = '$description:\nSe recibe un negativo a toda acción de $critical. El penalizador se recupera a un ritmo de 5 puntos por asalto.';
     }
 
     if (critical > 50) {
@@ -298,57 +201,5 @@ class ScreenCombatState {
     }
 
     return description;
-  }
-
-  String getCriticalLocalization() {
-    var roll = -1;
-
-    try {
-      roll = critical.localizationRoll.interpret().toInt();
-    } catch (e) {
-      return " - ";
-    }
-
-    if (roll == -1) return " - ";
-
-    if (roll >= 91) return "($roll) Cabeza";
-
-    if (roll >= 89) return "($roll) Pierna izquierda - Pie";
-
-    if (roll >= 85) return "($roll) Pierna izquierda - Pantorilla";
-
-    if (roll >= 81) return "($roll) Pierna izquierda - Muslo";
-
-    if (roll >= 79) return "($roll) Pierna derecha - Pie";
-
-    if (roll >= 75) return "($roll) Pierna derecha - Pantorilla";
-
-    if (roll >= 71) return "($roll) Pierna derecha - Muslo";
-
-    if (roll >= 69) return "($roll) Brazo izquierdo - Mano";
-
-    if (roll >= 65) return "($roll) Brazo izquierdo - Antebrazo inferior";
-
-    if (roll >= 61) return "($roll) Brazo izquierdo - Antebrazo superior";
-
-    if (roll >= 59) return "($roll) Brazo derecho - Mano";
-
-    if (roll >= 55) return "($roll) Brazo derecho - Antebrazo inferior";
-
-    if (roll >= 51) return "($roll) Brazo derecho - Antebrazo superior";
-
-    if (roll >= 49) return "($roll) Torso - Corazón";
-
-    if (roll >= 36) return "($roll) Torso - Pecho";
-
-    if (roll >= 31) return "($roll) Torso - Riñones";
-
-    if (roll >= 21) return "($roll) Torso - Estómago";
-
-    if (roll >= 11) return "($roll) Torso - Hombro";
-
-    if (roll >= 1) return "($roll) Torso - Costillas";
-
-    return "$roll";
   }
 }

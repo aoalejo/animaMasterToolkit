@@ -1,10 +1,10 @@
 import 'package:amt/models/character/character.dart';
 import 'package:amt/models/enums.dart';
 import 'package:amt/models/modifiers_state.dart';
+import 'package:amt/models/rules/rules.dart';
 import 'package:amt/presentation/charactersTable/character_info.dart';
 import 'package:amt/presentation/states/characters_page_state.dart';
-import 'package:amt/presentation/states/combat_state.dart';
-import 'package:amt/utils/Int+Extension.dart';
+import 'package:amt/utils/int_extension.dart';
 import 'package:amt/utils/assets.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -89,11 +89,9 @@ class CharactersTable extends StatelessWidget {
               children: [
                 for (var character in appState.characters)
                   Card(
-                    shape: appState.combatState.attack.character?.uuid ==
-                            character.uuid
+                    shape: appState.combatState.attack.character?.uuid == character.uuid
                         ? _border(theme.colorScheme.primary)
-                        : appState.combatState.defense.character?.uuid ==
-                                character.uuid
+                        : appState.combatState.defense.character?.uuid == character.uuid
                             ? _border(theme.colorScheme.secondary)
                             : null,
                     child: Row(
@@ -121,20 +119,13 @@ class CharactersTable extends StatelessWidget {
                                     Padding(
                                       padding: EdgeInsets.all(8),
                                       child: CircularProgressIndicator(
-                                        value: character.state
-                                                .getLifePointsPercentage()
-                                                .toDouble() /
-                                            100,
-                                        color: character.state
-                                            .getLifePointsPercentage()
-                                            .percentageColor(),
+                                        value: character.state.getLifePointsPercentage().toDouble() / 100,
+                                        color: character.state.getLifePointsPercentage().percentageColor(),
                                       ),
                                     ),
                                     Text(
                                       "${character.state.getLifePointsPercentage()}%",
-                                      style: theme.textTheme.bodySmall!
-                                          .copyWith(
-                                              fontWeight: FontWeight.bold),
+                                      style: theme.textTheme.bodySmall!.copyWith(fontWeight: FontWeight.bold),
                                     ),
                                   ],
                                 )
@@ -148,8 +139,7 @@ class CharactersTable extends StatelessWidget {
                               color: theme.colorScheme.primary,
                               child: Text(
                                 character.state.currentTurn.roll.toString(),
-                                style: theme.textTheme.bodyMedium!.copyWith(
-                                    color: theme.colorScheme.onPrimary),
+                                style: theme.textTheme.bodyMedium!.copyWith(color: theme.colorScheme.onPrimary),
                                 textAlign: TextAlign.center,
                               ),
                             ),
@@ -160,20 +150,14 @@ class CharactersTable extends StatelessWidget {
                             child: SingleChildScrollView(
                               scrollDirection: Axis.horizontal,
                               child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceAround,
+                                mainAxisAlignment: MainAxisAlignment.spaceAround,
                                 children: [
                                   Tooltip(
                                     message: "Info",
                                     child: IconButton(
                                       icon: Icon(Icons.info),
                                       onPressed: () {
-                                        ShowCharacterInfo.call(
-                                            context, character,
-                                            onRemove: (character) => {
-                                                  appState.removeCharacter(
-                                                      character)
-                                                });
+                                        ShowCharacterInfo.call(context, character, onRemove: (character) => {appState.removeCharacter(character)});
                                       },
                                     ),
                                   ),
@@ -188,8 +172,7 @@ class CharactersTable extends StatelessWidget {
                                       onPressed: () {
                                         var surprise = SurpriseType.calculate(
                                           attacker: character,
-                                          defendant: appState
-                                              .combatState.defense.character,
+                                          defendant: appState.combatState.defense.character,
                                         );
 
                                         appState.updateCombatState(
@@ -279,9 +262,7 @@ class CharactersTable extends StatelessWidget {
     DefenseType type,
   ) {
     var physicalResistance = character.resistances.physicalResistance;
-    var armour = character.combat.armour.calculatedArmour
-        .armourFor(appState.combatState.attack.damageType)
-        .toString();
+    var armour = character.combat.armour.calculatedArmour.armourFor(appState.combatState.attack.damageType).toString();
     var surprise = SurpriseType.calculate(
       attacker: appState.combatState.attack.character,
       defendant: character,

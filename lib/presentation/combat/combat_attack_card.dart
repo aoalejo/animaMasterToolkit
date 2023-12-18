@@ -20,8 +20,7 @@ class CombatAttackCard extends StatelessWidget {
     final weapon = character?.selectedWeapon();
 
     return CustomCombatCard(
-      title:
-          "${character?.profile.name ?? ""} Ataca (Total: ${appState.combatState.finalAttackValue()})",
+      title: "${character?.profile.name ?? ""} Ataca (Total: ${appState.combatState.finalAttackValue.result})",
       actionTitle: IconButton(
         icon: Icon(
           Icons.delete,
@@ -45,12 +44,10 @@ class CombatAttackCard extends StatelessWidget {
                       inputType: TextInputType.number,
                       text: attackState.roll,
                       label: "Tirada de ataque",
-                      onChanged: (value) =>
-                          {appState.updateCombatState(attackRoll: value)},
+                      onChanged: (value) => {appState.updateCombatState(attackRoll: value)},
                       suffixIcon: IconButton(
                         onPressed: () {
-                          appState.updateCombatState(
-                              attackRoll: Roll.roll().getRollsAsString());
+                          appState.updateCombatState(attackRoll: Roll.roll().getRollsAsString());
                         },
                         icon: SizedBox.square(
                           dimension: 24,
@@ -97,8 +94,7 @@ class CombatAttackCard extends StatelessWidget {
                               },
                             ),
                             text: attackState.attack,
-                            onChanged: (value) => appState.updateCombatState(
-                                baseAttackModifiers: value),
+                            onChanged: (value) => appState.updateCombatState(baseAttackModifiers: value),
                           ),
                         ),
                       ],
@@ -132,8 +128,7 @@ class CombatAttackCard extends StatelessWidget {
                             flex: 2,
                             child: TextFormFieldCustom(
                               onChanged: (value) {
-                                appState.updateCombatState(
-                                    damageModifier: value);
+                                appState.updateCombatState(damageModifier: value);
                               },
                               text: attackState.damage,
                               label: "(${weapon?.name ?? "Daño base"})",
@@ -143,28 +138,19 @@ class CombatAttackCard extends StatelessWidget {
                                       padding: EdgeInsets.all(8),
                                       child: ToggleButtons(
                                         isSelected: [
-                                          weapon?.principalDamage ==
-                                              attackState.damageType,
-                                          weapon?.secondaryDamage ==
-                                              attackState.damageType,
+                                          weapon?.principalDamage == attackState.damageType,
+                                          weapon?.secondaryDamage == attackState.damageType,
                                         ],
-                                        onPressed: (index) => {
-                                          appState.updateCombatState(
-                                              damageType: index == 0
-                                                  ? weapon?.principalDamage
-                                                  : weapon?.secondaryDamage)
-                                        },
-                                        borderRadius: const BorderRadius.all(
-                                            Radius.circular(8)),
+                                        onPressed: (index) =>
+                                            {appState.updateCombatState(damageType: index == 0 ? weapon?.principalDamage : weapon?.secondaryDamage)},
+                                        borderRadius: const BorderRadius.all(Radius.circular(8)),
                                         children: [
                                           Text(
-                                            weapon?.principalDamage?.name ??
-                                                "con",
+                                            weapon?.principalDamage?.name ?? "con",
                                             style: theme.textTheme.bodySmall,
                                           ),
                                           Text(
-                                            weapon?.secondaryDamage?.name ??
-                                                "con",
+                                            weapon?.secondaryDamage?.name ?? "con",
                                             style: theme.textTheme.bodySmall,
                                           ),
                                         ],
@@ -182,11 +168,8 @@ class CombatAttackCard extends StatelessWidget {
                     height: 40,
                     child: TextButton(
                       onPressed: () {
-                        BottomSheetModifiers.show(
-                            context,
-                            attackState.modifiers,
-                            Modifiers.getSituationalModifiers(
-                                ModifiersType.attack), (newModifiers) {
+                        BottomSheetModifiers.show(context, attackState.modifiers, Modifiers.getSituationalModifiers(ModifiersType.attack),
+                            (newModifiers) {
                           appState.updateAttackingModifiers(newModifiers);
                         });
                       },
@@ -221,8 +204,7 @@ class CombatAttackCard extends StatelessWidget {
             modifiers: attackState.modifiers.getAll(),
             onSelected: (selected) {
               attackState.modifiers.removeModifier(selected);
-              appState.updateCombatState(
-                  attackingModifiers: attackState.modifiers);
+              appState.updateCombatState(attackingModifiers: attackState.modifiers);
             },
           ),
         ),

@@ -17,6 +17,12 @@ class Roll {
     Roll.roll(turnFumble: true);
   }
 
+  Roll.d10Roll() {
+    roll = Random().nextInt(10) + 1;
+    description = "";
+    rolls = [];
+  }
+
   Roll.roll({
     int base = 0,
     bool canCrit = true,
@@ -27,7 +33,7 @@ class Roll {
   }) {
     rolls = [];
 
-    int thisRoll = Random().nextInt(99) + 1;
+    int thisRoll = Random().nextInt(100) + 1;
     String thisRollDescription = "";
     rolls.add(thisRoll);
 
@@ -83,7 +89,7 @@ class Roll {
   String getRollsAsString() {
     String output = "";
     bool first = true;
-    print(rolls);
+
     for (var roll in rolls) {
       if (first) {
         output = roll.toString();

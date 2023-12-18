@@ -74,25 +74,17 @@ class Character extends HiveObject {
   Character.fromJson(Map<String, dynamic> json) {
     uuid = Uuid().v4();
 
-    attributes = json['Atributos'] != null
-        ? AttributesList.fromJson(json['Atributos'])
-        : AttributesList();
+    attributes = json['Atributos'] != null ? AttributesList.fromJson(json['Atributos']) : AttributesList();
 
-    resistances = json['Resistencias'] != null
-        ? CharacterResistances.fromJson(json['Resistencias'])
-        : CharacterResistances();
+    resistances = json['Resistencias'] != null ? CharacterResistances.fromJson(json['Resistencias']) : CharacterResistances();
 
     combat = json['Combate'] != null
         ? CombatData.fromJson(json['Combate'])
-        : CombatData(
-            weapons: [],
-            armour: ArmourData(armours: [], calculatedArmour: Armour()));
+        : CombatData(weapons: [], armour: ArmourData(armours: [], calculatedArmour: Armour()));
 
     skills = json['Habilidades'] ?? <String, String>{};
 
-    profile = json['datosElementales'] != null
-        ? CharacterProfile?.fromJson(json['datosElementales'])
-        : CharacterProfile();
+    profile = json['datosElementales'] != null ? CharacterProfile?.fromJson(json['datosElementales']) : CharacterProfile();
 
     var consumables = <ConsumableState>[];
 
@@ -102,8 +94,7 @@ class Character extends HiveObject {
       actualValue: profile.hitPoints,
       step: 10,
       type: ConsumableType.hitPoints,
-      description:
-          "indice de regeneración: ${profile.regeneration}:\n${getRegenDescription()}",
+      description: "indice de regeneración: ${profile.regeneration}:\n${getRegenDescription()}",
     ));
 
     consumables.add(ConsumableState(
@@ -126,12 +117,7 @@ class Character extends HiveObject {
         for (var i = 0; i < max.length; i++) {
           if (max[i] > 0) {
             consumables.add(
-              ConsumableState(
-                  name: "Ki/${names[i]}",
-                  maxValue: max[i],
-                  actualValue: 1,
-                  step: accumulation[i],
-                  description: ""),
+              ConsumableState(name: "Ki/${names[i]}", maxValue: max[i], actualValue: 1, step: accumulation[i], description: ""),
             );
           }
         }
@@ -195,13 +181,7 @@ class Character extends HiveObject {
     try {
       return combat.weapons[state.selectedWeaponIndex];
     } catch (e) {
-      return Weapon(
-          name: "-",
-          turn: 0,
-          attack: 0,
-          defense: 0,
-          defenseType: DefenseType.dodge,
-          damage: 0);
+      return Weapon(name: "-", turn: 0, attack: 0, defense: 0, defenseType: DefenseType.dodge, damage: 0);
     }
   }
 
@@ -241,16 +221,14 @@ class Character extends HiveObject {
   }
 
   void removeFrom(int value, ConsumableType type) {
-    var firstOfType =
-        state.consumables.where((element) => element.type == type).first;
+    var firstOfType = state.consumables.where((element) => element.type == type).first;
     firstOfType.actualValue -= value;
   }
 
   String calculateAttack() {
     var weapon = selectedWeapon();
 
-    var modifiers =
-        state.modifiers.getAllModifiersForTypeString(ModifiersType.attack);
+    var modifiers = state.modifiers.getAllModifiersForTypeString(ModifiersType.attack);
 
     return "${weapon.attack}$modifiers";
   }
@@ -259,8 +237,7 @@ class Character extends HiveObject {
     var weapon = selectedWeapon();
     var weaponDefense = weapon.defenseType;
 
-    var modifiers = state.modifiers.getAllModifiersForTypeString(
-        type == DefenseType.dodge ? ModifiersType.dodge : ModifiersType.parry);
+    var modifiers = state.modifiers.getAllModifiersForTypeString(type == DefenseType.dodge ? ModifiersType.dodge : ModifiersType.parry);
 
     if (weaponDefense == type) {
       return '${weapon.defense}$modifiers';
@@ -278,8 +255,7 @@ class Character extends HiveObject {
       print("cannot interpret modifier!");
     }
 
-    totalTurn =
-        totalTurn + state.modifiers.getAllModifiersForType(ModifiersType.turn);
+    totalTurn = totalTurn + state.modifiers.getAllModifiersForType(ModifiersType.turn);
 
     return totalTurn;
   }

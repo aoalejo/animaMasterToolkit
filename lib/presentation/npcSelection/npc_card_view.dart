@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:amt/models/attributes_list.dart';
 import 'package:amt/models/character/character.dart';
 import 'package:amt/models/character_profile.dart';
-import 'package:amt/utils/Int+Extension.dart';
+import 'package:amt/utils/int_extension.dart';
 import 'package:amt/utils/Key_value.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
@@ -32,8 +32,7 @@ class CharacterNPCCard extends StatelessWidget {
     _skills = character.skills.list();
     _profile = character.profile;
     _combat = character.getCombatItems();
-    _combat.add(KeyValue(
-        key: "Presencia", value: character.resistances.presence.toString()));
+    _combat.add(KeyValue(key: "Presencia", value: character.resistances.presence.toString()));
     _attributes = character.attributes.orderedList();
   }
 
@@ -101,8 +100,7 @@ class CharacterNPCCard extends StatelessWidget {
             barRods: [
               BarChartRodData(
                 toY: _attributes[i].toDouble(),
-                color: (_attributes[i].toInt() * 10)
-                    .percentageColor(lastTransparent: false),
+                color: (_attributes[i].toInt() * 10).percentageColor(lastTransparent: false),
               )
             ],
             showingTooltipIndicators: [0],
@@ -151,10 +149,7 @@ class CharacterNPCCard extends StatelessWidget {
                     children: [
                       Card(
                         clipBehavior: Clip.hardEdge,
-                        child: Image.memory(base64Decode(
-                            _profile.image?.isEmpty ?? true
-                                ? _placeholder
-                                : _profile.image!)),
+                        child: Image.memory(base64Decode(_profile.image?.isEmpty ?? true ? _placeholder : _profile.image!)),
                       ),
                       Column(
                         children: [
@@ -209,8 +204,7 @@ class CharacterNPCCard extends StatelessWidget {
                         activeColor: Colors.black54,
                         textActiveColor: Colors.white,
                         alignment: MainAxisAlignment.spaceBetween,
-                        padding:
-                            EdgeInsets.symmetric(vertical: 5, horizontal: 4),
+                        padding: EdgeInsets.symmetric(vertical: 5, horizontal: 4),
                         borderRadius: BorderRadius.circular(8),
                         elevation: 1,
                         title: "${_combat[index].key}: ${_combat[index].value}",
@@ -258,8 +252,7 @@ class CharacterNPCCard extends StatelessWidget {
         padding: EdgeInsets.fromLTRB(4, 2, 4, 2),
         child: Text(
           text,
-          style: theme.textTheme.bodySmall!
-              .copyWith(color: theme.colorScheme.onPrimary),
+          style: theme.textTheme.bodySmall!.copyWith(color: theme.colorScheme.onPrimary),
         ),
       ),
     );
