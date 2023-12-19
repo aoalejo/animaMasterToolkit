@@ -4,7 +4,6 @@ import 'package:amt/models/modifiers_state.dart';
 import 'package:amt/models/rules/rules.dart';
 import 'package:amt/resources/modifiers.dart';
 import 'package:amt/utils/explained_text.dart';
-import 'package:function_tree/function_tree.dart';
 
 class ScreenCombatStateAttack {
   var roll = "";
@@ -122,76 +121,25 @@ class ScreenCombatState {
     return result;
   }
 
-  int criticalResult() {
-    var damageDoneInt = 0;
-    var criticalRollInt = 0;
-
-    var physicalResistanceBaseInt = 0;
-    var physicalResistanceRollInt = 0;
-
-    try {
-      damageDoneInt = critical.damageDone.interpret().toInt();
-    } catch (e) {
-      // Defaults to 0
-    }
-
-    try {
-      criticalRollInt = critical.criticalRoll.interpret().toInt();
-    } catch (e) {
-      // Defaults to 0
-    }
-
-    try {
-      physicalResistanceBaseInt = critical.physicalResistanceBase.interpret().toInt();
-    } catch (e) {
-      // Defaults to 0
-    }
-
-    try {
-      physicalResistanceRollInt = critical.physicalResistanceRoll.interpret().toInt();
-    } catch (e) {
-      // Defaults to 0
-    }
-
-    var result = damageDoneInt + criticalRollInt - physicalResistanceBaseInt - physicalResistanceRollInt;
-
-    return result;
+  int criticalResultWithReduction({
+    required int? criticalResult,
+  }) {
+    return CombatRules.criticalResultWithReduction(
+      reduction: critical.modifierReduction,
+      criticalResult: criticalResult,
+    );
   }
 
-  int criticalResultWithReduction() {
-    var reduction = 0;
-    var calculated = criticalResult();
-    try {
-      reduction = critical.modifierReduction.interpret().toInt();
-    } catch (e) {
-      return calculated;
-    }
-
-    return calculated - reduction;
+  ExplainedText criticalResult() {
+    return CombatRules.criticalResult(
+      damageDone: critical.damageDone,
+      criticalRoll: critical.criticalRoll,
+      physicalResistanceBase: critical.physicalResistanceBase,
+      physicalResistanceRoll: critical.physicalResistanceRoll,
+    );
   }
 
-  String criticalDescription() {
-    var critical = criticalResult();
-    var description = "Resultado de $critical";
-
-    if (critical > 1) {
-      description = '$description:\nSe recibe un negativo a toda acción de $critical. El penalizador se recupera a un ritmo de 5 puntos por asalto.';
-    }
-
-    if (critical > 50) {
-      description = '$description hasta la mitad de su valor';
-    }
-
-    if (critical > 100) {
-      description =
-          '$description \nSi la localización indica un miembro, este queda destrozado o amputado de manera irrecuperable. Si alcanza la cabeza o el corazón, el personaje muere.';
-    }
-
-    if (critical > 150) {
-      description =
-          '$description \nqueda además inconsciente automáticamente, y muere en un número de minutos equivalente a su Constitución si no recibe atención médica.';
-    }
-
-    return description;
+  List<ExplainedText> criticalEffects(ExplainedText criticalResult) {
+    return CombatRules.criticalDescription(criticalResult: criticalResult);
   }
 }

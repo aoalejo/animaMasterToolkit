@@ -10,7 +10,6 @@ import 'package:amt/models/weapon.dart';
 import 'package:amt/resources/modifiers.dart';
 import 'package:amt/utils/explained_text.dart';
 import 'package:amt/utils/int_extension.dart';
-import 'package:function_tree/function_tree.dart';
 
 class CombatRules {
   static int numberOfDefensesModifier(int? defenseNumber) {
@@ -351,14 +350,84 @@ class CombatRules {
 
     return info;
   }
-}
 
-extension on String {
-  int get safeInterpret {
-    try {
-      return interpret().toInt();
-    } catch (e) {
-      return 0;
+  static ExplainedText criticalResult({
+    required String? damageDone,
+    required String? criticalRoll,
+    required String? physicalResistanceBase,
+    required String? physicalResistanceRoll,
+  }) {
+    var damageDoneInt = damageDone?.safeInterpret ?? 0;
+    var criticalRollInt = criticalRoll?.safeInterpret ?? 0;
+
+    var physicalResistanceBaseInt = physicalResistanceBase?.safeInterpret ?? 0;
+    var physicalResistanceRollInt = physicalResistanceRoll?.safeInterpret ?? 0;
+
+    var result = damageDoneInt + criticalRollInt - physicalResistanceBaseInt - physicalResistanceRollInt;
+
+    return ExplainedText(
+      title: "Resultado Critico",
+      text: "Resultado: $result",
+      result: result,
+      explanation:
+          "Daño realizado ($damageDoneInt) + Tirada ($criticalRollInt) - RF ($physicalResistanceBaseInt) - Tirada RF ($physicalResistanceRollInt) = Resultado ($result)",
+    );
+  }
+
+  static int criticalResultWithReduction({
+    required String? reduction,
+    required int? criticalResult,
+  }) {
+    var reductionInt = reduction?.safeInterpret ?? 0;
+    return (criticalResult ?? 0) - reductionInt;
+  }
+
+  static List<ExplainedText> criticalDescription({
+    required ExplainedText criticalResult,
+  }) {
+    List<ExplainedText> list = [];
+
+    list.add(criticalResult);
+    var critical = criticalResult.result ?? 0;
+
+    var criticalEffects = ExplainedText(title: "Efectos Critico");
+    list.add(criticalEffects);
+
+    var text = "";
+
+    if (critical > 1) {
+      text = "$text Se recibe un negativo a toda acción de $critical";
+      criticalEffects.add(
+        explanation: "El penalizador se recupera a un ritmo de 5 puntos por asalto.",
+      );
     }
+
+    if (critical > 50) {
+      criticalEffects.add(
+        explanation: "hasta la mitad de su valor",
+      );
+    }
+
+    if (critical > 100) {
+      text = "$text, destrozando si golpea un miembro";
+
+      criticalEffects.add(
+        explanation:
+            "Si la localización indica un miembro, este queda destrozado o amputado de manera irrecuperable. Si alcanza la cabeza o el corazón, el personaje muere.",
+      );
+    }
+
+    if (critical > 150) {
+      text = "$text y quedando inconsciente. (Muere si no recibe atención médica inmediata)";
+
+      criticalEffects.add(
+        explanation:
+            "Queda además inconsciente automáticamente, y muere en un número de minutos equivalente a su Constitución si no recibe atención médica.",
+      );
+    }
+
+    criticalEffects.text = text;
+
+    return list;
   }
 }

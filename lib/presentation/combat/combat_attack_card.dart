@@ -91,7 +91,8 @@ class CombatAttackCard extends StatelessWidget {
                                   1,
                                   ConsumableType.fatigue,
                                 );
-                                attackState.attack = "${attackState.attack}+15";
+                                appState.updateCombatState(baseAttackModifiers: "${attackState.attack}+15");
+
                                 appState.updateCharacter(character);
                               },
                             ),

@@ -1,5 +1,6 @@
 import 'package:amt/models/character/status_modifier.dart';
 import 'package:amt/models/roll.dart';
+import 'package:amt/presentation/general/explained_result_container.dart';
 import 'package:amt/presentation/text_form_field_custom.dart';
 import 'package:amt/presentation/combat/custom_combat_card.dart';
 import 'package:amt/presentation/states/characters_page_state.dart';
@@ -11,7 +12,10 @@ class CombatCriticalCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var appState = context.watch<CharactersPageState>();
-    final theme = Theme.of(context);
+    var combatState = appState.combatState;
+    var criticalResult = combatState.criticalResult();
+
+    var criticalResultResult = combatState.criticalResultWithReduction(criticalResult: criticalResult.result);
 
     return CustomCombatCard(
       title: 'Critico',
@@ -29,7 +33,7 @@ class CombatCriticalCard extends StatelessWidget {
                       key: Key("TextFormFieldBaseAttack"),
                       inputType: TextInputType.number,
                       label: "Daño causado",
-                      text: appState.combatState.critical.damageDone,
+                      text: combatState.critical.damageDone,
                       onChanged: (value) => appState.updateCombatState(damageDone: value),
                     ),
                   ),
@@ -40,7 +44,7 @@ class CombatCriticalCard extends StatelessWidget {
                     height: 40,
                     child: TextFormFieldCustom(
                       inputType: TextInputType.number,
-                      text: appState.combatState.critical.criticalRoll,
+                      text: combatState.critical.criticalRoll,
                       label: "Tirada de critico",
                       onChanged: (value) => {appState.updateCombatState(criticalRoll: value)},
                       suffixIcon: IconButton(
@@ -61,7 +65,7 @@ class CombatCriticalCard extends StatelessWidget {
                     height: 40,
                     child: TextFormFieldCustom(
                       inputType: TextInputType.number,
-                      text: appState.combatState.critical.localizationRoll,
+                      text: combatState.critical.localizationRoll,
                       label: "Tirada de localización",
                       onChanged: (value) => {appState.updateCombatState(localizationRoll: value)},
                       suffixIcon: IconButton(
@@ -95,7 +99,7 @@ class CombatCriticalCard extends StatelessWidget {
                       key: Key("TextFormFieldBaseAttack"),
                       inputType: TextInputType.number,
                       label: "RF Base",
-                      text: appState.combatState.critical.physicalResistanceBase,
+                      text: combatState.critical.physicalResistanceBase,
                       onChanged: (value) => appState.updateCombatState(physicalResistanceBase: value),
                     ),
                   ),
@@ -106,7 +110,7 @@ class CombatCriticalCard extends StatelessWidget {
                     height: 40,
                     child: TextFormFieldCustom(
                       inputType: TextInputType.number,
-                      text: appState.combatState.critical.physicalResistanceRoll,
+                      text: combatState.critical.physicalResistanceRoll,
                       label: "Tirada de RF",
                       onChanged: (value) => {appState.updateCombatState(physicalResistanceRoll: value)},
                       suffixIcon: IconButton(
@@ -126,7 +130,7 @@ class CombatCriticalCard extends StatelessWidget {
                   SizedBox(
                     height: 40,
                     child: Center(
-                      child: Text(appState.combatState.criticalLocalization),
+                      child: Text(combatState.criticalLocalization),
                     ),
                   ),
                 ],
@@ -137,23 +141,12 @@ class CombatCriticalCard extends StatelessWidget {
         SizedBox(
           height: 10,
         ),
-        SizedBox(
-          width: 8000,
-          child: Row(
-            children: [
-              Expanded(
-                  child: Card(
-                color: theme.colorScheme.background,
-                child: Padding(
-                  padding: EdgeInsets.all(16),
-                  child: Text(
-                    appState.combatState.criticalDescription(),
-                  ),
-                ),
-              ))
-            ],
+        for (var explanation in combatState.criticalEffects(criticalResult))
+          ExplainedTextContainer(
+            explanationsExpanded: appState.explanationsExpanded,
+            onExpanded: (name) => appState.toggleExplanationStatus(name),
+            info: explanation,
           ),
-        ),
         SizedBox(
           height: 10,
         ),
@@ -164,10 +157,9 @@ class CombatCriticalCard extends StatelessWidget {
               Flexible(
                 flex: 1,
                 child: TextFormFieldCustom(
-                  key: Key("TextFormFieldBaseAttack"),
                   inputType: TextInputType.number,
                   label: "Reducción de penalizador",
-                  text: appState.combatState.critical.modifierReduction,
+                  text: combatState.critical.modifierReduction,
                   onChanged: (value) => appState.updateCombatState(modifierReduction: value),
                 ),
               ),
@@ -176,9 +168,9 @@ class CombatCriticalCard extends StatelessWidget {
                 child: Center(
                   child: TextButton(
                     onPressed: () {
-                      var character = appState.combatState.defense.character;
+                      var character = combatState.defense.character;
 
-                      var result = appState.combatState.criticalResultWithReduction();
+                      var result = criticalResultResult;
 
                       var midValue = -(result ~/ 2);
                       if (result < 50) {
@@ -200,7 +192,7 @@ class CombatCriticalCard extends StatelessWidget {
 
                       appState.updateCharacter(character);
                     },
-                    child: Text("Aplicar penalizador (${appState.combatState.criticalResultWithReduction()})"),
+                    child: Text("Aplicar penalizador ($criticalResultResult)"),
                   ),
                 ),
               ),

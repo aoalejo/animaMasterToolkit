@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:function_tree/function_tree.dart';
 
 extension Extensions on int {
   Color percentageColor({lastTransparent = true}) {
@@ -17,5 +18,15 @@ extension Extensions on int {
 
   int get roundToFives {
     return (this / 5).floor() * 5;
+  }
+}
+
+extension Interpret on String {
+  int get safeInterpret {
+    try {
+      return interpret().toInt();
+    } catch (e) {
+      return 0;
+    }
   }
 }
