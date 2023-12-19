@@ -31,7 +31,6 @@ import 'package:provider/provider.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:url_launcher/url_launcher_string.dart';
 
 void main() async {
   await Hive.initFlutter();
@@ -130,7 +129,7 @@ class GeneratorPage extends StatelessWidget {
         actions: [
           IconButton(
             onPressed: () {
-              launchUrl(repository);
+              launchUrl(repository, webOnlyWindowName: "_blank");
             },
             icon: SizedBox(
               width: 24,
