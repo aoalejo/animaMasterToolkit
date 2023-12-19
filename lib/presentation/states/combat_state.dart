@@ -43,7 +43,7 @@ class ScreenCombatState {
   SurpriseType surpriseType = SurpriseType.none;
 
   String get criticalLocalization {
-    return CombatRules.getCriticalLocalization(critical.criticalRoll);
+    return CombatRules.getCriticalLocalization(critical.localizationRoll);
   }
 
   ExplainedText get finalAttackValue {
@@ -140,6 +140,9 @@ class ScreenCombatState {
   }
 
   List<ExplainedText> criticalEffects(ExplainedText criticalResult) {
-    return CombatRules.criticalDescription(criticalResult: criticalResult);
+    return CombatRules.criticalDescription(
+      defender: defense.character,
+      criticalResult: criticalResult,
+    );
   }
 }

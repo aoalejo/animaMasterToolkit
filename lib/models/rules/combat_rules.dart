@@ -383,6 +383,7 @@ class CombatRules {
   }
 
   static List<ExplainedText> criticalDescription({
+    required Character? defender,
     required ExplainedText criticalResult,
   }) {
     List<ExplainedText> list = [];
@@ -391,7 +392,11 @@ class CombatRules {
     var critical = criticalResult.result ?? 0;
 
     var criticalEffects = ExplainedText(title: "Efectos Critico");
-    list.add(criticalEffects);
+    if ((criticalResult.result ?? 0) > 0) {
+      list.add(criticalEffects);
+    } else {
+      return list;
+    }
 
     var text = "";
 
@@ -418,11 +423,11 @@ class CombatRules {
     }
 
     if (critical > 150) {
-      text = "$text y quedando inconsciente. (Muere si no recibe atención médica inmediata)";
+      text = "$text y quedando inconsciente. (Muere si no recibe atención médica en ${defender?.attributes.constitution} minutos)";
 
       criticalEffects.add(
         explanation:
-            "Queda además inconsciente automáticamente, y muere en un número de minutos equivalente a su Constitución si no recibe atención médica.",
+            "Queda además inconsciente automáticamente, y muere en un número de minutos equivalente a su Constitución (${defender?.attributes.constitution}) si no recibe atención médica.",
       );
     }
 
