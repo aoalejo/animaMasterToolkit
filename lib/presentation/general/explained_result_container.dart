@@ -1,5 +1,6 @@
 import 'package:amt/utils/explained_text.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_tags_x/flutter_tags_x.dart';
 
 class ExplainedTextContainer extends StatelessWidget {
   final ExplainedText info;
@@ -41,11 +42,13 @@ class ExplainedTextContainer extends StatelessWidget {
                       width: 8,
                     ),
                     Expanded(
+                        child: Padding(
+                      padding: EdgeInsets.all(6),
                       child: Text(
                         info.text,
                         style: theme.textTheme.bodyMedium!.copyWith(fontWeight: FontWeight.bold),
                       ),
-                    ),
+                    )),
                     if (info.explanation.isNotEmpty || info.explanations.isNotEmpty)
                       IconButton(
                         visualDensity: VisualDensity.compact,
@@ -75,6 +78,31 @@ class ExplainedTextContainer extends StatelessWidget {
                       hierarchy: hierarchy + 1,
                       parent: info.title,
                     ),
+                if (hasToBeExpanded)
+                  Padding(
+                    padding: EdgeInsets.all(4),
+                    child: Tags(
+                      spacing: 2,
+                      runSpacing: 4,
+                      alignment: WrapAlignment.start,
+                      runAlignment: WrapAlignment.start,
+                      itemCount: info.references.length,
+                      itemBuilder: (int index) {
+                        return ItemTags(
+                          textStyle: theme.textTheme.bodySmall!,
+                          pressEnabled: false,
+                          index: index,
+                          activeColor: Colors.black54,
+                          textActiveColor: Colors.white,
+                          alignment: MainAxisAlignment.spaceBetween,
+                          padding: EdgeInsets.symmetric(vertical: 5, horizontal: 4),
+                          borderRadius: BorderRadius.circular(8),
+                          elevation: 1,
+                          title: "${info.references[index].bookName} P${info.references[index].page}",
+                        );
+                      },
+                    ),
+                  ),
               ],
             ),
           ),

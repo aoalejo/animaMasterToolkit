@@ -41,6 +41,15 @@ class BookReference {
   int page;
   Books book;
 
+  String get bookName {
+    switch (book) {
+      case Books.coreExxet:
+        return "Core Exxet";
+      case Books.directorsScreen:
+        return "Pantalla del director";
+    }
+  }
+
   BookReference({
     required this.page,
     required this.book,
