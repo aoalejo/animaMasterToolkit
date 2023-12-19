@@ -24,11 +24,14 @@ import 'package:amt/presentation/combat/combat_result_card.dart';
 import 'package:amt/presentation/npcSelection/npc_selector_view.dart';
 import 'package:amt/presentation/states/characters_page_state.dart';
 import 'package:amt/presentation/states/non_player_caracters_state.dart';
+import 'package:amt/utils/assets.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 void main() async {
   await Hive.initFlutter();
@@ -116,6 +119,7 @@ class GeneratorPage extends StatelessWidget {
     var small = screenSize.width < 1120;
     var appState = context.watch<CharactersPageState>();
     var nonCharactersState = context.watch<NonPlayerCharactersState>();
+    final Uri repository = Uri.parse('https://github.com/aoalejo/animaMasterToolkit');
 
     return Scaffold(
       appBar: AppBar(
@@ -124,6 +128,16 @@ class GeneratorPage extends StatelessWidget {
         backgroundColor: theme.primaryColor,
         foregroundColor: theme.colorScheme.onPrimary,
         actions: [
+          IconButton(
+            onPressed: () {
+              launchUrl(repository);
+            },
+            icon: SizedBox(
+              width: 24,
+              height: 24,
+              child: Assets.github,
+            ),
+          ),
           IconButton(
             onPressed: () {
               NPCSelector.open(
@@ -135,8 +149,7 @@ class GeneratorPage extends StatelessWidget {
                 },
                 onRemoveAll: () => appState.removeAllNPC(),
                 onAddNpc: () => nonCharactersState.getCharacters(),
-                onRemove: (character) =>
-                    nonCharactersState.removeNPC(character),
+                onRemove: (character) => nonCharactersState.removeNPC(character),
               );
             },
             icon: Icon(Icons.group),
@@ -145,17 +158,13 @@ class GeneratorPage extends StatelessWidget {
       ),
       body: Column(
         children: [
-          Expanded(
-              child: _content(theme, screenSize, small, appState.pageSelected)),
+          Expanded(child: _content(theme, screenSize, small, appState.pageSelected)),
           small
               ? BottomNavigationBar(
                   items: [
-                    BottomNavigationBarItem(
-                        icon: Icon(Icons.list), label: "Listado"),
-                    BottomNavigationBarItem(
-                        icon: Icon(Icons.receipt), label: "Detalle"),
-                    BottomNavigationBarItem(
-                        icon: Icon(Icons.bolt), label: "Combate"),
+                    BottomNavigationBarItem(icon: Icon(Icons.list), label: "Listado"),
+                    BottomNavigationBarItem(icon: Icon(Icons.receipt), label: "Detalle"),
+                    BottomNavigationBarItem(icon: Icon(Icons.bolt), label: "Combate"),
                   ],
                   onTap: (index) {
                     appState.updatePageSelected(index);
@@ -168,8 +177,7 @@ class GeneratorPage extends StatelessWidget {
     );
   }
 
-  Widget _content(
-      ThemeData theme, Size screenSize, bool small, int pageSelected) {
+  Widget _content(ThemeData theme, Size screenSize, bool small, int pageSelected) {
     return ColoredBox(
       color: theme.colorScheme.background,
       child: Align(
@@ -188,16 +196,12 @@ class GeneratorPage extends StatelessWidget {
                 ? Column(
                     children: [
                       SizedBox(
-                        height: small
-                            ? (screenSize.height / 2) - 54
-                            : (screenSize.height / 2) - 25,
+                        height: small ? (screenSize.height / 2) - 54 : (screenSize.height / 2) - 25,
                         width: small ? screenSize.width : screenSize.width / 3,
                         child: CharacterInfoCard(attacking: true),
                       ),
                       SizedBox(
-                        height: small
-                            ? (screenSize.height / 2) - 54
-                            : (screenSize.height / 2) - 25,
+                        height: small ? (screenSize.height / 2) - 54 : (screenSize.height / 2) - 25,
                         width: small ? screenSize.width : screenSize.width / 3,
                         child: CharacterInfoCard(attacking: false),
                       ),

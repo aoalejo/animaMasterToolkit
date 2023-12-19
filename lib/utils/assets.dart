@@ -36,4 +36,9 @@ class Assets {
     'assets/knife.svg',
     semanticsLabel: "knife icon",
   );
+
+  static final Widget github = SvgPicture.asset(
+    'assets/github.svg',
+    semanticsLabel: "github icon",
+  );
 }
