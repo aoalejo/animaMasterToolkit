@@ -38,9 +38,6 @@ class ExplainedTextContainer extends StatelessWidget {
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    SizedBox(
-                      width: 8,
-                    ),
                     Expanded(
                         child: Padding(
                       padding: EdgeInsets.all(6),
