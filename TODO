@@ -1,9 +1,8 @@
 TODO:
-- Cambiar el formato de resultado critico para usar ExplainedText
+- Cambios en armaduras
 
 Feedback Testing:
 - Al restaurar consumibles y luego recargar la pagina la vida de los personajes que no fueron modificados vuelve al estado anterior. Por ejemplo si aplico daño o modifico la vida del personaje desde la tarjeta central, tampoco se soluciona al restaurar consumibles y tirar iniciativa nuevamente.
-- El modal de atributos/Habilidades no se cierra al hacer clic fuera del modal.
 
 Realizados:
 - No se puede aplicar el daño si es menor o igual a 10, si es por una especificación del sistema seria recomendable cambiar el mensaje de “daño causado: 10” por uno descriptivo de “no causa daño” o “no aplica daño”(yo pensaba que esto solo ocurría si la diferencia de ataque era menor que 10 )
@@ -12,6 +11,8 @@ Realizados:
 - Sin ningún personaje seleccionado tanto como atacante o defensor el botón de descartar personaje aparentemente no hace nada, se podría reemplazar su funcionalidad por la de limpiar los campos de la tarjeta, al igual que lo hace el mismo icono en el campo armadura en la tarjeta del defensor.
 - En la sección de añadir NPC la alerta de borrar todos los NPC es poco clara, se podria cambiar por “’¿seguro que desea borrar todos los NPC de la lista de personajes activos?”
 - se pueden subir personajes que ya estan cargados, cuentan como personajes diferentes, pero mantiene el mismo nombre, seria bueno agregar un numero o diferenciador al igual que cuando se cargan varios npc
+- Cambiar el formato de resultado critico para usar ExplainedText
+- El modal de atributos/Habilidades no se cierra al hacer clic fuera del modal.
 
 
 Descartados:

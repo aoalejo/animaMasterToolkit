@@ -15,10 +15,7 @@ class BottomSheetModifiers {
     void toggleModifier(StateSetter setState, StatusModifier modifier) {
       setState(
         () => {
-          if (state.containsModifier(modifier))
-            {state.removeModifier(modifier)}
-          else
-            {state.add(modifier)},
+          if (state.containsModifier(modifier)) {state.removeModifier(modifier)} else {state.add(modifier)},
           onModifiersChanged(state)
         },
       );
@@ -27,7 +24,6 @@ class BottomSheetModifiers {
     final theme = Theme.of(context);
     final subtitleButton = theme.textTheme.bodySmall;
     final allModifiers = allModifiersBase;
-    // allModifiers.addAll(state.getAll());
 
     return showModalBottomSheet<void>(
       context: context,
@@ -116,9 +112,7 @@ class BottomSheetModifiers {
     );
   }
 
-  static void _showModifierCreator(BuildContext context,
-      {required StatusModifier modifier,
-      required Function(StatusModifier) onEdit}) {
+  static void _showModifierCreator(BuildContext context, {required StatusModifier modifier, required Function(StatusModifier) onEdit}) {
     showModalBottomSheet<void>(
       context: context,
       builder: (BuildContext context) {

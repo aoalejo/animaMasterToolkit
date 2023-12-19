@@ -6,8 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:function_tree/function_tree.dart';
 
 class ShowCharacterInfo {
-  static call(BuildContext context, Character character,
-      {required Function(Character) onRemove}) {
+  static call(BuildContext context, Character character, {required Function(Character) onRemove}) {
     var theme = Theme.of(context);
     var skills = character.skills.list();
     var attributes = character.attributes.toKeyValue();
@@ -35,7 +34,7 @@ class ShowCharacterInfo {
 
     var search = "";
 
-    return showBottomSheet(
+    return showModalBottomSheet(
       context: context,
       constraints: BoxConstraints.tight(Size(1200, 600)),
       builder: (context) {
@@ -66,8 +65,7 @@ class ShowCharacterInfo {
                                       builder: (context) {
                                         return AlertDialog(
                                           title: Text("Borrar personaje"),
-                                          content: Text(
-                                              "Seguro que desea borrar ${character.profile.name}?"),
+                                          content: Text("Seguro que desea borrar ${character.profile.name}?"),
                                           actions: [
                                             OutlinedButton(
                                               onPressed: () {
@@ -89,8 +87,7 @@ class ShowCharacterInfo {
                                 icon: Row(children: [
                                   Text(
                                     "Eliminar!",
-                                    style: theme.textTheme.bodyMedium!
-                                        .copyWith(color: Colors.red),
+                                    style: theme.textTheme.bodyMedium!.copyWith(color: Colors.red),
                                   ),
                                   Icon(
                                     Icons.delete,
@@ -140,41 +137,18 @@ class ShowCharacterInfo {
                             diffDivisor: 10,
                           ))
                             row,
-                          for (var row in _table(
-                              "Resistencias", resistances, theme, search))
-                            row,
-                          for (var row
-                              in _table("Habilidad", skills, theme, search))
-                            row,
-                          for (var row in _table("Vias", paths, theme, search))
-                            row,
-                          for (var row
-                              in _table("Sub-Vias", subPaths, theme, search))
-                            row,
-                          for (var row
-                              in _table("Meta-magia", metamagic, theme, search))
-                            row,
-                          for (var row in _table("Hechizos mantenidos",
-                              spellsMaintained, theme, search))
-                            row,
-                          for (var row in _table("Hechizos comprados",
-                              spellsPurchased, theme, search))
-                            row,
-                          for (var row in _table(
-                              "habilidades de Ki", kiSkills, theme, search))
-                            row,
-                          for (var row in _table(
-                              "Disciplinas", disciplines, theme, search))
-                            row,
-                          for (var row
-                              in _table("Innatos", innate, theme, search))
-                            row,
-                          for (var row
-                              in _table("Patrones", patterns, theme, search))
-                            row,
-                          for (var row
-                              in _table("Poderes", powers, theme, search))
-                            row,
+                          for (var row in _table("Resistencias", resistances, theme, search)) row,
+                          for (var row in _table("Habilidad", skills, theme, search)) row,
+                          for (var row in _table("Vias", paths, theme, search)) row,
+                          for (var row in _table("Sub-Vias", subPaths, theme, search)) row,
+                          for (var row in _table("Meta-magia", metamagic, theme, search)) row,
+                          for (var row in _table("Hechizos mantenidos", spellsMaintained, theme, search)) row,
+                          for (var row in _table("Hechizos comprados", spellsPurchased, theme, search)) row,
+                          for (var row in _table("habilidades de Ki", kiSkills, theme, search)) row,
+                          for (var row in _table("Disciplinas", disciplines, theme, search)) row,
+                          for (var row in _table("Innatos", innate, theme, search)) row,
+                          for (var row in _table("Patrones", patterns, theme, search)) row,
+                          for (var row in _table("Poderes", powers, theme, search)) row,
                         ],
                       ),
                     ),
@@ -212,14 +186,8 @@ class ShowCharacterInfo {
                   value.text,
                   textAlign: TextAlign.center,
                   style: value.flex == 1
-                      ? theme.textTheme.bodySmall!.copyWith(
-                          color: title
-                              ? theme.colorScheme.onPrimary
-                              : theme.colorScheme.onBackground)
-                      : theme.textTheme.bodyLarge!.copyWith(
-                          color: title
-                              ? theme.colorScheme.onPrimary
-                              : theme.colorScheme.onBackground),
+                      ? theme.textTheme.bodySmall!.copyWith(color: title ? theme.colorScheme.onPrimary : theme.colorScheme.onBackground)
+                      : theme.textTheme.bodyLarge!.copyWith(color: title ? theme.colorScheme.onPrimary : theme.colorScheme.onBackground),
                 ),
               ),
           ],
@@ -238,12 +206,7 @@ class ShowCharacterInfo {
   }) {
     if (list == null) return [];
 
-    var listFiltered = search.isEmpty
-        ? list
-        : list
-            .where((element) =>
-                element.key.toLowerCase().contains(search.toLowerCase()))
-            .toList();
+    var listFiltered = search.isEmpty ? list : list.where((element) => element.key.toLowerCase().contains(search.toLowerCase())).toList();
 
     if (listFiltered.isEmpty) return [];
 
@@ -251,20 +214,13 @@ class ShowCharacterInfo {
       _row([
         StringFlex(name, flex: 4),
         StringFlex("Valor", flex: 2),
-        for (var diff in difficulties)
-          StringFlex(
-              "${diff.abbreviated}\n(${(diff.difficulty / diffDivisor).toStringAsFixed(0)})",
-              flex: 1)
+        for (var diff in difficulties) StringFlex("${diff.abbreviated}\n(${(diff.difficulty / diffDivisor).toStringAsFixed(0)})", flex: 1)
       ], theme: theme, title: true),
       for (var i = 0; i < listFiltered.length; i++)
         _row([
           StringFlex(listFiltered[i].key, flex: 4),
           StringFlex(listFiltered[i].value, flex: 2),
-          for (var diff in difficulties)
-            StringFlex(
-                _differenceTo(
-                    listFiltered[i].value, diff.difficulty ~/ diffDivisor),
-                flex: 1),
+          for (var diff in difficulties) StringFlex(_differenceTo(listFiltered[i].value, diff.difficulty ~/ diffDivisor), flex: 1),
         ], theme: theme, odd: i % 2 == 0)
     ];
   }
@@ -283,11 +239,8 @@ class ShowCharacterInfo {
     }
   }
 
-  static Color _colorForBackground(
-      ThemeData theme, KeyValue value, List<KeyValue> values) {
-    return values.indexOf(value) % 2 == 0
-        ? theme.colorScheme.onPrimary
-        : theme.colorScheme.primaryContainer;
+  static Color _colorForBackground(ThemeData theme, KeyValue value, List<KeyValue> values) {
+    return values.indexOf(value) % 2 == 0 ? theme.colorScheme.onPrimary : theme.colorScheme.primaryContainer;
   }
 }
 
