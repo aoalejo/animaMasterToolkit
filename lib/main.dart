@@ -92,7 +92,7 @@ class MyAppState extends State {
           AppLocalizations.delegate,
         ],
         supportedLocales: AppLocalizations.supportedLocales,
-        title: 'Personajes',
+        title: 'Anima Master Toolkit v3',
         theme: ThemeData(
           useMaterial3: true,
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepOrangeAccent),
@@ -123,7 +123,7 @@ class GeneratorPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: 50,
-        title: Text("Personajes"),
+        title: Text("Anima Master Toolkit v3"),
         backgroundColor: theme.primaryColor,
         foregroundColor: theme.colorScheme.onPrimary,
         actions: [
