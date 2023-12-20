@@ -14,7 +14,7 @@ import 'package:amt/models/psychic_data.dart';
 import 'package:amt/models/roll.dart';
 import 'package:amt/models/weapon.dart';
 import 'package:amt/resources/modifiers.dart';
-import 'package:amt/utils/Key_value.dart';
+import 'package:amt/utils/key_value.dart';
 import 'package:function_tree/function_tree.dart';
 import 'package:hive/hive.dart';
 import 'package:uuid/uuid.dart';
