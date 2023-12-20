@@ -53,3 +53,5 @@ jobs:
           firebaseServiceAccount: "${{ secrets.FIREBASE_SERVICE_ACCOUNT_AMT_V3 }}"
           channelId: live
           projectId: amt-v3
+        env:
+          FIREBASE_CLI_EXPERIMENTS: webframeworks
