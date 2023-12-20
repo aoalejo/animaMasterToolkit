@@ -32,11 +32,9 @@ class ModifiersCard extends StatelessWidget {
           children: [
             for (var modifier in modifiers)
               Tooltip(
-                message:
-                    '${modifier.name}:\n${modifier.description(separator: "\n")}',
+                message: '${modifier.name}:\n${modifier.description(separator: "\n")}',
                 child: InkWell(
-                  onTap: () =>
-                      onSelected != null ? onSelected!(modifier) : null,
+                  onTap: () => onSelected != null ? onSelected!(modifier) : null,
                   child: Card(
                     color: theme.colorScheme.primary,
                     child: Center(

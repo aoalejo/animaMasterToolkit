@@ -58,16 +58,7 @@ class AttributesList {
   }
 
   List<int> orderedList() {
-    return [
-      agility,
-      constitution,
-      dexterity,
-      strength,
-      intelligence,
-      perception,
-      might,
-      willpower
-    ];
+    return [agility, constitution, dexterity, strength, intelligence, perception, might, willpower];
   }
 
   static List<String> names() {
@@ -86,14 +77,7 @@ class AttributesList {
       ];
 
   bool hasAValueWithMoreThanZero() {
-    if (agility > 0 ||
-        constitution > 0 ||
-        dexterity > 0 ||
-        strength > 0 ||
-        intelligence > 0 ||
-        perception > 0 ||
-        might > 0 ||
-        willpower > 0) {
+    if (agility > 0 || constitution > 0 || dexterity > 0 || strength > 0 || intelligence > 0 || perception > 0 || might > 0 || willpower > 0) {
       return true;
     }
     return false;
@@ -102,24 +86,14 @@ class AttributesList {
   List<KeyValue> toKeyValue({bool abbreviated = false}) {
     List<KeyValue> list = [];
 
-    list.add(KeyValue(
-        key: abbreviated ? "AGI" : "Agilidad", value: agility.toString()));
-    list.add(KeyValue(
-        key: abbreviated ? "CON" : "Constitución",
-        value: constitution.toString()));
-    list.add(KeyValue(
-        key: abbreviated ? "DES" : "Destreza", value: dexterity.toString()));
-    list.add(KeyValue(
-        key: abbreviated ? "FUE" : "Fuerza", value: strength.toString()));
-    list.add(KeyValue(
-        key: abbreviated ? "INT" : "Inteligencia",
-        value: intelligence.toString()));
-    list.add(KeyValue(
-        key: abbreviated ? "PER" : "Percepción", value: perception.toString()));
-    list.add(
-        KeyValue(key: abbreviated ? "POD" : "Poder", value: might.toString()));
-    list.add(KeyValue(
-        key: abbreviated ? "VOL" : "Voluntad", value: willpower.toString()));
+    list.add(KeyValue(key: abbreviated ? "AGI" : "Agilidad", value: agility.toString()));
+    list.add(KeyValue(key: abbreviated ? "CON" : "Constitución", value: constitution.toString()));
+    list.add(KeyValue(key: abbreviated ? "DES" : "Destreza", value: dexterity.toString()));
+    list.add(KeyValue(key: abbreviated ? "FUE" : "Fuerza", value: strength.toString()));
+    list.add(KeyValue(key: abbreviated ? "INT" : "Inteligencia", value: intelligence.toString()));
+    list.add(KeyValue(key: abbreviated ? "PER" : "Percepción", value: perception.toString()));
+    list.add(KeyValue(key: abbreviated ? "POD" : "Poder", value: might.toString()));
+    list.add(KeyValue(key: abbreviated ? "VOL" : "Voluntad", value: willpower.toString()));
 
     return list;
   }

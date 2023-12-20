@@ -38,8 +38,7 @@ class Modifiers {
       case ModifiersType.turn:
         modifiers = modifiers.where((element) => element.turn != 0).toList();
       case ModifiersType.action:
-        modifiers =
-            modifiers.where((element) => element.physicalAction != 0).toList();
+        modifiers = modifiers.where((element) => element.physicalAction != 0).toList();
     }
 
     return modifiers;

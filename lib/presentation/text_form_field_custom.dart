@@ -12,16 +12,7 @@ class TextFormFieldCustom extends StatelessWidget {
   final bool? enabled;
 
   const TextFormFieldCustom(
-      {super.key,
-      this.text,
-      this.label,
-      this.inputType,
-      this.onChanged,
-      this.suffixIcon,
-      this.decoration,
-      this.style,
-      this.align,
-      this.enabled});
+      {super.key, this.text, this.label, this.inputType, this.onChanged, this.suffixIcon, this.decoration, this.style, this.align, this.enabled});
 
   @override
   Widget build(BuildContext context) {

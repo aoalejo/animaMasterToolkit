@@ -46,8 +46,7 @@ class NonPlayerCharactersState extends ChangeNotifier {
       'assets/characters.json',
     );
 
-    var charactersWrapper =
-        CharacterList.fromJson(jsonDecode(charactersString));
+    var charactersWrapper = CharacterList.fromJson(jsonDecode(charactersString));
 
     return charactersWrapper.characters;
   }
@@ -63,9 +62,7 @@ class NonPlayerCharactersState extends ChangeNotifier {
       if (result != null) {
         if (result.files.first.bytes != null) {
           // For web
-          List<String> files = result.files
-              .map((file) => Windows1252Codec().decode(file.bytes!.toList()))
-              .toList();
+          List<String> files = result.files.map((file) => Windows1252Codec().decode(file.bytes!.toList())).toList();
 
           for (var file in files) {
             var character = Character.fromJson(jsonDecode(file));
@@ -74,8 +71,7 @@ class NonPlayerCharactersState extends ChangeNotifier {
           }
         } else {
           // For desktop
-          List<File> files =
-              result.paths.map((path) => File(path ?? "")).toList();
+          List<File> files = result.paths.map((path) => File(path ?? "")).toList();
 
           for (var file in files) {
             final json = await file.readAsString(encoding: Windows1252Codec());

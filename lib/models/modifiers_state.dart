@@ -45,9 +45,7 @@ class ModifiersState {
       totalModifier.attack = totalModifier.attack + modifier.attack;
     }
 
-    return totalModifier.description().isEmpty
-        ? "0"
-        : totalModifier.description();
+    return totalModifier.description().isEmpty ? "0" : totalModifier.description();
   }
 
   String totalDefendingDescription(DefenseType type) {
@@ -88,28 +86,23 @@ class ModifiersState {
       switch (type) {
         case ModifiersType.attack:
           if (modifier.attack != 0) {
-            total =
-                '$total${modifier.attack > 0 ? '+${modifier.attack}' : '${modifier.attack}'}';
+            total = '$total${modifier.attack > 0 ? '+${modifier.attack}' : '${modifier.attack}'}';
           }
         case ModifiersType.turn:
           if (modifier.turn != 0) {
-            total =
-                '$total${modifier.turn > 0 ? '+${modifier.turn}' : '${modifier.turn}'}';
+            total = '$total${modifier.turn > 0 ? '+${modifier.turn}' : '${modifier.turn}'}';
           }
         case ModifiersType.action:
           if (modifier.physicalAction != 0) {
-            total =
-                '$total${modifier.physicalAction > 0 ? '+${modifier.physicalAction}' : '${modifier.physicalAction}'}';
+            total = '$total${modifier.physicalAction > 0 ? '+${modifier.physicalAction}' : '${modifier.physicalAction}'}';
           }
         case ModifiersType.parry:
           if (modifier.parry != 0) {
-            total =
-                '$total${modifier.parry > 0 ? '+${modifier.parry}' : '${modifier.parry}'}';
+            total = '$total${modifier.parry > 0 ? '+${modifier.parry}' : '${modifier.parry}'}';
           }
         case ModifiersType.dodge:
           if (modifier.dodge != 0) {
-            total =
-                '$total${modifier.dodge > 0 ? '+${modifier.dodge}' : '${modifier.dodge}'}';
+            total = '$total${modifier.dodge > 0 ? '+${modifier.dodge}' : '${modifier.dodge}'}';
           }
       }
     }
@@ -139,8 +132,7 @@ class ModifiersState {
       totalModifier.dodge = totalModifier.dodge + modifier.dodge;
       totalModifier.parry = totalModifier.parry + modifier.parry;
       totalModifier.turn = totalModifier.turn + modifier.turn;
-      totalModifier.physicalAction =
-          totalModifier.physicalAction + modifier.physicalAction;
+      totalModifier.physicalAction = totalModifier.physicalAction + modifier.physicalAction;
     }
 
     return totalModifier.description();

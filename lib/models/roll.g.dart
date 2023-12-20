@@ -39,9 +39,5 @@ class RollAdapter extends TypeAdapter<Roll> {
   int get hashCode => typeId.hashCode;
 
   @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is RollAdapter &&
-          runtimeType == other.runtimeType &&
-          typeId == other.typeId;
+  bool operator ==(Object other) => identical(this, other) || other is RollAdapter && runtimeType == other.runtimeType && typeId == other.typeId;
 }

@@ -31,9 +31,7 @@ class CombatData {
       });
     }
 
-    armour = json['armadura'] != null
-        ? ArmourData.fromJson(json['armadura'])
-        : ArmourData(calculatedArmour: Armour(), armours: []);
+    armour = json['armadura'] != null ? ArmourData.fromJson(json['armadura']) : ArmourData(calculatedArmour: Armour(), armours: []);
   }
 
   CombatData copy() {

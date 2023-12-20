@@ -66,8 +66,7 @@ class StatusModifier extends Object {
 
     if (isOfCritical == true && midValue != null) {
       if (attack != midValue) {
-        description =
-            '$description${separator}Se recupera hasta: $midValue a 5/turno';
+        description = '$description${separator}Se recupera hasta: $midValue a 5/turno';
       }
     }
 

@@ -21,9 +21,7 @@ class CharacterInfoCard extends StatelessWidget {
     var appState = context.watch<CharactersPageState>();
     var theme = Theme.of(context);
 
-    Character? character = attacking
-        ? appState.combatState.attack.character
-        : appState.combatState.defense.character;
+    Character? character = attacking ? appState.combatState.attack.character : appState.combatState.defense.character;
 
     return character != null
         ? Card(
@@ -34,9 +32,7 @@ class CharacterInfoCard extends StatelessWidget {
                   width: 10000,
                   height: 40,
                   child: ColoredBox(
-                    color: attacking
-                        ? theme.colorScheme.primary
-                        : theme.colorScheme.secondary,
+                    color: attacking ? theme.colorScheme.primary : theme.colorScheme.secondary,
                     child: TextFormFieldCustom(
                       align: TextAlign.center,
                       style: theme.textTheme.titleMedium!.copyWith(
@@ -69,8 +65,7 @@ class CharacterInfoCard extends StatelessWidget {
                                   appState.updateCharacter(character),
                                 },
                                 onSelect: (element) => {
-                                  character.state.selectedWeaponIndex =
-                                      character.combat.weapons.indexOf(element),
+                                  character.state.selectedWeaponIndex = character.combat.weapons.indexOf(element),
                                   appState.updateCharacter(character),
                                 },
                               ))
@@ -80,8 +75,7 @@ class CharacterInfoCard extends StatelessWidget {
                           _row([
                             Expanded(
                               flex: 2,
-                              child: Text(
-                                  "Turno: ${character.selectedWeapon().turn.toString()} + "),
+                              child: Text("Turno: ${character.selectedWeapon().turn.toString()} + "),
                             ),
                             spacer,
                             Expanded(
@@ -89,8 +83,7 @@ class CharacterInfoCard extends StatelessWidget {
                                 child: TextFormFieldCustom(
                                   text: character.state.turnModifier,
                                   onChanged: (value) {
-                                    var newChar =
-                                        _calculateTurn(character, value);
+                                    var newChar = _calculateTurn(character, value);
                                     appState.updateCharacter(newChar);
                                   },
                                 )),
@@ -120,24 +113,19 @@ class CharacterInfoCard extends StatelessWidget {
                               crossAxisCount: 2,
                               childAspectRatio: 0.4,
                               children: [
-                                for (var consumable
-                                    in character.state.consumables)
+                                for (var consumable in character.state.consumables)
                                   ConsumableCard(
                                     consumable,
                                     onChangedActual: (actual) {
-                                      int index = character.state.consumables
-                                          .indexOf(consumable);
+                                      int index = character.state.consumables.indexOf(consumable);
                                       consumable.update(actual: actual);
-                                      character.state.consumables[index] =
-                                          consumable;
+                                      character.state.consumables[index] = consumable;
                                       appState.updateCharacter(character);
                                     },
                                     onChangedMax: (max) {
-                                      int index = character.state.consumables
-                                          .indexOf(consumable);
+                                      int index = character.state.consumables.indexOf(consumable);
                                       consumable.update(max: max);
-                                      character.state.consumables[index] =
-                                          consumable;
+                                      character.state.consumables[index] = consumable;
                                       appState.updateCharacter(character);
                                     },
                                   ),
@@ -151,18 +139,13 @@ class CharacterInfoCard extends StatelessWidget {
                               child: Column(children: [
                                 Text("Modificadores"),
                                 Text(
-                                  character.state.modifiers
-                                      .totalModifierDescription(),
+                                  character.state.modifiers.totalModifierDescription(),
                                   style: theme.textTheme.bodySmall,
                                   textAlign: TextAlign.center,
                                 ),
                               ]),
                               onPressed: () {
-                                BottomSheetModifiers.show(
-                                    context,
-                                    character.state.modifiers,
-                                    Modifiers.getStatusModifiers(),
-                                    (newModifiersState) {
+                                BottomSheetModifiers.show(context, character.state.modifiers, Modifiers.getStatusModifiers(), (newModifiersState) {
                                   character.state.modifiers = newModifiersState;
                                   appState.updateCharacter(character);
                                 });
@@ -177,8 +160,7 @@ class CharacterInfoCard extends StatelessWidget {
                               aspectRatio: 0.3,
                               modifiers: character.state.modifiers.getAll(),
                               onSelected: (modifier) {
-                                character.state.modifiers
-                                    .removeModifier(modifier);
+                                character.state.modifiers.removeModifier(modifier);
                                 appState.updateCharacter(character);
                               },
                             ),
@@ -214,9 +196,7 @@ class CharacterInfoCard extends StatelessWidget {
       modifier = value.interpret().toInt();
     } catch (e) {}
 
-    var total = baseTurn +
-        turn.rolls.reduce((value, element) => value + element) +
-        modifier;
+    var total = baseTurn + turn.rolls.reduce((value, element) => value + element) + modifier;
 
     character.state.currentTurn.roll = total;
     return character;

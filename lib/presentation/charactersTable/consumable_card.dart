@@ -23,10 +23,7 @@ class ConsumableCard extends StatelessWidget {
     var header = Padding(
       padding: EdgeInsets.fromLTRB(8, 4, 8, 0),
       child: Row(
-        mainAxisAlignment:
-            consumable.step > 0 || consumable.description.isNotEmpty
-                ? MainAxisAlignment.spaceBetween
-                : MainAxisAlignment.center,
+        mainAxisAlignment: consumable.step > 0 || consumable.description.isNotEmpty ? MainAxisAlignment.spaceBetween : MainAxisAlignment.center,
         children: [
           Text(
             consumable.name,
@@ -59,8 +56,7 @@ class ConsumableCard extends StatelessWidget {
             children: [
               IconButton(
                   onPressed: () {
-                    onChangedActual(
-                        (consumable.actualValue - consumable.step).toString());
+                    onChangedActual((consumable.actualValue - consumable.step).toString());
                   },
                   icon: Icon(Icons.remove)),
               Expanded(
@@ -91,8 +87,7 @@ class ConsumableCard extends StatelessWidget {
               ),
               IconButton(
                   onPressed: () {
-                    onChangedActual(
-                        (consumable.actualValue + consumable.step).toString());
+                    onChangedActual((consumable.actualValue + consumable.step).toString());
                   },
                   icon: Icon(Icons.add)),
             ],

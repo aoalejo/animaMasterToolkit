@@ -34,12 +34,8 @@ class CharacterKi {
   }
 
   CharacterKi.fromJson(Map<String, dynamic> json) {
-    accumulationsPerAttribute = json['Acumulaciones'] != null
-        ? AttributesList.fromJson(json['Acumulaciones'])
-        : AttributesList();
-    maximumPerAttribute = json['Maximos'] != null
-        ? AttributesList.fromJson(json['Maximos'])
-        : AttributesList();
+    accumulationsPerAttribute = json['Acumulaciones'] != null ? AttributesList.fromJson(json['Acumulaciones']) : AttributesList();
+    maximumPerAttribute = json['Maximos'] != null ? AttributesList.fromJson(json['Maximos']) : AttributesList();
     skills = json['Habilidades'] ?? <String, String>{};
 
     maximumAccumulation = JsonUtils.integer(json['acumulacionMax'], 0);
