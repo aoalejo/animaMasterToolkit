@@ -41,6 +41,11 @@ jobs:
     steps:
       - name: 📚 Checkout repo
         uses: actions/checkout@v3
+      - name: 🐦 Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: "stable"
+          flutter-version: 3.16.2
       - name: ⬇️ Download Artifact
         uses: actions/download-artifact@master
         with:
