@@ -15,7 +15,7 @@ jobs:
     uses: VeryGoodOpenSource/very_good_workflows/.github/workflows/flutter_package.yml@v1
     with:
       flutter_channel: stable
-      flutter_version: 3.3.8
+      flutter_version: 3.16.2
 
   build:
     name: Build
@@ -28,14 +28,14 @@ jobs:
         uses: subosito/flutter-action@v2
         with:
           channel: "stable"
-          flutter-version: 3.3.8
+          flutter-version: 3.16.2
       - name: 📦 Install Dependencies
         run: |
           flutter pub global activate very_good_cli
           very_good --analytics false
           very_good packages get --recursive
       - name: 🛠️ Build the application
-        run: flutter build web -t lib/main_production.dart
+        run: flutter build web -t lib/main.dart
       - name: ⬇️ Archive Production Artifact
         uses: actions/upload-artifact@master
         with:
