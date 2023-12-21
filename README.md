@@ -25,8 +25,8 @@ Anima Master Toolkit
 - Carga o generación de tiradas
 - Uso del tipo de armadura específico para el tipo de ataque dado
 
+
 ### Proximas tareas:
-- Añadir modificadores de apuntado
 - Soporte a modificación/edición de armaduras
 - Tomar en cuenta la localización de armadura si posee un modificador de apuntado
 - Añadir modificadores de cansancio (no se aplicarán automaticamente)
@@ -36,6 +36,8 @@ Anima Master Toolkit
 - Al restaurar consumibles y luego recargar la pagina la vida de los personajes que no fueron modificados vuelve al estado anterior. Por ejemplo si aplico daño o modifico la vida del personaje desde la tarjeta central, tampoco se soluciona al restaurar consumibles y tirar iniciativa nuevamente.
 
 ### Realizados:
+- Añadidos modificadores de cansancio
+- Añadidos modificadores de apuntado
 - No se puede aplicar el daño si es menor o igual a 10, si es por una especificación del sistema seria recomendable cambiar el mensaje de “daño causado: 10” por uno descriptivo de “no causa daño” o “no aplica daño”(yo pensaba que esto solo ocurría si la diferencia de ataque era menor que 10 )
 - En la tarjeta del atacante en el campo daño base falta el botón de limpiar campo
 - El botón para descartar los personajes atacante y defensor pasan muy desapercibidos no son claros en su funcionamiento, en cambio seria mas intuitivo agregar en la equina superior derecha de las tarjetas centrales de atacante y defensor una “X”
