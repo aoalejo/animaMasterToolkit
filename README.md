@@ -24,18 +24,16 @@ Anima Master Toolkit
 - Adición de modificadores personalizados
 - Carga o generación de tiradas
 - Uso del tipo de armadura específico para el tipo de ataque dado
-
+- Soporte a modificación de armaduras
 
 ### Proximas tareas:
-- Soporte a modificación/edición de armaduras
 - Tomar en cuenta la localización de armadura si posee un modificador de apuntado
-- Añadir modificadores de cansancio (no se aplicarán automaticamente)
-
 
 ### Feedback Testing:
 - Al restaurar consumibles y luego recargar la pagina la vida de los personajes que no fueron modificados vuelve al estado anterior. Por ejemplo si aplico daño o modifico la vida del personaje desde la tarjeta central, tampoco se soluciona al restaurar consumibles y tirar iniciativa nuevamente.
 
 ### Realizados:
+- Añadidas armaduras por defecto para cambio rápido
 - Añadidos modificadores de cansancio
 - Añadidos modificadores de apuntado
 - No se puede aplicar el daño si es menor o igual a 10, si es por una especificación del sistema seria recomendable cambiar el mensaje de “daño causado: 10” por uno descriptivo de “no causa daño” o “no aplica daño”(yo pensaba que esto solo ocurría si la diferencia de ataque era menor que 10 )
