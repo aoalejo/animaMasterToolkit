@@ -30,8 +30,11 @@ class ArmoursRack extends StatelessWidget {
             return StatefulBuilder(
               builder: (BuildContext context, StateSetter setState) {
                 return BottomSheetCustom(
-                  title: Text("Modificar ${armour.armours.firstOrNull?.name ?? "Sin armadura"}"),
+                  title: Text("Modificar Armadura"),
                   children: [
+                    SizedBox(
+                      height: 16,
+                    ),
                     TextFormFieldCustom(
                       label: "Nombre",
                       text: armour.armours.firstOrNull?.name ?? "Sin armadura",

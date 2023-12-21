@@ -28,6 +28,7 @@ Anima Master Toolkit
 
 ### Proximas tareas:
 - Tomar en cuenta la localización de armadura si posee un modificador de apuntado
+- Revisar si el exportado de la planilla tiene en cuenta los penalizadores por armadura en las habilidades secundarias
 
 ### Feedback Testing:
 - Al restaurar consumibles y luego recargar la pagina la vida de los personajes que no fueron modificados vuelve al estado anterior. Por ejemplo si aplico daño o modifico la vida del personaje desde la tarjeta central, tampoco se soluciona al restaurar consumibles y tirar iniciativa nuevamente.
