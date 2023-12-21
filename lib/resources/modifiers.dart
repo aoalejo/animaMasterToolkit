@@ -60,6 +60,22 @@ class Modifiers {
 
   static var _valuesSituational = """
 [
+  { "name": "Cuello (Apuntado)", "attack":"-80" },
+{ "name": "Cabeza (Apuntado)", "attack":"-60" },
+{ "name": "Codo (Apuntado)", "attack":"-60" },
+{ "name": "Corazón (Apuntado)", "attack":"-60" },
+{ "name": "Ingle (Apuntado)", "attack":"-60" },
+{ "name": "Pie (Apuntado)", "attack":"-50" },
+{ "name": "Mano (Apuntado)", "attack":"-40" },
+{ "name": "Rodilla (Apuntado)", "attack":"-40" },
+{ "name": "Abdomen (Apuntado)", "attack":"-20" },
+{ "name": "Brazo (Apuntado)", "attack":"-20" },
+{ "name": "Muslo (Apuntado)", "attack":"-20" },
+{ "name": "Pantorrilla (Apuntado)", "attack":"-10" },
+{ "name": "Torso (Apuntado)", "attack":"-10" },
+{ "name": "Ojo (Apuntado)", "attack":"-100" },
+{ "name": "Muñeca (Apuntado)", "attack":"-40" },
+{ "name": "Hombro (Apuntado)", "attack":"-30" },
   {
     "name": "Flanco",
     "attack": -10,
