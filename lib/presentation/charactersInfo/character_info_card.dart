@@ -1,4 +1,5 @@
 import 'package:amt/models/character/character.dart';
+import 'package:amt/presentation/charactersTable/armours_rack.dart';
 import 'package:amt/presentation/text_form_field_custom.dart';
 import 'package:amt/presentation/bottom_sheet_modifiers.dart';
 import 'package:amt/presentation/charactersTable/consumable_card.dart';
@@ -57,18 +58,30 @@ class CharacterInfoCard extends StatelessWidget {
                             [
                               Text("Arma:"),
                               Expanded(
-                                  child: WeaponsRack(
-                                weapons: character.combat.weapons,
-                                selectedWeapon: character.selectedWeapon(),
-                                onEdit: (weapon) => {
-                                  character.combat.updateWeapon(weapon),
-                                  appState.updateCharacter(character),
-                                },
-                                onSelect: (element) => {
-                                  character.state.selectedWeaponIndex = character.combat.weapons.indexOf(element),
-                                  appState.updateCharacter(character),
-                                },
-                              ))
+                                child: WeaponsRack(
+                                  weapons: character.combat.weapons,
+                                  selectedWeapon: character.selectedWeapon(),
+                                  onEdit: (weapon) => {
+                                    character.combat.updateWeapon(weapon),
+                                    appState.updateCharacter(character),
+                                  },
+                                  onSelect: (element) => {
+                                    character.state.selectedWeaponIndex = character.combat.weapons.indexOf(element),
+                                    appState.updateCharacter(character),
+                                  },
+                                ),
+                              ),
+                              SizedBox(width: 16),
+                              Text("Armadura:"),
+                              Expanded(
+                                child: ArmoursRack(
+                                  armourBase: character.combat.armour,
+                                  onEdit: (armour) => {
+                                    character.combat.armour = armour,
+                                    appState.updateCharacter(character),
+                                  },
+                                ),
+                              ),
                             ],
                           ),
                           spacer,

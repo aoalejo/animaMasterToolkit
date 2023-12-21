@@ -39,13 +39,13 @@ class ArmourData {
     calculatedArmour = json['armaduraTotal'] != null
         ? Armour?.fromJson(json['armaduraTotal'])
         : Armour(
-            fil: 2,
-            con: 2,
-            pen: 2,
-            cal: 2,
-            ele: 2,
-            fri: 2,
-            ene: 2,
+            fil: 0,
+            con: 0,
+            pen: 0,
+            cal: 0,
+            ele: 0,
+            fri: 0,
+            ene: 0,
           );
     if (json['armaduras'] != null) {
       armours = <Armour>[];
@@ -53,7 +53,18 @@ class ArmourData {
         armours.add(Armour.fromJson(v));
       });
     } else {
-      armours = <Armour>[];
+      armours = <Armour>[
+        Armour(
+          name: "Sin armadura",
+          fil: 0,
+          con: 0,
+          pen: 0,
+          cal: 0,
+          ele: 0,
+          fri: 0,
+          ene: 0,
+        )
+      ];
     }
   }
 }

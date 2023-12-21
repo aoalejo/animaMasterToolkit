@@ -39,13 +39,13 @@ class Armour {
       {this.name,
       this.location,
       this.quality,
-      this.fil = 2,
-      this.con = 2,
-      this.pen = 2,
-      this.cal = 2,
-      this.ele = 2,
-      this.fri = 2,
-      this.ene = 2,
+      this.fil = 0,
+      this.con = 0,
+      this.pen = 0,
+      this.cal = 0,
+      this.ele = 0,
+      this.fri = 0,
+      this.ene = 0,
       this.endurance,
       this.presence,
       this.movementRestriction,
@@ -68,6 +68,20 @@ class Armour {
       case DamageTypes.ene:
         return ene;
     }
+  }
+
+  String description() {
+    return "Fil: $fil Con: $con Pen: $pen Cal: $cal Ele: $ele Fri: $fri Ene: $ene";
+  }
+
+  changeForAll({required int add}) {
+    fil = fil + add;
+    con = con + add;
+    pen = pen + add;
+    cal = cal + add;
+    ele = ele + add;
+    fri = fri + add;
+    ene = ene + add;
   }
 
   Armour.fromJson(Map<String, dynamic> json) {

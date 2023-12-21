@@ -60,6 +60,22 @@ class Modifiers {
 
   static var _valuesSituational = """
 [
+  { "name": "Cuello (Apuntado)", "attack":"-80" },
+{ "name": "Cabeza (Apuntado)", "attack":"-60" },
+{ "name": "Codo (Apuntado)", "attack":"-60" },
+{ "name": "Corazón (Apuntado)", "attack":"-60" },
+{ "name": "Ingle (Apuntado)", "attack":"-60" },
+{ "name": "Pie (Apuntado)", "attack":"-50" },
+{ "name": "Mano (Apuntado)", "attack":"-40" },
+{ "name": "Rodilla (Apuntado)", "attack":"-40" },
+{ "name": "Abdomen (Apuntado)", "attack":"-20" },
+{ "name": "Brazo (Apuntado)", "attack":"-20" },
+{ "name": "Muslo (Apuntado)", "attack":"-20" },
+{ "name": "Pantorrilla (Apuntado)", "attack":"-10" },
+{ "name": "Torso (Apuntado)", "attack":"-10" },
+{ "name": "Ojo (Apuntado)", "attack":"-100" },
+{ "name": "Muñeca (Apuntado)", "attack":"-40" },
+{ "name": "Hombro (Apuntado)", "attack":"-30" },
   {
     "name": "Flanco",
     "attack": -10,
@@ -241,6 +257,11 @@ class Modifiers {
 
   static var _values = """
 [
+{ "name": "4 puntos restantes de cansancio", "attack":"-10", "parry": -10, "dodge": -10, "turn": -10, "physicalAction": -10},
+{ "name": "3 puntos restantes de cansancio", "attack":"-20", "parry": -20, "dodge": -20, "turn": -20, "physicalAction": -20},
+{ "name": "2 puntos restantes de cansancio", "attack":"-40", "parry": -40, "dodge": -40, "turn": -40, "physicalAction": -40},
+{ "name": "1 puntos restantes de cansancio", "attack":"-80", "parry": -80, "dodge": -80, "turn": -80, "physicalAction": -80},
+{ "name": "0 puntos restantes de cansancio", "attack":"-120", "parry": -120, "dodge": -120, "turn": -120, "physicalAction": -120},
   {
     "name": "Ceguera parcial",
     "attack": -30,
