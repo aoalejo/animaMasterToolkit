@@ -113,7 +113,9 @@ class CharacterInfoCard extends StatelessWidget {
                               child: Text(
                                 '= ${character.state.currentTurn.roll.toString()}',
                                 textAlign: TextAlign.end,
-                                style: theme.textTheme.titleMedium,
+                                style: theme.textTheme.titleMedium!.copyWith(
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
                             ),
                             spacer,
