@@ -196,8 +196,8 @@ class CharactersPageState extends ChangeNotifier {
       for (var consumable in character.state.consumables) {
         consumable.actualValue = consumable.maxValue;
       }
+      character.save();
     }
-
     notifyListeners();
   }
 

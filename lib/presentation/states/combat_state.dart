@@ -89,7 +89,6 @@ class ScreenCombatState {
   }
 
   List<ExplainedText> attackResult() {
-    print("attackResult START");
     List<ExplainedText> result = [];
 
     var damage = calculateDamage();
@@ -100,6 +99,7 @@ class ScreenCombatState {
       defender: defense.character,
       damage: damage.result,
     );
+
     if (critical != null) result.add(critical);
 
     var counter = CombatRules.calculateCounterBonus(attackValue: finalAttackValue, defenseValue: finalDefenseValue);
