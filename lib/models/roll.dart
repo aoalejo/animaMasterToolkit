@@ -15,11 +15,15 @@ class Roll {
   late List<int> rolls;
 
   Roll.turn() {
-    Roll.roll(
+    final turnRoll = Roll.roll(
       turnFumble: true,
       fumbleLevel: -1,
       nature: 0,
     );
+
+    roll = turnRoll.roll;
+    description = turnRoll.description;
+    rolls = turnRoll.rolls;
   }
 
   Roll.d10Roll() {

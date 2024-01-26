@@ -267,6 +267,39 @@ class WeaponsRack extends StatelessWidget {
                 ),
               ],
             ),
+            SizedBox(
+              height: 16,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text("Tipo de defensa: "),
+                StatefulBuilder(
+                  builder: (context, setState) => ToggleButtons(
+                    borderRadius: const BorderRadius.all(Radius.circular(8)),
+                    isSelected: [
+                      weapon.defenseType == DefenseType.parry,
+                      weapon.defenseType == DefenseType.dodge,
+                    ],
+                    onPressed: (index) => {
+                      setState(
+                        () => {
+                          weapon.defenseType = DefenseType.values[index],
+                          onEdit(weapon),
+                        },
+                      )
+                    },
+                    children: [
+                      Text("Parada"),
+                      Text("Esquiva"),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(
+              height: 16,
+            ),
           ],
         );
       },

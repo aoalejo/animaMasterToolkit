@@ -84,7 +84,7 @@ class ShowCharacterInfo {
                     ),
                   ),
                   SizedBox(
-                    height: 480,
+                    height: 400,
                     width: 1200,
                     child: SingleChildScrollView(
                       scrollDirection: Axis.vertical,

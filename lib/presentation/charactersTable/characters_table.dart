@@ -4,6 +4,7 @@ import 'package:amt/models/modifiers_state.dart';
 import 'package:amt/models/rules/rules.dart';
 import 'package:amt/presentation/charactersTable/character_info.dart';
 import 'package:amt/presentation/charactersTable/character_options.dart';
+import 'package:amt/presentation/charactersTable/create_character.dart';
 import 'package:amt/presentation/states/characters_page_state.dart';
 import 'package:amt/utils/int_extension.dart';
 import 'package:amt/utils/assets.dart';
@@ -48,6 +49,22 @@ class CharactersTable extends StatelessWidget {
                 icon: Icon(Icons.upload_file),
                 label: Text(
                   "Cargar Personaje",
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 1,
+                ),
+              ),
+            ),
+            Flexible(
+              flex: 1,
+              child: TextButton.icon(
+                onPressed: () {
+                  CreateCharacter.show(context, (character) {
+                    appState.addCharacter(character);
+                  });
+                },
+                icon: Icon(Icons.edit_document),
+                label: Text(
+                  "Crear Personaje",
                   overflow: TextOverflow.ellipsis,
                   maxLines: 1,
                 ),

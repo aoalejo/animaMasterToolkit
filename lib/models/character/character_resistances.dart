@@ -50,6 +50,16 @@ class CharacterResistances {
     return list;
   }
 
+  CharacterResistances.withDefault(int value) {
+    presence = value;
+
+    physicalResistance = value;
+    diseasesResistance = value;
+    poisonResistance = value;
+    magicalResistance = value;
+    physicResistance = value;
+  }
+
   CharacterResistances copy() {
     return CharacterResistances(
       presence: presence,

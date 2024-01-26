@@ -3,8 +3,9 @@ import 'package:flutter/material.dart';
 class BottomSheetCustom extends StatelessWidget {
   final Widget title;
   final List<Widget> children;
+  final List<Widget>? bottomRow;
 
-  BottomSheetCustom({required this.title, required this.children});
+  BottomSheetCustom({required this.title, required this.children, this.bottomRow});
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +23,7 @@ class BottomSheetCustom extends StatelessWidget {
               child: title,
             ),
             SizedBox(
-              height: midHeight - 120,
+              height: midHeight - 240,
               child: ListView(children: children),
             ),
             SizedBox(
@@ -31,10 +32,13 @@ class BottomSheetCustom extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   SizedBox(),
-                  ElevatedButton(
-                    child: const Text('Cerrar'),
-                    onPressed: () => Navigator.pop(context),
-                  ),
+                  if (bottomRow != null)
+                    ...bottomRow!
+                  else
+                    ElevatedButton(
+                      child: const Text('Cerrar'),
+                      onPressed: () => Navigator.pop(context),
+                    ),
                   SizedBox(),
                 ],
               ),

@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:amt/models/enums.dart';
 import 'package:function_tree/function_tree.dart';
 import 'package:hive/hive.dart';
@@ -45,6 +47,12 @@ class ConsumableState {
     required this.description,
     this.type = ConsumableType.other,
   });
+
+  ConsumableState.from({required this.name, required int value, required this.type}) {
+    maxValue = value;
+    actualValue = value;
+    step = max(value ~/ 10, 1);
+  }
 
   ConsumableState copy() {
     return ConsumableState(

@@ -100,4 +100,16 @@ class Armour {
     movementRestriction = JsonUtils.integer(json['RestMov'], 0);
     enchanted = json['Enc'].toString() == "Si";
   }
+
+  Armour.fromValue({required String name, required int physical, required int energy}) {
+    name = name;
+    fil = physical;
+    con = physical;
+    pen = physical;
+    cal = physical;
+    ele = physical;
+    fri = physical;
+    ene = energy;
+    endurance = 99;
+  }
 }
