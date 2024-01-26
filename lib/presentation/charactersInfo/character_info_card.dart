@@ -1,4 +1,5 @@
 import 'package:amt/models/character/character.dart';
+import 'package:amt/presentation/charactersInfo/consumable_create_bottom_sheet.dart';
 import 'package:amt/presentation/charactersTable/armours_rack.dart';
 import 'package:amt/presentation/text_form_field_custom.dart';
 import 'package:amt/presentation/bottom_sheet_modifiers.dart';
@@ -144,6 +145,18 @@ class CharacterInfoCard extends StatelessWidget {
                                       appState.updateCharacter(character);
                                     },
                                   ),
+                                Card(
+                                  color: theme.colorScheme.secondaryContainer,
+                                  child: Center(
+                                      child: TextButton(
+                                          onPressed: () {
+                                            CreateConsumable.show(context, (consumable) {
+                                              character.state.consumables.add(consumable);
+                                              appState.updateCharacter(character);
+                                            });
+                                          },
+                                          child: Text("Añadir"))),
+                                )
                               ],
                             ),
                           ),

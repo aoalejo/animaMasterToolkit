@@ -9,7 +9,7 @@ class BottomSheetCustom extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var midHeight = MediaQuery.of(context).size.height / 1.5;
+    var midHeight = MediaQuery.of(context).size.height / 2;
 
     return SizedBox(
       height: midHeight,
@@ -23,7 +23,7 @@ class BottomSheetCustom extends StatelessWidget {
               child: title,
             ),
             SizedBox(
-              height: midHeight - 240,
+              height: midHeight - 160,
               child: ListView(children: children),
             ),
             SizedBox(
