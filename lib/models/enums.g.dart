@@ -39,7 +39,10 @@ class DefenseTypeAdapter extends TypeAdapter<DefenseType> {
 
   @override
   bool operator ==(Object other) =>
-      identical(this, other) || other is DefenseTypeAdapter && runtimeType == other.runtimeType && typeId == other.typeId;
+      identical(this, other) ||
+      other is DefenseTypeAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
 }
 
 class DamageTypesAdapter extends TypeAdapter<DamageTypes> {
@@ -100,7 +103,10 @@ class DamageTypesAdapter extends TypeAdapter<DamageTypes> {
 
   @override
   bool operator ==(Object other) =>
-      identical(this, other) || other is DamageTypesAdapter && runtimeType == other.runtimeType && typeId == other.typeId;
+      identical(this, other) ||
+      other is DamageTypesAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
 }
 
 class WeaponSizeAdapter extends TypeAdapter<WeaponSize> {
@@ -141,7 +147,10 @@ class WeaponSizeAdapter extends TypeAdapter<WeaponSize> {
 
   @override
   bool operator ==(Object other) =>
-      identical(this, other) || other is WeaponSizeAdapter && runtimeType == other.runtimeType && typeId == other.typeId;
+      identical(this, other) ||
+      other is WeaponSizeAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
 }
 
 class KnownTypeAdapter extends TypeAdapter<KnownType> {
@@ -181,7 +190,11 @@ class KnownTypeAdapter extends TypeAdapter<KnownType> {
   int get hashCode => typeId.hashCode;
 
   @override
-  bool operator ==(Object other) => identical(this, other) || other is KnownTypeAdapter && runtimeType == other.runtimeType && typeId == other.typeId;
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is KnownTypeAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
 }
 
 class ArmourLocationAdapter extends TypeAdapter<ArmourLocation> {
@@ -227,7 +240,10 @@ class ArmourLocationAdapter extends TypeAdapter<ArmourLocation> {
 
   @override
   bool operator ==(Object other) =>
-      identical(this, other) || other is ArmourLocationAdapter && runtimeType == other.runtimeType && typeId == other.typeId;
+      identical(this, other) ||
+      other is ArmourLocationAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
 }
 
 class ConsumableTypeAdapter extends TypeAdapter<ConsumableType> {
@@ -268,5 +284,8 @@ class ConsumableTypeAdapter extends TypeAdapter<ConsumableType> {
 
   @override
   bool operator ==(Object other) =>
-      identical(this, other) || other is ConsumableTypeAdapter && runtimeType == other.runtimeType && typeId == other.typeId;
+      identical(this, other) ||
+      other is ConsumableTypeAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
 }

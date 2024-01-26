@@ -49,5 +49,8 @@ class CharacterResistancesAdapter extends TypeAdapter<CharacterResistances> {
 
   @override
   bool operator ==(Object other) =>
-      identical(this, other) || other is CharacterResistancesAdapter && runtimeType == other.runtimeType && typeId == other.typeId;
+      identical(this, other) ||
+      other is CharacterResistancesAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
 }

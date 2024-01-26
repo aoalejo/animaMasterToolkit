@@ -16,7 +16,8 @@ class ModifiersStateAdapter extends TypeAdapter<ModifiersState> {
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return ModifiersState().._modifiers = (fields[0] as List).cast<StatusModifier>();
+    return ModifiersState()
+      .._modifiers = (fields[0] as List).cast<StatusModifier>();
   }
 
   @override
@@ -32,5 +33,8 @@ class ModifiersStateAdapter extends TypeAdapter<ModifiersState> {
 
   @override
   bool operator ==(Object other) =>
-      identical(this, other) || other is ModifiersStateAdapter && runtimeType == other.runtimeType && typeId == other.typeId;
+      identical(this, other) ||
+      other is ModifiersStateAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
 }

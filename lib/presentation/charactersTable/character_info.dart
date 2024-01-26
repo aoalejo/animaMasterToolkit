@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:function_tree/function_tree.dart';
 
 class ShowCharacterInfo {
-  static call(BuildContext context, Character character, {required Function(Character) onRemove}) {
+  static call(BuildContext context, Character character) {
     var theme = Theme.of(context);
     var skills = character.skills.list();
     var attributes = character.attributes.toKeyValue();
@@ -56,45 +56,6 @@ class ShowCharacterInfo {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(character.profile.name),
-                              IconButton(
-                                onPressed: () {
-                                  Navigator.pop(context);
-
-                                  showDialog(
-                                      context: context,
-                                      builder: (context) {
-                                        return AlertDialog(
-                                          title: Text("Borrar personaje"),
-                                          content: Text("Seguro que desea borrar ${character.profile.name}?"),
-                                          actions: [
-                                            OutlinedButton(
-                                              onPressed: () {
-                                                Navigator.pop(context);
-                                                onRemove(character);
-                                              },
-                                              child: Text("Borrar"),
-                                            ),
-                                            TextButton(
-                                              onPressed: () {
-                                                Navigator.pop(context);
-                                              },
-                                              child: Text("Cancelar"),
-                                            )
-                                          ],
-                                        );
-                                      });
-                                },
-                                icon: Row(children: [
-                                  Text(
-                                    "Eliminar!",
-                                    style: theme.textTheme.bodyMedium!.copyWith(color: Colors.red),
-                                  ),
-                                  Icon(
-                                    Icons.delete,
-                                    color: Colors.red,
-                                  )
-                                ]),
-                              ),
                               IconButton(
                                 onPressed: () {
                                   Navigator.pop(context);

@@ -3,7 +3,6 @@ import 'package:amt/models/rules/rules.dart';
 import 'package:amt/presentation/combat/custom_combat_card.dart';
 import 'package:amt/presentation/general/explained_result_container.dart';
 import 'package:amt/presentation/states/characters_page_state.dart';
-import 'package:amt/utils/explained_text.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

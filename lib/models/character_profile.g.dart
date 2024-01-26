@@ -27,13 +27,15 @@ class CharacterProfileAdapter extends TypeAdapter<CharacterProfile> {
       speed: fields[7] as int,
       isNpc: fields[8] as bool?,
       image: fields[9] as String?,
+      fumbleLevel: fields[10] as int?,
+      nature: fields[11] as int?,
     );
   }
 
   @override
   void write(BinaryWriter writer, CharacterProfile obj) {
     writer
-      ..writeByte(10)
+      ..writeByte(12)
       ..writeByte(0)
       ..write(obj.fatigue)
       ..writeByte(1)
@@ -53,7 +55,11 @@ class CharacterProfileAdapter extends TypeAdapter<CharacterProfile> {
       ..writeByte(8)
       ..write(obj.isNpc)
       ..writeByte(9)
-      ..write(obj.image);
+      ..write(obj.image)
+      ..writeByte(10)
+      ..write(obj.fumbleLevel)
+      ..writeByte(11)
+      ..write(obj.nature);
   }
 
   @override
@@ -61,5 +67,8 @@ class CharacterProfileAdapter extends TypeAdapter<CharacterProfile> {
 
   @override
   bool operator ==(Object other) =>
-      identical(this, other) || other is CharacterProfileAdapter && runtimeType == other.runtimeType && typeId == other.typeId;
+      identical(this, other) ||
+      other is CharacterProfileAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
 }

@@ -15,6 +15,9 @@ class CombatCriticalCard extends StatelessWidget {
     var combatState = appState.combatState;
     var criticalResult = combatState.criticalResult();
 
+    var attacker = combatState.attack.character;
+    var defender = combatState.defense.character;
+
     var criticalResultResult = combatState.criticalResultWithReduction(criticalResult: criticalResult.result);
 
     return CustomCombatCard(
@@ -49,7 +52,7 @@ class CombatCriticalCard extends StatelessWidget {
                       onChanged: (value) => {appState.updateCombatState(criticalRoll: value)},
                       suffixIcon: IconButton(
                         onPressed: () {
-                          appState.updateCombatState(criticalRoll: Roll.roll().getRollsAsString());
+                          appState.updateCombatState(criticalRoll: attacker?.roll().getRollsAsString());
                         },
                         icon: SizedBox.square(
                           dimension: 24,
@@ -115,7 +118,7 @@ class CombatCriticalCard extends StatelessWidget {
                       onChanged: (value) => {appState.updateCombatState(physicalResistanceRoll: value)},
                       suffixIcon: IconButton(
                         onPressed: () {
-                          appState.updateCombatState(physicalResistanceRoll: Roll.roll().getRollsAsString());
+                          appState.updateCombatState(physicalResistanceRoll: defender?.roll().getRollsAsString());
                         },
                         icon: SizedBox.square(
                           dimension: 24,

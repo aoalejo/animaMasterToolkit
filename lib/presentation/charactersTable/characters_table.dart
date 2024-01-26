@@ -3,6 +3,7 @@ import 'package:amt/models/enums.dart';
 import 'package:amt/models/modifiers_state.dart';
 import 'package:amt/models/rules/rules.dart';
 import 'package:amt/presentation/charactersTable/character_info.dart';
+import 'package:amt/presentation/charactersTable/character_options.dart';
 import 'package:amt/presentation/states/characters_page_state.dart';
 import 'package:amt/utils/int_extension.dart';
 import 'package:amt/utils/assets.dart';
@@ -157,7 +158,7 @@ class CharactersTable extends StatelessWidget {
                                     child: IconButton(
                                       icon: Icon(Icons.info),
                                       onPressed: () {
-                                        ShowCharacterInfo.call(context, character, onRemove: (character) => {appState.removeCharacter(character)});
+                                        ShowCharacterInfo.call(context, character);
                                       },
                                     ),
                                   ),
@@ -217,6 +218,20 @@ class CharactersTable extends StatelessWidget {
                                           appState,
                                           character,
                                           DefenseType.dodge,
+                                        );
+                                      },
+                                    ),
+                                  ),
+                                  Tooltip(
+                                    message: "Opciones",
+                                    child: IconButton(
+                                      icon: Icon(Icons.settings),
+                                      onPressed: () {
+                                        ShowCharacterOptions.call(
+                                          context,
+                                          character,
+                                          onRemove: (character) => {appState.removeCharacter(character)},
+                                          onEdit: (character) => appState.updateCharacter(character),
                                         );
                                       },
                                     ),

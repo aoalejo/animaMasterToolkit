@@ -173,7 +173,11 @@ class Character extends HiveObject {
     state = CharacterState(
       consumables: consumables,
       modifiers: ModifiersState(),
-      currentTurn: Roll.roll(base: combat.weapons.firstOrNull?.turn ?? 0),
+      currentTurn: Roll.roll(
+        base: combat.weapons.firstOrNull?.turn ?? 0,
+        fumbleLevel: profile.fumbleLevel ?? 3,
+        nature: profile.nature ?? 0,
+      ),
     );
   }
 
@@ -188,6 +192,8 @@ class Character extends HiveObject {
   void rollInitiative() {
     state.currentTurn = Roll.roll(
       base: calculateTurnBase(),
+      fumbleLevel: profile.fumbleLevel ?? 3,
+      nature: profile.nature ?? 0,
       turnFumble: true,
     );
   }

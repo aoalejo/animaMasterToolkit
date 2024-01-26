@@ -55,5 +55,8 @@ class StatusModifierAdapter extends TypeAdapter<StatusModifier> {
 
   @override
   bool operator ==(Object other) =>
-      identical(this, other) || other is StatusModifierAdapter && runtimeType == other.runtimeType && typeId == other.typeId;
+      identical(this, other) ||
+      other is StatusModifierAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
 }
