@@ -77,19 +77,11 @@ class Roll {
 
     if (canFumble && thisRoll <= fumbleLevel) {
       if (turnFumble) {
-        var handicap = 0;
-        switch (thisRoll) {
-          case 1:
-            handicap = -125;
-          case 2:
-            handicap = -100;
-          case 3:
-            handicap = -75;
-        }
+        var handicap = -75 - (fumbleLevel - thisRoll) * 25;
 
         rolls.add(handicap);
         thisRollDescription = "$thisRollDescription\nPifia: $handicap";
-        thisRoll = -handicap;
+        thisRoll = handicap;
       } else {
         Roll fumble = Roll.roll(
           canCrit: false,
