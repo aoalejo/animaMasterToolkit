@@ -5,11 +5,13 @@ class ModifiersCard extends StatelessWidget {
   final List<StatusModifier> modifiers;
   final double aspectRatio;
   final Function(StatusModifier)? onSelected;
+  final int crossAxisCount;
 
   ModifiersCard({
     required this.modifiers,
     this.aspectRatio = 0.4,
     this.onSelected,
+    this.crossAxisCount = 2,
   });
 
   @override
@@ -27,7 +29,7 @@ class ModifiersCard extends StatelessWidget {
         child: GridView.count(
           shrinkWrap: true,
           scrollDirection: Axis.horizontal,
-          crossAxisCount: 2,
+          crossAxisCount: crossAxisCount,
           childAspectRatio: aspectRatio,
           children: [
             for (var modifier in modifiers)

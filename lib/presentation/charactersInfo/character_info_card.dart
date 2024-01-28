@@ -32,19 +32,15 @@ class CharacterInfoCard extends StatelessWidget {
               children: [
                 SizedBox(
                   width: 10000,
-                  height: 40,
+                  height: 30,
                   child: ColoredBox(
                     color: attacking ? theme.colorScheme.primary : theme.colorScheme.secondary,
-                    child: TextFormFieldCustom(
-                      align: TextAlign.center,
+                    child: Text(
+                      character.profile.name,
+                      textAlign: TextAlign.center,
                       style: theme.textTheme.titleMedium!.copyWith(
                         color: theme.colorScheme.onPrimary,
                       ),
-                      text: character.profile.name,
-                      onChanged: (value) {
-                        character.profile.name = value;
-                        appState.updateCharacter(character);
-                      },
                     ),
                   ),
                 ),
@@ -124,40 +120,44 @@ class CharacterInfoCard extends StatelessWidget {
                           spacer,
                           SizedBox(
                             height: 150,
-                            child: GridView.count(
-                              scrollDirection: Axis.horizontal,
-                              crossAxisCount: 2,
-                              childAspectRatio: 0.4,
-                              children: [
-                                for (var consumable in character.state.consumables)
-                                  ConsumableCard(
-                                    consumable,
-                                    onChangedActual: (actual) {
-                                      int index = character.state.consumables.indexOf(consumable);
-                                      consumable.update(actual: actual);
-                                      character.state.consumables[index] = consumable;
-                                      appState.updateCharacter(character);
-                                    },
-                                    onChangedMax: (max) {
-                                      int index = character.state.consumables.indexOf(consumable);
-                                      consumable.update(max: max);
-                                      character.state.consumables[index] = consumable;
-                                      appState.updateCharacter(character);
-                                    },
-                                  ),
-                                Card(
-                                  color: theme.colorScheme.secondaryContainer,
-                                  child: Center(
-                                      child: TextButton(
-                                          onPressed: () {
-                                            CreateConsumable.show(context, (consumable) {
-                                              character.state.consumables.add(consumable);
-                                              appState.updateCharacter(character);
-                                            });
-                                          },
-                                          child: Text("Añadir"))),
-                                )
-                              ],
+                            child: Scrollbar(
+                              thumbVisibility: true,
+                              trackVisibility: true,
+                              child: GridView.count(
+                                scrollDirection: Axis.horizontal,
+                                crossAxisCount: 2,
+                                childAspectRatio: 0.45,
+                                children: [
+                                  for (var consumable in character.state.consumables)
+                                    ConsumableCard(
+                                      consumable,
+                                      onChangedActual: (actual) {
+                                        int index = character.state.consumables.indexOf(consumable);
+                                        consumable.update(actual: actual);
+                                        character.state.consumables[index] = consumable;
+                                        appState.updateCharacter(character);
+                                      },
+                                      onChangedMax: (max) {
+                                        int index = character.state.consumables.indexOf(consumable);
+                                        consumable.update(max: max);
+                                        character.state.consumables[index] = consumable;
+                                        appState.updateCharacter(character);
+                                      },
+                                    ),
+                                  Card(
+                                    color: theme.colorScheme.secondaryContainer,
+                                    child: Center(
+                                        child: TextButton(
+                                            onPressed: () {
+                                              CreateConsumable.show(context, (consumable) {
+                                                character.state.consumables.add(consumable);
+                                                appState.updateCharacter(character);
+                                              });
+                                            },
+                                            child: Text("Añadir"))),
+                                  )
+                                ],
+                              ),
                             ),
                           ),
                           spacer,
@@ -182,9 +182,10 @@ class CharacterInfoCard extends StatelessWidget {
                           ]),
                           spacer,
                           SizedBox(
-                            height: 70,
+                            height: 35,
                             width: 989,
                             child: ModifiersCard(
+                              crossAxisCount: 1,
                               aspectRatio: 0.3,
                               modifiers: character.state.modifiers.getAll(),
                               onSelected: (modifier) {
@@ -197,6 +198,7 @@ class CharacterInfoCard extends StatelessWidget {
                           SizedBox(
                               height: 40,
                               child: TextFormFieldCustom(
+                                label: "Notas",
                                 text: character.state.notes,
                                 onChanged: (value) {
                                   character.state.notes = value;
