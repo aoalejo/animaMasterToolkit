@@ -1,4 +1,5 @@
 import 'package:amt/models/character/consumable_state.dart';
+import 'package:amt/models/enums.dart';
 import 'package:amt/presentation/text_form_field_custom.dart';
 import 'package:flutter/material.dart';
 
@@ -6,11 +7,13 @@ class ConsumableCard extends StatelessWidget {
   final ConsumableState consumable;
   final void Function(String) onChangedMax;
   final void Function(String) onChangedActual;
+  final void Function(ConsumableState) onDelete;
 
   ConsumableCard(
     this.consumable, {
     required this.onChangedMax,
     required this.onChangedActual,
+    required this.onDelete,
   });
 
   @override
@@ -25,6 +28,39 @@ class ConsumableCard extends StatelessWidget {
       child: Row(
         mainAxisAlignment: consumable.step > 0 || consumable.description.isNotEmpty ? MainAxisAlignment.spaceBetween : MainAxisAlignment.center,
         children: [
+          if (consumable.type == ConsumableType.other)
+            InkWell(
+              child: Icon(
+                Icons.delete,
+                size: 14,
+                color: Colors.grey,
+              ),
+              onTap: () {
+                showDialog(
+                    context: context,
+                    builder: (context) {
+                      return AlertDialog(
+                        title: Text("Borrar consumible"),
+                        content: Text("Seguro que desea borrar ${consumable.name}?"),
+                        actions: [
+                          OutlinedButton(
+                            onPressed: () {
+                              Navigator.pop(context);
+                              onDelete(consumable);
+                            },
+                            child: Text("Borrar"),
+                          ),
+                          TextButton(
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            child: Text("Cancelar"),
+                          )
+                        ],
+                      );
+                    });
+              },
+            ),
           Text(
             consumable.name,
             style: styleM,

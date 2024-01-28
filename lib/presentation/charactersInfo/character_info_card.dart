@@ -131,6 +131,10 @@ class CharacterInfoCard extends StatelessWidget {
                                   for (var consumable in character.state.consumables)
                                     ConsumableCard(
                                       consumable,
+                                      onDelete: (consumable) {
+                                        character.state.consumables.remove(consumable);
+                                        appState.updateCharacter(character);
+                                      },
                                       onChangedActual: (actual) {
                                         int index = character.state.consumables.indexOf(consumable);
                                         consumable.update(actual: actual);
