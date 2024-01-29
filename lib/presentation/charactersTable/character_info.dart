@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:function_tree/function_tree.dart';
 
 class ShowCharacterInfo {
-  static call(BuildContext context, Character character) {
+  static call(BuildContext context, Character character, {required Function(Character) onEdit}) {
     var theme = Theme.of(context);
     var skills = character.skills.list();
     var attributes = character.attributes.toKeyValue();
@@ -33,6 +33,21 @@ class ShowCharacterInfo {
     var powers = character.psychic?.powers.list();
 
     var search = "";
+
+    onAttributeEdit(KeyValue element) {
+      character.attributes.edit(element);
+      onEdit(character);
+    }
+
+    onResistanceEdit(KeyValue element) {
+      character.resistances.editResistance(element);
+      onEdit(character);
+    }
+
+    onSkillEdit(KeyValue element) {
+      character.skills[element.key] = element.value;
+      onEdit(character);
+    }
 
     return showModalBottomSheet(
       context: context,
@@ -96,20 +111,21 @@ class ShowCharacterInfo {
                             theme,
                             search,
                             diffDivisor: 10,
+                            onEdit: onAttributeEdit,
                           ))
                             row,
-                          for (var row in _table("Resistencias", resistances, theme, search)) row,
-                          for (var row in _table("Habilidad", skills, theme, search)) row,
-                          for (var row in _table("Vias", paths, theme, search)) row,
-                          for (var row in _table("Sub-Vias", subPaths, theme, search)) row,
-                          for (var row in _table("Meta-magia", metamagic, theme, search)) row,
-                          for (var row in _table("Hechizos mantenidos", spellsMaintained, theme, search)) row,
-                          for (var row in _table("Hechizos comprados", spellsPurchased, theme, search)) row,
-                          for (var row in _table("habilidades de Ki", kiSkills, theme, search)) row,
-                          for (var row in _table("Disciplinas", disciplines, theme, search)) row,
-                          for (var row in _table("Innatos", innate, theme, search)) row,
-                          for (var row in _table("Patrones", patterns, theme, search)) row,
-                          for (var row in _table("Poderes", powers, theme, search)) row,
+                          for (var row in _table("Resistencias", resistances, theme, search, onEdit: onResistanceEdit)) row,
+                          for (var row in _table("Habilidad", skills, theme, search, onEdit: onSkillEdit)) row,
+                          for (var row in _table("Vias", paths, theme, search, onEdit: null)) row,
+                          for (var row in _table("Sub-Vias", subPaths, theme, search, onEdit: null)) row,
+                          for (var row in _table("Meta-magia", metamagic, theme, search, onEdit: null)) row,
+                          for (var row in _table("Hechizos mantenidos", spellsMaintained, theme, search, onEdit: null)) row,
+                          for (var row in _table("Hechizos comprados", spellsPurchased, theme, search, onEdit: null)) row,
+                          for (var row in _table("habilidades de Ki", kiSkills, theme, search, onEdit: null)) row,
+                          for (var row in _table("Disciplinas", disciplines, theme, search, onEdit: null)) row,
+                          for (var row in _table("Innatos", innate, theme, search, onEdit: null)) row,
+                          for (var row in _table("Patrones", patterns, theme, search, onEdit: null)) row,
+                          for (var row in _table("Poderes", powers, theme, search, onEdit: null)) row,
                         ],
                       ),
                     ),
@@ -128,6 +144,7 @@ class ShowCharacterInfo {
     bool title = false,
     bool odd = false,
     required ThemeData theme,
+    required Function(String)? onEdit,
   }) {
     return Card(
       color: title
@@ -143,13 +160,20 @@ class ShowCharacterInfo {
             for (var value in values)
               Expanded(
                 flex: value.flex,
-                child: Text(
-                  value.text,
-                  textAlign: TextAlign.center,
-                  style: value.flex == 1
-                      ? theme.textTheme.bodySmall!.copyWith(color: title ? theme.colorScheme.onPrimary : theme.colorScheme.onBackground)
-                      : theme.textTheme.bodyLarge!.copyWith(color: title ? theme.colorScheme.onPrimary : theme.colorScheme.onBackground),
-                ),
+                child: (value.editable && onEdit != null)
+                    ? TextFormFieldCustom(
+                        text: value.text,
+                        onChanged: (value) {
+                          onEdit(value);
+                        },
+                      )
+                    : Text(
+                        value.text,
+                        textAlign: TextAlign.center,
+                        style: value.flex == 1
+                            ? theme.textTheme.bodySmall!.copyWith(color: title ? theme.colorScheme.onPrimary : theme.colorScheme.onBackground)
+                            : theme.textTheme.bodyLarge!.copyWith(color: title ? theme.colorScheme.onPrimary : theme.colorScheme.onBackground),
+                      ),
               ),
           ],
         ),
@@ -164,6 +188,7 @@ class ShowCharacterInfo {
     String search, {
     List<DifficultyEnum> difficulties = SecondaryDifficulties.values,
     int diffDivisor = 1,
+    required Function(KeyValue)? onEdit,
   }) {
     if (list == null) return [];
 
@@ -176,13 +201,22 @@ class ShowCharacterInfo {
         StringFlex(name, flex: 4),
         StringFlex("Valor", flex: 2),
         for (var diff in difficulties) StringFlex("${diff.abbreviated}\n(${(diff.difficulty / diffDivisor).toStringAsFixed(0)})", flex: 1)
-      ], theme: theme, title: true),
+      ], theme: theme, title: true, onEdit: null),
       for (var i = 0; i < listFiltered.length; i++)
-        _row([
-          StringFlex(listFiltered[i].key, flex: 4),
-          StringFlex(listFiltered[i].value, flex: 2),
-          for (var diff in difficulties) StringFlex(_differenceTo(listFiltered[i].value, diff.difficulty ~/ diffDivisor), flex: 1),
-        ], theme: theme, odd: i % 2 == 0)
+        _row(
+          [
+            StringFlex(listFiltered[i].key, flex: 4),
+            StringFlex(listFiltered[i].value, flex: 2, editable: true),
+            for (var diff in difficulties) StringFlex(_differenceTo(listFiltered[i].value, diff.difficulty ~/ diffDivisor), flex: 1),
+          ],
+          theme: theme,
+          odd: i % 2 == 0,
+          onEdit: onEdit == null
+              ? null
+              : (value) {
+                  onEdit(KeyValue(key: listFiltered[i].key, value: value));
+                },
+        )
     ];
   }
 
@@ -208,6 +242,11 @@ class ShowCharacterInfo {
 class StringFlex {
   final String text;
   final int flex;
+  final bool editable;
 
-  StringFlex(this.text, {required this.flex});
+  StringFlex(
+    this.text, {
+    required this.flex,
+    this.editable = false,
+  });
 }

@@ -175,7 +175,7 @@ class CharactersTable extends StatelessWidget {
                                     child: IconButton(
                                       icon: Icon(Icons.info),
                                       onPressed: () {
-                                        ShowCharacterInfo.call(context, character);
+                                        ShowCharacterInfo.call(context, character, onEdit: appState.updateCharacter);
                                       },
                                     ),
                                   ),

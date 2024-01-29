@@ -37,6 +37,23 @@ class CharacterResistances {
     this.physicResistance = 0,
   });
 
+  editResistance(KeyValue element) {
+    switch (element.key) {
+      case "Pres":
+        presence = int.tryParse(element.value) ?? presence;
+      case "RF":
+        physicalResistance = int.tryParse(element.value) ?? physicalResistance;
+      case "RE":
+        diseasesResistance = int.tryParse(element.value) ?? diseasesResistance;
+      case "RV":
+        poisonResistance = int.tryParse(element.value) ?? poisonResistance;
+      case "RM":
+        magicalResistance = int.tryParse(element.value) ?? magicalResistance;
+      case "RP":
+        physicResistance = int.tryParse(element.value) ?? physicResistance;
+    }
+  }
+
   List<KeyValue> toKeyValue() {
     List<KeyValue> list = [];
 

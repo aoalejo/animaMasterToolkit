@@ -97,6 +97,44 @@ class AttributesList {
     return list;
   }
 
+  void edit(KeyValue value) {
+    var parsed = int.tryParse(value.value);
+
+    switch (value.key) {
+      case "Agilidad":
+      case "AGI":
+        agility = parsed ?? agility;
+
+      case "Constitución":
+      case "CON":
+        constitution = parsed ?? constitution;
+
+      case "Destreza":
+      case "DES":
+        dexterity = parsed ?? dexterity;
+
+      case "Fuerza":
+      case "FUE":
+        strength = parsed ?? strength;
+
+      case "Inteligencia":
+      case "INT":
+        intelligence = parsed ?? intelligence;
+
+      case "Percepción":
+      case "PER":
+        perception = parsed ?? perception;
+
+      case "Poder":
+      case "POD":
+        might = parsed ?? might;
+
+      case "Voluntad":
+      case "VOL":
+        willpower = parsed ?? willpower;
+    }
+  }
+
   @override
   String toString() {
     var string = "";
