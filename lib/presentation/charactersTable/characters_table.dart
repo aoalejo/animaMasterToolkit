@@ -43,8 +43,12 @@ class CharactersTable extends StatelessWidget {
             Flexible(
               flex: 1,
               child: TextButton.icon(
-                onPressed: () {
-                  appState.getCharacters();
+                onPressed: () async {
+                  appState.showLoading(
+                    message: "Si seleccionas una planilla excel, el proceso puede demorar hasta 15 minutos por archivo",
+                  );
+                  await appState.getCharacters();
+                  appState.hideLoading();
                 },
                 icon: Icon(Icons.upload_file),
                 label: Text(

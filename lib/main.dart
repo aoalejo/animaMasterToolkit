@@ -26,6 +26,7 @@ import 'package:amt/presentation/states/characters_page_state.dart';
 import 'package:amt/presentation/states/non_player_caracters_state.dart';
 import 'package:amt/utils/assets.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -157,7 +158,7 @@ class GeneratorPage extends StatelessWidget {
       ),
       body: Column(
         children: [
-          Expanded(child: _content(theme, screenSize, small, appState.pageSelected)),
+          Expanded(child: _content(theme, screenSize, small, appState.pageSelected, appState.isLoading, appState.message)),
           small
               ? BottomNavigationBar(
                   items: [
@@ -176,46 +177,82 @@ class GeneratorPage extends StatelessWidget {
     );
   }
 
-  Widget _content(ThemeData theme, Size screenSize, bool small, int pageSelected) {
+  Widget _content(ThemeData theme, Size screenSize, bool small, int pageSelected, bool loading, String? message) {
     return ColoredBox(
       color: theme.colorScheme.background,
       child: Align(
         alignment: Alignment.topLeft,
-        child: Flex(
-          direction: Axis.horizontal,
+        child: Stack(
           children: [
-            pageSelected == 0 || !small
-                ? SizedBox(
-                    height: screenSize.height,
-                    width: small ? screenSize.width : screenSize.width / 3,
-                    child: CharactersTable(),
-                  )
-                : Container(),
-            pageSelected == 1 || !small
-                ? Column(
-                    children: [
-                      SizedBox(
-                        height: small ? (screenSize.height / 2) - 54 : (screenSize.height / 2) - 25,
+            Flex(
+              direction: Axis.horizontal,
+              children: [
+                pageSelected == 0 || !small
+                    ? SizedBox(
+                        height: screenSize.height,
                         width: small ? screenSize.width : screenSize.width / 3,
-                        child: CharacterInfoCard(attacking: true),
-                      ),
-                      SizedBox(
-                        height: small ? (screenSize.height / 2) - 54 : (screenSize.height / 2) - 25,
+                        child: CharactersTable(),
+                      )
+                    : Container(),
+                pageSelected == 1 || !small
+                    ? Column(
+                        children: [
+                          SizedBox(
+                            height: small ? (screenSize.height / 2) - 54 : (screenSize.height / 2) - 25,
+                            width: small ? screenSize.width : screenSize.width / 3,
+                            child: CharacterInfoCard(attacking: true),
+                          ),
+                          SizedBox(
+                            height: small ? (screenSize.height / 2) - 54 : (screenSize.height / 2) - 25,
+                            width: small ? screenSize.width : screenSize.width / 3,
+                            child: CharacterInfoCard(attacking: false),
+                          ),
+                        ],
+                      )
+                    : Container(),
+                pageSelected == 2 || !small
+                    ? SizedBox(
+                        height: screenSize.height,
                         width: small ? screenSize.width : screenSize.width / 3,
-                        child: CharacterInfoCard(attacking: false),
+                        child: CombatSection(
+                          isLandscape: true,
+                        ),
+                      )
+                    : Container(),
+              ],
+            ),
+            if (loading)
+              Stack(
+                children: [
+                  SizedBox.expand(child: ColoredBox(color: Colors.black26)),
+                  Center(
+                    child: SizedBox(
+                      width: screenSize.width / 3,
+                      height: screenSize.width / 4,
+                      child: Container(
+                        decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(16)), color: Colors.white),
+                        child: Padding(
+                          padding: EdgeInsets.all(16),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              CircularProgressIndicator(),
+                              Text(
+                                message ?? "",
+                                textAlign: TextAlign.center,
+                                style: GoogleFonts.montserrat(
+                                  fontSize: 24,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
                       ),
-                    ],
-                  )
-                : Container(),
-            pageSelected == 2 || !small
-                ? SizedBox(
-                    height: screenSize.height,
-                    width: small ? screenSize.width : screenSize.width / 3,
-                    child: CombatSection(
-                      isLandscape: true,
                     ),
-                  )
-                : Container(),
+                  ),
+                ],
+              )
           ],
         ),
       ),

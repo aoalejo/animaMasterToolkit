@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
@@ -8,7 +9,9 @@ import 'package:amt/models/modifiers_state.dart';
 import 'package:amt/models/rules/rules.dart';
 import 'package:amt/presentation/states/combat_state.dart';
 import 'package:enough_convert/windows.dart';
+import 'package:excel/excel.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:uuid/uuid.dart';
@@ -18,6 +21,8 @@ class CharactersPageState extends ChangeNotifier {
   var combatState = ScreenCombatState();
   String? errorMessage = "";
   int pageSelected = 0;
+  bool isLoading = false;
+  String? message;
 
   Map<String, bool> explanationsExpanded = {};
 
@@ -25,6 +30,18 @@ class CharactersPageState extends ChangeNotifier {
 
   CharactersPageState() {
     initAsync();
+  }
+
+  void showLoading({String? message}) {
+    this.message = message;
+    isLoading = true;
+    notifyListeners();
+  }
+
+  void hideLoading({String? message}) {
+    this.message = null;
+    isLoading = false;
+    notifyListeners();
   }
 
   void initAsync() async {
@@ -212,10 +229,20 @@ class CharactersPageState extends ChangeNotifier {
     character.save();
   }
 
-  void getCharacters() async {
+  Future readExcel(File file) async {
+    print("Starting at ${DateTime.now().millisecondsSinceEpoch}");
+    var bytes = file.readAsBytesSync();
+    print("read ${DateTime.now().millisecondsSinceEpoch}");
+    var excel = Excel.decodeBytes(bytes);
+
+    print("Decoded at ${DateTime.now().millisecondsSinceEpoch}");
+    return;
+  }
+
+  Future getCharacters() async {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
       type: FileType.custom,
-      allowedExtensions: ['json'],
+      allowedExtensions: ['json', 'xlsm'],
       allowMultiple: true,
     );
 
@@ -238,9 +265,17 @@ class CharactersPageState extends ChangeNotifier {
           List<File> files = result.paths.map((path) => File(path ?? "")).toList();
 
           for (var file in files) {
-            final json = await file.readAsString(encoding: Windows1252Codec());
-            var character = Character.fromJson(jsonDecode(json));
-            addCharacter(character);
+            print("file.path ${file.path}");
+
+            var extension = file.path.split(".").last;
+
+            if (extension == "xlsm") {
+              readExcel(file);
+            } else {
+              final json = await file.readAsString(encoding: Windows1252Codec());
+              var character = Character.fromJson(jsonDecode(json));
+              addCharacter(character);
+            }
           }
         }
       } else {
