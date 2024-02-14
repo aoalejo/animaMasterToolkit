@@ -42,20 +42,50 @@ class CombatAttackCard extends StatelessWidget {
                 children: [
                   SizedBox(
                     height: 40,
-                    child: TextFormFieldCustom(
-                      inputType: TextInputType.number,
-                      text: attackState.roll,
-                      label: "Tirada de ataque",
-                      onChanged: (value) => {appState.updateCombatState(attackRoll: value)},
-                      suffixIcon: IconButton(
-                        onPressed: () {
-                          appState.updateCombatState(attackRoll: character?.roll().getRollsAsString());
-                        },
-                        icon: SizedBox.square(
-                          dimension: 24,
-                          child: Assets.diceRoll,
+                    child: Row(
+                      children: [
+                        Flexible(
+                          child: TextFormFieldCustom(
+                            inputType: TextInputType.number,
+                            text: attackState.roll,
+                            label: "Tirada de ataque",
+                            onChanged: (value) => {appState.updateCombatState(attackRoll: value)},
+                            suffixIcon: IconButton(
+                              onPressed: () {
+                                appState.updateCombatState(attackRoll: character?.roll().getRollsAsString());
+                              },
+                              icon: SizedBox.square(
+                                dimension: 24,
+                                child: Assets.diceRoll,
+                              ),
+                            ),
+                          ),
                         ),
-                      ),
+                        if (character != null) SizedBox(width: 4),
+                        if (character != null)
+                          Padding(
+                            padding: EdgeInsets.all(0),
+                            child: ToggleButtons(
+                              isSelected: [
+                                weapon?.principalDamage == attackState.damageType,
+                                weapon?.secondaryDamage == attackState.damageType,
+                              ],
+                              onPressed: (index) =>
+                                  {appState.updateCombatState(damageType: index == 0 ? weapon?.principalDamage : weapon?.secondaryDamage)},
+                              borderRadius: const BorderRadius.all(Radius.circular(8)),
+                              children: [
+                                Text(
+                                  weapon?.principalDamage?.name ?? "con",
+                                  style: theme.textTheme.bodySmall,
+                                ),
+                                Text(
+                                  weapon?.secondaryDamage?.name ?? "con",
+                                  style: theme.textTheme.bodySmall,
+                                ),
+                              ],
+                            ),
+                          ),
+                      ],
                     ),
                   ),
                   SizedBox(
@@ -117,13 +147,21 @@ class CombatAttackCard extends StatelessWidget {
                       height: 40,
                       child: Row(
                         children: [
-                          if (character != null)
+                          if (character != null && !(weapon?.variableDamage ?? false))
                             Flexible(
                               flex: 1,
                               child: TextFormFieldCustom(
                                 enabled: false,
                                 label: "Daño",
                                 text: weapon?.damage.toString(),
+                                onChanged: (newText) {
+                                  var newValue = int.tryParse(newText);
+
+                                  if (newValue != null) {
+                                    weapon?.damage = newValue;
+                                    appState.updateCharacter(character);
+                                  }
+                                },
                               ),
                             ),
                           if (character != null) SizedBox(width: 4),
@@ -134,37 +172,14 @@ class CombatAttackCard extends StatelessWidget {
                                 appState.updateCombatState(damageModifier: value);
                               },
                               text: attackState.damage,
-                              label: "(${weapon?.name ?? "Daño base"})",
+                              label: "Daño: ${weapon?.name ?? "base"}",
                               inputType: TextInputType.number,
-                              suffixIcon: character != null
-                                  ? Padding(
-                                      padding: EdgeInsets.all(8),
-                                      child: ToggleButtons(
-                                        isSelected: [
-                                          weapon?.principalDamage == attackState.damageType,
-                                          weapon?.secondaryDamage == attackState.damageType,
-                                        ],
-                                        onPressed: (index) =>
-                                            {appState.updateCombatState(damageType: index == 0 ? weapon?.principalDamage : weapon?.secondaryDamage)},
-                                        borderRadius: const BorderRadius.all(Radius.circular(8)),
-                                        children: [
-                                          Text(
-                                            weapon?.principalDamage?.name ?? "con",
-                                            style: theme.textTheme.bodySmall,
-                                          ),
-                                          Text(
-                                            weapon?.secondaryDamage?.name ?? "con",
-                                            style: theme.textTheme.bodySmall,
-                                          ),
-                                        ],
-                                      ),
-                                    )
-                                  : IconButton(
-                                      icon: Icon(Icons.delete),
-                                      onPressed: () {
-                                        appState.updateCombatState(damageModifier: "");
-                                      },
-                                    ),
+                              suffixIcon: IconButton(
+                                icon: Icon(Icons.delete),
+                                onPressed: () {
+                                  appState.updateCombatState(damageModifier: "");
+                                },
+                              ),
                             ),
                           ),
                         ],

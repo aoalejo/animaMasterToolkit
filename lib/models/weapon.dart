@@ -44,27 +44,31 @@ class Weapon {
   String? ammunition;
   @HiveField(18)
   String? special;
+  @HiveField(19)
+  late bool variableDamage;
 
-  Weapon(
-      {required this.name,
-      this.type,
-      this.known,
-      this.size,
-      this.principalDamage,
-      this.secondaryDamage,
-      this.endurance,
-      this.breakage,
-      this.presence,
-      required this.turn,
-      required this.attack,
-      required this.defense,
-      required this.defenseType,
-      required this.damage,
-      this.quality,
-      this.characteristic,
-      this.warning,
-      this.ammunition,
-      this.special});
+  Weapon({
+    required this.name,
+    this.type,
+    this.known,
+    this.size,
+    this.principalDamage,
+    this.secondaryDamage,
+    this.endurance,
+    this.breakage,
+    this.presence,
+    required this.turn,
+    required this.attack,
+    required this.defense,
+    required this.defenseType,
+    required this.damage,
+    this.quality,
+    this.characteristic,
+    this.warning,
+    this.ammunition,
+    this.special,
+    this.variableDamage = false,
+  });
 
   Weapon.fromJson(Map<String, dynamic> json) {
     name = json['nombre'] ?? "";
@@ -86,6 +90,7 @@ class Weapon {
     warning = json['advertencia'];
     ammunition = json['municion'];
     special = json['especial'];
+    variableDamage = false;
   }
 
   String description({bool lineBreak = false}) {
