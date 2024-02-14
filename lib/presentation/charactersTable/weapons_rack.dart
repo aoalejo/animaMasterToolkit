@@ -37,62 +37,83 @@ class WeaponsRack extends StatelessWidget {
         showModalBottomSheet<void>(
           context: context,
           builder: (BuildContext context) {
-            return BottomSheetCustom(title: Text('Selección/Edición de arma'), children: [
-              Column(
-                children: [
-                  for (var weapon in weapons)
+            return BottomSheetCustom(
+                title: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text('Selección/Edición de arma'),
                     TextButton(
-                      style: TextButton.styleFrom(
-                          backgroundColor: weapon == selectedWeapon ? theme.colorScheme.primary : null,
-                          foregroundColor: weapon == selectedWeapon ? theme.colorScheme.onPrimary : null),
-                      onPressed: () => {
-                        onSelect(weapon),
-                        Navigator.pop(context),
+                      onPressed: () {
+                        var newWeapon = Weapon.blank();
+                        weapons.add(newWeapon);
+                        Navigator.pop(context);
+                        onSelect(newWeapon);
+                        _showWeaponEditor(
+                          context,
+                          weapon: newWeapon,
+                          onEdit: onEdit,
+                        );
                       },
-                      child: Padding(
-                        padding: EdgeInsets.all(4),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                      child: Text("Crear nueva"),
+                    ),
+                  ],
+                ),
+                children: [
+                  Column(
+                    children: [
+                      for (var weapon in weapons)
+                        TextButton(
+                          style: TextButton.styleFrom(
+                              backgroundColor: weapon == selectedWeapon ? theme.colorScheme.primary : null,
+                              foregroundColor: weapon == selectedWeapon ? theme.colorScheme.onPrimary : null),
+                          onPressed: () => {
+                            onSelect(weapon),
+                            Navigator.pop(context),
+                          },
+                          child: Padding(
+                            padding: EdgeInsets.all(4),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text(weapon.name),
-                                Text(
-                                  weapon.description(),
-                                  style: weapon == selectedWeapon ? subtitleButtonOnPrimary : subtitleButton,
+                                Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(weapon.name),
+                                    Text(
+                                      weapon.description(),
+                                      style: weapon == selectedWeapon ? subtitleButtonOnPrimary : subtitleButton,
+                                    ),
+                                  ],
                                 ),
-                              ],
-                            ),
-                            Row(
-                              children: [
-                                IconButton(
-                                  onPressed: () {
-                                    var copy = weapon.copy();
-                                    weapons.add(copy);
-                                    Navigator.pop(context);
-                                    _showWeaponEditor(
-                                      context,
-                                      weapon: copy,
-                                      onEdit: onEdit,
-                                    );
-                                  },
-                                  icon: Icon(Icons.copy),
-                                ),
-                                IconButton(
-                                  onPressed: () => {Navigator.pop(context), _showWeaponEditor(context, weapon: weapon, onEdit: onEdit)},
-                                  icon: Icon(Icons.edit),
+                                Row(
+                                  children: [
+                                    IconButton(
+                                      onPressed: () {
+                                        var copy = weapon.copy();
+                                        weapons.add(copy);
+                                        Navigator.pop(context);
+                                        _showWeaponEditor(
+                                          context,
+                                          weapon: copy,
+                                          onEdit: onEdit,
+                                        );
+                                      },
+                                      icon: Icon(Icons.copy),
+                                    ),
+                                    IconButton(
+                                      onPressed: () => {Navigator.pop(context), _showWeaponEditor(context, weapon: weapon, onEdit: onEdit)},
+                                      icon: Icon(Icons.edit),
+                                    )
+                                  ],
                                 )
                               ],
-                            )
-                          ],
+                            ),
+                          ),
                         ),
-                      ),
-                    ),
-                ],
-              ),
-            ]);
+                    ],
+                  ),
+                ]);
           },
         )
       },
