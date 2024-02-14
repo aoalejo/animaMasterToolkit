@@ -122,18 +122,18 @@ class GeneratorPage extends StatelessWidget {
         toolbarHeight: 50,
         title: Row(
           children: [
-            if (appState.backgroundLoadingPercentage != -1)
+            if (appState.sheetsLoadingPercentaje != -1)
               SizedBox.square(
                 dimension: 24,
                 child: Stack(
                   children: [
                     CircularProgressIndicator(
-                      value: appState.backgroundLoadingPercentage,
+                      value: appState.sheetsLoadingPercentaje,
                       color: Colors.white,
                     ),
                     Center(
                       child: Text(
-                        "${(appState.backgroundLoadingPercentage * 100).toInt()}",
+                        "${(appState.sheetsLoadingPercentaje * 100).toInt()}",
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 10,
@@ -144,9 +144,9 @@ class GeneratorPage extends StatelessWidget {
                   ],
                 ),
               ),
-            if (appState.backgroundLoadingPercentage != -1) SizedBox.square(dimension: 8),
-            if (appState.backgroundLoadingPercentage != -1) Text("Cargando..."),
-            if (appState.backgroundLoadingPercentage == -1) Text("Anima Master Toolkit v3"),
+            if (appState.sheetsLoadingPercentaje != -1) SizedBox.square(dimension: 8),
+            if (appState.sheetsLoadingPercentaje != -1) Text("Cargando planillas..."),
+            if (appState.sheetsLoadingPercentaje == -1) Text("Anima Master Toolkit v3"),
           ],
         ),
         backgroundColor: theme.primaryColor,

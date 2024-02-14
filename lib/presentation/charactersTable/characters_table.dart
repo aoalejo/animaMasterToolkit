@@ -45,17 +45,19 @@ class CharactersTable extends StatelessWidget {
             Flexible(
               flex: 1,
               child: TextButton.icon(
-                onPressed: () async {
-                  appState.showLoading(
-                    message: "Si seleccionas una planilla excel, el proceso puede demorar más de 15 minutos por archivo",
-                  );
-                  final files = await appState.getCharacters();
-                  appState.hideLoading();
+                onPressed: appState.sheetsLoadingPercentaje == -1
+                    ? () async {
+                        appState.showLoading(
+                          message: "Si seleccionas una planilla excel, el proceso puede demorar más de 15 minutos por archivo",
+                        );
+                        final files = await appState.getCharacters();
+                        appState.hideLoading();
 
-                  final timer = Timer.periodic(Duration(seconds: 1 * (files?.count ?? 1)), (timer) => appState.stepBackgroundLoading());
-                  await appState.parseCharacters(files, (value) => {appState.updateBackgroundLoading(value)});
-                  timer.cancel();
-                },
+                        final timer = Timer.periodic(Duration(seconds: 1 * (files?.count ?? 1)), (timer) => appState.stepSheetLoading());
+                        await appState.parseCharacters(files, (value) => {appState.updateSheetLoading(value)});
+                        timer.cancel();
+                      }
+                    : null,
                 icon: Icon(Icons.upload_file),
                 label: Text(
                   "Cargar Personaje",

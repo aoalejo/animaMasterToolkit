@@ -24,7 +24,7 @@ class CharactersPageState extends ChangeNotifier {
   bool isLoading = false;
   String? message;
 
-  double backgroundLoadingPercentage = -1;
+  double sheetsLoadingPercentaje = -1;
 
   Map<String, bool> explanationsExpanded = {};
 
@@ -34,21 +34,21 @@ class CharactersPageState extends ChangeNotifier {
     initAsync();
   }
 
-  void stepBackgroundLoading() {
-    if (backgroundLoadingPercentage > 0.9) {
-      backgroundLoadingPercentage = backgroundLoadingPercentage + 0.0010;
-    } else if (backgroundLoadingPercentage > 0.75) {
-      backgroundLoadingPercentage = backgroundLoadingPercentage + 0.0025;
-    } else if (backgroundLoadingPercentage > 0.5) {
-      backgroundLoadingPercentage = backgroundLoadingPercentage + 0.0050;
+  void stepSheetLoading() {
+    if (sheetsLoadingPercentaje > 0.9) {
+      sheetsLoadingPercentaje = sheetsLoadingPercentaje + 0.0010;
+    } else if (sheetsLoadingPercentaje > 0.75) {
+      sheetsLoadingPercentaje = sheetsLoadingPercentaje + 0.0025;
+    } else if (sheetsLoadingPercentaje > 0.5) {
+      sheetsLoadingPercentaje = sheetsLoadingPercentaje + 0.0050;
     } else {
-      backgroundLoadingPercentage = backgroundLoadingPercentage + 0.0100;
+      sheetsLoadingPercentaje = sheetsLoadingPercentaje + 0.0100;
     }
     notifyListeners();
   }
 
-  void updateBackgroundLoading(double value) {
-    backgroundLoadingPercentage = value;
+  void updateSheetLoading(double value) {
+    sheetsLoadingPercentaje = value;
     notifyListeners();
   }
 
@@ -95,6 +95,7 @@ class CharactersPageState extends ChangeNotifier {
       characters.add(newChar);
       _box.add(newChar);
     } else {
+      // TODO: Improve the numbering, to avoid same numbers on characters (use the biggest one after a #?)
       var hasCharacterWithSameName = characters.where((element) => element.profile.name == character.profile.name);
 
       if (hasCharacterWithSameName.isNotEmpty) {
