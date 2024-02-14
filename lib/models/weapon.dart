@@ -92,6 +92,16 @@ class Weapon {
     return "$name ${lineBreak ? '\n' : ''}HA: $attack ${lineBreak ? '\n' : ''}${defenseType == DefenseType.dodge ? "HE" : "HP"}: $defense ${lineBreak ? '\n' : ''}T: $turn ${lineBreak ? '\n' : ''}DMG: $damage ${principalDamage?.name()}/${secondaryDamage?.name()} ";
   }
 
+  Weapon.blank() {
+    name = "";
+    turn = 0;
+
+    attack = 0;
+    defense = 0;
+    defenseType = DefenseType.dodge;
+    damage = 0;
+  }
+
   Weapon copy() {
     return Weapon(
       name: name,
