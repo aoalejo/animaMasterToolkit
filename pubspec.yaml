@@ -51,8 +51,6 @@ dependencies:
   fl_chart: ^0.62.0
   url_launcher: ^6.2.2
   excel: ^4.0.2
-  google_fonts: ^6.1.0
-  flutter_archive: ^6.0.0
 
 dev_dependencies:
   flutter_test:

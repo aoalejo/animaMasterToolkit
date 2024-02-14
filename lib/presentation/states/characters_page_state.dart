@@ -8,14 +8,13 @@ import 'package:amt/models/enums.dart';
 import 'package:amt/models/modifiers_state.dart';
 import 'package:amt/models/rules/rules.dart';
 import 'package:amt/presentation/states/combat_state.dart';
+import 'package:amt/utils/excel_parser.dart';
 import 'package:enough_convert/windows.dart';
-import 'package:excel/excel.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:uuid/uuid.dart';
-import 'package:archive/archive.dart';
 
 class CharactersPageState extends ChangeNotifier {
   List<Character> characters = [];
@@ -25,12 +24,32 @@ class CharactersPageState extends ChangeNotifier {
   bool isLoading = false;
   String? message;
 
+  double backgroundLoadingPercentage = -1;
+
   Map<String, bool> explanationsExpanded = {};
 
   late Box<Character> _box;
 
   CharactersPageState() {
     initAsync();
+  }
+
+  void stepBackgroundLoading() {
+    if (backgroundLoadingPercentage > 0.9) {
+      backgroundLoadingPercentage = backgroundLoadingPercentage + 0.0010;
+    } else if (backgroundLoadingPercentage > 0.75) {
+      backgroundLoadingPercentage = backgroundLoadingPercentage + 0.0025;
+    } else if (backgroundLoadingPercentage > 0.5) {
+      backgroundLoadingPercentage = backgroundLoadingPercentage + 0.0050;
+    } else {
+      backgroundLoadingPercentage = backgroundLoadingPercentage + 0.0100;
+    }
+    notifyListeners();
+  }
+
+  void updateBackgroundLoading(double value) {
+    backgroundLoadingPercentage = value;
+    notifyListeners();
   }
 
   void showLoading({String? message}) {
@@ -230,61 +249,49 @@ class CharactersPageState extends ChangeNotifier {
     character.save();
   }
 
-  Future readExcel(File file) async {
-    print("Starting at ${DateTime.now().millisecondsSinceEpoch}");
-    var bytes = file.readAsBytesSync();
-    print("read ${DateTime.now().millisecondsSinceEpoch}");
-    //var excel = Excel.decodeBytes(bytes);
-
-    final Archive archive;
+  Future parseCharacters(FilePickerResult? filesPicked, Function(double) onUpdated) async {
+    print("result: $filesPicked");
 
     try {
-      archive = ZipDecoder().decodeBytes(data);
-    } catch (e) {
-      throw UnsupportedError('Excel format unsupported. Only .xlsx files are supported');
-    }
+      if (filesPicked != null) {
+        var counter = 0;
+        final total = filesPicked.files.length;
 
-    print("Decoded at ${DateTime.now().millisecondsSinceEpoch}");
-    return;
-  }
-
-  Future getCharacters() async {
-    FilePickerResult? result = await FilePicker.platform.pickFiles(
-      type: FileType.custom,
-      allowedExtensions: ['json', 'xlsm'],
-      allowMultiple: true,
-    );
-
-    if (result?.files.isEmpty ?? true) {
-      errorMessage = "$errorMessage Sin archivos encontrados";
-    }
-
-    try {
-      if (result != null) {
-        if (result.files.first.bytes != null) {
+        if (filesPicked.files.first.bytes != null) {
           // For web
-          List<String> files = result.files.map((file) => Windows1252Codec().decode(file.bytes!.toList())).toList();
+          for (var element in filesPicked.files) {
+            onUpdated(counter / total);
+            print("Progress: $counter / $total");
 
-          for (var file in files) {
-            var character = Character.fromJson(jsonDecode(file));
-            addCharacter(character);
+            if (element.extension == 'json') {
+              var jsonFile = Windows1252Codec().decode(element.bytes!.toList());
+              var character = Character.fromJson(jsonDecode(jsonFile));
+              addCharacter(character);
+            } else {
+              var character = ExcelParser.parseBytes(element.bytes!.toList());
+              addCharacter(character);
+            }
+
+            counter = counter + 1;
           }
         } else {
           // For desktop
-          List<File> files = result.paths.map((path) => File(path ?? "")).toList();
+          List<File> files = filesPicked.paths.map((path) => File(path ?? "")).toList();
 
           for (var file in files) {
-            print("file.path ${file.path}");
+            onUpdated(counter / total);
+            print("Progress: $counter / $total");
 
             var extension = file.path.split(".").last;
-
-            if (extension == "xlsm") {
-              readExcel(file);
-            } else {
+            if (extension == "json") {
               final json = await file.readAsString(encoding: Windows1252Codec());
               var character = Character.fromJson(jsonDecode(json));
               addCharacter(character);
+            } else {
+              var character = await ExcelParser.parseFile(file);
+              addCharacter(character);
             }
+            counter = counter + 1;
           }
         }
       } else {
@@ -293,5 +300,20 @@ class CharactersPageState extends ChangeNotifier {
     } catch (e) {
       errorMessage = "$errorMessage ${e.toString()}";
     }
+    onUpdated(-1);
+  }
+
+  Future<FilePickerResult?> getCharacters() async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
+      type: FileType.custom,
+      allowedExtensions: ['json', 'xlsm', 'xlsx'],
+      allowMultiple: true,
+    );
+
+    if (result?.files.isEmpty ?? true) {
+      errorMessage = "$errorMessage Sin archivos encontrados";
+    }
+
+    return result;
   }
 }

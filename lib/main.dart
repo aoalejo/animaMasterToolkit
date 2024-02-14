@@ -23,14 +23,12 @@ import 'package:amt/presentation/combat/combat_defense_card.dart';
 import 'package:amt/presentation/combat/combat_result_card.dart';
 import 'package:amt/presentation/npcSelection/npc_selector_view.dart';
 import 'package:amt/presentation/states/characters_page_state.dart';
-import 'package:amt/presentation/states/non_player_caracters_state.dart';
+import 'package:amt/presentation/states/non_player_characters_state.dart';
 import 'package:amt/utils/assets.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 void main() async {
@@ -90,9 +88,7 @@ class MyAppState extends State {
         localizationsDelegates: [
           GlobalMaterialLocalizations.delegate,
           GlobalWidgetsLocalizations.delegate,
-          AppLocalizations.delegate,
         ],
-        supportedLocales: AppLocalizations.supportedLocales,
         title: 'Anima Master Toolkit v3',
         theme: ThemeData(
           useMaterial3: true,
@@ -124,7 +120,35 @@ class GeneratorPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: 50,
-        title: Text("Anima Master Toolkit v3"),
+        title: Row(
+          children: [
+            if (appState.backgroundLoadingPercentage != -1)
+              SizedBox.square(
+                dimension: 24,
+                child: Stack(
+                  children: [
+                    CircularProgressIndicator(
+                      value: appState.backgroundLoadingPercentage,
+                      color: Colors.white,
+                    ),
+                    Center(
+                      child: Text(
+                        "${(appState.backgroundLoadingPercentage * 100).toInt()}",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 10,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            if (appState.backgroundLoadingPercentage != -1) SizedBox.square(dimension: 8),
+            if (appState.backgroundLoadingPercentage != -1) Text("Cargando..."),
+            if (appState.backgroundLoadingPercentage == -1) Text("Anima Master Toolkit v3"),
+          ],
+        ),
         backgroundColor: theme.primaryColor,
         foregroundColor: theme.colorScheme.onPrimary,
         actions: [
@@ -240,7 +264,7 @@ class GeneratorPage extends StatelessWidget {
                               Text(
                                 message ?? "",
                                 textAlign: TextAlign.center,
-                                style: GoogleFonts.montserrat(
+                                style: TextStyle(
                                   fontSize: 24,
                                   fontWeight: FontWeight.w700,
                                 ),

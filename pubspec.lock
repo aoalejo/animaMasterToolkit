@@ -278,14 +278,6 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
-  flutter_archive:
-    dependency: "direct main"
-    description:
-      name: flutter_archive
-      sha256: "004132780d382df5171589ab793e2efc9c3eef570fe72d78b4ccfbfbe52762ae"
-      url: "https://pub.dev"
-    source: hosted
-    version: "6.0.0"
   flutter_lints:
     dependency: "direct dev"
     description:
@@ -357,14 +349,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.2"
-  google_fonts:
-    dependency: "direct main"
-    description:
-      name: google_fonts
-      sha256: f0b8d115a13ecf827013ec9fc883390ccc0e87a96ed5347a3114cac177ef18e8
-      url: "https://pub.dev"
-    source: hosted
-    version: "6.1.0"
   graphs:
     dependency: transitive
     description:
@@ -397,14 +381,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.0.1"
-  http:
-    dependency: transitive
-    description:
-      name: http
-      sha256: a2bbf9d017fcced29139daa8ed2bba4ece450ab222871df93ca9eec6f80c34ba
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.2.0"
   http_multi_server:
     dependency: transitive
     description:

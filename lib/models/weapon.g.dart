@@ -36,7 +36,7 @@ class WeaponAdapter extends TypeAdapter<Weapon> {
       warning: fields[16] as String?,
       ammunition: fields[17] as String?,
       special: fields[18] as String?,
-      variableDamage: fields[19] as bool,
+      variableDamage: fields[19] as bool? ?? false,
     );
   }
 
@@ -90,9 +90,5 @@ class WeaponAdapter extends TypeAdapter<Weapon> {
   int get hashCode => typeId.hashCode;
 
   @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is WeaponAdapter &&
-          runtimeType == other.runtimeType &&
-          typeId == other.typeId;
+  bool operator ==(Object other) => identical(this, other) || other is WeaponAdapter && runtimeType == other.runtimeType && typeId == other.typeId;
 }

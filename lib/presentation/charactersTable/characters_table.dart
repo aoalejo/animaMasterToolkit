@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:amt/models/character/character.dart';
 import 'package:amt/models/enums.dart';
 import 'package:amt/models/modifiers_state.dart';
@@ -45,10 +47,14 @@ class CharactersTable extends StatelessWidget {
               child: TextButton.icon(
                 onPressed: () async {
                   appState.showLoading(
-                    message: "Si seleccionas una planilla excel, el proceso puede demorar hasta 15 minutos por archivo",
+                    message: "Si seleccionas una planilla excel, el proceso puede demorar más de 15 minutos por archivo",
                   );
-                  await appState.getCharacters();
+                  final files = await appState.getCharacters();
                   appState.hideLoading();
+
+                  final timer = Timer.periodic(Duration(seconds: 1 * (files?.count ?? 1)), (timer) => appState.stepBackgroundLoading());
+                  await appState.parseCharacters(files, (value) => {appState.updateBackgroundLoading(value)});
+                  timer.cancel();
                 },
                 icon: Icon(Icons.upload_file),
                 label: Text(
@@ -133,7 +139,10 @@ class CharactersTable extends StatelessWidget {
                             child: Row(
                               children: [
                                 Expanded(
-                                  child: Text(character.profile.name),
+                                  child: Text(
+                                    character.profile.name,
+                                    maxLines: 2,
+                                  ),
                                 ),
                                 Stack(
                                   alignment: AlignmentDirectional.center,
