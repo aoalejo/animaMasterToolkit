@@ -15,6 +15,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:uuid/uuid.dart';
+import 'package:archive/archive.dart';
 
 class CharactersPageState extends ChangeNotifier {
   List<Character> characters = [];
@@ -233,7 +234,15 @@ class CharactersPageState extends ChangeNotifier {
     print("Starting at ${DateTime.now().millisecondsSinceEpoch}");
     var bytes = file.readAsBytesSync();
     print("read ${DateTime.now().millisecondsSinceEpoch}");
-    var excel = Excel.decodeBytes(bytes);
+    //var excel = Excel.decodeBytes(bytes);
+
+    final Archive archive;
+
+    try {
+      archive = ZipDecoder().decodeBytes(data);
+    } catch (e) {
+      throw UnsupportedError('Excel format unsupported. Only .xlsx files are supported');
+    }
 
     print("Decoded at ${DateTime.now().millisecondsSinceEpoch}");
     return;
