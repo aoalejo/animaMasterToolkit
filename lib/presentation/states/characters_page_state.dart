@@ -269,8 +269,8 @@ class CharactersPageState extends ChangeNotifier {
               var character = Character.fromJson(jsonDecode(jsonFile));
               addCharacter(character);
             } else {
-              var character = ExcelParser.parseBytes(element.bytes!.toList());
-              addCharacter(character);
+              var character = ExcelParser.fromBytes(element.bytes!.toList());
+              addCharacter(await character.parse());
             }
 
             counter = counter + 1;
@@ -289,8 +289,8 @@ class CharactersPageState extends ChangeNotifier {
               var character = Character.fromJson(jsonDecode(json));
               addCharacter(character);
             } else {
-              var character = await ExcelParser.parseFile(file);
-              addCharacter(character);
+              var character = ExcelParser.fromFile(file);
+              addCharacter(await character.parse());
             }
             counter = counter + 1;
           }
@@ -307,7 +307,7 @@ class CharactersPageState extends ChangeNotifier {
   Future<FilePickerResult?> getCharacters() async {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
       type: FileType.custom,
-      allowedExtensions: ['json', 'xlsm', 'xlsx'],
+      allowedExtensions: ['json'], //, 'xlsm', 'xlsx'],
       allowMultiple: true,
     );
 

@@ -11,393 +11,210 @@ import 'package:amt/models/character_profile.dart';
 import 'package:amt/models/combat_data.dart';
 import 'package:amt/models/enums.dart';
 import 'package:amt/models/modifiers_state.dart';
+import 'package:amt/models/mystical.dart';
 import 'package:amt/models/roll.dart';
 import 'package:amt/models/weapon.dart';
 import 'package:amt/utils/json_utils.dart';
 import 'package:excel/excel.dart';
+import 'package:uuid/uuid.dart';
 
 class ExcelParser {
-  static Future<Character> parseFile(File file) async {
+  File? file;
+  List<int>? bytes;
+  late Excel excel;
+
+  ExcelParser.fromFile(this.file);
+  ExcelParser.fromBytes(this.bytes);
+
+  Future<Character> parse() {
+    if (file != null) {
+      return _parseFile(file!);
+    } else {
+      return _parseBytes(bytes!);
+    }
+  }
+
+  Future<Character> _parseFile(File file) async {
     var start = DateTime.now().millisecondsSinceEpoch;
     print("Start $start");
     var bytes = file.readAsBytesSync();
 
     return await Isolate.run(() async {
-      var excel = Excel.decodeBytes(bytes);
+      excel = Excel.decodeBytes(bytes);
       print("Elapsed readAsBytesSync: ${DateTime.now().millisecondsSinceEpoch - start}");
-
-      return _parseExcel(excel);
+      final character = _parseExcel();
+      return character;
     });
   }
 
-  static Character parseBytes(List<int> bytes) {
+  Future<Character> _parseBytes(List<int> bytes) async {
     var start = DateTime.now().millisecondsSinceEpoch;
     print("Start $start");
 
-    var file = Excel.decodeBytes(bytes);
+    return await Isolate.run(() async {
+      excel = Excel.decodeBytes(bytes);
+      print("Elapsed decodeBytes: ${DateTime.now().millisecondsSinceEpoch - start}");
 
-    print("Elapsed decodeBytes: ${DateTime.now().millisecondsSinceEpoch - start}");
-    return _parseExcel(file);
+      var character = _parseExcel();
+
+      return character;
+    });
   }
 
-  static Character _parseExcel(Excel? excel) {
-    var general = excel?['General'];
-    print(general.toString());
+  Character _parseExcel() {
+    var attributes = _getAttributes();
+    var skills = excel.points.getMapFromRange("M22", "Q77", indexTitles: 1, indexValues: 5);
+    var basicData = _getBasicData();
+    var combatData = _getAllCombatData();
+    var mysticalData = _getMysticData();
+    var resistances = _getResistances();
 
-    var name = general?.valueAt('F22');
-    print(name);
+    final character = Character(
+      uuid: Uuid().v4(),
+      attributes: attributes,
+      skills: skills,
+      profile: basicData,
+      combat: combatData,
+      state: CharacterState(currentTurn: Roll.turn(), consumables: [], modifiers: ModifiersState()),
+      ki: null,
+      mystical: mysticalData,
+      psychic: null,
+      resistances: resistances,
+    );
 
-    return Character(
-        uuid: name ?? "",
-        attributes: AttributesList.withDefault(6),
-        skills: {},
-        profile: CharacterProfile(name: name ?? ""),
-        combat: CombatData(armour: ArmourData(calculatedArmour: Armour(), armours: []), weapons: []),
-        state: CharacterState(currentTurn: Roll.turn(), consumables: [], modifiers: ModifiersState()),
-        ki: null,
-        mystical: null,
-        psychic: null,
-        resistances: CharacterResistances());
+    print(character.getResumedSkills());
+    print(character.attributes.toString());
+    print(character.profile.toString());
+    print(character.combat.toString());
+    print(character.state.toString());
+    print(character.mystical.toString());
+    print(character.resistances.toString());
+
+    return character;
   }
 
-  bool contains(List<String> column, String thisItem) {
-    return column.contains(thisItem);
+  CharacterResistances _getResistances() {
+    final resistances = excel.principal.getMapFromRange("D57", "J62", indexTitles: 1, indexValues: 7);
+    return CharacterResistances.fromJson(resistances);
   }
 
-/*
-Public Sub exportJson()
-    Dim rng As Range, json As String
-    Dim intInFile As Integer
-    
-    json = "{"
-    ' Set Attributes Block
-    json = json & RangeToJson("Principal", "D11:H18", "A1", "D1", "Atributos")
-    
-    ' Set Skills Block
-    json = json & "," & RangeToJson("Principal", "M22:Q77", "A1", "E1", "Habilidades")
-    
-    ' Set BasicData Block
-    json = json & "," & getBasicData()
-    
-    ' Set Resistances Block
-    json = json & "," & RangeToJson("Principal", "D57:J62", "A1", "G1", "Resistencias")
-    
-     ' Set Creature Powers Block
-    json = json & "," & RangeToJson("Principal", "AB12:AH23", "A1", "E1", "PoderesDeCriatura")
-    
-    ' Set Elemental Habilities Block
-    json = json & "," & RangeToJson("Principal", "AD12:AH69", "A1", "D1", "HabilidadesElementales")
-    
-    
-    ' START Combat Section
-    json = json & Replace(", 'Combate': {", "'", Chr(34))
-    
-    ' Set Weapons Tables Block
-    json = json & RangeToJson("Combate", "AH11:AL16", "A1", "E1", "TablasDeArmas")
-    
-    ' Set Combat Styles Block
-    json = json & "," & RangeToJson("Combate", "AB19:AQ28", "A1", "G1", "EstilosDeCombate")
-    
-    ' Set ArsMagnus Block
-    json = json & "," & RangeToJson("Combate", "AB55:AQ64", "A1", "G1", "ArsMagnus")
-    
-    ' Set Combat Styles Block
-    json = json & "," & RangeToJson("Combate", "AB31:AQ49", "A1", "E1", "ArtesMarciales")
-    
-    ' Set Combat Block
-    json = json & ", " & getAllCombatData()
-    
-    ' END Combat Section
-    
-    json = json & "}"
-    
-    ' Set Ki Block
-    json = json & Replace(", 'Ki': {", "'", Chr(34))
-    
-    json = json & RangeToJson("Ki", "C12:D23", "A1", "B1", "Acumulaciones")
-    
-    json = json & ", " & RangeToJson("Ki", "C35:F36", "A1", "D1", "Habilidades")
-    
-    json = json & "}"
-    
-    ' Set Elan Block
-    
-    json = json & ", " & RangeToJson("Elan", "C29:G49", "D1", "E1", "Elan")
-    
-    ' START Mistic Section
-    
-    If hasPointsOnMistic() Then
-    
-        json = json & Replace(", 'Misticos': {", "'", Chr(34))
-        
-        json = json & getMisticBasicData()
-        
-        json = json & ", " & RangeToJson("Místicos", "C15:H25", "A1", "F1", "Vias")
-        
-        json = json & ", " & RangeToJson("Místicos", "C15:H25", "A1", "C1", "SubVias")
-        
-        json = json & ", " & RangeToJson("Místicos", "W53:AB73", "A1", "F1", "Metamagia")
-        
-        json = json & ", " & RangeToJson("Místicos", "Y12:AC50", "E1", "A1", "Conjuros")
-        
-        json = json & ", " & RangeToJson("Místicos", "AG12:AK50", "E1", "A1", "Libres")
-        
-        json = json & "}"
-    
-    End If
-    
-    ' END Mistic Section
-    
-    ' START PSY Section
-    
-    If hasPointsOnMistic() Then
-    
-        json = json & Replace(", 'Psiquicos': {", "'", Chr(34))
-        
-        json = json & RangeToJson("Psíquicos", "C25:Q36", "A1", "D1", "Disciplinas")
-        
-        json = json & ", " & RangeToJson("Psíquicos", "C39:Q50", "A1", "D1", "Patrones")
-        
-        json = json & ", " & RangeToJson("Psíquicos", "V11:AB64", "A1", "G1", "Poderes")
-        
-        json = json & ", " & RangeToJson("Psíquicos", "AD17:AK62", "A1", "H1", "Innatos")
-        
-        
-        json = json & "}"
-        
-    End If
-    
-    ' END PSY Section
-    
-    json = json & "}"
-    
-    Set wbA = ActiveWorkbook
-    
-    'get active workbook folder, if saved
-    strPath = wbA.Path
-    If strPath = "" Then
-        strPath = Application.DefaultFilePath
-    End If
-    strPath = strPath & "\"
-       
-    'replace spaces and periods in character name
-    strName = Replace(Range("ResumenNombre").Value, ".", "_")
-    
-    'create default name for savng file
-    strFile = strName & ".json"
-    strPathFile = strPath & strFile
-    
-    'use can enter name and
-    ' select folder for file
-    myFile = Application.GetSaveAsFilename _
-        (InitialFileName:=strPathFile, _
-        FileFilter:="Archivos Json (*.json), *.json", _
-        Title:="Seleccione directorio y fichero donde guardar")
-    
-    intInFile = FreeFile
-    
-    Open myFile For Output As intInFile
-        Print #intInFile, json
-    Close intInFile
-    
-    
-    Debug.Print json
-End Sub
-*/
-
-/*
-Function hasPointsOnMistic() As Boolean
-    If Worksheets("PDs").Range("M101").Value > 0 Then
-        hasPointsOnMistic = True
-    Else
-        hasPointsOnMistic = False
-    End If
-End Function
-*/
-
-/*
-Function hasPointsOnPsichiq() As Boolean
-    If Worksheets("PDs").Range("M117").Value > 0 Then
-        hasPointsOnPsichiq = True
-    Else
-        hasPointsOnPsichiq = False
-    End If
-End Function
-*/
-
-/*
-Function getMisticBasicData() As String
-    regen = "J12"
-    act = "L12"
-    zeon = "K18"
-  
-    items = "'regen': '" & Worksheets("Místicos").Range(regen) & "',"
-    items = items & "'act': '" & Worksheets("Místicos").Range(act) & "',"
-    items = items & "'zeon': '" & Worksheets("Místicos").Range(zeon) & "'"
-    
-    getMisticBasicData = Replace(items, "'", Chr(34))
-    
-End Function
-*/
-
-/*
-Function getBasicData() As String
-    cansancio = "N16"
-    puntosDeVida = "N11"
-    regeneracion = "J11"
-    movimiento = "J16"
-    
-    nombre = "K4"
-    categoria = "K5"
-    nivel = "O6"
-    clase = "K7"
-    
-    acumDanio = "Y13"
-    creadoConMagia = "Y14"
-    gnosis = "AB13"
-    natura = "AB14"
-    
-    items = "'datosElementales': {"
-    
-    items = items & "'cansancio': '" & Worksheets("Principal").Range(cansancio) & "',"
-    items = items & "'puntosDeVida': '" & Worksheets("Principal").Range(puntosDeVida) & "',"
-    items = items & "'regeneracion': '" & Worksheets("Principal").Range(regeneracion) & "',"
-    items = items & "'nombre': '" & Worksheets("Principal").Range(nombre) & "',"
-    items = items & "'categoria': '" & Worksheets("Principal").Range(categoria) & "',"
-    items = items & "'nivel': '" & Worksheets("Principal").Range(nivel) & "',"
-    items = items & "'clase': '" & Worksheets("Principal").Range(clase) & "',"
-    
-    items = items & "'acumDanio': '" & Worksheets("Principal").Range(acumDanio) & "',"
-    items = items & "'creadoConMagia': '" & Worksheets("Principal").Range(creadoConMagia) & "',"
-    items = items & "'gnosis': '" & Worksheets("Principal").Range(gnosis) & "',"
-    items = items & "'natura': '" & Worksheets("Principal").Range(natura) & "',"
-    
-    items = items & "'movimiento': '" & Worksheets("Principal").Range(movimiento) & "' }"
-    
-    getBasicData = Replace(items, "'", Chr(34))
-End Function
-*/
-
-/*
-Function getAllCombatData() As String
-    Dim items As String, blocksWeaponsBase(5) As String, blocksWeaponsRanged(3) As String
-    
-    blocksWeaponsBase(0) = "C27:L32"
-    blocksWeaponsBase(1) = "C34:L39"
-    blocksWeaponsBase(2) = "C41:L46"
-    blocksWeaponsBase(3) = "N27:W32"
-    blocksWeaponsBase(4) = "N34:W39"
-    blocksWeaponsBase(5) = "N41:W46"
-    
-    blocksWeaponsRanged(0) = "C49:L55"
-    blocksWeaponsRanged(1) = "C58:L64"
-    blocksWeaponsRanged(2) = "N49:W55"
-    blocksWeaponsRanged(3) = "N58:W64"
-    
-    items = "'armas': ["
-        
-    items = items & getUnarmedCombatData()
-     
-    If hasPointsOnMistic() Then
-        items = items & getMagicProjectionAsWeapon()
-    End If
-    
-    If hasPointsOnPsichiq() Then
-        items = items & getPsychicProjectionAsWeapon()
-    End If
-        
-    For Each block In blocksWeaponsBase
-        items = items & getBaseCombatData(Worksheets("Combate").Range(block))
-    Next
-        
-    For Each block In blocksWeaponsRanged
-        items = items & getRangedCombatData(Worksheets("Combate").Range(block))
-    Next
-    
-    items = items & "]"
-    
-    items = items & getArmourData()
-    
-    getAllCombatData = Replace(items, "'", Chr(34))
-End Function
-*/
-
-/*
-Function getArmourData() As String
-    Dim items As String
-    Set combatSheet = Worksheets("Combate")
-    
-    items = ", 'armadura': {"
-    items = items & "'restriccionMov': '" & combatSheet.Range("E16").Value & "',"
-    items = items & "'penNatural': '" & combatSheet.Range("H17").Value & "',"
-    items = items & "'requisito': '" & combatSheet.Range("H16").Value & "',"
-    items = items & "'penAccionFisica': '" & combatSheet.Range("S16").Value & "',"
-    items = items & "'penNaturalFinal': '" & combatSheet.Range("S17").Value & "'"
-                
-    items = items & ", 'armaduraTotal': {"
-    items = items & "'FIL': '" & combatSheet.Range("I16").Value & "',"
-    items = items & "'CON': '" & combatSheet.Range("J16").Value & "',"
-    items = items & "'PEN': '" & combatSheet.Range("K16").Value & "',"
-    items = items & "'CAL': '" & combatSheet.Range("L16").Value & "',"
-    items = items & "'ELE': '" & combatSheet.Range("M16").Value & "',"
-    items = items & "'FRI': '" & combatSheet.Range("N16").Value & "',"
-    items = items & "'ENE': '" & combatSheet.Range("O16").Value & "'}"
-    
-    items = items & getArmours() & "}"
-    
-    getArmourData = Replace(items, "'", Chr(34))
-
-End Function
-*/
-
-  Armour getArmours(Sheet sheet) {
-    const rangeStart = "O12:Q13";
-
-    return Armour();
+  AttributesList _getAttributes() {
+    final attributes = excel.principal.getMapFromRange("D11", "H18", indexTitles: 1, indexValues: 4);
+    return AttributesList.fromJson(attributes);
   }
-/*
-Function getArmours() As String
-    Dim items As String, firstComma As String
-    Dim row As Range
-    
-    Set rng = Worksheets("Combate").Range("C12:S15")
-    
-    items = ", 'armaduras': ["
-          
-    For Each row In rng.Rows
-        
-        If Not row.Range("A1").Value = "" Then
-        
-            items = items & firstComma & "{ 'nombre': '" & row.Range("A1").Value & "',"
-            items = items & "'Localizacion': '" & row.Range("D1").Value & "',"
-            items = items & "'calidad': '" & row.Range("F1").Value & "',"
-            
-            items = items & "'FIL': '" & row.Range("G1").Value & "',"
-            items = items & "'CON': '" & row.Range("H1").Value & "',"
-            items = items & "'PEN': '" & row.Range("I1").Value & "',"
-            items = items & "'CAL': '" & row.Range("J1").Value & "',"
-            items = items & "'ELE': '" & row.Range("K1").Value & "',"
-            items = items & "'FRI': '" & row.Range("L1").Value & "',"
-            items = items & "'ENE': '" & row.Range("M1").Value & "',"
-            
-            items = items & "'Entereza': '" & row.Range("N1").Value & "',"
-            items = items & "'Presencia': '" & row.Range("O1").Value & "',"
-            items = items & "'RestMov': '" & row.Range("P1").Value & "',"
-            items = items & "'Enc': '" & row.Range("Q1").Value & "'}"
-            
-            firstComma = ", "
-        
-        End If
-    Next
 
-    items = items & "]"
-    
-    getArmours = Replace(items, "'", Chr(34))
-End Function
-*/
+  Mystical? _getMysticData() {
+    final sheet = excel.mystic;
 
-  Weapon getMagicProjectionAsWeapon(Sheet sheet) {
-    const rangeStart = "O12:Q13";
+    if (!_hasPointsOnMistic()) {
+      return null;
+    }
+
+    return Mystical(
+      zeonRegeneration: sheet.intAt("J12"),
+      act: sheet.intAt("L12"),
+      zeon: sheet.intAt("K18"),
+      paths: sheet.getMapFromRange("C15", "H25", indexTitles: 1, indexValues: 6),
+      subPaths: sheet.getMapFromRange("C15", "H25", indexTitles: 1, indexValues: 3),
+      metamagic: sheet.getMapFromRange("W53", "AB73", indexTitles: 1, indexValues: 6),
+      spellsMaintained: sheet.getMapFromRange("Y12", "AC50", indexTitles: 5, indexValues: 1),
+      spellsPurchased: sheet.getMapFromRange("AG12", "AK50", indexTitles: 5, indexValues: 1),
+    );
+  }
+
+  CharacterProfile _getBasicData() {
+    final sheet = excel.principal;
+    return CharacterProfile(
+      fatigue: sheet.intAt("N16"),
+      hitPoints: sheet.intAt("N11"),
+      regeneration: sheet.intAt("J11"),
+      speed: sheet.intAt("J16"),
+      name: sheet.stringAt("K4"),
+      category: sheet.stringAt("K5"),
+      level: sheet.stringAt("O6"),
+      kind: sheet.stringAt("K7"),
+      nature: sheet.intAt("AB14"),
+      fumbleLevel: 3,
+    );
+  }
+
+  CombatData _getAllCombatData() {
+    var weaponsRanges = ["C27", "C34", "C41", "N27", "N34", "N41"];
+    var rangedWeaponsRanges = ["C49", "C58", "N49", "N58"];
+
+    List<Weapon> weapons = [];
+
+    weapons.add(_getUnarmedCombatData());
+
+    if (_hasPointsOnMistic()) weapons.add(_getMagicProjectionAsWeapon());
+    if (_hasPointsOnPsychic()) weapons.add(_getPsychicProjectionAsWeapon());
+
+    for (var weapon in weaponsRanges) {
+      weapons.add(_getBaseCombatData(weapon));
+    }
+
+    for (var weapon in rangedWeaponsRanges) {
+      weapons.add(_getRangedCombatData(weapon));
+    }
+
+    return CombatData(armour: _getArmourData(), weapons: weapons);
+  }
+
+  ArmourData _getArmourData() {
+    final sheet = excel.combat;
+
+    return ArmourData(
+      movementRestriction: sheet.intAt("E16"),
+      naturalPenalty: sheet.intAt("H17"),
+      requirement: sheet.intAt("H16"),
+      physicalPenalty: sheet.intAt("S16"),
+      finalNaturalPenalty: sheet.intAt("S17"),
+      calculatedArmour: Armour(
+        fil: sheet.intAt("I16"),
+        con: sheet.intAt("J16"),
+        pen: sheet.intAt("K16"),
+        cal: sheet.intAt("L16"),
+        ele: sheet.intAt("M16"),
+        fri: sheet.intAt("N16"),
+        ene: sheet.intAt("O16"),
+      ),
+      armours: _getArmours(),
+    );
+  }
+
+  List<Armour> _getArmours() {
+    final sheet = excel.combat;
+    final range = sheet.valuesOn("C12", "S15");
+
+    List<Armour> armours = [];
+
+    for (var row in range) {
+      if (row?[0] != '') {
+        armours.add(Armour(
+          name: row?[0],
+          location: JsonUtils.armourLocation(row?[4]),
+          quality: int.tryParse(row?[6]) ?? 0,
+          fil: int.tryParse(row?[7]) ?? 0,
+          con: int.tryParse(row?[8]) ?? 0,
+          pen: int.tryParse(row?[9]) ?? 0,
+          cal: int.tryParse(row?[10]) ?? 0,
+          ele: int.tryParse(row?[11]) ?? 0,
+          fri: int.tryParse(row?[12]) ?? 0,
+          ene: int.tryParse(row?[13]) ?? 0,
+          endurance: int.tryParse(row?[14]) ?? 0,
+          presence: int.tryParse(row?[15]) ?? 0,
+          movementRestriction: int.tryParse(row?[16]) ?? 0,
+          enchanted: bool.tryParse(row?[17]),
+        ));
+      }
+    }
+
+    return armours;
+  }
+
+  Weapon _getMagicProjectionAsWeapon() {
+    final sheet = excel.mystic;
+    const rangeStart = "O12";
 
     return Weapon(
       name: 'Proyección Magica',
@@ -419,8 +236,9 @@ End Function
     );
   }
 
-  Weapon getPsychicProjectionAsWeapon(Sheet sheet) {
-    const rangeStart = "O12:Q13";
+  Weapon _getPsychicProjectionAsWeapon() {
+    final sheet = excel.psychic;
+    const rangeStart = "O12";
 
     return Weapon(
       name: 'Proyección Psiquica',
@@ -442,8 +260,9 @@ End Function
     );
   }
 
-  Weapon getUnarmedCombatData(Sheet sheet) {
-    const rangeStart = "C20:L25";
+  Weapon _getUnarmedCombatData() {
+    final sheet = excel.combat;
+    const rangeStart = "C20";
 
     return Weapon(
       name: sheet.stringInRange("A1", rangeStart),
@@ -464,7 +283,9 @@ End Function
     );
   }
 
-  Weapon getBaseCombatData(String rangeStart, Sheet sheet) {
+  Weapon _getBaseCombatData(String rangeStart) {
+    final sheet = excel.combat;
+
     return Weapon(
       name: sheet.stringInRange("B1", rangeStart),
       turn: sheet.intInRange("F3", rangeStart),
@@ -488,7 +309,9 @@ End Function
     );
   }
 
-  Weapon getRangedCombatData(String rangeStart, Sheet sheet) {
+  Weapon _getRangedCombatData(String rangeStart) {
+    final sheet = excel.combat;
+
     return Weapon(
       name: sheet.stringInRange("C1", rangeStart),
       turn: sheet.intInRange("F2", rangeStart),
@@ -512,22 +335,33 @@ End Function
       variableDamage: false,
     );
   }
-}
 
-extension on String {
-  normalize() {
-    var accChars = "ŠŽšžŸÀÁÂÃÄÅÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖÙÚÛÜÝàáâãäåçèéêëìíîïðñòóôõöùúûüýÿ";
-    var regChars = "SZszYAAAAAACEEEEIIIIDNOOOOOUUUUYaaaaaaceeeeiiiidnooooouuuuyy";
+  bool _hasPointsOnMistic() {
+    return (excel.points.intAt("M101") > 0);
+  }
 
-    for (int i = 0; i > accChars.length; i++) {
-      replaceAll(accChars[i], regChars[i]);
-    }
-
-    return this;
+  bool _hasPointsOnPsychic() {
+    return (excel.points.intAt("M117") > 0);
   }
 }
 
 extension on Sheet {
+  Map<String, String> getMapFromRange(
+    String start,
+    String end, {
+    required int indexTitles,
+    required int indexValues,
+  }) {
+    final values = valuesOn(start, end);
+    var result = <String, String>{};
+
+    for (var element in values) {
+      result[element?[indexTitles]] = element?[indexValues];
+    }
+
+    return result;
+  }
+
   int intInRange(String name, String referenceStr) {
     var reference = CellIndex.indexByString(referenceStr);
     var objective = CellIndex.indexByString(name);
@@ -552,14 +386,37 @@ extension on Sheet {
     return cell(index).value.toString();
   }
 
-  List<String> valuesOn(String start, String end) {
-    return selectRangeValues(
+  List<List<dynamic>?> valuesOn(String start, String end) {
+    final values = selectRange(
       CellIndex.indexByString(start),
       end: CellIndex.indexByString(end),
-    ).map((e) => e.toString()).toList();
+    );
+
+    for (var row in values) {
+      var rowStr = "";
+      row?.forEach((cell) {
+        final value = cell?.value;
+        rowStr = "$rowStr\t$value";
+      });
+      print(rowStr);
+    }
+
+    return values;
   }
 
-  String valueAt(String name) {
-    return cell(CellIndex.indexByString(name)).value.toString();
+  int intAt(String coordinate) {
+    return int.tryParse(stringAt(coordinate)) ?? 0;
   }
+
+  String stringAt(String coordinate) {
+    return cell(CellIndex.indexByString(coordinate)).value.toString();
+  }
+}
+
+extension on Excel {
+  Sheet get combat => this["Combate"];
+  Sheet get points => this["PDs"];
+  Sheet get principal => this["Principal"];
+  Sheet get mystic => this["Místicos"];
+  Sheet get psychic => this["Psíquicos"];
 }
