@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:amt/models/character/character.dart';
 import 'package:amt/models/enums.dart';
 import 'package:amt/models/modifiers_state.dart';
@@ -43,9 +45,19 @@ class CharactersTable extends StatelessWidget {
             Flexible(
               flex: 1,
               child: TextButton.icon(
-                onPressed: () {
-                  appState.getCharacters();
-                },
+                onPressed: appState.sheetsLoadingPercentaje == -1
+                    ? () async {
+                        appState.showLoading(
+                          message: "Selecciona las planillas que deseas cargar",
+                        );
+                        final files = await appState.getCharacters();
+                        appState.hideLoading();
+
+                        final timer = Timer.periodic(Duration(seconds: 1 * (files?.count ?? 1)), (timer) => appState.stepSheetLoading());
+                        await appState.parseCharacters(files, (value) => {appState.updateSheetLoading(value)});
+                        timer.cancel();
+                      }
+                    : null,
                 icon: Icon(Icons.upload_file),
                 label: Text(
                   "Cargar Personaje",
@@ -129,7 +141,10 @@ class CharactersTable extends StatelessWidget {
                             child: Row(
                               children: [
                                 Expanded(
-                                  child: Text(character.profile.name),
+                                  child: Text(
+                                    character.profile.name,
+                                    maxLines: 2,
+                                  ),
                                 ),
                                 Stack(
                                   alignment: AlignmentDirectional.center,

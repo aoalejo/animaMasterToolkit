@@ -44,27 +44,31 @@ class Weapon {
   String? ammunition;
   @HiveField(18)
   String? special;
+  @HiveField(19)
+  late bool variableDamage;
 
-  Weapon(
-      {required this.name,
-      this.type,
-      this.known,
-      this.size,
-      this.principalDamage,
-      this.secondaryDamage,
-      this.endurance,
-      this.breakage,
-      this.presence,
-      required this.turn,
-      required this.attack,
-      required this.defense,
-      required this.defenseType,
-      required this.damage,
-      this.quality,
-      this.characteristic,
-      this.warning,
-      this.ammunition,
-      this.special});
+  Weapon({
+    required this.name,
+    this.type,
+    this.known,
+    this.size,
+    this.principalDamage,
+    this.secondaryDamage,
+    this.endurance,
+    this.breakage,
+    this.presence,
+    required this.turn,
+    required this.attack,
+    required this.defense,
+    required this.defenseType,
+    required this.damage,
+    this.quality,
+    this.characteristic,
+    this.warning,
+    this.ammunition,
+    this.special,
+    this.variableDamage = false,
+  });
 
   Weapon.fromJson(Map<String, dynamic> json) {
     name = json['nombre'] ?? "";
@@ -86,10 +90,21 @@ class Weapon {
     warning = json['advertencia'];
     ammunition = json['municion'];
     special = json['especial'];
+    variableDamage = false;
   }
 
   String description({bool lineBreak = false}) {
     return "$name ${lineBreak ? '\n' : ''}HA: $attack ${lineBreak ? '\n' : ''}${defenseType == DefenseType.dodge ? "HE" : "HP"}: $defense ${lineBreak ? '\n' : ''}T: $turn ${lineBreak ? '\n' : ''}DMG: $damage ${principalDamage?.name()}/${secondaryDamage?.name()} ";
+  }
+
+  Weapon.blank() {
+    name = "";
+    turn = 0;
+
+    attack = 0;
+    defense = 0;
+    defenseType = DefenseType.dodge;
+    damage = 0;
   }
 
   Weapon copy() {

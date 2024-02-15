@@ -36,13 +36,14 @@ class WeaponAdapter extends TypeAdapter<Weapon> {
       warning: fields[16] as String?,
       ammunition: fields[17] as String?,
       special: fields[18] as String?,
+      variableDamage: fields[19] as bool? ?? false,
     );
   }
 
   @override
   void write(BinaryWriter writer, Weapon obj) {
     writer
-      ..writeByte(19)
+      ..writeByte(20)
       ..writeByte(0)
       ..write(obj.name)
       ..writeByte(1)
@@ -80,16 +81,14 @@ class WeaponAdapter extends TypeAdapter<Weapon> {
       ..writeByte(17)
       ..write(obj.ammunition)
       ..writeByte(18)
-      ..write(obj.special);
+      ..write(obj.special)
+      ..writeByte(19)
+      ..write(obj.variableDamage);
   }
 
   @override
   int get hashCode => typeId.hashCode;
 
   @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is WeaponAdapter &&
-          runtimeType == other.runtimeType &&
-          typeId == other.typeId;
+  bool operator ==(Object other) => identical(this, other) || other is WeaponAdapter && runtimeType == other.runtimeType && typeId == other.typeId;
 }

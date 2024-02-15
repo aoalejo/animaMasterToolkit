@@ -17,6 +17,7 @@ class CharacterInfoCard extends StatelessWidget {
   final bool attacking;
 
   CharacterInfoCard({required this.attacking});
+  final modifiersController = ScrollController();
 
   @override
   Widget build(BuildContext context) {
@@ -121,12 +122,12 @@ class CharacterInfoCard extends StatelessWidget {
                           SizedBox(
                             height: 150,
                             child: Scrollbar(
-                              thumbVisibility: true,
-                              trackVisibility: true,
+                              controller: modifiersController,
                               child: GridView.count(
                                 scrollDirection: Axis.horizontal,
                                 crossAxisCount: 2,
                                 childAspectRatio: 0.45,
+                                controller: modifiersController,
                                 children: [
                                   for (var consumable in character.state.consumables)
                                     ConsumableCard(

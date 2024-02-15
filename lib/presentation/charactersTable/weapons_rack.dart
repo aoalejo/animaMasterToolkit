@@ -37,62 +37,83 @@ class WeaponsRack extends StatelessWidget {
         showModalBottomSheet<void>(
           context: context,
           builder: (BuildContext context) {
-            return BottomSheetCustom(title: Text('Selección/Edición de arma'), children: [
-              Column(
-                children: [
-                  for (var weapon in weapons)
+            return BottomSheetCustom(
+                title: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text('Selección/Edición de arma'),
                     TextButton(
-                      style: TextButton.styleFrom(
-                          backgroundColor: weapon == selectedWeapon ? theme.colorScheme.primary : null,
-                          foregroundColor: weapon == selectedWeapon ? theme.colorScheme.onPrimary : null),
-                      onPressed: () => {
-                        onSelect(weapon),
-                        Navigator.pop(context),
+                      onPressed: () {
+                        var newWeapon = Weapon.blank();
+                        weapons.add(newWeapon);
+                        Navigator.pop(context);
+                        onSelect(newWeapon);
+                        _showWeaponEditor(
+                          context,
+                          weapon: newWeapon,
+                          onEdit: onEdit,
+                        );
                       },
-                      child: Padding(
-                        padding: EdgeInsets.all(4),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                      child: Text("Crear nueva"),
+                    ),
+                  ],
+                ),
+                children: [
+                  Column(
+                    children: [
+                      for (var weapon in weapons)
+                        TextButton(
+                          style: TextButton.styleFrom(
+                              backgroundColor: weapon == selectedWeapon ? theme.colorScheme.primary : null,
+                              foregroundColor: weapon == selectedWeapon ? theme.colorScheme.onPrimary : null),
+                          onPressed: () => {
+                            onSelect(weapon),
+                            Navigator.pop(context),
+                          },
+                          child: Padding(
+                            padding: EdgeInsets.all(4),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text(weapon.name),
-                                Text(
-                                  weapon.description(),
-                                  style: weapon == selectedWeapon ? subtitleButtonOnPrimary : subtitleButton,
+                                Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(weapon.name),
+                                    Text(
+                                      weapon.description(),
+                                      style: weapon == selectedWeapon ? subtitleButtonOnPrimary : subtitleButton,
+                                    ),
+                                  ],
                                 ),
-                              ],
-                            ),
-                            Row(
-                              children: [
-                                IconButton(
-                                  onPressed: () {
-                                    var copy = weapon.copy();
-                                    weapons.add(copy);
-                                    Navigator.pop(context);
-                                    _showWeaponEditor(
-                                      context,
-                                      weapon: copy,
-                                      onEdit: onEdit,
-                                    );
-                                  },
-                                  icon: Icon(Icons.copy),
-                                ),
-                                IconButton(
-                                  onPressed: () => {Navigator.pop(context), _showWeaponEditor(context, weapon: weapon, onEdit: onEdit)},
-                                  icon: Icon(Icons.edit),
+                                Row(
+                                  children: [
+                                    IconButton(
+                                      onPressed: () {
+                                        var copy = weapon.copy();
+                                        weapons.add(copy);
+                                        Navigator.pop(context);
+                                        _showWeaponEditor(
+                                          context,
+                                          weapon: copy,
+                                          onEdit: onEdit,
+                                        );
+                                      },
+                                      icon: Icon(Icons.copy),
+                                    ),
+                                    IconButton(
+                                      onPressed: () => {Navigator.pop(context), _showWeaponEditor(context, weapon: weapon, onEdit: onEdit)},
+                                      icon: Icon(Icons.edit),
+                                    )
+                                  ],
                                 )
                               ],
-                            )
-                          ],
+                            ),
+                          ),
                         ),
-                      ),
-                    ),
-                ],
-              ),
-            ]);
+                    ],
+                  ),
+                ]);
           },
         )
       },
@@ -129,73 +150,100 @@ class WeaponsRack extends StatelessWidget {
     showModalBottomSheet<void>(
       context: context,
       builder: (BuildContext context) {
-        return BottomSheetCustom(
-          title: Text("Modificar ${weapon.name}"),
-          children: [
-            SizedBox(
-              height: 16,
-            ),
-            TextFormFieldCustom(
-              label: "Nombre",
-              text: weapon.name,
-              onChanged: (value) {
-                weapon.name = value;
-                onEdit(weapon);
-              },
-            ),
-            SizedBox(
-              height: 16,
-            ),
-            TextFormFieldCustom(
-              label: "Daño base",
-              text: weapon.damage.toString(),
-              onChanged: (value) {
-                weapon.damage = _parseInput(value);
-                onEdit(weapon);
-              },
-            ),
-            SizedBox(
-              height: 16,
-            ),
-            TextFormFieldCustom(
-              label: "Ataque",
-              text: weapon.attack.toString(),
-              onChanged: (value) {
-                weapon.defense = _parseInput(value);
-                onEdit(weapon);
-              },
-            ),
-            SizedBox(
-              height: 16,
-            ),
-            TextFormFieldCustom(
-              label: "Defensa",
-              text: weapon.defense.toString(),
-              onChanged: (value) {
-                weapon.defense = _parseInput(value);
-                onEdit(weapon);
-              },
-            ),
-            SizedBox(
-              height: 16,
-            ),
-            TextFormFieldCustom(
-              label: "Turno",
-              text: weapon.turn.toString(),
-              onChanged: (value) {
-                weapon.turn = _parseInput(value);
-                onEdit(weapon);
-              },
-            ),
-            SizedBox(
-              height: 16,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text("Tipo de daño principal: "),
-                StatefulBuilder(
-                  builder: (context, setState) => ToggleButtons(
+        return StatefulBuilder(
+          builder: (context, setState) => BottomSheetCustom(
+            title: Text("Modificar ${weapon.name}"),
+            children: [
+              SizedBox(
+                height: 16,
+              ),
+              TextFormFieldCustom(
+                label: "Nombre",
+                text: weapon.name,
+                onChanged: (value) {
+                  weapon.name = value;
+                  onEdit(weapon);
+                },
+              ),
+              SizedBox(
+                height: 16,
+              ),
+              Row(
+                children: [
+                  Expanded(
+                    child: TextFormFieldCustom(
+                      label: "Daño base",
+                      text: weapon.damage.toString(),
+                      enabled: !weapon.variableDamage,
+                      onChanged: (value) {
+                        setState(
+                          () => {
+                            weapon.damage = _parseInput(value),
+                            onEdit(weapon),
+                          },
+                        );
+                      },
+                    ),
+                  ),
+                  SizedBox(
+                    width: 16,
+                  ),
+                  Text("Daño variable?:"),
+                  Switch(
+                    value: weapon.variableDamage,
+                    onChanged: (newValue) {
+                      setState(
+                        () => {
+                          if (newValue) {weapon.damage = 0},
+                          weapon.variableDamage = newValue,
+                          onEdit(weapon),
+                        },
+                      );
+                    },
+                  )
+                ],
+              ),
+              SizedBox(
+                height: 16,
+              ),
+              TextFormFieldCustom(
+                label: "Ataque",
+                text: weapon.attack.toString(),
+                onChanged: (value) {
+                  weapon.attack = _parseInput(value);
+                  onEdit(weapon);
+                },
+              ),
+              SizedBox(
+                height: 16,
+              ),
+              TextFormFieldCustom(
+                label: "Defensa",
+                text: weapon.defense.toString(),
+                onChanged: (value) {
+                  weapon.defense = _parseInput(value);
+                  onEdit(weapon);
+                },
+              ),
+              SizedBox(
+                height: 16,
+              ),
+              TextFormFieldCustom(
+                label: "Turno",
+                text: weapon.turn.toString(),
+                onChanged: (value) {
+                  weapon.turn = _parseInput(value);
+                  onEdit(weapon);
+                },
+              ),
+              SizedBox(
+                height: 16,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text("Tipo de daño principal: "),
+                  ToggleButtons(
                     borderRadius: const BorderRadius.all(Radius.circular(8)),
                     isSelected: [
                       weapon.principalDamage == DamageTypes.fil,
@@ -224,18 +272,16 @@ class WeaponsRack extends StatelessWidget {
                       Text("ene"),
                     ],
                   ),
-                ),
-              ],
-            ),
-            SizedBox(
-              height: 16,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text("Tipo de daño secundario: "),
-                StatefulBuilder(
-                  builder: (context, setState) => ToggleButtons(
+                ],
+              ),
+              SizedBox(
+                height: 16,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text("Tipo de daño secundario: "),
+                  ToggleButtons(
                     borderRadius: const BorderRadius.all(Radius.circular(8)),
                     isSelected: [
                       weapon.secondaryDamage == DamageTypes.fil,
@@ -264,43 +310,43 @@ class WeaponsRack extends StatelessWidget {
                       Text("ene"),
                     ],
                   ),
-                ),
-              ],
-            ),
-            SizedBox(
-              height: 16,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text("Tipo de defensa: "),
-                StatefulBuilder(
-                  builder: (context, setState) => ToggleButtons(
-                    borderRadius: const BorderRadius.all(Radius.circular(8)),
-                    isSelected: [
-                      weapon.defenseType == DefenseType.parry,
-                      weapon.defenseType == DefenseType.dodge,
-                    ],
-                    onPressed: (index) => {
-                      setState(
-                        () => {
-                          weapon.defenseType = DefenseType.values[index],
-                          onEdit(weapon),
-                        },
-                      )
-                    },
-                    children: [
-                      Text("Parada"),
-                      Text("Esquiva"),
-                    ],
+                ],
+              ),
+              SizedBox(
+                height: 16,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text("Tipo de defensa: "),
+                  StatefulBuilder(
+                    builder: (context, setState) => ToggleButtons(
+                      borderRadius: const BorderRadius.all(Radius.circular(8)),
+                      isSelected: [
+                        weapon.defenseType == DefenseType.parry,
+                        weapon.defenseType == DefenseType.dodge,
+                      ],
+                      onPressed: (index) => {
+                        setState(
+                          () => {
+                            weapon.defenseType = DefenseType.values[index],
+                            onEdit(weapon),
+                          },
+                        )
+                      },
+                      children: [
+                        Text("Parada"),
+                        Text("Esquiva"),
+                      ],
+                    ),
                   ),
-                ),
-              ],
-            ),
-            SizedBox(
-              height: 16,
-            ),
-          ],
+                ],
+              ),
+              SizedBox(
+                height: 16,
+              ),
+            ],
+          ),
         );
       },
     );

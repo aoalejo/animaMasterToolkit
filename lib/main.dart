@@ -23,13 +23,12 @@ import 'package:amt/presentation/combat/combat_defense_card.dart';
 import 'package:amt/presentation/combat/combat_result_card.dart';
 import 'package:amt/presentation/npcSelection/npc_selector_view.dart';
 import 'package:amt/presentation/states/characters_page_state.dart';
-import 'package:amt/presentation/states/non_player_caracters_state.dart';
+import 'package:amt/presentation/states/non_player_characters_state.dart';
 import 'package:amt/utils/assets.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 void main() async {
@@ -89,9 +88,7 @@ class MyAppState extends State {
         localizationsDelegates: [
           GlobalMaterialLocalizations.delegate,
           GlobalWidgetsLocalizations.delegate,
-          AppLocalizations.delegate,
         ],
-        supportedLocales: AppLocalizations.supportedLocales,
         title: 'Anima Master Toolkit v3',
         theme: ThemeData(
           useMaterial3: true,
@@ -123,7 +120,35 @@ class GeneratorPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: 50,
-        title: Text("Anima Master Toolkit v3"),
+        title: Row(
+          children: [
+            if (appState.sheetsLoadingPercentaje != -1)
+              SizedBox.square(
+                dimension: 24,
+                child: Stack(
+                  children: [
+                    CircularProgressIndicator(
+                      value: appState.sheetsLoadingPercentaje,
+                      color: Colors.white,
+                    ),
+                    Center(
+                      child: Text(
+                        "${(appState.sheetsLoadingPercentaje * 100).toInt()}",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 10,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            if (appState.sheetsLoadingPercentaje != -1) SizedBox.square(dimension: 8),
+            if (appState.sheetsLoadingPercentaje != -1) Text("Cargando planillas..."),
+            if (appState.sheetsLoadingPercentaje == -1) Text("Anima Master Toolkit v3"),
+          ],
+        ),
         backgroundColor: theme.primaryColor,
         foregroundColor: theme.colorScheme.onPrimary,
         actions: [
@@ -157,7 +182,7 @@ class GeneratorPage extends StatelessWidget {
       ),
       body: Column(
         children: [
-          Expanded(child: _content(theme, screenSize, small, appState.pageSelected)),
+          Expanded(child: _content(theme, screenSize, small, appState.pageSelected, appState.isLoading, appState.message)),
           small
               ? BottomNavigationBar(
                   items: [
@@ -176,46 +201,82 @@ class GeneratorPage extends StatelessWidget {
     );
   }
 
-  Widget _content(ThemeData theme, Size screenSize, bool small, int pageSelected) {
+  Widget _content(ThemeData theme, Size screenSize, bool small, int pageSelected, bool loading, String? message) {
     return ColoredBox(
       color: theme.colorScheme.background,
       child: Align(
         alignment: Alignment.topLeft,
-        child: Flex(
-          direction: Axis.horizontal,
+        child: Stack(
           children: [
-            pageSelected == 0 || !small
-                ? SizedBox(
-                    height: screenSize.height,
-                    width: small ? screenSize.width : screenSize.width / 3,
-                    child: CharactersTable(),
-                  )
-                : Container(),
-            pageSelected == 1 || !small
-                ? Column(
-                    children: [
-                      SizedBox(
-                        height: small ? (screenSize.height / 2) - 54 : (screenSize.height / 2) - 25,
+            Flex(
+              direction: Axis.horizontal,
+              children: [
+                pageSelected == 0 || !small
+                    ? SizedBox(
+                        height: screenSize.height,
                         width: small ? screenSize.width : screenSize.width / 3,
-                        child: CharacterInfoCard(attacking: true),
-                      ),
-                      SizedBox(
-                        height: small ? (screenSize.height / 2) - 54 : (screenSize.height / 2) - 25,
+                        child: CharactersTable(),
+                      )
+                    : Container(),
+                pageSelected == 1 || !small
+                    ? Column(
+                        children: [
+                          SizedBox(
+                            height: small ? (screenSize.height / 2) - 54 : (screenSize.height / 2) - 25,
+                            width: small ? screenSize.width : screenSize.width / 3,
+                            child: CharacterInfoCard(attacking: true),
+                          ),
+                          SizedBox(
+                            height: small ? (screenSize.height / 2) - 54 : (screenSize.height / 2) - 25,
+                            width: small ? screenSize.width : screenSize.width / 3,
+                            child: CharacterInfoCard(attacking: false),
+                          ),
+                        ],
+                      )
+                    : Container(),
+                pageSelected == 2 || !small
+                    ? SizedBox(
+                        height: screenSize.height,
                         width: small ? screenSize.width : screenSize.width / 3,
-                        child: CharacterInfoCard(attacking: false),
+                        child: CombatSection(
+                          isLandscape: true,
+                        ),
+                      )
+                    : Container(),
+              ],
+            ),
+            if (loading)
+              Stack(
+                children: [
+                  SizedBox.expand(child: ColoredBox(color: Colors.black26)),
+                  Center(
+                    child: SizedBox(
+                      width: screenSize.width / 3,
+                      height: screenSize.width / 4,
+                      child: Container(
+                        decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(16)), color: Colors.white),
+                        child: Padding(
+                          padding: EdgeInsets.all(16),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              CircularProgressIndicator(),
+                              Text(
+                                message ?? "",
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontSize: 24,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
                       ),
-                    ],
-                  )
-                : Container(),
-            pageSelected == 2 || !small
-                ? SizedBox(
-                    height: screenSize.height,
-                    width: small ? screenSize.width : screenSize.width / 3,
-                    child: CombatSection(
-                      isLandscape: true,
                     ),
-                  )
-                : Container(),
+                  ),
+                ],
+              )
           ],
         ),
       ),
