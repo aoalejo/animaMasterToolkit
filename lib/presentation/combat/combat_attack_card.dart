@@ -18,6 +18,7 @@ class CombatAttackCard extends StatelessWidget {
     final attackState = appState.combatState.attack;
     final character = attackState.character;
     final weapon = character?.selectedWeapon();
+    final isVariableDamage = weapon?.variableDamage ?? false;
 
     return CustomCombatCard(
       title: "${character?.profile.name ?? ""} Ataca (Total: ${appState.combatState.finalAttackValue.result})",
@@ -33,6 +34,118 @@ class CombatAttackCard extends StatelessWidget {
               },
             ),
       children: [
+        SizedBox(
+          height: 40,
+          child: Row(
+            children: [
+              Flexible(
+                flex: 2,
+                child: TextFormFieldCustom(
+                  inputType: TextInputType.number,
+                  text: attackState.roll,
+                  label: "Tirada de ataque",
+                  onChanged: (value) => {appState.updateCombatState(attackRoll: value)},
+                  suffixIcon: IconButton(
+                    onPressed: () {
+                      appState.updateCombatState(attackRoll: character?.roll().getRollsAsString());
+                    },
+                    icon: SizedBox.square(
+                      dimension: 24,
+                      child: Assets.diceRoll,
+                    ),
+                  ),
+                ),
+              ),
+              if (character != null) SizedBox(width: 12),
+              if (character != null && !isVariableDamage)
+                Flexible(
+                  flex: 1,
+                  child: TextFormFieldCustom(
+                    enabled: false,
+                    label: "Daño base",
+                    text: weapon?.damage.toString(),
+                    onChanged: (newText) {
+                      var newValue = int.tryParse(newText);
+
+                      if (newValue != null) {
+                        weapon?.damage = newValue;
+                        appState.updateCharacter(character);
+                      }
+                    },
+                  ),
+                ),
+              if (character != null) SizedBox(width: 4),
+              Flexible(
+                flex: 2,
+                child: TextFormFieldCustom(
+                  onChanged: (value) {
+                    appState.updateCombatState(damageModifier: value);
+                  },
+                  text: attackState.damage,
+                  label: isVariableDamage ? "Daño" : "Modificador",
+                  inputType: TextInputType.number,
+                  suffixIcon: IconButton(
+                    icon: Icon(Icons.delete),
+                    onPressed: () {
+                      appState.updateCombatState(damageModifier: "");
+                    },
+                  ),
+                ),
+              ),
+              if (character != null) SizedBox(width: 12),
+              if (character != null)
+                isVariableDamage
+                    ? ToggleButtons(
+                        constraints: BoxConstraints(minWidth: 30, minHeight: 40),
+                        isSelected: [
+                          attackState.damageType == DamageTypes.fil,
+                          attackState.damageType == DamageTypes.pen,
+                          attackState.damageType == DamageTypes.con,
+                          attackState.damageType == DamageTypes.fri,
+                          attackState.damageType == DamageTypes.cal,
+                          attackState.damageType == DamageTypes.ele,
+                          attackState.damageType == DamageTypes.ene,
+                        ],
+                        onPressed: (index) => {appState.updateCombatState(damageType: DamageTypes.values[index])},
+                        borderRadius: const BorderRadius.all(Radius.circular(8)),
+                        children: [
+                          Text("fil", style: theme.textTheme.bodySmall),
+                          Text("pen", style: theme.textTheme.bodySmall),
+                          Text("con", style: theme.textTheme.bodySmall),
+                          Text("fri", style: theme.textTheme.bodySmall),
+                          Text("cal", style: theme.textTheme.bodySmall),
+                          Text("ele", style: theme.textTheme.bodySmall),
+                          Text("ene", style: theme.textTheme.bodySmall),
+                        ],
+                      )
+                    : Padding(
+                        padding: EdgeInsets.all(0),
+                        child: ToggleButtons(
+                          isSelected: [
+                            weapon?.principalDamage == attackState.damageType,
+                            weapon?.secondaryDamage == attackState.damageType,
+                          ],
+                          onPressed: (index) =>
+                              {appState.updateCombatState(damageType: index == 0 ? weapon?.principalDamage : weapon?.secondaryDamage)},
+                          borderRadius: const BorderRadius.all(Radius.circular(8)),
+                          children: [
+                            Text(
+                              weapon?.principalDamage?.name ?? "con",
+                              style: theme.textTheme.bodySmall,
+                            ),
+                            Text(
+                              weapon?.secondaryDamage?.name ?? "con",
+                              style: theme.textTheme.bodySmall,
+                            ),
+                          ],
+                        ),
+                      ),
+            ],
+          ),
+        ),
+        SizedBox(
+          height: 20,
+        ),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -40,57 +153,6 @@ class CombatAttackCard extends StatelessWidget {
               flex: 1,
               child: Column(
                 children: [
-                  SizedBox(
-                    height: 40,
-                    child: Row(
-                      children: [
-                        Flexible(
-                          child: TextFormFieldCustom(
-                            inputType: TextInputType.number,
-                            text: attackState.roll,
-                            label: "Tirada de ataque",
-                            onChanged: (value) => {appState.updateCombatState(attackRoll: value)},
-                            suffixIcon: IconButton(
-                              onPressed: () {
-                                appState.updateCombatState(attackRoll: character?.roll().getRollsAsString());
-                              },
-                              icon: SizedBox.square(
-                                dimension: 24,
-                                child: Assets.diceRoll,
-                              ),
-                            ),
-                          ),
-                        ),
-                        if (character != null) SizedBox(width: 4),
-                        if (character != null)
-                          Padding(
-                            padding: EdgeInsets.all(0),
-                            child: ToggleButtons(
-                              isSelected: [
-                                weapon?.principalDamage == attackState.damageType,
-                                weapon?.secondaryDamage == attackState.damageType,
-                              ],
-                              onPressed: (index) =>
-                                  {appState.updateCombatState(damageType: index == 0 ? weapon?.principalDamage : weapon?.secondaryDamage)},
-                              borderRadius: const BorderRadius.all(Radius.circular(8)),
-                              children: [
-                                Text(
-                                  weapon?.principalDamage?.name ?? "con",
-                                  style: theme.textTheme.bodySmall,
-                                ),
-                                Text(
-                                  weapon?.secondaryDamage?.name ?? "con",
-                                  style: theme.textTheme.bodySmall,
-                                ),
-                              ],
-                            ),
-                          ),
-                      ],
-                    ),
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
                   SizedBox(
                     height: 40,
                     child: Row(
@@ -143,50 +205,6 @@ class CombatAttackCard extends StatelessWidget {
               flex: 1,
               child: Column(
                 children: [
-                  SizedBox(
-                      height: 40,
-                      child: Row(
-                        children: [
-                          if (character != null && !(weapon?.variableDamage ?? false))
-                            Flexible(
-                              flex: 1,
-                              child: TextFormFieldCustom(
-                                enabled: false,
-                                label: "Daño",
-                                text: weapon?.damage.toString(),
-                                onChanged: (newText) {
-                                  var newValue = int.tryParse(newText);
-
-                                  if (newValue != null) {
-                                    weapon?.damage = newValue;
-                                    appState.updateCharacter(character);
-                                  }
-                                },
-                              ),
-                            ),
-                          if (character != null) SizedBox(width: 4),
-                          Flexible(
-                            flex: 2,
-                            child: TextFormFieldCustom(
-                              onChanged: (value) {
-                                appState.updateCombatState(damageModifier: value);
-                              },
-                              text: attackState.damage,
-                              label: "Daño: ${weapon?.name ?? "base"}",
-                              inputType: TextInputType.number,
-                              suffixIcon: IconButton(
-                                icon: Icon(Icons.delete),
-                                onPressed: () {
-                                  appState.updateCombatState(damageModifier: "");
-                                },
-                              ),
-                            ),
-                          ),
-                        ],
-                      )),
-                  SizedBox(
-                    height: 20,
-                  ),
                   SizedBox(
                     height: 40,
                     child: TextButton(

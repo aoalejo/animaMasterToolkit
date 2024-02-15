@@ -45,7 +45,7 @@ class Weapon {
   @HiveField(18)
   String? special;
   @HiveField(19)
-  late bool variableDamage;
+  bool? variableDamage;
 
   Weapon({
     required this.name,
