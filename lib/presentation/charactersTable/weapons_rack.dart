@@ -174,7 +174,7 @@ class WeaponsRack extends StatelessWidget {
                     child: TextFormFieldCustom(
                       label: "Daño base",
                       text: weapon.damage.toString(),
-                      enabled: !weapon.variableDamage,
+                      enabled: !(weapon.variableDamage ?? false),
                       onChanged: (value) {
                         setState(
                           () => {
@@ -190,7 +190,7 @@ class WeaponsRack extends StatelessWidget {
                   ),
                   Text("Daño variable?:"),
                   Switch(
-                    value: weapon.variableDamage,
+                    value: weapon.variableDamage ?? false,
                     onChanged: (newValue) {
                       setState(
                         () => {
@@ -239,79 +239,82 @@ class WeaponsRack extends StatelessWidget {
               SizedBox(
                 height: 16,
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text("Tipo de daño principal: "),
-                  ToggleButtons(
-                    borderRadius: const BorderRadius.all(Radius.circular(8)),
-                    isSelected: [
-                      weapon.principalDamage == DamageTypes.fil,
-                      weapon.principalDamage == DamageTypes.pen,
-                      weapon.principalDamage == DamageTypes.con,
-                      weapon.principalDamage == DamageTypes.fri,
-                      weapon.principalDamage == DamageTypes.cal,
-                      weapon.principalDamage == DamageTypes.ele,
-                      weapon.principalDamage == DamageTypes.ene,
-                    ],
-                    onPressed: (index) => {
-                      setState(
-                        () => {
-                          weapon.principalDamage = DamageTypes.values[index],
-                          onEdit(weapon),
-                        },
-                      )
-                    },
-                    children: [
-                      Text("fil"),
-                      Text("pen"),
-                      Text("con"),
-                      Text("fri"),
-                      Text("cal"),
-                      Text("ele"),
-                      Text("ene"),
-                    ],
-                  ),
-                ],
-              ),
-              SizedBox(
-                height: 16,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text("Tipo de daño secundario: "),
-                  ToggleButtons(
-                    borderRadius: const BorderRadius.all(Radius.circular(8)),
-                    isSelected: [
-                      weapon.secondaryDamage == DamageTypes.fil,
-                      weapon.secondaryDamage == DamageTypes.pen,
-                      weapon.secondaryDamage == DamageTypes.con,
-                      weapon.secondaryDamage == DamageTypes.fri,
-                      weapon.secondaryDamage == DamageTypes.cal,
-                      weapon.secondaryDamage == DamageTypes.ele,
-                      weapon.secondaryDamage == DamageTypes.ene,
-                    ],
-                    onPressed: (index) => {
-                      setState(
-                        () => {
-                          weapon.secondaryDamage = DamageTypes.values[index],
-                          onEdit(weapon),
-                        },
-                      )
-                    },
-                    children: [
-                      Text("fil"),
-                      Text("pen"),
-                      Text("con"),
-                      Text("fri"),
-                      Text("cal"),
-                      Text("ele"),
-                      Text("ene"),
-                    ],
-                  ),
-                ],
-              ),
+              if (!(weapon.variableDamage ?? false))
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text("Tipo de daño principal: "),
+                    ToggleButtons(
+                      borderRadius: const BorderRadius.all(Radius.circular(8)),
+                      isSelected: [
+                        weapon.principalDamage == DamageTypes.fil,
+                        weapon.principalDamage == DamageTypes.pen,
+                        weapon.principalDamage == DamageTypes.con,
+                        weapon.principalDamage == DamageTypes.fri,
+                        weapon.principalDamage == DamageTypes.cal,
+                        weapon.principalDamage == DamageTypes.ele,
+                        weapon.principalDamage == DamageTypes.ene,
+                      ],
+                      onPressed: (index) => {
+                        setState(
+                          () => {
+                            weapon.principalDamage = DamageTypes.values[index],
+                            onEdit(weapon),
+                          },
+                        )
+                      },
+                      children: [
+                        Text("fil"),
+                        Text("pen"),
+                        Text("con"),
+                        Text("fri"),
+                        Text("cal"),
+                        Text("ele"),
+                        Text("ene"),
+                      ],
+                    ),
+                  ],
+                ),
+              if (!(weapon.variableDamage ?? false))
+                SizedBox(
+                  height: 16,
+                ),
+              if (!(weapon.variableDamage ?? false))
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text("Tipo de daño secundario: "),
+                    ToggleButtons(
+                      borderRadius: const BorderRadius.all(Radius.circular(8)),
+                      isSelected: [
+                        weapon.secondaryDamage == DamageTypes.fil,
+                        weapon.secondaryDamage == DamageTypes.pen,
+                        weapon.secondaryDamage == DamageTypes.con,
+                        weapon.secondaryDamage == DamageTypes.fri,
+                        weapon.secondaryDamage == DamageTypes.cal,
+                        weapon.secondaryDamage == DamageTypes.ele,
+                        weapon.secondaryDamage == DamageTypes.ene,
+                      ],
+                      onPressed: (index) => {
+                        setState(
+                          () => {
+                            weapon.secondaryDamage = DamageTypes.values[index],
+                            onEdit(weapon),
+                          },
+                        )
+                      },
+                      children: [
+                        Text("fil"),
+                        Text("pen"),
+                        Text("con"),
+                        Text("fri"),
+                        Text("cal"),
+                        Text("ele"),
+                        Text("ene"),
+                      ],
+                    ),
+                  ],
+                ),
               SizedBox(
                 height: 16,
               ),
