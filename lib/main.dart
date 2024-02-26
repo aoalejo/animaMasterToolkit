@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:amt/models/armour.dart';
 import 'package:amt/models/armour_data.dart';
 import 'package:amt/models/attributes_list.dart';
@@ -251,8 +253,8 @@ class GeneratorPage extends StatelessWidget {
                   SizedBox.expand(child: ColoredBox(color: Colors.black26)),
                   Center(
                     child: SizedBox(
-                      width: screenSize.width / 3,
-                      height: screenSize.width / 4,
+                      width: max(screenSize.width / 3, 300),
+                      height: max(screenSize.width / 4, 300),
                       child: Container(
                         decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(16)), color: Colors.white),
                         child: Padding(
@@ -262,11 +264,19 @@ class GeneratorPage extends StatelessWidget {
                             children: [
                               CircularProgressIndicator(),
                               Text(
-                                message ?? "",
+                                message?.split("#").first ?? "",
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                   fontSize: 24,
                                   fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                              Text(
+                                message?.split("#").last ?? "",
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w400,
                                 ),
                               ),
                             ],

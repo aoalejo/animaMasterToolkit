@@ -8,7 +8,7 @@ import 'package:amt/models/enums.dart';
 import 'package:amt/models/modifiers_state.dart';
 import 'package:amt/models/rules/rules.dart';
 import 'package:amt/presentation/states/combat_state.dart';
-import 'package:amt/utils/excel_parser.dart';
+import 'package:amt/utils/cloud_excel_parser.dart';
 import 'package:enough_convert/windows.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
@@ -269,8 +269,10 @@ class CharactersPageState extends ChangeNotifier {
               var character = Character.fromJson(jsonDecode(jsonFile));
               addCharacter(character);
             } else {
-              var character = ExcelParser.fromBytes(element.bytes!.toList());
-              addCharacter(await character.parse());
+              var character = CloudExcelParser.fromBytes(element.bytes!.toList());
+              final characterDecoded = await character.parse();
+
+              if (characterDecoded != null) addCharacter(characterDecoded);
             }
 
             counter = counter + 1;
@@ -289,8 +291,10 @@ class CharactersPageState extends ChangeNotifier {
               var character = Character.fromJson(jsonDecode(json));
               addCharacter(character);
             } else {
-              var character = ExcelParser.fromFile(file);
-              addCharacter(await character.parse());
+              var character = CloudExcelParser.fromFile(file);
+              final characterDecoded = await character.parse();
+
+              if (characterDecoded != null) addCharacter(characterDecoded);
             }
             counter = counter + 1;
           }
@@ -307,7 +311,7 @@ class CharactersPageState extends ChangeNotifier {
   Future<FilePickerResult?> getCharacters() async {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
       type: FileType.custom,
-      allowedExtensions: ['json'], //, 'xlsm', 'xlsx'],
+      allowedExtensions: ['json', 'xlsm', 'xlsx'],
       allowMultiple: true,
     );
 

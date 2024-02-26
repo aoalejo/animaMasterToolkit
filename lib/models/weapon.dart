@@ -90,7 +90,7 @@ class Weapon {
     warning = json['advertencia'];
     ammunition = json['municion'];
     special = json['especial'];
-    variableDamage = false;
+    variableDamage = JsonUtils.boolean(json['variable'], false);
   }
 
   String description({bool lineBreak = false}) {

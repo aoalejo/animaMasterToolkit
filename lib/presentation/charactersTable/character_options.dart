@@ -46,6 +46,17 @@ class ShowCharacterOptions {
                       SizedBox(
                         height: 12,
                       ),
+                      TextFormFieldCustom(
+                        label: "Nombre",
+                        text: (character.profile.name).toString(),
+                        onChanged: (value) {
+                          character.profile.name = value;
+                          onEdit(character);
+                        },
+                      ),
+                      SizedBox(
+                        height: 12,
+                      ),
                       Row(
                         children: [
                           Expanded(

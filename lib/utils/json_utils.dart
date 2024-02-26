@@ -101,4 +101,20 @@ class JsonUtils {
       return placeholder;
     }
   }
+
+  static String string(dynamic base, String placeholder) {
+    try {
+      return base.toString();
+    } catch (e) {
+      return placeholder;
+    }
+  }
+
+  static bool boolean(dynamic base, bool placeholder) {
+    try {
+      return bool.tryParse(base) ?? placeholder;
+    } catch (e) {
+      return placeholder;
+    }
+  }
 }

@@ -48,12 +48,13 @@ class CharactersTable extends StatelessWidget {
                 onPressed: appState.sheetsLoadingPercentaje == -1
                     ? () async {
                         appState.showLoading(
-                          message: "Selecciona las planillas que deseas cargar",
+                          message:
+                              "Selecciona las planillas que deseas cargar#Si seleccionas archivos excel, deberán ser procesadas en un servidor externo\n(requiere conexión a internet)",
                         );
                         final files = await appState.getCharacters();
                         appState.hideLoading();
 
-                        final timer = Timer.periodic(Duration(seconds: 1 * (files?.count ?? 1)), (timer) => appState.stepSheetLoading());
+                        final timer = Timer.periodic(Duration(milliseconds: 250 * (files?.count ?? 1)), (timer) => appState.stepSheetLoading());
                         await appState.parseCharacters(files, (value) => {appState.updateSheetLoading(value)});
                         timer.cancel();
                       }
