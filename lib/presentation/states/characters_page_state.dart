@@ -251,7 +251,7 @@ class CharactersPageState extends ChangeNotifier {
   }
 
   Future parseCharacters(FilePickerResult? filesPicked, Function(double) onUpdated) async {
-    print("result: $filesPicked");
+    print("result: ${filesPicked?.count}");
 
     try {
       if (filesPicked != null) {

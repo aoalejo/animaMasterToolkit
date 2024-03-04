@@ -5,10 +5,19 @@ import 'dart:isolate';
 import 'package:amt/models/character/character.dart';
 import 'package:amt/utils/excel_parser.dart';
 import 'package:http/http.dart' as http;
+import 'package:http_parser/http_parser.dart';
 
-final _functionUrl = Uri.https("convertsheet-y5zbymdrcq-uc.a.run.app", "/convertSheet");
-// For Local testing
-// final _functionUrl = Uri.http("127.0.0.1:5001", "/amt-v3/us-central1/convertSheet");
+class _CloudExcelService {
+  static const isDev = false;
+
+  static Uri get getUri {
+    if (isDev) {
+      return Uri.http("127.0.0.1:5001", "/amt-v3/us-central1/convertSheet");
+    } else {
+      return Uri.https("convertsheet-y5zbymdrcq-uc.a.run.app", "/convertSheet");
+    }
+  }
+}
 
 class CloudExcelParser implements ExcelParser {
   CloudExcelParser.fromFile(this.file);
@@ -22,44 +31,48 @@ class CloudExcelParser implements ExcelParser {
 
   @override
   Future<Character?> parse() async {
-    String base64;
-    print("bytes $bytes");
-    print("file $file");
+    // return Isolate.run(() async {
+    bytes ??= await file!.readAsBytes();
+    print("Encoded to b64 ${bytes?.length}");
 
-    return Isolate.run(() async {
-      try {
-        if (bytes != null) {
-          base64 = base64Encode(bytes!);
-        } else {
-          base64 = base64Encode(await file!.readAsBytes());
-        }
-
-        print("Encoded to b64 ${base64.length}");
-
-        return await convertExcel(base64);
-      } catch (e) {
-        return null;
-      }
-    });
+    return await convertExcelFromBytes(bytes!);
+    // });
   }
 
-  Future<Character> convertExcel(String base64) async {
-    print("Sending to $_functionUrl");
+  Future<Character?> convertExcelFromBytes(List<int> bytes) async {
+    print("Sending to ${_CloudExcelService.getUri}");
 
-    String body = '{"sheet": "$base64"}';
+    final multipart = http.MultipartRequest("POST", _CloudExcelService.getUri);
+    multipart.files.add(http.MultipartFile.fromBytes(
+      "sheet",
+      bytes,
+      filename: "sheet",
+      contentType: MediaType("application", "vnd.openxmlformats-officedocument.spreadsheetml.sheet"),
+    ));
 
-    final response = await http.post(_functionUrl, body: body, headers: {
-      "Content-Type": "application/json",
+    multipart.headers.addAll({
+      "Accept": "*/*",
       "Accept-Encoding": "gzip, deflate, br",
+      "Cache-Control": "no-cache",
     });
 
-    final json = jsonDecode(response.body) as Map<String, dynamic>;
-    print("time: " + json['time']);
+    final streamedResponse = await multipart.send();
 
-    final character = json['sheet'];
+    if (streamedResponse.statusCode != 200) {
+      print("Failed! with error ${streamedResponse.statusCode}");
+    } else {
+      print("Success!");
+      var response = await http.Response.fromStream(streamedResponse);
 
-    print("character: $character");
+      final json = jsonDecode(response.body) as Map<String, dynamic>;
 
-    return Character.fromJson(character);
+      final character = json['sheet'];
+
+      print("character: $character");
+
+      return Character.fromJson(character);
+    }
+
+    return null;
   }
 }
