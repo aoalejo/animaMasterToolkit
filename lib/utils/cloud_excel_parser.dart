@@ -31,17 +31,13 @@ class CloudExcelParser implements ExcelParser {
 
   @override
   Future<Character?> parse() async {
-    // return Isolate.run(() async {
-    bytes ??= await file!.readAsBytes();
-    print("Encoded to b64 ${bytes?.length}");
-
-    return await convertExcelFromBytes(bytes!);
-    // });
+    return Isolate.run(() async {
+      bytes ??= await file!.readAsBytes();
+      return await convertExcelFromBytes(bytes!);
+    });
   }
 
   Future<Character?> convertExcelFromBytes(List<int> bytes) async {
-    print("Sending to ${_CloudExcelService.getUri}");
-
     final multipart = http.MultipartRequest("POST", _CloudExcelService.getUri);
     multipart.files.add(http.MultipartFile.fromBytes(
       "sheet",
@@ -50,25 +46,16 @@ class CloudExcelParser implements ExcelParser {
       contentType: MediaType("application", "vnd.openxmlformats-officedocument.spreadsheetml.sheet"),
     ));
 
-    multipart.headers.addAll({
-      "Accept": "*/*",
-      "Accept-Encoding": "gzip, deflate, br",
-      "Cache-Control": "no-cache",
-    });
-
     final streamedResponse = await multipart.send();
 
     if (streamedResponse.statusCode != 200) {
       print("Failed! with error ${streamedResponse.statusCode}");
     } else {
-      print("Success!");
       var response = await http.Response.fromStream(streamedResponse);
 
       final json = jsonDecode(response.body) as Map<String, dynamic>;
 
       final character = json['sheet'];
-
-      print("character: $character");
 
       return Character.fromJson(character);
     }
