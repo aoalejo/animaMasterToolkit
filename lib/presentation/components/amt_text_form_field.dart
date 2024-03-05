@@ -11,7 +11,7 @@ class AMTTextFormField extends StatelessWidget {
   final TextStyle? style;
   final TextAlign? align;
   final bool? enabled;
-  late int maxLength;
+  final int maxLength;
 
   AMTTextFormField({
     super.key,

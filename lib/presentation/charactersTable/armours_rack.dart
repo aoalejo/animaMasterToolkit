@@ -1,8 +1,7 @@
 import 'package:amt/models/armour.dart';
 import 'package:amt/models/armour_data.dart';
 import 'package:amt/resources/armours.dart';
-import 'package:amt/utils/amt_bottom_sheet.dart';
-import 'package:amt/utils/amt_text_form_field.dart';
+import 'package:amt/presentation/components/components.dart';
 import 'package:flutter/material.dart';
 import 'package:function_tree/function_tree.dart';
 

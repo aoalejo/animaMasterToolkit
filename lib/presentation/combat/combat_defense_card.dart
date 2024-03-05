@@ -1,6 +1,6 @@
 import 'package:amt/models/enums.dart';
 import 'package:amt/models/roll.dart';
-import 'package:amt/utils/amt_text_form_field.dart';
+import 'package:amt/presentation/components/components.dart';
 import 'package:amt/presentation/bottom_sheet_modifiers.dart';
 import 'package:amt/presentation/charactersTable/modifiers_card.dart';
 import 'package:amt/presentation/combat/custom_combat_card.dart';

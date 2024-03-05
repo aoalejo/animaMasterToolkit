@@ -1,6 +1,6 @@
 import 'package:amt/models/character/consumable_state.dart';
 import 'package:amt/models/enums.dart';
-import 'package:amt/utils/amt_text_form_field.dart';
+import 'package:amt/presentation/components/components.dart';
 import 'package:flutter/material.dart';
 
 class ConsumableCard extends StatelessWidget {

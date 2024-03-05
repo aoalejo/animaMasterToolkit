@@ -1,6 +1,6 @@
 import 'package:amt/models/character/character.dart';
 import 'package:amt/models/enums.dart';
-import 'package:amt/utils/amt_text_form_field.dart';
+import 'package:amt/presentation/components/components.dart';
 import 'package:amt/utils/key_value.dart';
 import 'package:flutter/material.dart';
 import 'package:function_tree/function_tree.dart';
@@ -176,7 +176,7 @@ class ShowCharacterOptions {
   }
 
   static Widget _row(
-    List<StringFlex> values, {
+    List<AMTStringFlex> values, {
     bool title = false,
     bool odd = false,
     required ThemeData theme,
@@ -225,15 +225,15 @@ class ShowCharacterOptions {
 
     return [
       _row([
-        StringFlex(name, flex: 4),
-        StringFlex("Valor", flex: 2),
-        for (var diff in difficulties) StringFlex("${diff.abbreviated}\n(${(diff.difficulty / diffDivisor).toStringAsFixed(0)})", flex: 1)
+        AMTStringFlex(name, flex: 4),
+        AMTStringFlex("Valor", flex: 2),
+        for (var diff in difficulties) AMTStringFlex("${diff.abbreviated}\n(${(diff.difficulty / diffDivisor).toStringAsFixed(0)})", flex: 1)
       ], theme: theme, title: true),
       for (var i = 0; i < listFiltered.length; i++)
         _row([
-          StringFlex(listFiltered[i].key, flex: 4),
-          StringFlex(listFiltered[i].value, flex: 2),
-          for (var diff in difficulties) StringFlex(_differenceTo(listFiltered[i].value, diff.difficulty ~/ diffDivisor), flex: 1),
+          AMTStringFlex(listFiltered[i].key, flex: 4),
+          AMTStringFlex(listFiltered[i].value, flex: 2),
+          for (var diff in difficulties) AMTStringFlex(_differenceTo(listFiltered[i].value, diff.difficulty ~/ diffDivisor), flex: 1),
         ], theme: theme, odd: i % 2 == 0)
     ];
   }
@@ -255,11 +255,4 @@ class ShowCharacterOptions {
   static Color _colorForBackground(ThemeData theme, KeyValue value, List<KeyValue> values) {
     return values.indexOf(value) % 2 == 0 ? theme.colorScheme.onPrimary : theme.colorScheme.primaryContainer;
   }
-}
-
-class StringFlex {
-  final String text;
-  final int flex;
-
-  StringFlex(this.text, {required this.flex});
 }

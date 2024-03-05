@@ -1,6 +1,6 @@
 import 'package:amt/models/character/character.dart';
 import 'package:amt/presentation/npcSelection/npc_card_view.dart';
-import 'package:amt/utils/amt_text_form_field.dart';
+import 'package:amt/presentation/components/components.dart';
 import 'package:flutter/material.dart';
 
 class NPCSelector {
