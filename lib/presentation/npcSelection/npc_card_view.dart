@@ -29,7 +29,7 @@ class CharacterNPCCard extends StatelessWidget {
     required this.onSelected,
     required this.onRemove,
   }) {
-    _skills = character.skills.list();
+    _skills = character.skills.list().where((element) => ((int.tryParse(element.value) ?? 0) > 0)).toList();
     _profile = character.profile;
     _combat = character.getCombatItems();
     _combat.add(KeyValue(key: "Presencia", value: character.resistances.presence.toString()));
@@ -218,27 +218,28 @@ class CharacterNPCCard extends StatelessWidget {
               height: 8,
             ),
             Expanded(
-                child: SingleChildScrollView(
-              child: Tags(
-                spacing: 4,
-                runSpacing: 6,
-                runAlignment: WrapAlignment.start,
-                alignment: WrapAlignment.start,
-                itemCount: _skills.length,
-                itemBuilder: (int index) {
-                  return ItemTags(
-                    textStyle: theme.textTheme.bodySmall!,
-                    pressEnabled: false,
-                    index: index,
-                    alignment: MainAxisAlignment.spaceBetween,
-                    padding: EdgeInsets.symmetric(vertical: 5, horizontal: 4),
-                    borderRadius: BorderRadius.circular(8),
-                    elevation: 1,
-                    title: "${_skills[index].key}: ${_skills[index].value}",
-                  );
-                },
+              child: SingleChildScrollView(
+                child: Tags(
+                  spacing: 4,
+                  runSpacing: 6,
+                  runAlignment: WrapAlignment.start,
+                  alignment: WrapAlignment.start,
+                  itemCount: _skills.length,
+                  itemBuilder: (int index) {
+                    return ItemTags(
+                      textStyle: theme.textTheme.bodySmall!,
+                      pressEnabled: false,
+                      index: index,
+                      alignment: MainAxisAlignment.spaceBetween,
+                      padding: EdgeInsets.symmetric(vertical: 5, horizontal: 4),
+                      borderRadius: BorderRadius.circular(8),
+                      elevation: 1,
+                      title: "${_skills[index].key}: ${_skills[index].value}",
+                    );
+                  },
+                ),
               ),
-            )),
+            ),
           ],
         ),
       ),

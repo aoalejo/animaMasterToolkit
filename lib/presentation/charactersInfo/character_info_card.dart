@@ -8,6 +8,7 @@ import 'package:amt/presentation/charactersTable/modifiers_card.dart';
 import 'package:amt/presentation/charactersTable/weapons_rack.dart';
 import 'package:amt/presentation/states/characters_page_state.dart';
 import 'package:amt/resources/modifiers.dart';
+import 'package:amt/utils/string_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:function_tree/function_tree.dart';
 import 'package:provider/provider.dart';
@@ -25,6 +26,7 @@ class CharacterInfoCard extends StatelessWidget {
     var theme = Theme.of(context);
 
     Character? character = attacking ? appState.combatState.attack.character : appState.combatState.defense.character;
+    var consumables = character?.state.consumables;
 
     return character != null
         ? Card(
@@ -119,64 +121,71 @@ class CharacterInfoCard extends StatelessWidget {
                             spacer,
                           ]),
                           spacer,
-                          SizedBox(
-                            height: 150,
-                            child: Scrollbar(
-                              controller: modifiersController,
-                              child: GridView.count(
-                                scrollDirection: Axis.horizontal,
-                                crossAxisCount: 2,
-                                childAspectRatio: 0.45,
-                                controller: modifiersController,
-                                children: [
-                                  for (var consumable in character.state.consumables)
-                                    ConsumableCard(
-                                      consumable,
-                                      onDelete: (consumable) {
-                                        character.state.consumables.remove(consumable);
-                                        appState.updateCharacter(character);
-                                      },
-                                      onChangedActual: (actual) {
-                                        int index = character.state.consumables.indexOf(consumable);
-                                        consumable.update(actual: actual);
-                                        character.state.consumables[index] = consumable;
-                                        appState.updateCharacter(character);
-                                      },
-                                      onChangedMax: (max) {
-                                        int index = character.state.consumables.indexOf(consumable);
-                                        consumable.update(max: max);
-                                        character.state.consumables[index] = consumable;
-                                        appState.updateCharacter(character);
-                                      },
-                                    ),
-                                  Card(
-                                    color: theme.colorScheme.secondaryContainer,
-                                    child: Center(
-                                        child: TextButton(
-                                            onPressed: () {
-                                              CreateConsumable.show(context, (consumable) {
-                                                character.state.consumables.add(consumable);
-                                                appState.updateCharacter(character);
-                                              });
-                                            },
-                                            child: Text("Añadir"))),
-                                  )
-                                ],
+                          LayoutBuilder(builder: (context, constraints) {
+                            return AMTGrid(
+                              elements: consumables!,
+                              columns: constraints.constrainWidth() > 500 ? 3 : 2,
+                              builder: (element, index) => ConsumableCard(
+                                element,
+                                onDelete: (consumable) {
+                                  character.state.consumables.remove(consumable);
+                                  appState.updateCharacter(character);
+                                },
+                                onChangedActual: (actual) {
+                                  character.state.consumables[index].update(actual: actual);
+                                  appState.updateCharacter(character);
+                                },
+                                onChangedMax: (max) {
+                                  character.state.consumables[index].update(max: max);
+                                  appState.updateCharacter(character);
+                                },
                               ),
-                            ),
-                          ),
+                              lastElementBuilder: () => Card(
+                                color: theme.colorScheme.secondaryContainer,
+                                child: Center(
+                                    child: TextButton(
+                                        onPressed: () {
+                                          CreateConsumable.show(context, (consumable) {
+                                            character.state.consumables.add(consumable);
+                                            appState.updateCharacter(character);
+                                          });
+                                        },
+                                        child: Text("Añadir"))),
+                              ),
+                            );
+                          }),
                           spacer,
                           _row([
                             Expanded(
                                 child: OutlinedButton(
-                              child: Column(children: [
-                                Text("Modificadores"),
-                                Text(
-                                  character.state.modifiers.totalModifierDescription(),
-                                  style: theme.textTheme.bodySmall,
-                                  textAlign: TextAlign.center,
-                                ),
-                              ]),
+                              child: Tooltip(
+                                message: character.state.modifiers.totalModifierDescription(),
+                                child: Row(children: [
+                                  Text("Modificadores"),
+                                  SizedBox.square(
+                                    dimension: 8,
+                                  ),
+                                  Flexible(
+                                    flex: 1,
+                                    child: Padding(
+                                      padding: EdgeInsets.all(4),
+                                      child: AMTGrid(
+                                        elements: character.state.modifiers.getAllModifiersString(),
+                                        columns: 3,
+                                        builder: (element, index) {
+                                          return Text(
+                                            "${element.key.abbreviated}: ${element.value}",
+                                            overflow: TextOverflow.ellipsis,
+                                            style: theme.textTheme.bodySmall,
+                                            textAlign: TextAlign.right,
+                                            maxLines: 1,
+                                          );
+                                        },
+                                      ),
+                                    ),
+                                  ),
+                                ]),
+                              ),
                               onPressed: () {
                                 BottomSheetModifiers.show(context, character.state.modifiers, Modifiers.getStatusModifiers(), (newModifiersState) {
                                   character.state.modifiers = newModifiersState;
@@ -187,11 +196,8 @@ class CharacterInfoCard extends StatelessWidget {
                           ]),
                           spacer,
                           SizedBox(
-                            height: 35,
                             width: 989,
                             child: ModifiersCard(
-                              crossAxisCount: 1,
-                              aspectRatio: 0.3,
                               modifiers: character.state.modifiers.getAll(),
                               onSelected: (modifier) {
                                 character.state.modifiers.removeModifier(modifier);
@@ -237,10 +243,57 @@ class CharacterInfoCard extends StatelessWidget {
     return character;
   }
 
-  _row(List<Widget> children) {
+  _row(List<Widget> children, {double height = 40}) {
     return SizedBox(
-      height: 40,
+      height: height,
       child: Row(children: children),
+    );
+  }
+}
+
+class AMTGrid<T> extends StatelessWidget {
+  final List<T> elements;
+  final int columns;
+  final Widget Function(T, int) builder;
+  final Widget Function()? lastElementBuilder;
+
+  const AMTGrid({
+    super.key,
+    required this.elements,
+    required this.columns,
+    required this.builder,
+    this.lastElementBuilder,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: <Widget>[
+        for (int index = 0; index < elements.length; index = index + columns)
+          Row(
+            children: [
+              for (int element = 0; element < columns; element = element + 1)
+                elements.length > index + element
+                    ? Expanded(
+                        child: builder(elements[index + element], index + element),
+                      )
+                    : elements.length == index + element && lastElementBuilder != null
+                        ? Expanded(
+                            child: lastElementBuilder!(),
+                          )
+                        : Expanded(
+                            child: Container(),
+                          )
+            ],
+          ),
+        if (elements.length % columns == 0 && lastElementBuilder != null)
+          IntrinsicHeight(
+            child: Flexible(
+              flex: columns,
+              child: lastElementBuilder!(),
+            ),
+          )
+      ],
     );
   }
 }

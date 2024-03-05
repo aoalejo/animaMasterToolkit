@@ -1,17 +1,15 @@
 import 'package:amt/models/character/status_modifier.dart';
+import 'package:amt/utils/string_extension.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_tags_x/flutter_tags_x.dart';
 
 class ModifiersCard extends StatelessWidget {
   final List<StatusModifier> modifiers;
-  final double aspectRatio;
   final Function(StatusModifier)? onSelected;
-  final int crossAxisCount;
 
   ModifiersCard({
     required this.modifiers,
-    this.aspectRatio = 0.4,
     this.onSelected,
-    this.crossAxisCount = 2,
   });
 
   @override
@@ -22,38 +20,45 @@ class ModifiersCard extends StatelessWidget {
       color: theme.colorScheme.onPrimary,
     );
 
-    return SizedBox(
-      height: 70,
-      child: Card(
-        clipBehavior: Clip.antiAlias,
-        child: GridView.count(
-          shrinkWrap: true,
-          scrollDirection: Axis.horizontal,
-          crossAxisCount: crossAxisCount,
-          childAspectRatio: aspectRatio,
-          children: [
-            for (var modifier in modifiers)
-              Tooltip(
-                message: '${modifier.name}:\n${modifier.description(separator: "\n")}',
-                child: InkWell(
-                  onTap: () => onSelected != null ? onSelected!(modifier) : null,
-                  child: Card(
+    return Card(
+      clipBehavior: Clip.antiAlias,
+      color: theme.colorScheme.secondaryContainer,
+      child: Padding(
+        padding: EdgeInsets.all(8),
+        child: IntrinsicHeight(
+          child: Tags(
+            spacing: 2,
+            runSpacing: 4,
+            alignment: WrapAlignment.start,
+            runAlignment: WrapAlignment.start,
+            itemCount: modifiers.length,
+            itemBuilder: (int index) {
+              return Tooltip(
+                message: '${modifiers[index].name}:\n${modifiers[index].description(separator: "\n")}',
+                child: ItemTags(
+                  textStyle: style,
+                  pressEnabled: false,
+                  index: index,
+                  removeButton: ItemTagsRemoveButton(
+                    icon: Icons.delete,
+                    backgroundColor: theme.colorScheme.background,
                     color: theme.colorScheme.primary,
-                    child: Center(
-                      child: Padding(
-                        padding: EdgeInsets.fromLTRB(8, 0, 8, 0),
-                        child: Text(
-                          modifier.name,
-                          style: style,
-                          textAlign: TextAlign.center,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                    ),
+                    onRemoved: () {
+                      onSelected?.call(modifiers[index]);
+                      return true;
+                    },
                   ),
+                  activeColor: theme.colorScheme.primary,
+                  textActiveColor: Colors.white,
+                  alignment: MainAxisAlignment.spaceBetween,
+                  padding: EdgeInsets.symmetric(vertical: 2, horizontal: 4),
+                  borderRadius: BorderRadius.circular(8),
+                  elevation: 1,
+                  title: modifiers[index].name.abbreviated,
                 ),
-              ),
-          ],
+              );
+            },
+          ),
         ),
       ),
     );

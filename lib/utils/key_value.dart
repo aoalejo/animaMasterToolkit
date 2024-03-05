@@ -3,6 +3,11 @@ class KeyValue {
   final String value;
 
   KeyValue({required this.key, required this.value});
+
+  @override
+  String toString() {
+    return "$key: $value";
+  }
 }
 
 extension ListToKeyValue on Map<String, dynamic> {

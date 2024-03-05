@@ -1,6 +1,7 @@
 import 'package:amt/models/character/status_modifier.dart';
 import 'package:amt/models/enums.dart';
 import 'package:amt/resources/modifiers.dart';
+import 'package:amt/utils/key_value.dart';
 import 'package:hive/hive.dart';
 
 part 'modifiers_state.g.dart';
@@ -79,6 +80,10 @@ class ModifiersState {
     return total;
   }
 
+  List<KeyValue> getAllModifiersString() {
+    return totalModifier().descriptionKeyValue();
+  }
+
   String getAllModifiersForTypeString(ModifiersType type) {
     var total = "";
 
@@ -125,7 +130,7 @@ class ModifiersState {
     return total;
   }
 
-  String totalModifierDescription() {
+  StatusModifier totalModifier() {
     StatusModifier totalModifier = StatusModifier(name: "total");
     for (var modifier in _modifiers) {
       totalModifier.attack = totalModifier.attack + modifier.attack;
@@ -135,6 +140,10 @@ class ModifiersState {
       totalModifier.physicalAction = totalModifier.physicalAction + modifier.physicalAction;
     }
 
-    return totalModifier.description();
+    return totalModifier;
+  }
+
+  String totalModifierDescription() {
+    return totalModifier().description();
   }
 }
