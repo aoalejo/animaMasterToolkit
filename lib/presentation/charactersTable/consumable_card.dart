@@ -61,10 +61,14 @@ class ConsumableCard extends StatelessWidget {
                     });
               },
             ),
-          Text(
-            consumable.name,
-            style: styleM,
-            textAlign: TextAlign.center,
+          Expanded(
+            child: Text(
+              consumable.name,
+              style: styleM,
+              textAlign: TextAlign.center,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            ),
           ),
           consumable.step > 0 || consumable.description.isNotEmpty
               ? Icon(
