@@ -53,6 +53,7 @@ class CharacterInfoCard extends StatelessWidget {
                     padding: EdgeInsets.all(8),
                     child: SingleChildScrollView(
                       child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
                           _row(
                             [
@@ -155,55 +156,49 @@ class CharacterInfoCard extends StatelessWidget {
                             );
                           }),
                           spacer,
-                          _row([
-                            Expanded(
-                                child: OutlinedButton(
-                              child: Tooltip(
-                                message: character.state.modifiers.totalModifierDescription(),
-                                child: Row(children: [
-                                  Text("Modificadores"),
-                                  SizedBox.square(
-                                    dimension: 8,
-                                  ),
-                                  Flexible(
-                                    flex: 1,
-                                    child: Padding(
-                                      padding: EdgeInsets.all(4),
-                                      child: AMTGrid(
-                                        elements: character.state.modifiers.getAllModifiersString(),
-                                        columns: 3,
-                                        builder: (element, index) {
-                                          return Text(
-                                            "${element.key.abbreviated}: ${element.value}",
-                                            overflow: TextOverflow.ellipsis,
-                                            style: theme.textTheme.bodySmall,
-                                            textAlign: TextAlign.right,
-                                            maxLines: 1,
-                                          );
-                                        },
-                                      ),
+                          OutlinedButton(
+                            child: Tooltip(
+                              message: character.state.modifiers.totalModifierDescription(),
+                              child: Row(children: [
+                                Text("Modificadores"),
+                                SizedBox.square(
+                                  dimension: 8,
+                                ),
+                                Flexible(
+                                  flex: 1,
+                                  child: Padding(
+                                    padding: EdgeInsets.all(4),
+                                    child: AMTGrid(
+                                      elements: character.state.modifiers.getAllModifiersString(),
+                                      columns: 3,
+                                      builder: (element, index) {
+                                        return Text(
+                                          "${element.key.abbreviated}: ${element.value}",
+                                          overflow: TextOverflow.ellipsis,
+                                          style: theme.textTheme.bodySmall,
+                                          textAlign: TextAlign.right,
+                                          maxLines: 1,
+                                        );
+                                      },
                                     ),
                                   ),
-                                ]),
-                              ),
-                              onPressed: () {
-                                BottomSheetModifiers.show(context, character.state.modifiers, Modifiers.getStatusModifiers(), (newModifiersState) {
-                                  character.state.modifiers = newModifiersState;
-                                  appState.updateCharacter(character);
-                                });
-                              },
-                            ))
-                          ]),
-                          spacer,
-                          SizedBox(
-                            width: 989,
-                            child: ModifiersCard(
-                              modifiers: character.state.modifiers.getAll(),
-                              onSelected: (modifier) {
-                                character.state.modifiers.removeModifier(modifier);
-                                appState.updateCharacter(character);
-                              },
+                                ),
+                              ]),
                             ),
+                            onPressed: () {
+                              BottomSheetModifiers.show(context, character.state.modifiers, Modifiers.getStatusModifiers(), (newModifiersState) {
+                                character.state.modifiers = newModifiersState;
+                                appState.updateCharacter(character);
+                              });
+                            },
+                          ),
+                          spacer,
+                          ModifiersCard(
+                            modifiers: character.state.modifiers.getAll(),
+                            onSelected: (modifier) {
+                              character.state.modifiers.removeModifier(modifier);
+                              appState.updateCharacter(character);
+                            },
                           ),
                           spacer,
                           SizedBox(
@@ -246,7 +241,10 @@ class CharacterInfoCard extends StatelessWidget {
   _row(List<Widget> children, {double height = 40}) {
     return SizedBox(
       height: height,
-      child: Row(children: children),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: children,
+      ),
     );
   }
 }
@@ -288,10 +286,7 @@ class AMTGrid<T> extends StatelessWidget {
           ),
         if (elements.length % columns == 0 && lastElementBuilder != null)
           IntrinsicHeight(
-            child: Flexible(
-              flex: columns,
-              child: lastElementBuilder!(),
-            ),
+            child: lastElementBuilder!(),
           )
       ],
     );
