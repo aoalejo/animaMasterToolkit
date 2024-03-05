@@ -87,6 +87,7 @@ class CreateCharacter {
                   AMTTextFormField(
                     label: "Pifia",
                     text: fumble,
+                    inputType: TextInputType.number,
                     onChanged: (value) => setState(
                       () => fumble = value,
                     ),
@@ -94,6 +95,7 @@ class CreateCharacter {
                   AMTTextFormField(
                     label: "Natura",
                     text: nature,
+                    inputType: TextInputType.number,
                     onChanged: (value) => setState(
                       () => nature = value,
                     ),
@@ -109,12 +111,14 @@ class CreateCharacter {
                 AMTTextFormField(
                   label: "Vida",
                   text: life,
+                  inputType: TextInputType.number,
                   onChanged: (value) => setState(
                     () => life = value,
                   ),
                 ),
                 AMTTextFormField(
                   label: "Cansancio",
+                  inputType: TextInputType.number,
                   text: fatigue,
                   onChanged: (value) => setState(
                     () => fatigue = value,
@@ -125,12 +129,14 @@ class CreateCharacter {
                 AMTTextFormField(
                   label: "Zeon",
                   text: zeon,
+                  inputType: TextInputType.number,
                   onChanged: (value) => setState(
                     () => zeon = value,
                   ),
                 ),
                 AMTTextFormField(
                   label: "Ki",
+                  inputType: TextInputType.number,
                   text: ki,
                   onChanged: (value) => setState(
                     () => ki = value,
@@ -138,6 +144,7 @@ class CreateCharacter {
                 ),
                 AMTTextFormField(
                   label: "CV",
+                  inputType: TextInputType.number,
                   text: cv,
                   onChanged: (value) => setState(
                     () => cv = value,
@@ -153,6 +160,7 @@ class CreateCharacter {
                 AMTTextFormField(
                   label: "Turno",
                   text: turn,
+                  inputType: TextInputType.number,
                   onChanged: (value) => setState(
                     () => turn = value,
                   ),
@@ -160,6 +168,7 @@ class CreateCharacter {
                 AMTTextFormField(
                   label: "Ataque",
                   text: attack,
+                  inputType: TextInputType.number,
                   onChanged: (value) => setState(
                     () => attack = value,
                   ),
@@ -167,6 +176,7 @@ class CreateCharacter {
                 AMTTextFormField(
                   label: "Daño",
                   text: damage,
+                  inputType: TextInputType.number,
                   onChanged: (value) => setState(
                     () => damage = value,
                   ),
@@ -174,6 +184,7 @@ class CreateCharacter {
                 AMTTextFormField(
                   label: "RF",
                   text: physicalResistance,
+                  inputType: TextInputType.number,
                   onChanged: (value) => setState(
                     () => physicalResistance = value,
                   ),
@@ -214,12 +225,14 @@ class CreateCharacter {
                   AMTTextFormField(
                     label: "Defensa",
                     text: defense,
+                    inputType: TextInputType.number,
                     onChanged: (value) => setState(
                       () => defense = value,
                     ),
                   ),
                   AMTTextFormField(
                     label: "TA",
+                    inputType: TextInputType.number,
                     text: armour,
                     onChanged: (value) => setState(
                       () => armour = value,
@@ -227,6 +240,7 @@ class CreateCharacter {
                   ),
                   AMTTextFormField(
                     label: "TA Energia",
+                    inputType: TextInputType.number,
                     text: armourEnergy,
                     onChanged: (value) => setState(
                       () => armourEnergy = value,
