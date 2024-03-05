@@ -34,7 +34,6 @@ class CombatCriticalCard extends StatelessWidget {
                     height: 40,
                     child: AMTTextFormField(
                       key: Key("TextFormFieldBaseAttack"),
-                      inputType: TextInputType.number,
                       label: "Daño causado",
                       text: combatState.critical.damageDone,
                       onChanged: (value) => appState.updateCombatState(damageDone: value),
@@ -46,7 +45,6 @@ class CombatCriticalCard extends StatelessWidget {
                   SizedBox(
                     height: 40,
                     child: AMTTextFormField(
-                      inputType: TextInputType.number,
                       text: combatState.critical.criticalRoll,
                       label: "Tirada de critico",
                       onChanged: (value) => {appState.updateCombatState(criticalRoll: value)},
@@ -100,7 +98,6 @@ class CombatCriticalCard extends StatelessWidget {
                     height: 40,
                     child: AMTTextFormField(
                       key: Key("TextFormFieldBaseAttack"),
-                      inputType: TextInputType.number,
                       label: "RF Base",
                       text: combatState.critical.physicalResistanceBase,
                       onChanged: (value) => appState.updateCombatState(physicalResistanceBase: value),
@@ -112,7 +109,6 @@ class CombatCriticalCard extends StatelessWidget {
                   SizedBox(
                     height: 40,
                     child: AMTTextFormField(
-                      inputType: TextInputType.number,
                       text: combatState.critical.physicalResistanceRoll,
                       label: "Tirada de RF",
                       onChanged: (value) => {appState.updateCombatState(physicalResistanceRoll: value)},

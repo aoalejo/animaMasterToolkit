@@ -43,7 +43,6 @@ class CombatDefenseCard extends StatelessWidget {
                   SizedBox(
                     height: 40,
                     child: AMTTextFormField(
-                      inputType: TextInputType.number,
                       text: defense.roll,
                       label: "Tirada de defensa",
                       onChanged: (value) => {appState.updateCombatState(defenseRoll: value)},
@@ -82,7 +81,6 @@ class CombatDefenseCard extends StatelessWidget {
                         Flexible(
                           flex: 2,
                           child: AMTTextFormField(
-                            inputType: TextInputType.number,
                             label: character != null ? "Modificador" : "Defensa",
                             suffixIcon: TextButton(
                               child: Text("+Can"),
@@ -134,7 +132,6 @@ class CombatDefenseCard extends StatelessWidget {
                               },
                               text: defense.armour,
                               label: character != null ? "Modificador" : "Armadura",
-                              inputType: TextInputType.number,
                               suffixIcon: IconButton(
                                 icon: Icon(Icons.delete),
                                 onPressed: () {
