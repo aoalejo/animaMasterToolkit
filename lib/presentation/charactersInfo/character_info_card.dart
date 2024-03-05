@@ -93,7 +93,6 @@ class CharacterInfoCard extends StatelessWidget {
                                 flex: 2,
                                 child: AMTTextFormField(
                                   text: character.state.turnModifier,
-                                  inputType: TextInputType.number,
                                   onChanged: (value) {
                                     var newChar = _calculateTurn(character, value);
                                     appState.updateCharacter(newChar);

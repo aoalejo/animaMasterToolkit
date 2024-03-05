@@ -41,7 +41,6 @@ class CombatAttackCard extends StatelessWidget {
               Flexible(
                 flex: 2,
                 child: AMTTextFormField(
-                  inputType: TextInputType.number,
                   text: attackState.roll,
                   label: "Tirada de ataque",
                   onChanged: (value) => {appState.updateCombatState(attackRoll: value)},
@@ -83,7 +82,6 @@ class CombatAttackCard extends StatelessWidget {
                   },
                   text: attackState.damage,
                   label: isVariableDamage ? "Daño" : "Modificador",
-                  inputType: TextInputType.number,
                   suffixIcon: IconButton(
                     icon: Icon(Icons.delete),
                     onPressed: () {
@@ -174,7 +172,6 @@ class CombatAttackCard extends StatelessWidget {
                         Flexible(
                           flex: 2,
                           child: AMTTextFormField(
-                            inputType: TextInputType.number,
                             label: character != null ? "Modificador" : "Ataque",
                             suffixIcon: TextButton(
                               child: Text("+Can"),
