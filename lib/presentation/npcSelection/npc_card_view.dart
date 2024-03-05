@@ -29,7 +29,7 @@ class CharacterNPCCard extends StatelessWidget {
     required this.onSelected,
     required this.onRemove,
   }) {
-    _skills = character.skills.list();
+    _skills = character.skills.list().where((element) => ((int.tryParse(element.value) ?? 0) > 0)).toList();
     _profile = character.profile;
     _combat = character.getCombatItems();
     _combat.add(KeyValue(key: "Presencia", value: character.resistances.presence.toString()));
