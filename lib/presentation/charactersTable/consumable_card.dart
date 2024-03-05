@@ -26,7 +26,7 @@ class ConsumableCard extends StatelessWidget {
     var header = Padding(
       padding: EdgeInsets.fromLTRB(8, 4, 8, 0),
       child: Row(
-        mainAxisAlignment: consumable.step > 0 || consumable.description.isNotEmpty ? MainAxisAlignment.spaceBetween : MainAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           if (consumable.type == ConsumableType.other)
             InkWell(
@@ -71,7 +71,7 @@ class ConsumableCard extends StatelessWidget {
                   Icons.info,
                   size: 16,
                 )
-              : Container(),
+              : SizedBox.square(dimension: 16),
         ],
       ),
     );
