@@ -315,6 +315,10 @@ class Character extends HiveObject {
     var string = profile.name + profile.category + profile.level.toString();
     return string.toLowerCase().contains(filter.toLowerCase());
   }
+
+  String nameNormalized() {
+    return profile.name.split("#").first.toLowerCase().replaceAll(" ", "");
+  }
 }
 
 class CharacterList {
