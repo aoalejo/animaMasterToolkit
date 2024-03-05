@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
-class BottomSheetCustom extends StatelessWidget {
+class AMTBottomSheet extends StatelessWidget {
   final Widget title;
   final List<Widget> children;
   final List<Widget>? bottomRow;
 
-  BottomSheetCustom({required this.title, required this.children, this.bottomRow});
+  AMTBottomSheet({required this.title, required this.children, this.bottomRow});
 
   @override
   Widget build(BuildContext context) {

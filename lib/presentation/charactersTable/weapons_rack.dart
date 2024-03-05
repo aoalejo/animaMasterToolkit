@@ -1,7 +1,7 @@
 import 'package:amt/models/enums.dart';
 import 'package:amt/models/weapon.dart';
-import 'package:amt/presentation/text_form_field_custom.dart';
-import 'package:amt/presentation/bottom_sheet_custom.dart';
+import 'package:amt/presentation/amt_text_form_field.dart';
+import 'package:amt/presentation/amt_bottom_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:function_tree/function_tree.dart';
 
@@ -37,7 +37,7 @@ class WeaponsRack extends StatelessWidget {
         showModalBottomSheet<void>(
           context: context,
           builder: (BuildContext context) {
-            return BottomSheetCustom(
+            return AMTBottomSheet(
                 title: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -151,13 +151,13 @@ class WeaponsRack extends StatelessWidget {
       context: context,
       builder: (BuildContext context) {
         return StatefulBuilder(
-          builder: (context, setState) => BottomSheetCustom(
+          builder: (context, setState) => AMTBottomSheet(
             title: Text("Modificar ${weapon.name}"),
             children: [
               SizedBox(
                 height: 16,
               ),
-              TextFormFieldCustom(
+              AMTTextFormField(
                 label: "Nombre",
                 text: weapon.name,
                 onChanged: (value) {
@@ -171,7 +171,7 @@ class WeaponsRack extends StatelessWidget {
               Row(
                 children: [
                   Expanded(
-                    child: TextFormFieldCustom(
+                    child: AMTTextFormField(
                       label: "Daño base",
                       text: weapon.damage.toString(),
                       enabled: !(weapon.variableDamage ?? false),
@@ -206,7 +206,7 @@ class WeaponsRack extends StatelessWidget {
               SizedBox(
                 height: 16,
               ),
-              TextFormFieldCustom(
+              AMTTextFormField(
                 label: "Ataque",
                 text: weapon.attack.toString(),
                 onChanged: (value) {
@@ -217,7 +217,7 @@ class WeaponsRack extends StatelessWidget {
               SizedBox(
                 height: 16,
               ),
-              TextFormFieldCustom(
+              AMTTextFormField(
                 label: "Defensa",
                 text: weapon.defense.toString(),
                 onChanged: (value) {
@@ -228,7 +228,7 @@ class WeaponsRack extends StatelessWidget {
               SizedBox(
                 height: 16,
               ),
-              TextFormFieldCustom(
+              AMTTextFormField(
                 label: "Turno",
                 text: weapon.turn.toString(),
                 onChanged: (value) {

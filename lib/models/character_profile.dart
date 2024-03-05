@@ -56,8 +56,8 @@ class CharacterProfile {
     speed = JsonUtils.integer(json['movimiento'], 6);
     isNpc = false;
     image = json['imagen'] ?? "";
-    fumbleLevel = JsonUtils.integer('nivelDePifia', 3);
-    nature = JsonUtils.integer('natura', 5);
+    fumbleLevel = JsonUtils.integer(json['nivelDePifia'], 3);
+    nature = JsonUtils.integer(json['natura'], 5);
   }
 
   CharacterProfile copy({bool? isNpc, int? number}) {

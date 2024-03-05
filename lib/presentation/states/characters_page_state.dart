@@ -85,21 +85,27 @@ class CharactersPageState extends ChangeNotifier {
   }
 
   addCharacter(Character character, {bool isNpc = false}) {
+    // Numbering, get all characters with # in the name:
+    var maxValue = 0;
+    for (var element in characters.where(
+      (element) => element.nameNormalized() == character.nameNormalized(),
+    )) {
+      final split = element.profile.name.split("#");
+      final value = int.tryParse(split.last);
+      maxValue = max(value ?? 0, maxValue);
+    }
+
     if (isNpc) {
-      var number = characters.where((element) => element.profile.isNpc ?? false).length + 1;
       var newChar = character.copyWith(
         uuid: Uuid().v4(),
         isNpc: isNpc,
-        number: number,
+        number: maxValue + 1,
       );
       characters.add(newChar);
       _box.add(newChar);
     } else {
-      // TODO: Improve the numbering, to avoid same numbers on characters (use the biggest one after a #?)
-      var hasCharacterWithSameName = characters.where((element) => element.profile.name == character.profile.name);
-
-      if (hasCharacterWithSameName.isNotEmpty) {
-        character.profile.name = "${character.profile.name} #${hasCharacterWithSameName.length + 1}";
+      if (maxValue > 0) {
+        character.profile.name = "${character.profile.name} #${maxValue + 1}";
       }
 
       characters.add(character);

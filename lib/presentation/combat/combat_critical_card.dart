@@ -1,7 +1,7 @@
 import 'package:amt/models/character/status_modifier.dart';
 import 'package:amt/models/roll.dart';
 import 'package:amt/presentation/general/explained_result_container.dart';
-import 'package:amt/presentation/text_form_field_custom.dart';
+import 'package:amt/presentation/amt_text_form_field.dart';
 import 'package:amt/presentation/combat/custom_combat_card.dart';
 import 'package:amt/presentation/states/characters_page_state.dart';
 import 'package:amt/utils/assets.dart';
@@ -32,7 +32,7 @@ class CombatCriticalCard extends StatelessWidget {
                 children: [
                   SizedBox(
                     height: 40,
-                    child: TextFormFieldCustom(
+                    child: AMTTextFormField(
                       key: Key("TextFormFieldBaseAttack"),
                       inputType: TextInputType.number,
                       label: "Daño causado",
@@ -45,7 +45,7 @@ class CombatCriticalCard extends StatelessWidget {
                   ),
                   SizedBox(
                     height: 40,
-                    child: TextFormFieldCustom(
+                    child: AMTTextFormField(
                       inputType: TextInputType.number,
                       text: combatState.critical.criticalRoll,
                       label: "Tirada de critico",
@@ -66,7 +66,7 @@ class CombatCriticalCard extends StatelessWidget {
                   ),
                   SizedBox(
                     height: 40,
-                    child: TextFormFieldCustom(
+                    child: AMTTextFormField(
                       inputType: TextInputType.number,
                       text: combatState.critical.localizationRoll,
                       label: "Tirada de localización",
@@ -98,7 +98,7 @@ class CombatCriticalCard extends StatelessWidget {
                 children: [
                   SizedBox(
                     height: 40,
-                    child: TextFormFieldCustom(
+                    child: AMTTextFormField(
                       key: Key("TextFormFieldBaseAttack"),
                       inputType: TextInputType.number,
                       label: "RF Base",
@@ -111,7 +111,7 @@ class CombatCriticalCard extends StatelessWidget {
                   ),
                   SizedBox(
                     height: 40,
-                    child: TextFormFieldCustom(
+                    child: AMTTextFormField(
                       inputType: TextInputType.number,
                       text: combatState.critical.physicalResistanceRoll,
                       label: "Tirada de RF",
@@ -159,7 +159,7 @@ class CombatCriticalCard extends StatelessWidget {
             children: [
               Flexible(
                 flex: 1,
-                child: TextFormFieldCustom(
+                child: AMTTextFormField(
                   inputType: TextInputType.number,
                   label: "Reducción de penalizador",
                   text: combatState.critical.modifierReduction,

@@ -312,8 +312,22 @@ class Character extends HiveObject {
   }
 
   bool isOn(String filter) {
-    var string = profile.name + profile.category + profile.level.toString();
-    return string.toLowerCase().contains(filter.toLowerCase());
+    if (filter.isEmpty) return true;
+
+    var string = "${profile.name}${profile.category}lv.${profile.level}level";
+    var result = true;
+
+    filter.split(" ").forEach((element) {
+      if (!string.normalized.contains(element)) {
+        result = false;
+      }
+    });
+
+    return result;
+  }
+
+  String nameNormalized() {
+    return profile.name.split("#").first.normalized;
   }
 }
 
@@ -330,5 +344,11 @@ class CharacterList {
         characters.add(Character.fromJson(v));
       });
     }
+  }
+}
+
+extension on String {
+  String get normalized {
+    return toLowerCase().replaceAll(" ", "");
   }
 }

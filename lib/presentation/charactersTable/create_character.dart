@@ -11,8 +11,8 @@ import 'package:amt/models/enums.dart';
 import 'package:amt/models/modifiers_state.dart';
 import 'package:amt/models/roll.dart';
 import 'package:amt/models/weapon.dart';
-import 'package:amt/presentation/bottom_sheet_custom.dart';
-import 'package:amt/presentation/text_form_field_custom.dart';
+import 'package:amt/presentation/amt_bottom_sheet.dart';
+import 'package:amt/presentation/amt_text_form_field.dart';
 import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
 
@@ -40,7 +40,7 @@ class CreateCharacter {
       context: context,
       builder: (BuildContext context) {
         return StatefulBuilder(
-          builder: (context, setState) => BottomSheetCustom(
+          builder: (context, setState) => AMTBottomSheet(
             title: Text('Crear nuevo personaje'),
             bottomRow: [
               ElevatedButton(
@@ -77,23 +77,25 @@ class CreateCharacter {
             children: [
               ..._row(
                 [
-                  TextFormFieldCustom(
+                  AMTTextFormField(
                     label: "Nombre",
                     text: name,
                     onChanged: (value) => setState(
                       () => name = value,
                     ),
                   ),
-                  TextFormFieldCustom(
+                  AMTTextFormField(
                     label: "Pifia",
                     text: fumble,
+                    inputType: TextInputType.number,
                     onChanged: (value) => setState(
                       () => fumble = value,
                     ),
                   ),
-                  TextFormFieldCustom(
+                  AMTTextFormField(
                     label: "Natura",
                     text: nature,
+                    inputType: TextInputType.number,
                     onChanged: (value) => setState(
                       () => nature = value,
                     ),
@@ -106,15 +108,17 @@ class CreateCharacter {
                 textAlign: TextAlign.center,
               ),
               ..._row([
-                TextFormFieldCustom(
+                AMTTextFormField(
                   label: "Vida",
                   text: life,
+                  inputType: TextInputType.number,
                   onChanged: (value) => setState(
                     () => life = value,
                   ),
                 ),
-                TextFormFieldCustom(
+                AMTTextFormField(
                   label: "Cansancio",
+                  inputType: TextInputType.number,
                   text: fatigue,
                   onChanged: (value) => setState(
                     () => fatigue = value,
@@ -122,22 +126,25 @@ class CreateCharacter {
                 ),
               ]),
               ..._row([
-                TextFormFieldCustom(
+                AMTTextFormField(
                   label: "Zeon",
                   text: zeon,
+                  inputType: TextInputType.number,
                   onChanged: (value) => setState(
                     () => zeon = value,
                   ),
                 ),
-                TextFormFieldCustom(
+                AMTTextFormField(
                   label: "Ki",
+                  inputType: TextInputType.number,
                   text: ki,
                   onChanged: (value) => setState(
                     () => ki = value,
                   ),
                 ),
-                TextFormFieldCustom(
+                AMTTextFormField(
                   label: "CV",
+                  inputType: TextInputType.number,
                   text: cv,
                   onChanged: (value) => setState(
                     () => cv = value,
@@ -150,30 +157,34 @@ class CreateCharacter {
                 textAlign: TextAlign.center,
               ),
               ..._row([
-                TextFormFieldCustom(
+                AMTTextFormField(
                   label: "Turno",
                   text: turn,
+                  inputType: TextInputType.number,
                   onChanged: (value) => setState(
                     () => turn = value,
                   ),
                 ),
-                TextFormFieldCustom(
+                AMTTextFormField(
                   label: "Ataque",
                   text: attack,
+                  inputType: TextInputType.number,
                   onChanged: (value) => setState(
                     () => attack = value,
                   ),
                 ),
-                TextFormFieldCustom(
+                AMTTextFormField(
                   label: "Daño",
                   text: damage,
+                  inputType: TextInputType.number,
                   onChanged: (value) => setState(
                     () => damage = value,
                   ),
                 ),
-                TextFormFieldCustom(
+                AMTTextFormField(
                   label: "RF",
                   text: physicalResistance,
+                  inputType: TextInputType.number,
                   onChanged: (value) => setState(
                     () => physicalResistance = value,
                   ),
@@ -211,22 +222,25 @@ class CreateCharacter {
               _separator,
               ..._row(
                 [
-                  TextFormFieldCustom(
+                  AMTTextFormField(
                     label: "Defensa",
                     text: defense,
+                    inputType: TextInputType.number,
                     onChanged: (value) => setState(
                       () => defense = value,
                     ),
                   ),
-                  TextFormFieldCustom(
+                  AMTTextFormField(
                     label: "TA",
+                    inputType: TextInputType.number,
                     text: armour,
                     onChanged: (value) => setState(
                       () => armour = value,
                     ),
                   ),
-                  TextFormFieldCustom(
+                  AMTTextFormField(
                     label: "TA Energia",
+                    inputType: TextInputType.number,
                     text: armourEnergy,
                     onChanged: (value) => setState(
                       () => armourEnergy = value,

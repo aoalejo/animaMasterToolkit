@@ -1,6 +1,6 @@
 import 'package:amt/models/character/character.dart';
 import 'package:amt/presentation/npcSelection/npc_card_view.dart';
-import 'package:amt/presentation/text_form_field_custom.dart';
+import 'package:amt/presentation/amt_text_form_field.dart';
 import 'package:flutter/material.dart';
 
 class NPCSelector {
@@ -27,7 +27,7 @@ class NPCSelector {
                   Expanded(child: Text("Añadir NPC")),
                   Flexible(
                       flex: 1,
-                      child: TextFormFieldCustom(
+                      child: AMTTextFormField(
                         suffixIcon: Icon(Icons.search),
                         text: filter,
                         onChanged: (newFilter) => setState(() => filter = newFilter),

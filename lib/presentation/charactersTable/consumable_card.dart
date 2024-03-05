@@ -1,6 +1,6 @@
 import 'package:amt/models/character/consumable_state.dart';
 import 'package:amt/models/enums.dart';
-import 'package:amt/presentation/text_form_field_custom.dart';
+import 'package:amt/presentation/amt_text_form_field.dart';
 import 'package:flutter/material.dart';
 
 class ConsumableCard extends StatelessWidget {
@@ -26,7 +26,7 @@ class ConsumableCard extends StatelessWidget {
     var header = Padding(
       padding: EdgeInsets.fromLTRB(8, 4, 8, 0),
       child: Row(
-        mainAxisAlignment: consumable.step > 0 || consumable.description.isNotEmpty ? MainAxisAlignment.spaceBetween : MainAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           if (consumable.type == ConsumableType.other)
             InkWell(
@@ -61,17 +61,21 @@ class ConsumableCard extends StatelessWidget {
                     });
               },
             ),
-          Text(
-            consumable.name,
-            style: styleM,
-            textAlign: TextAlign.center,
+          Expanded(
+            child: Text(
+              consumable.name,
+              style: styleM,
+              textAlign: TextAlign.center,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            ),
           ),
           consumable.step > 0 || consumable.description.isNotEmpty
               ? Icon(
                   Icons.info,
                   size: 16,
                 )
-              : Container(),
+              : SizedBox.square(dimension: 16),
         ],
       ),
     );
@@ -96,7 +100,7 @@ class ConsumableCard extends StatelessWidget {
                   },
                   icon: Icon(Icons.remove)),
               Expanded(
-                  child: TextFormFieldCustom(
+                  child: AMTTextFormField(
                 align: TextAlign.center,
                 decoration: InputDecoration(
                   isDense: true,
@@ -109,7 +113,7 @@ class ConsumableCard extends StatelessWidget {
               )),
               Text("/"),
               Expanded(
-                child: TextFormFieldCustom(
+                child: AMTTextFormField(
                   align: TextAlign.center,
                   decoration: InputDecoration(
                     isDense: true,

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-class TextFormFieldCustom extends StatelessWidget {
+class AMTTextFormField extends StatelessWidget {
   final String? text;
   final String? label;
   final TextInputType? inputType;
@@ -11,9 +11,9 @@ class TextFormFieldCustom extends StatelessWidget {
   final TextStyle? style;
   final TextAlign? align;
   final bool? enabled;
-  final List<TextInputFormatter>? formatters;
+  late int maxLength;
 
-  const TextFormFieldCustom({
+  AMTTextFormField({
     super.key,
     this.text,
     this.label,
@@ -24,8 +24,7 @@ class TextFormFieldCustom extends StatelessWidget {
     this.style,
     this.align,
     this.enabled,
-    this.formatters,
-  });
+  }) : maxLength = inputType == TextInputType.number ? 4 : 20;
 
   @override
   Widget build(BuildContext context) {
@@ -41,8 +40,8 @@ class TextFormFieldCustom extends StatelessWidget {
         ),
       ),
       textInputAction: TextInputAction.done,
-      inputFormatters: formatters,
       keyboardType: inputType,
+      inputFormatters: [LengthLimitingTextInputFormatter(maxLength)],
       style: style,
       textAlign: align ?? TextAlign.start,
       decoration: decoration ??
