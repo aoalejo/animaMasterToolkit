@@ -1,6 +1,6 @@
 import 'package:amt/models/character/character.dart';
 import 'package:amt/models/enums.dart';
-import 'package:amt/presentation/amt_text_form_field.dart';
+import 'package:amt/utils/amt_text_form_field.dart';
 import 'package:amt/utils/key_value.dart';
 import 'package:flutter/material.dart';
 import 'package:function_tree/function_tree.dart';

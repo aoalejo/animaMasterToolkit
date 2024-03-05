@@ -1,7 +1,7 @@
 import 'package:amt/models/character/status_modifier.dart';
 import 'package:amt/models/roll.dart';
 import 'package:amt/presentation/general/explained_result_container.dart';
-import 'package:amt/presentation/amt_text_form_field.dart';
+import 'package:amt/utils/amt_text_form_field.dart';
 import 'package:amt/presentation/combat/custom_combat_card.dart';
 import 'package:amt/presentation/states/characters_page_state.dart';
 import 'package:amt/utils/assets.dart';
