@@ -25,6 +25,7 @@ class CharacterInfoCard extends StatelessWidget {
     var theme = Theme.of(context);
 
     Character? character = attacking ? appState.combatState.attack.character : appState.combatState.defense.character;
+    var consumables = character?.state.consumables;
 
     return character != null
         ? Card(
@@ -119,52 +120,39 @@ class CharacterInfoCard extends StatelessWidget {
                             spacer,
                           ]),
                           spacer,
-                          SizedBox(
-                            height: 150,
-                            child: Scrollbar(
-                              controller: modifiersController,
-                              child: GridView.count(
-                                scrollDirection: Axis.horizontal,
-                                crossAxisCount: 2,
-                                childAspectRatio: 0.45,
-                                controller: modifiersController,
-                                children: [
-                                  for (var consumable in character.state.consumables)
-                                    ConsumableCard(
-                                      consumable,
-                                      onDelete: (consumable) {
-                                        character.state.consumables.remove(consumable);
-                                        appState.updateCharacter(character);
-                                      },
-                                      onChangedActual: (actual) {
-                                        int index = character.state.consumables.indexOf(consumable);
-                                        consumable.update(actual: actual);
-                                        character.state.consumables[index] = consumable;
-                                        appState.updateCharacter(character);
-                                      },
-                                      onChangedMax: (max) {
-                                        int index = character.state.consumables.indexOf(consumable);
-                                        consumable.update(max: max);
-                                        character.state.consumables[index] = consumable;
-                                        appState.updateCharacter(character);
-                                      },
-                                    ),
-                                  Card(
-                                    color: theme.colorScheme.secondaryContainer,
-                                    child: Center(
-                                        child: TextButton(
-                                            onPressed: () {
-                                              CreateConsumable.show(context, (consumable) {
-                                                character.state.consumables.add(consumable);
-                                                appState.updateCharacter(character);
-                                              });
-                                            },
-                                            child: Text("Añadir"))),
-                                  )
-                                ],
+                          LayoutBuilder(builder: (context, constraints) {
+                            return AMTGrid(
+                              elements: consumables!,
+                              columns: constraints.constrainWidth() > 500 ? 3 : 2,
+                              builder: (element, index) => ConsumableCard(
+                                element,
+                                onDelete: (consumable) {
+                                  character.state.consumables.remove(consumable);
+                                  appState.updateCharacter(character);
+                                },
+                                onChangedActual: (actual) {
+                                  character.state.consumables[index].update(actual: actual);
+                                  appState.updateCharacter(character);
+                                },
+                                onChangedMax: (max) {
+                                  character.state.consumables[index].update(max: max);
+                                  appState.updateCharacter(character);
+                                },
                               ),
-                            ),
-                          ),
+                              lastElementBuilder: () => Card(
+                                color: theme.colorScheme.secondaryContainer,
+                                child: Center(
+                                    child: TextButton(
+                                        onPressed: () {
+                                          CreateConsumable.show(context, (consumable) {
+                                            character.state.consumables.add(consumable);
+                                            appState.updateCharacter(character);
+                                          });
+                                        },
+                                        child: Text("Añadir"))),
+                              ),
+                            );
+                          }),
                           spacer,
                           _row([
                             Expanded(
@@ -241,6 +229,53 @@ class CharacterInfoCard extends StatelessWidget {
     return SizedBox(
       height: 40,
       child: Row(children: children),
+    );
+  }
+}
+
+class AMTGrid<T> extends StatelessWidget {
+  final List<T> elements;
+  final int columns;
+  final Widget Function(T, int) builder;
+  final Widget Function()? lastElementBuilder;
+
+  const AMTGrid({
+    super.key,
+    required this.elements,
+    required this.columns,
+    required this.builder,
+    this.lastElementBuilder,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: <Widget>[
+        for (int index = 0; index < elements.length; index = index + columns)
+          Row(
+            children: [
+              for (int element = 0; element < columns; element = element + 1)
+                elements.length > index + element
+                    ? Expanded(
+                        child: builder(elements[index + element], index + element),
+                      )
+                    : elements.length == index + element && lastElementBuilder != null
+                        ? Expanded(
+                            child: lastElementBuilder!(),
+                          )
+                        : Expanded(
+                            child: Container(),
+                          )
+            ],
+          ),
+        if (elements.length % columns == 0 && lastElementBuilder != null)
+          IntrinsicHeight(
+            child: Flexible(
+              flex: columns,
+              child: lastElementBuilder!(),
+            ),
+          )
+      ],
     );
   }
 }
