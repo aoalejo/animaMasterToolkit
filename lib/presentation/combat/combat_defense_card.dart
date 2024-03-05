@@ -182,7 +182,6 @@ class CombatDefenseCard extends StatelessWidget {
         SizedBox(
           width: 8000,
           child: ModifiersCard(
-            aspectRatio: 0.2,
             modifiers: defense.modifiers.getAll(),
             onSelected: (selected) {
               defense.modifiers.removeModifier(selected);

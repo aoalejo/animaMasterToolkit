@@ -1,4 +1,5 @@
 import 'package:amt/utils/json_utils.dart';
+import 'package:amt/utils/key_value.dart';
 import 'package:hive/hive.dart';
 
 part 'status_modifier.g.dart';
@@ -46,31 +47,34 @@ class StatusModifier extends Object {
   }
 
   String description({String separator = " "}) {
-    var description = "";
+    return descriptionKeyValue().join(separator);
+  }
 
+  List<KeyValue> descriptionKeyValue() {
+    List<KeyValue> list = [];
     if (attack != 0) {
-      description = '$description${separator}Ataque: $attack';
+      list.add(KeyValue(key: "Ataque", value: attack.toString()));
     }
     if (parry != 0) {
-      description = '$description${separator}Parada: $attack';
+      list.add(KeyValue(key: "Parada", value: parry.toString()));
     }
     if (dodge != 0) {
-      description = '$description${separator}Esquiva: $dodge';
+      list.add(KeyValue(key: "Esquiva", value: dodge.toString()));
     }
     if (turn != 0) {
-      description = '$description${separator}Turno: $turn';
+      list.add(KeyValue(key: "Turno", value: turn.toString()));
     }
     if (physicalAction != 0) {
-      description = '$description${separator}Acciones Fisicas: $physicalAction';
+      list.add(KeyValue(key: "Acc. Físicas", value: physicalAction.toString()));
     }
 
     if (isOfCritical == true && midValue != null) {
       if (attack != midValue) {
-        description = '$description${separator}Se recupera hasta: $midValue a 5/turno';
+        list.add(KeyValue(key: "Recuperación", value: 'hasta: $midValue a 5/turno'));
       }
     }
 
-    return description;
+    return list;
   }
 
   @override
