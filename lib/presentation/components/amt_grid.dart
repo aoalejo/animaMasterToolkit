@@ -1,18 +1,15 @@
 import 'package:flutter/material.dart';
 
 class AMTGrid<T> extends StatelessWidget {
+
+  const AMTGrid({
+    required this.elements, required this.columns, required this.builder, super.key,
+    this.lastElementBuilder,
+  });
   final List<T> elements;
   final int columns;
   final Widget Function(T, int) builder;
   final Widget Function()? lastElementBuilder;
-
-  const AMTGrid({
-    super.key,
-    required this.elements,
-    required this.columns,
-    required this.builder,
-    this.lastElementBuilder,
-  });
 
   @override
   Widget build(BuildContext context) {
@@ -32,13 +29,13 @@ class AMTGrid<T> extends StatelessWidget {
                           )
                         : Expanded(
                             child: Container(),
-                          )
+                          ),
             ],
           ),
         if (elements.length % columns == 0 && lastElementBuilder != null)
           IntrinsicHeight(
             child: lastElementBuilder!(),
-          )
+          ),
       ],
     );
   }

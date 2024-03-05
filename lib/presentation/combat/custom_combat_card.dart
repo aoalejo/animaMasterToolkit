@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
 class CustomCombatCard extends StatelessWidget {
+
+  const CustomCombatCard({required this.title, required this.children, super.key, this.actionTitle, this.padding = 16});
   final String title;
   final List<Widget> children;
   final Widget? actionTitle;
   final double padding;
-
-  CustomCombatCard({required this.title, required this.children, this.actionTitle, this.padding = 16});
 
   @override
   Widget build(BuildContext context) {
@@ -26,17 +26,17 @@ class CustomCombatCard extends StatelessWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    SizedBox(width: 8),
+                    const SizedBox(width: 8),
                     Text(
                       title,
                       textAlign: TextAlign.center,
                       style: theme.textTheme.titleMedium!.copyWith(color: theme.colorScheme.onPrimary),
                     ),
-                    actionTitle ?? SizedBox(width: 8),
+                    actionTitle ?? const SizedBox(width: 8),
                   ],
-                )),
+                ),),
           ),
-          SizedBox(
+          const SizedBox(
             height: 8,
           ),
           Padding(
@@ -44,7 +44,7 @@ class CustomCombatCard extends StatelessWidget {
             child: Column(
               children: children,
             ),
-          )
+          ),
         ],
       ),
     );

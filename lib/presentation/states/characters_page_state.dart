@@ -17,9 +17,12 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:uuid/uuid.dart';
 
 class CharactersPageState extends ChangeNotifier {
+  CharactersPageState() {
+    initAsync();
+  }
   List<Character> characters = [];
-  var combatState = ScreenCombatState();
-  String? errorMessage = "";
+  ScreenCombatState combatState = ScreenCombatState();
+  String? errorMessage = '';
   int pageSelected = 0;
   bool isLoading = false;
   String? message;
@@ -29,10 +32,6 @@ class CharactersPageState extends ChangeNotifier {
   Map<String, bool> explanationsExpanded = {};
 
   late Box<Character> _box;
-
-  CharactersPageState() {
-    initAsync();
-  }
 
   void stepSheetLoading() {
     if (sheetsLoadingPercentaje > 0.9) {
@@ -64,13 +63,13 @@ class CharactersPageState extends ChangeNotifier {
     notifyListeners();
   }
 
-  void initAsync() async {
+  Future<void> initAsync() async {
     try {
       _box = await Hive.openBox('characters');
       characters.addAll(_box.values.toList());
       notifyListeners();
     } catch (e) {
-      Hive.deleteBoxFromDisk('characters');
+      await Hive.deleteBoxFromDisk('characters');
       _box = await Hive.openBox('characters');
     }
   }
@@ -87,17 +86,17 @@ class CharactersPageState extends ChangeNotifier {
   addCharacter(Character character, {bool isNpc = false}) {
     // Numbering, get all characters with # in the name:
     var maxValue = 0;
-    for (var element in characters.where(
+    for (final element in characters.where(
       (element) => element.nameNormalized() == character.nameNormalized(),
     )) {
-      final split = element.profile.name.split("#");
+      final split = element.profile.name.split('#');
       final value = int.tryParse(split.last);
       maxValue = max(value ?? 0, maxValue);
     }
 
     if (isNpc) {
-      var newChar = character.copyWith(
-        uuid: Uuid().v4(),
+      final newChar = character.copyWith(
+        uuid: const Uuid().v4(),
         isNpc: isNpc,
         number: maxValue + 1,
       );
@@ -105,7 +104,7 @@ class CharactersPageState extends ChangeNotifier {
       _box.add(newChar);
     } else {
       if (maxValue > 0) {
-        character.profile.name = "${character.profile.name} #${maxValue + 1}";
+        character.profile.name = '${character.profile.name} #${maxValue + 1}';
       }
 
       characters.add(character);
@@ -116,7 +115,7 @@ class CharactersPageState extends ChangeNotifier {
   }
 
   removeAllNPC() {
-    for (var char in characters) {
+    for (final char in characters) {
       if (char.profile.isNpc == true) {
         char.delete();
       }
@@ -211,10 +210,10 @@ class CharactersPageState extends ChangeNotifier {
   }
 
   void rollTurns() {
-    for (Character character in characters) {
-      var allModifiers = character.state.modifiers.getAll();
+    for (final character in characters) {
+      final allModifiers = character.state.modifiers.getAll();
 
-      for (var element in allModifiers) {
+      for (final element in allModifiers) {
         if (element.isOfCritical ?? false) {
           element.attack = min(element.attack + 5, element.midValue ?? 0);
           element.dodge = min(element.dodge + 5, element.midValue ?? 0);
@@ -236,8 +235,8 @@ class CharactersPageState extends ChangeNotifier {
   }
 
   void resetConsumables() {
-    for (Character character in characters) {
-      for (var consumable in character.state.consumables) {
+    for (final character in characters) {
+      for (final consumable in character.state.consumables) {
         consumable.actualValue = consumable.maxValue;
       }
       character.save();
@@ -248,7 +247,7 @@ class CharactersPageState extends ChangeNotifier {
   void updateCharacter(Character? character) {
     if (character == null) return;
 
-    int index = characters.indexWhere((element) => element.uuid == character.uuid);
+    final index = characters.indexWhere((element) => element.uuid == character.uuid);
 
     characters[index] = character;
 
@@ -257,7 +256,7 @@ class CharactersPageState extends ChangeNotifier {
   }
 
   Future parseCharacters(FilePickerResult? filesPicked, Function(double) onUpdated) async {
-    print("result: ${filesPicked?.count}");
+    Logger().d('result: ${filesPicked?.count}');
 
     try {
       if (filesPicked != null) {
@@ -266,16 +265,16 @@ class CharactersPageState extends ChangeNotifier {
 
         if (filesPicked.files.first.bytes != null) {
           // For web
-          for (var element in filesPicked.files) {
+          for (final element in filesPicked.files) {
             onUpdated(counter / total);
-            print("Progress: $counter / $total");
+            Logger().d('Progress: $counter / $total');
 
             if (element.extension == 'json') {
-              var jsonFile = Windows1252Codec().decode(element.bytes!.toList());
-              var character = Character.fromJson(jsonDecode(jsonFile));
+              final jsonFile = const Windows1252Codec().decode(element.bytes!.toList());
+              final character = Character.fromJson(jsonDecode(jsonFile));
               addCharacter(character);
             } else {
-              var character = CloudExcelParser.fromBytes(element.bytes!.toList());
+              final character = CloudExcelParser.fromBytes(element.bytes!.toList());
               final characterDecoded = await character.parse();
 
               if (characterDecoded != null) addCharacter(characterDecoded);
@@ -285,19 +284,19 @@ class CharactersPageState extends ChangeNotifier {
           }
         } else {
           // For desktop
-          List<File> files = filesPicked.paths.map((path) => File(path ?? "")).toList();
+          final files = filesPicked.paths.map((path) => File(path ?? '')).toList();
 
-          for (var file in files) {
+          for (final file in files) {
             onUpdated(counter / total);
-            print("Progress: $counter / $total");
+            Logger().d('Progress: $counter / $total');
 
-            var extension = file.path.split(".").last;
-            if (extension == "json") {
-              final json = await file.readAsString(encoding: Windows1252Codec());
-              var character = Character.fromJson(jsonDecode(json));
+            final extension = file.path.split('.').last;
+            if (extension == 'json') {
+              final json = await file.readAsString(encoding: const Windows1252Codec());
+              final character = Character.fromJson(jsonDecode(json));
               addCharacter(character);
             } else {
-              var character = CloudExcelParser.fromFile(file);
+              final character = CloudExcelParser.fromFile(file);
               final characterDecoded = await character.parse();
 
               if (characterDecoded != null) addCharacter(characterDecoded);
@@ -306,23 +305,23 @@ class CharactersPageState extends ChangeNotifier {
           }
         }
       } else {
-        errorMessage = "$errorMessage Error leyendo archivos";
+        errorMessage = '$errorMessage Error leyendo archivos';
       }
     } catch (e) {
-      errorMessage = "$errorMessage ${e.toString()}";
+      errorMessage = '$errorMessage $e';
     }
     onUpdated(-1);
   }
 
   Future<FilePickerResult?> getCharacters() async {
-    FilePickerResult? result = await FilePicker.platform.pickFiles(
+    final result = await FilePicker.platform.pickFiles(
       type: FileType.custom,
       allowedExtensions: ['json', 'xlsm', 'xlsx'],
       allowMultiple: true,
     );
 
     if (result?.files.isEmpty ?? true) {
-      errorMessage = "$errorMessage Sin archivos encontrados";
+      errorMessage = '$errorMessage Sin archivos encontrados';
     }
 
     return result;

@@ -8,18 +8,20 @@ import 'package:amt/presentation/charactersTable/character_info.dart';
 import 'package:amt/presentation/charactersTable/character_options.dart';
 import 'package:amt/presentation/charactersTable/create_character.dart';
 import 'package:amt/presentation/states/characters_page_state.dart';
-import 'package:amt/utils/int_extension.dart';
 import 'package:amt/utils/assets.dart';
+import 'package:amt/utils/int_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class CharactersTable extends StatelessWidget {
-  final spacer = SizedBox(height: 8, width: 8);
+  const CharactersTable({super.key});
+
+  final spacer = const SizedBox(height: 8, width: 8);
 
   @override
   Widget build(BuildContext context) {
-    var appState = context.watch<CharactersPageState>();
-    var theme = Theme.of(context);
+    final appState = context.watch<CharactersPageState>();
+    final theme = Theme.of(context);
 
     return Column(
       children: [
@@ -29,27 +31,23 @@ class CharactersTable extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Flexible(
-              flex: 1,
               child: TextButton.icon(
-                onPressed: () {
-                  appState.rollTurns();
-                },
-                icon: Icon(Icons.repeat),
-                label: Text(
-                  "Iniciativas",
+                onPressed: appState.rollTurns,
+                icon: const Icon(Icons.repeat),
+                label: const Text(
+                  'Iniciativas',
                   overflow: TextOverflow.ellipsis,
                   maxLines: 1,
                 ),
               ),
             ),
             Flexible(
-              flex: 1,
               child: TextButton.icon(
                 onPressed: appState.sheetsLoadingPercentaje == -1
                     ? () async {
                         appState.showLoading(
                           message:
-                              "Selecciona las planillas que deseas cargar#Si seleccionas archivos excel, deberán ser procesadas en un servidor externo\n(requiere conexión a internet)",
+                              'Selecciona las planillas que deseas cargar#Si seleccionas archivos excel, deberán ser procesadas en un servidor externo\n(requiere conexión a internet)',
                         );
                         final files = await appState.getCharacters();
                         appState.hideLoading();
@@ -59,39 +57,33 @@ class CharactersTable extends StatelessWidget {
                         timer.cancel();
                       }
                     : null,
-                icon: Icon(Icons.upload_file),
-                label: Text(
-                  "Cargar Personaje",
+                icon: const Icon(Icons.upload_file),
+                label: const Text(
+                  'Cargar Personaje',
                   overflow: TextOverflow.ellipsis,
                   maxLines: 1,
                 ),
               ),
             ),
             Flexible(
-              flex: 1,
               child: TextButton.icon(
                 onPressed: () {
-                  CreateCharacter.show(context, (character) {
-                    appState.addCharacter(character);
-                  });
+                  CreateCharacter.show(context, appState.addCharacter);
                 },
-                icon: Icon(Icons.edit_document),
-                label: Text(
-                  "Crear Personaje",
+                icon: const Icon(Icons.edit_document),
+                label: const Text(
+                  'Crear Personaje',
                   overflow: TextOverflow.ellipsis,
                   maxLines: 1,
                 ),
               ),
             ),
             Flexible(
-              flex: 1,
               child: TextButton.icon(
-                onPressed: () {
-                  appState.resetConsumables();
-                },
-                icon: Icon(Icons.restore),
-                label: Text(
-                  "Restaurar consumibles",
+                onPressed: appState.resetConsumables,
+                icon: const Icon(Icons.restore),
+                label: const Text(
+                  'Restaurar consumibles',
                   overflow: TextOverflow.ellipsis,
                   maxLines: 1,
                 ),
@@ -102,14 +94,14 @@ class CharactersTable extends StatelessWidget {
         spacer,
         // Header
         Padding(
-          padding: EdgeInsets.all(4),
+          padding: const EdgeInsets.all(4),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              _header(1, ""),
-              _header(3, "Nombre"),
-              _header(1, "Turno"),
-              _header(5, "Acciones"),
+              _header(1, ''),
+              _header(3, 'Nombre'),
+              _header(1, 'Turno'),
+              _header(5, 'Acciones'),
             ],
           ),
         ),
@@ -118,7 +110,7 @@ class CharactersTable extends StatelessWidget {
           child: SingleChildScrollView(
             child: Column(
               children: [
-                for (var character in appState.characters)
+                for (final character in appState.characters)
                   Card(
                     shape: appState.combatState.attack.character?.uuid == character.uuid
                         ? _border(theme.colorScheme.primary)
@@ -149,25 +141,25 @@ class CharactersTable extends StatelessWidget {
                                     maxLines: 2,
                                     overflow: TextOverflow.ellipsis,
                                   ),
-                                )),
+                                ),),
                                 Stack(
                                   alignment: AlignmentDirectional.center,
                                   children: [
                                     Padding(
-                                      padding: EdgeInsets.all(8),
+                                      padding: const EdgeInsets.all(8),
                                       child: CircularProgressIndicator(
                                         value: character.state.getLifePointsPercentage().toDouble() / 100,
                                         color: character.state.getLifePointsPercentage().percentageColor(),
                                       ),
                                     ),
                                     Text(
-                                      "${character.state.getLifePointsPercentage()}%",
+                                      '${character.state.getLifePointsPercentage()}%',
                                       style: theme.textTheme.bodySmall!.copyWith(fontWeight: FontWeight.bold),
                                     ),
                                   ],
-                                )
+                                ),
                               ],
-                            )),
+                            ),),
                         _cell(
                           size: 1,
                           child: Tooltip(
@@ -190,16 +182,16 @@ class CharactersTable extends StatelessWidget {
                                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                                 children: [
                                   Tooltip(
-                                    message: "Info",
+                                    message: 'Info',
                                     child: IconButton(
-                                      icon: Icon(Icons.info),
+                                      icon: const Icon(Icons.info),
                                       onPressed: () {
                                         ShowCharacterInfo.call(context, character, onEdit: appState.updateCharacter);
                                       },
                                     ),
                                   ),
                                   Tooltip(
-                                    message: "Atacar",
+                                    message: 'Atacar',
                                     child: IconButton(
                                       icon: SizedBox(
                                         width: 24,
@@ -207,24 +199,24 @@ class CharactersTable extends StatelessWidget {
                                         child: Assets.knife,
                                       ),
                                       onPressed: () {
-                                        var surprise = SurpriseType.calculate(
+                                        final surprise = SurpriseType.calculate(
                                           attacker: character,
                                           defendant: appState.combatState.defense.character,
                                         );
 
                                         appState.updateCombatState(
                                           attacking: character,
-                                          attackRoll: "",
+                                          attackRoll: '',
                                           attackingModifiers: ModifiersState(),
-                                          damageModifier: "",
-                                          baseAttackModifiers: "",
+                                          damageModifier: '',
+                                          baseAttackModifiers: '',
                                           surprise: surprise,
                                         );
                                       },
                                     ),
                                   ),
                                   Tooltip(
-                                    message: "Parada",
+                                    message: 'Parada',
                                     child: IconButton(
                                       icon: SizedBox(
                                         width: 24,
@@ -241,7 +233,7 @@ class CharactersTable extends StatelessWidget {
                                     ),
                                   ),
                                   Tooltip(
-                                    message: "Esquiva",
+                                    message: 'Esquiva',
                                     child: IconButton(
                                       icon: SizedBox(
                                         width: 24,
@@ -259,25 +251,25 @@ class CharactersTable extends StatelessWidget {
                                     ),
                                   ),
                                   Tooltip(
-                                    message: "Opciones",
+                                    message: 'Opciones',
                                     child: IconButton(
-                                      icon: Icon(Icons.settings),
+                                      icon: const Icon(Icons.settings),
                                       onPressed: () {
                                         ShowCharacterOptions.call(
                                           context,
                                           character,
                                           onRemove: (character) => {appState.removeCharacter(character)},
-                                          onEdit: (character) => appState.updateCharacter(character),
+                                          onEdit: appState.updateCharacter,
                                         );
                                       },
                                     ),
                                   ),
                                 ],
                               ),
-                            )),
+                            ),),
                       ],
                     ),
-                  )
+                  ),
               ],
             ),
           ),
@@ -300,7 +292,7 @@ class CharactersTable extends StatelessWidget {
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
           ),
-        ));
+        ),);
   }
 
   Widget _cell({required int size, required Widget child}) {
@@ -312,20 +304,20 @@ class CharactersTable extends StatelessWidget {
     Character character,
     DefenseType type,
   ) {
-    var physicalResistance = character.resistances.physicalResistance;
-    var surprise = SurpriseType.calculate(
+    final physicalResistance = character.resistances.physicalResistance;
+    final surprise = SurpriseType.calculate(
       attacker: appState.combatState.attack.character,
       defendant: character,
     );
 
     appState.updateCombatState(
       defendant: character,
-      defenseRoll: "0",
+      defenseRoll: '0',
       defenderModifiers: ModifiersState(),
-      armourModifier: "",
+      armourModifier: '',
       defenseType: type,
       physicalResistanceBase: physicalResistance.toString(),
-      baseDefenseModifiers: "",
+      baseDefenseModifiers: '',
       surprise: surprise,
     );
   }

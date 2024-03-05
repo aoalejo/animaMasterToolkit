@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
 
 class AMTBottomSheet extends StatelessWidget {
+
+  const AMTBottomSheet({required this.title, required this.children, super.key, this.bottomRow});
   final Widget title;
   final List<Widget> children;
   final List<Widget>? bottomRow;
 
-  AMTBottomSheet({required this.title, required this.children, this.bottomRow});
-
   @override
   Widget build(BuildContext context) {
-    var midHeight = MediaQuery.of(context).size.height / 2;
+    final midHeight = MediaQuery.of(context).size.height / 2;
 
     return SizedBox(
       height: midHeight,
       child: Padding(
-        padding: EdgeInsets.all(16),
+        padding: const EdgeInsets.all(16),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
@@ -31,7 +31,7 @@ class AMTBottomSheet extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  SizedBox(),
+                  const SizedBox(),
                   if (bottomRow != null)
                     ...bottomRow!
                   else
@@ -39,7 +39,7 @@ class AMTBottomSheet extends StatelessWidget {
                       child: const Text('Cerrar'),
                       onPressed: () => Navigator.pop(context),
                     ),
-                  SizedBox(),
+                  const SizedBox(),
                 ],
               ),
             ),

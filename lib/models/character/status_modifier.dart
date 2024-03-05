@@ -4,24 +4,8 @@ import 'package:hive/hive.dart';
 
 part 'status_modifier.g.dart';
 
-@HiveType(typeId: 14, adapterName: "StatusModifierAdapter")
+@HiveType(typeId: 14, adapterName: 'StatusModifierAdapter')
 class StatusModifier extends Object {
-  @HiveField(0)
-  late String name;
-  @HiveField(1)
-  late int attack;
-  @HiveField(2)
-  late int dodge;
-  @HiveField(3)
-  late int parry;
-  @HiveField(4)
-  late int turn;
-  @HiveField(5)
-  late int physicalAction;
-  @HiveField(6)
-  late bool? isOfCritical;
-  @HiveField(7)
-  late int? midValue;
 
   StatusModifier({
     required this.name,
@@ -45,32 +29,48 @@ class StatusModifier extends Object {
     isOfCritical = false;
     midValue = 0;
   }
+  @HiveField(0)
+  late String name;
+  @HiveField(1)
+  late int attack;
+  @HiveField(2)
+  late int dodge;
+  @HiveField(3)
+  late int parry;
+  @HiveField(4)
+  late int turn;
+  @HiveField(5)
+  late int physicalAction;
+  @HiveField(6)
+  late bool? isOfCritical;
+  @HiveField(7)
+  late int? midValue;
 
-  String description({String separator = " "}) {
+  String description({String separator = ' '}) {
     return descriptionKeyValue().join(separator);
   }
 
   List<KeyValue> descriptionKeyValue() {
-    List<KeyValue> list = [];
+    final list = <KeyValue>[];
     if (attack != 0) {
-      list.add(KeyValue(key: "Ataque", value: attack.toString()));
+      list.add(KeyValue(key: 'Ataque', value: attack.toString()));
     }
     if (parry != 0) {
-      list.add(KeyValue(key: "Parada", value: parry.toString()));
+      list.add(KeyValue(key: 'Parada', value: parry.toString()));
     }
     if (dodge != 0) {
-      list.add(KeyValue(key: "Esquiva", value: dodge.toString()));
+      list.add(KeyValue(key: 'Esquiva', value: dodge.toString()));
     }
     if (turn != 0) {
-      list.add(KeyValue(key: "Turno", value: turn.toString()));
+      list.add(KeyValue(key: 'Turno', value: turn.toString()));
     }
     if (physicalAction != 0) {
-      list.add(KeyValue(key: "Acc. Físicas", value: physicalAction.toString()));
+      list.add(KeyValue(key: 'Acc. Físicas', value: physicalAction.toString()));
     }
 
     if (isOfCritical == true && midValue != null) {
       if (attack != midValue) {
-        list.add(KeyValue(key: "Recuperación", value: 'hasta: $midValue a 5/turno'));
+        list.add(KeyValue(key: 'Recuperación', value: 'hasta: $midValue a 5/turno'));
       }
     }
 

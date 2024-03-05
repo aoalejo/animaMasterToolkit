@@ -1,23 +1,23 @@
 class KeyValue {
+
+  KeyValue({required this.key, required this.value});
   final String key;
   final String value;
 
-  KeyValue({required this.key, required this.value});
-
   @override
   String toString() {
-    return "$key: $value";
+    return '$key: $value';
   }
 }
 
 extension ListToKeyValue on Map<String, dynamic> {
   List<KeyValue> list({bool interchange = false}) {
-    List<KeyValue> list = [];
+    final list = <KeyValue>[];
     for (final entry in entries) {
       list.add(
         KeyValue(
-          key: interchange ? entry.value.toString() : entry.key.toString(),
-          value: interchange ? entry.key.toString() : entry.value.toString(),
+          key: interchange ? entry.value.toString() : entry.key,
+          value: interchange ? entry.key : entry.value.toString(),
         ),
       );
     }

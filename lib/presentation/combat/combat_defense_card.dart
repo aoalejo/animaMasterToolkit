@@ -1,9 +1,9 @@
 import 'package:amt/models/enums.dart';
 import 'package:amt/models/roll.dart';
-import 'package:amt/presentation/components/components.dart';
 import 'package:amt/presentation/bottom_sheet_modifiers.dart';
 import 'package:amt/presentation/charactersTable/modifiers_card.dart';
 import 'package:amt/presentation/combat/custom_combat_card.dart';
+import 'package:amt/presentation/components/components.dart';
 import 'package:amt/presentation/states/characters_page_state.dart';
 import 'package:amt/resources/modifiers.dart';
 import 'package:amt/utils/assets.dart';
@@ -11,9 +11,11 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class CombatDefenseCard extends StatelessWidget {
+  const CombatDefenseCard({super.key});
+
   @override
   Widget build(BuildContext context) {
-    var appState = context.watch<CharactersPageState>();
+    final appState = context.watch<CharactersPageState>();
     final theme = Theme.of(context);
     final combatState = appState.combatState;
     final defense = combatState.defense;
@@ -28,23 +30,20 @@ class CombatDefenseCard extends StatelessWidget {
                 Icons.close,
                 color: theme.colorScheme.onPrimary,
               ),
-              onPressed: () {
-                appState.removeDefendant();
-              },
+              onPressed: appState.removeDefendant,
             ),
       children: [
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Flexible(
-              flex: 1,
               child: Column(
                 children: [
                   SizedBox(
                     height: 40,
                     child: AMTTextFormField(
                       text: defense.roll,
-                      label: "Tirada de defensa",
+                      label: 'Tirada de defensa',
                       onChanged: (value) => {appState.updateCombatState(defenseRoll: value)},
                       suffixIcon: IconButton(
                         onPressed: () {
@@ -57,7 +56,7 @@ class CombatDefenseCard extends StatelessWidget {
                       ),
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 20,
                   ),
                   SizedBox(
@@ -67,29 +66,28 @@ class CombatDefenseCard extends StatelessWidget {
                       children: [
                         if (character != null)
                           Flexible(
-                            flex: 1,
                             child: Tooltip(
                               message: character.calculateDefense(defense.defenseType),
                               child: AMTTextFormField(
                                 enabled: false,
-                                label: "Defensa",
+                                label: 'Defensa',
                                 text: character.calculateDefense(defense.defenseType),
                               ),
                             ),
                           ),
-                        if (character != null) SizedBox(width: 4),
+                        if (character != null) const SizedBox(width: 4),
                         Flexible(
                           flex: 2,
                           child: AMTTextFormField(
-                            label: character != null ? "Modificador" : "Defensa",
+                            label: character != null ? 'Modificador' : 'Defensa',
                             suffixIcon: TextButton(
-                              child: Text("+Can"),
+                              child: const Text('+Can'),
                               onPressed: () {
                                 character?.removeFrom(
                                   1,
                                   ConsumableType.fatigue,
                                 );
-                                appState.updateCombatState(baseDefenseModifiers: "${defense.defense}+15");
+                                appState.updateCombatState(baseDefenseModifiers: '${defense.defense}+15');
                                 appState.updateCharacter(character);
                               },
                             ),
@@ -103,11 +101,10 @@ class CombatDefenseCard extends StatelessWidget {
                 ],
               ),
             ),
-            SizedBox(
+            const SizedBox(
               width: 12,
             ),
             Flexible(
-              flex: 1,
               child: Column(
                 children: [
                   SizedBox(
@@ -116,14 +113,13 @@ class CombatDefenseCard extends StatelessWidget {
                         children: [
                           if (character != null)
                             Flexible(
-                              flex: 1,
                               child: AMTTextFormField(
                                 enabled: false,
-                                label: "Armadura",
+                                label: 'Armadura',
                                 text: character.combat.armour.calculatedArmour.armourFor(combatState.attack.damageType).toString(),
                               ),
                             ),
-                          if (character != null) SizedBox(width: 4),
+                          if (character != null) const SizedBox(width: 4),
                           Flexible(
                             flex: 2,
                             child: AMTTextFormField(
@@ -131,18 +127,18 @@ class CombatDefenseCard extends StatelessWidget {
                                 appState.updateCombatState(armourModifier: value);
                               },
                               text: defense.armour,
-                              label: character != null ? "Modificador" : "Armadura",
+                              label: character != null ? 'Modificador' : 'Armadura',
                               suffixIcon: IconButton(
-                                icon: Icon(Icons.delete),
+                                icon: const Icon(Icons.delete),
                                 onPressed: () {
-                                  appState.updateCombatState(armourModifier: "");
+                                  appState.updateCombatState(armourModifier: '');
                                 },
                               ),
                             ),
-                          )
+                          ),
                         ],
-                      )),
-                  SizedBox(
+                      ),),
+                  const SizedBox(
                     height: 20,
                   ),
                   SizedBox(
@@ -158,8 +154,8 @@ class CombatDefenseCard extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
-                          Text(
-                            "Situacionales",
+                          const Text(
+                            'Situacionales',
                             textAlign: TextAlign.center,
                           ),
                           Text(
@@ -176,7 +172,7 @@ class CombatDefenseCard extends StatelessWidget {
             ),
           ],
         ),
-        SizedBox(
+        const SizedBox(
           height: 10,
         ),
         SizedBox(
@@ -195,9 +191,9 @@ class CombatDefenseCard extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Flexible(
+                const Flexible(
                   child: Text(
-                    "Cantidad de defensas:",
+                    'Cantidad de defensas:',
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                   ),
@@ -215,12 +211,12 @@ class CombatDefenseCard extends StatelessWidget {
                     appState.updateCharacter(character);
                   },
                   borderRadius: const BorderRadius.all(Radius.circular(8)),
-                  children: [
-                    Text("1"),
-                    Text("2"),
-                    Text("3"),
-                    Text("4"),
-                    Text("5+"),
+                  children: const [
+                    Text('1'),
+                    Text('2'),
+                    Text('3'),
+                    Text('4'),
+                    Text('5+'),
                   ],
                 ),
               ],

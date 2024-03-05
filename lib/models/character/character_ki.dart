@@ -4,18 +4,8 @@ import 'package:hive/hive.dart';
 
 part 'character_ki.g.dart';
 
-@HiveType(typeId: 9, adapterName: "CharacterKiAdapter")
+@HiveType(typeId: 9, adapterName: 'CharacterKiAdapter')
 class CharacterKi {
-  @HiveField(0)
-  late AttributesList accumulationsPerAttribute;
-  @HiveField(1)
-  late AttributesList maximumPerAttribute;
-  @HiveField(2)
-  late Map<String, dynamic> skills;
-  @HiveField(3)
-  late int maximumAccumulation;
-  @HiveField(4)
-  late int genericAccumulation;
 
   CharacterKi({
     required this.accumulationsPerAttribute,
@@ -41,6 +31,16 @@ class CharacterKi {
     maximumAccumulation = JsonUtils.integer(json['acumulacionMax'], 0);
     genericAccumulation = JsonUtils.integer(json['acumulacionGenerica'], 0);
   }
+  @HiveField(0)
+  late AttributesList accumulationsPerAttribute;
+  @HiveField(1)
+  late AttributesList maximumPerAttribute;
+  @HiveField(2)
+  late Map<String, dynamic> skills;
+  @HiveField(3)
+  late int maximumAccumulation;
+  @HiveField(4)
+  late int genericAccumulation;
 
   CharacterKi copy() {
     return CharacterKi(

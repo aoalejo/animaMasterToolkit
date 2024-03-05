@@ -1,32 +1,32 @@
 import 'package:amt/models/character/character.dart';
+import 'package:amt/presentation/bottom_sheet_modifiers.dart';
 import 'package:amt/presentation/charactersInfo/consumable_create_bottom_sheet.dart';
 import 'package:amt/presentation/charactersTable/armours_rack.dart';
-import 'package:amt/presentation/bottom_sheet_modifiers.dart';
 import 'package:amt/presentation/charactersTable/consumable_card.dart';
 import 'package:amt/presentation/charactersTable/modifiers_card.dart';
 import 'package:amt/presentation/charactersTable/weapons_rack.dart';
+import 'package:amt/presentation/components/components.dart';
 import 'package:amt/presentation/states/characters_page_state.dart';
 import 'package:amt/resources/modifiers.dart';
-import 'package:amt/presentation/components/components.dart';
 import 'package:amt/utils/string_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:function_tree/function_tree.dart';
 import 'package:provider/provider.dart';
 
 class CharacterInfoCard extends StatelessWidget {
-  final spacer = SizedBox(height: 8, width: 8);
-  final bool attacking;
 
-  CharacterInfoCard({required this.attacking});
+  CharacterInfoCard({required this.attacking, super.key});
+  final spacer = const SizedBox(height: 8, width: 8);
+  final bool attacking;
   final modifiersController = ScrollController();
 
   @override
   Widget build(BuildContext context) {
-    var appState = context.watch<CharactersPageState>();
-    var theme = Theme.of(context);
+    final appState = context.watch<CharactersPageState>();
+    final theme = Theme.of(context);
 
-    Character? character = attacking ? appState.combatState.attack.character : appState.combatState.defense.character;
-    var consumables = character?.state.consumables;
+    final character = attacking ? appState.combatState.attack.character : appState.combatState.defense.character;
+    final consumables = character?.state.consumables;
 
     return character != null
         ? Card(
@@ -50,14 +50,14 @@ class CharacterInfoCard extends StatelessWidget {
                 spacer,
                 Expanded(
                   child: Padding(
-                    padding: EdgeInsets.all(8),
+                    padding: const EdgeInsets.all(8),
                     child: SingleChildScrollView(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
                           _row(
                             [
-                              Text("Arma:"),
+                              const Text('Arma:'),
                               Expanded(
                                 child: WeaponsRack(
                                   weapons: character.combat.weapons,
@@ -72,8 +72,8 @@ class CharacterInfoCard extends StatelessWidget {
                                   },
                                 ),
                               ),
-                              SizedBox(width: 16),
-                              Text("Armadura:"),
+                              const SizedBox(width: 16),
+                              const Text('Armadura:'),
                               Expanded(
                                 child: ArmoursRack(
                                   armourBase: character.combat.armour,
@@ -89,7 +89,7 @@ class CharacterInfoCard extends StatelessWidget {
                           _row([
                             Expanded(
                               flex: 2,
-                              child: Text("Turno: ${character.selectedWeapon().turn.toString()} + "),
+                              child: Text('Turno: ${character.selectedWeapon().turn} + '),
                             ),
                             spacer,
                             Expanded(
@@ -97,10 +97,10 @@ class CharacterInfoCard extends StatelessWidget {
                                 child: AMTTextFormField(
                                   text: character.state.turnModifier,
                                   onChanged: (value) {
-                                    var newChar = _calculateTurn(character, value);
+                                    final newChar = _calculateTurn(character, value);
                                     appState.updateCharacter(newChar);
                                   },
-                                )),
+                                ),),
                             spacer,
                             Expanded(
                               flex: 2,
@@ -112,7 +112,7 @@ class CharacterInfoCard extends StatelessWidget {
                             Expanded(
                               flex: 2,
                               child: Text(
-                                '= ${character.state.currentTurn.roll.toString()}',
+                                '= ${character.state.currentTurn.roll}',
                                 textAlign: TextAlign.end,
                                 style: theme.textTheme.titleMedium!.copyWith(
                                   fontWeight: FontWeight.bold,
@@ -151,29 +151,28 @@ class CharacterInfoCard extends StatelessWidget {
                                             appState.updateCharacter(character);
                                           });
                                         },
-                                        child: Text("Añadir"))),
+                                        child: const Text('Añadir'),),),
                               ),
                             );
-                          }),
+                          },),
                           spacer,
                           OutlinedButton(
                             child: Tooltip(
                               message: character.state.modifiers.totalModifierDescription(),
                               child: Row(children: [
-                                Text("Modificadores"),
-                                SizedBox.square(
+                                const Text('Modificadores'),
+                                const SizedBox.square(
                                   dimension: 8,
                                 ),
                                 Flexible(
-                                  flex: 1,
                                   child: Padding(
-                                    padding: EdgeInsets.all(4),
+                                    padding: const EdgeInsets.all(4),
                                     child: AMTGrid(
                                       elements: character.state.modifiers.getAllModifiersString(),
                                       columns: 3,
                                       builder: (element, index) {
                                         return Text(
-                                          "${element.key.abbreviated}: ${element.value}",
+                                          '${element.key.abbreviated}: ${element.value}',
                                           overflow: TextOverflow.ellipsis,
                                           style: theme.textTheme.bodySmall,
                                           textAlign: TextAlign.right,
@@ -183,7 +182,7 @@ class CharacterInfoCard extends StatelessWidget {
                                     ),
                                   ),
                                 ),
-                              ]),
+                              ],),
                             ),
                             onPressed: () {
                               BottomSheetModifiers.show(context, character.state.modifiers, Modifiers.getStatusModifiers(), (newModifiersState) {
@@ -204,13 +203,13 @@ class CharacterInfoCard extends StatelessWidget {
                           SizedBox(
                               height: 40,
                               child: AMTTextFormField(
-                                label: "Notas",
+                                label: 'Notas',
                                 text: character.state.notes,
                                 onChanged: (value) {
                                   character.state.notes = value;
                                   appState.updateCharacter(character);
                                 },
-                              ))
+                              ),),
                         ],
                       ),
                     ),
@@ -219,26 +218,26 @@ class CharacterInfoCard extends StatelessWidget {
               ],
             ),
           )
-        : Card();
+        : const Card();
   }
 
   Character _calculateTurn(Character character, String value) {
-    var baseTurn = character.selectedWeapon().turn;
+    final baseTurn = character.selectedWeapon().turn;
     character.state.turnModifier = value;
-    var turn = character.state.currentTurn;
+    final turn = character.state.currentTurn;
     var modifier = 0;
 
     try {
       modifier = value.interpret().toInt();
     } catch (e) {}
 
-    var total = baseTurn + turn.rolls.reduce((value, element) => value + element) + modifier;
+    final total = baseTurn + turn.rolls.reduce((value, element) => value + element) + modifier;
 
     character.state.currentTurn.roll = total;
     return character;
   }
 
-  _row(List<Widget> children, {double height = 40}) {
+  SizedBox _row(List<Widget> children, {double height = 40}) {
     return SizedBox(
       height: height,
       child: Row(

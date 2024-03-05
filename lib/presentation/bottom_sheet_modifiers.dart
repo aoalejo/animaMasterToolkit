@@ -15,7 +15,7 @@ class BottomSheetModifiers {
       setState(
         () => {
           if (state.containsModifier(modifier)) {state.removeModifier(modifier)} else {state.add(modifier)},
-          onModifiersChanged(state)
+          onModifiersChanged(state),
         },
       );
     }
@@ -36,53 +36,54 @@ class BottomSheetModifiers {
                   Expanded(
                     child: Column(
                       children: [
-                        Text(
+                        const Text(
                           'Modificadores afectando al personaje',
                         ),
                         Text(
                           state.totalModifierDescription(),
                           style: subtitleButton,
-                        )
+                        ),
                       ],
                     ),
                   ),
                   IconButton(
-                      onPressed: () {
-                        var modifier = StatusModifier(name: "");
-                        state.add(modifier);
-                        Navigator.pop(context);
+                    onPressed: () {
+                      final modifier = StatusModifier(name: '');
+                      state.add(modifier);
+                      Navigator.pop(context);
 
-                        _showModifierCreator(
-                          context,
-                          modifier: modifier,
-                          onEdit: (modifier) {
-                            print(modifier);
-                            state.removeModifier(modifier);
-                            state.add(modifier);
-                            onModifiersChanged(state);
-                          },
-                        );
-                      },
-                      icon: Icon(Icons.add)),
+                      _showModifierCreator(
+                        context,
+                        modifier: modifier,
+                        onEdit: (modifier) {
+                          Logger().d(modifier);
+                          state.removeModifier(modifier);
+                          state.add(modifier);
+                          onModifiersChanged(state);
+                        },
+                      );
+                    },
+                    icon: const Icon(Icons.add),
+                  ),
                   IconButton(
-                      onPressed: () {
-                        setState(() => state.clear());
-                        onModifiersChanged(state);
-                      },
-                      icon: Icon(Icons.delete))
+                    onPressed: () {
+                      setState(() => state.clear());
+                      onModifiersChanged(state);
+                    },
+                    icon: const Icon(Icons.delete),
+                  ),
                 ],
               ),
               children: [
-                for (var modifier in allModifiers)
+                for (final modifier in allModifiers)
                   TextButton(
                     onPressed: () => {toggleModifier(setState, modifier)},
                     child: Padding(
-                      padding: EdgeInsets.all(4),
+                      padding: const EdgeInsets.all(4),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(modifier.name),
@@ -98,7 +99,7 @@ class BottomSheetModifiers {
                             onChanged: (v) {
                               toggleModifier(setState, modifier);
                             },
-                          )
+                          ),
                         ],
                       ),
                     ),
@@ -116,72 +117,72 @@ class BottomSheetModifiers {
       context: context,
       builder: (BuildContext context) {
         return AMTBottomSheet(
-          title: Text("Añadir modificador"),
+          title: const Text('Añadir modificador'),
           children: [
             AMTTextFormField(
-              label: "Nombre",
+              label: 'Nombre',
               text: modifier.name,
               onChanged: (value) {
                 modifier.name = value;
                 onEdit(modifier);
               },
             ),
-            SizedBox(
+            const SizedBox(
               height: 16,
             ),
             AMTTextFormField(
-              label: "Ataque",
+              label: 'Ataque',
               text: modifier.attack.toString(),
               onChanged: (value) {
                 modifier.attack = _parseInput(value);
                 onEdit(modifier);
               },
             ),
-            SizedBox(
+            const SizedBox(
               height: 16,
             ),
             AMTTextFormField(
-              label: "Esquiva",
+              label: 'Esquiva',
               text: modifier.dodge.toString(),
               onChanged: (value) {
                 modifier.dodge = _parseInput(value);
                 onEdit(modifier);
               },
             ),
-            SizedBox(
+            const SizedBox(
               height: 16,
             ),
             AMTTextFormField(
-              label: "Parada",
+              label: 'Parada',
               text: modifier.parry.toString(),
               onChanged: (value) {
                 modifier.parry = _parseInput(value);
                 onEdit(modifier);
               },
             ),
-            SizedBox(
+            const SizedBox(
               height: 16,
             ),
             AMTTextFormField(
-              label: "Turno",
+              label: 'Turno',
               text: modifier.turn.toString(),
               onChanged: (value) {
                 modifier.turn = _parseInput(value);
                 onEdit(modifier);
               },
             ),
-            SizedBox(
+            const SizedBox(
               height: 16,
             ),
             AMTTextFormField(
-              label: "Acciones",
+              label: 'Acciones',
               text: modifier.physicalAction.toString(),
               onChanged: (value) {
                 modifier.physicalAction = _parseInput(value);
                 onEdit(modifier);
               },
             ),
-            SizedBox(
+            const SizedBox(
               height: 16,
             ),
           ],

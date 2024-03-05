@@ -5,20 +5,15 @@ import 'package:hive/hive.dart';
 
 part 'roll.g.dart';
 
-@HiveType(typeId: 4, adapterName: "RollAdapter")
+@HiveType(typeId: 4, adapterName: 'RollAdapter')
 class Roll {
-  @HiveField(0)
-  late int roll;
-  @HiveField(1)
-  late String description;
-  @HiveField(2)
-  late List<int> rolls;
+
+  Roll({required this.description, required this.roll, required this.rolls});
 
   Roll.turn() {
     final turnRoll = Roll.roll(
       turnFumble: true,
       fumbleLevel: -1,
-      nature: 0,
     );
 
     roll = turnRoll.roll;
@@ -28,7 +23,7 @@ class Roll {
 
   Roll.d10Roll() {
     roll = Random().nextInt(10) + 1;
-    description = "";
+    description = '';
     rolls = [];
   }
 
@@ -43,26 +38,26 @@ class Roll {
   }) {
     rolls = [];
 
-    int thisRoll = Random().nextInt(100) + 1;
-    String thisRollDescription = "";
+    var thisRoll = Random().nextInt(100) + 1;
+    var thisRollDescription = '';
     rolls.add(thisRoll);
 
-    if (base != 0) thisRollDescription = "Base: $base";
-    thisRollDescription = "$thisRollDescription\nTirada: $thisRoll";
+    if (base != 0) thisRollDescription = 'Base: $base';
+    thisRollDescription = '$thisRollDescription\nTirada: $thisRoll';
 
     if (thisRoll.isPalindrome && nature > 15) {
-      var newRoll = Roll.d10Roll();
-      thisRollDescription = "$thisRollDescription\nTirada adicional: ${newRoll.roll}";
+      final newRoll = Roll.d10Roll();
+      thisRollDescription = '$thisRollDescription\nTirada adicional: ${newRoll.roll}';
       rolls.add(newRoll.roll);
 
       if (thisRoll.toString()[0] == newRoll.roll.toString()) {
-        thisRollDescription = "$thisRollDescription\nCritico adicional transforma la tirada en 100";
+        thisRollDescription = '$thisRollDescription\nCritico adicional transforma la tirada en 100';
         thisRoll = 100;
       }
     }
 
     if (canCrit && thisRoll >= critLevel) {
-      Roll crit = Roll.roll(
+      final crit = Roll.roll(
         canFumble: false,
         fumbleLevel: -1,
         critLevel: nature >= 5 ? critLevel + 1 : 999,
@@ -71,19 +66,19 @@ class Roll {
 
       rolls.addAll(crit.rolls);
 
-      thisRollDescription = "$thisRollDescription\nCritico: ${crit.roll}";
+      thisRollDescription = '$thisRollDescription\nCritico: ${crit.roll}';
       thisRoll = thisRoll + crit.roll;
     }
 
     if (canFumble && thisRoll <= fumbleLevel) {
       if (turnFumble) {
-        var handicap = -75 - (fumbleLevel - thisRoll) * 25;
+        final handicap = -75 - (fumbleLevel - thisRoll) * 25;
 
         rolls.add(handicap);
-        thisRollDescription = "$thisRollDescription\nPifia: $handicap";
+        thisRollDescription = '$thisRollDescription\nPifia: $handicap';
         thisRoll = handicap;
       } else {
-        Roll fumble = Roll.roll(
+        final var fumble = Roll.roll(
           canCrit: false,
           canFumble: false,
           fumbleLevel: -1,
@@ -92,7 +87,7 @@ class Roll {
 
         rolls.addAll(fumble.rolls.map((e) => -e).toList());
 
-        thisRollDescription = "$thisRollDescription\nPifia: ${fumble.roll}";
+        thisRollDescription = '$thisRollDescription\nPifia: ${fumble.roll}';
         thisRoll = -fumble.roll;
       }
     }
@@ -100,20 +95,24 @@ class Roll {
     description = thisRollDescription;
     roll = base + thisRoll;
   }
-
-  Roll({required this.description, required this.roll, required this.rolls});
+  @HiveField(0)
+  late int roll;
+  @HiveField(1)
+  late String description;
+  @HiveField(2)
+  late List<int> rolls;
 
   String getRollsAsString() {
-    String output = "";
-    bool first = true;
+    var output = '';
+    var first = true;
 
-    for (var roll in rolls) {
+    for (final roll in rolls) {
       if (first) {
         output = roll.toString();
         first = false;
       } else {
         if (roll >= 0) {
-          output = "$output+$roll";
+          output = '$output+$roll';
         } else {
           output = "$output$roll";
         }
@@ -132,7 +131,7 @@ extension Rolls on Character {
 
 extension on int {
   bool get isPalindrome {
-    var str = toString();
+    final str = toString();
 
     if (str.length < 2) {
       return false;

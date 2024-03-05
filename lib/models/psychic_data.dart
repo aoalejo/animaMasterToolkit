@@ -3,19 +3,8 @@ import 'package:hive/hive.dart';
 
 part 'psychic_data.g.dart';
 
-@HiveType(typeId: 11, adapterName: "PsychicDataAdapter")
-class PsychicData {
-  @HiveField(0)
-  int freeCvs;
-  @HiveField(1)
-  Map<String, dynamic> disciplines;
-  @HiveField(2)
-  Map<String, dynamic> patterns;
-  @HiveField(3)
-  Map<String, dynamic> powers;
-  @HiveField(4)
-  Map<String, dynamic> innate;
-
+@HiveType(typeId: 11, adapterName: 'PsychicDataAdapter')
+class PsychicData extends JsonEncoded {
   PsychicData({
     this.freeCvs = 0,
     this.disciplines = const <String, dynamic>{},
@@ -33,6 +22,17 @@ class PsychicData {
       innate: Map<String, String>.from(json['Innatos']),
     );
   }
+
+  @HiveField(0)
+  int freeCvs;
+  @HiveField(1)
+  Map<String, dynamic> disciplines;
+  @HiveField(2)
+  Map<String, dynamic> patterns;
+  @HiveField(3)
+  Map<String, dynamic> powers;
+  @HiveField(4)
+  Map<String, dynamic> innate;
 
   PsychicData copy() {
     return PsychicData(

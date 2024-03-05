@@ -9,50 +9,50 @@ import 'package:flutter/services.dart';
 import 'package:hive/hive.dart';
 
 class NonPlayerCharactersState extends ChangeNotifier {
-  late Box<Character> _box;
-  List<Character> characters = [];
 
   NonPlayerCharactersState() {
     initAsync();
   }
+  late Box<Character> _box;
+  List<Character> characters = [];
 
-  void initAsync() async {
+  Future<void> initAsync() async {
     try {
       _box = await Hive.openBox('non_player_characters');
       characters.addAll(_box.values.toList());
 
       if (characters.isEmpty) {
-        var preloadedNPC = await loadNpc();
+        final preloadedNPC = await loadNpc();
         characters.addAll(preloadedNPC);
-        for (var element in preloadedNPC) {
-          _box.add(element);
+        for (final element in preloadedNPC) {
+          await _box.add(element);
         }
       }
 
-      print("Loaded NPCS: ${characters.length}");
+      Logger().d('Loaded NPCS: ${characters.length}');
       notifyListeners();
     } catch (e) {
-      Hive.deleteBoxFromDisk('non_player_characters');
+      await Hive.deleteBoxFromDisk('non_player_characters');
       _box = await Hive.openBox('non_player_characters');
       notifyListeners();
-      print(e);
+      Logger().d(e);
     }
 
-    print("Loaded NPCS: ${characters.length}");
+    Logger().d('Loaded NPCS: ${characters.length}');
   }
 
   Future<List<Character>> loadNpc() async {
-    var charactersString = await rootBundle.loadString(
+    final charactersString = await rootBundle.loadString(
       'assets/characters.json',
     );
 
-    var charactersWrapper = CharacterList.fromJson(jsonDecode(charactersString));
+    final charactersWrapper = CharacterList.fromJson(jsonDecode(charactersString));
 
     return charactersWrapper.characters;
   }
 
-  void getCharacters() async {
-    FilePickerResult? result = await FilePicker.platform.pickFiles(
+  Future<void> getCharacters() async {
+    final var result = await FilePicker.platform.pickFiles(
       type: FileType.custom,
       allowedExtensions: ['json'],
       allowMultiple: true,
@@ -62,25 +62,25 @@ class NonPlayerCharactersState extends ChangeNotifier {
       if (result != null) {
         if (result.files.first.bytes != null) {
           // For web
-          List<String> files = result.files.map((file) => Windows1252Codec().decode(file.bytes!.toList())).toList();
+          final var files = result.files.map((file) => const Windows1252Codec().decode(file.bytes!.toList())).toList();
 
-          for (var file in files) {
-            var character = Character.fromJson(jsonDecode(file));
+          for (final file in files) {
+            final character = Character.fromJson(jsonDecode(file));
             characters.add(character);
-            _box.add(character);
+            await _box.add(character);
           }
         } else {
           // For desktop
-          List<File> files = result.paths.map((path) => File(path ?? "")).toList();
+          final files = result.paths.map((path) => File(path ?? '')).toList();
 
-          for (var file in files) {
-            final json = await file.readAsString(encoding: Windows1252Codec());
-            var character = Character.fromJson(jsonDecode(json));
-            print(character.toString());
+          for (final file in files) {
+            final json = await file.readAsString(encoding: const Windows1252Codec());
+            final character = Character.fromJson(jsonDecode(json));
+            Logger().d(character);
             characters.add(character);
-            print("character added");
+            Logger().d('character added');
 
-            _box.add(character);
+            await _box.add(character);
           }
         }
       }

@@ -4,9 +4,9 @@ import 'package:amt/models/armour.dart';
 
 class Armours {
   static List<Armour> getPresetArmours() {
-    var modifiers = <Armour>[];
+    final modifiers = <Armour>[];
 
-    var json = jsonDecode(_presets);
+    final json = jsonDecode(_presets);
 
     if (json != null) {
       json.forEach((v) {

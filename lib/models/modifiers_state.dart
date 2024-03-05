@@ -20,7 +20,7 @@ class ModifiersState {
   }
 
   bool containsModifier(StatusModifier modifier) {
-    for (var element in _modifiers) {
+    for (final element in _modifiers) {
       if (element.name == modifier.name) {
         return true;
       }
@@ -41,18 +41,18 @@ class ModifiersState {
   }
 
   String totalAttackingDescription() {
-    StatusModifier totalModifier = StatusModifier(name: "total");
-    for (var modifier in _modifiers) {
+    final var totalModifier = StatusModifier(name: 'total');
+    for (final modifier in _modifiers) {
       totalModifier.attack = totalModifier.attack + modifier.attack;
     }
 
-    return totalModifier.description().isEmpty ? "0" : totalModifier.description();
+    return totalModifier.description().isEmpty ? '0' : totalModifier.description();
   }
 
   String totalDefendingDescription(DefenseType type) {
-    StatusModifier totalModifier = StatusModifier(name: "total");
+    final var totalModifier = StatusModifier(name: 'total');
 
-    for (var modifier in _modifiers) {
+    for (final modifier in _modifiers) {
       totalModifier.attack = totalModifier.attack + modifier.attack;
     }
 
@@ -62,7 +62,7 @@ class ModifiersState {
   int getAllModifiersForType(ModifiersType type) {
     var total = 0;
 
-    for (var modifier in _modifiers) {
+    for (final modifier in _modifiers) {
       switch (type) {
         case ModifiersType.attack:
           total = total + modifier.attack;
@@ -85,9 +85,9 @@ class ModifiersState {
   }
 
   String getAllModifiersForTypeString(ModifiersType type) {
-    var total = "";
+    var total = '';
 
-    for (var modifier in _modifiers) {
+    for (final modifier in _modifiers) {
       switch (type) {
         case ModifiersType.attack:
           if (modifier.attack != 0) {
@@ -118,7 +118,7 @@ class ModifiersState {
   int getAllModifiersForDefense(DefenseType type) {
     var total = 0;
 
-    for (var modifier in _modifiers) {
+    for (final modifier in _modifiers) {
       switch (type) {
         case DefenseType.parry:
           total = total + modifier.parry;
@@ -131,8 +131,8 @@ class ModifiersState {
   }
 
   StatusModifier totalModifier() {
-    StatusModifier totalModifier = StatusModifier(name: "total");
-    for (var modifier in _modifiers) {
+    final totalModifier = StatusModifier(name: 'total');
+    for (final modifier in _modifiers) {
       totalModifier.attack = totalModifier.attack + modifier.attack;
       totalModifier.dodge = totalModifier.dodge + modifier.dodge;
       totalModifier.parry = totalModifier.parry + modifier.parry;

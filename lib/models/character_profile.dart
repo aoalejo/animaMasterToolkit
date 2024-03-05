@@ -3,8 +3,38 @@ import 'package:hive/hive.dart';
 
 part 'character_profile.g.dart';
 
-@HiveType(typeId: 2, adapterName: "CharacterProfileAdapter")
+@HiveType(typeId: 2, adapterName: 'CharacterProfileAdapter')
 class CharacterProfile {
+
+  CharacterProfile({
+    this.fatigue = 6,
+    this.hitPoints = 60,
+    this.regeneration = 1,
+    this.name = '',
+    this.category = '',
+    this.level = '',
+    this.kind = '',
+    this.speed = 6,
+    this.isNpc = false,
+    this.image = '',
+    this.fumbleLevel = 3,
+    this.nature = 5,
+  });
+
+  CharacterProfile.fromJson(Map<String, dynamic> json) {
+    fatigue = JsonUtils.integer(json['cansancio'], 6);
+    hitPoints = JsonUtils.integer(json['puntosDeVida'], 60);
+    regeneration = JsonUtils.integer(json['regeneracion'], 1);
+    name = json['nombre'] ?? '';
+    category = json['categoria'] ?? '';
+    level = json['nivel'] ?? '';
+    kind = json['clase'] ?? '';
+    speed = JsonUtils.integer(json['movimiento'], 6);
+    isNpc = false;
+    image = json['imagen'] ?? '';
+    fumbleLevel = JsonUtils.integer(json['nivelDePifia'], 3);
+    nature = JsonUtils.integer(json['natura'], 5);
+  }
   @HiveField(0)
   late int fatigue;
   @HiveField(1)
@@ -29,36 +59,6 @@ class CharacterProfile {
   late int? fumbleLevel;
   @HiveField(11)
   late int? nature;
-
-  CharacterProfile({
-    this.fatigue = 6,
-    this.hitPoints = 60,
-    this.regeneration = 1,
-    this.name = "",
-    this.category = "",
-    this.level = "",
-    this.kind = "",
-    this.speed = 6,
-    this.isNpc = false,
-    this.image = "",
-    this.fumbleLevel = 3,
-    this.nature = 5,
-  });
-
-  CharacterProfile.fromJson(Map<String, dynamic> json) {
-    fatigue = JsonUtils.integer(json['cansancio'], 6);
-    hitPoints = JsonUtils.integer(json['puntosDeVida'], 60);
-    regeneration = JsonUtils.integer(json['regeneracion'], 1);
-    name = json['nombre'] ?? "";
-    category = json['categoria'] ?? "";
-    level = json['nivel'] ?? "";
-    kind = json['clase'] ?? "";
-    speed = JsonUtils.integer(json['movimiento'], 6);
-    isNpc = false;
-    image = json['imagen'] ?? "";
-    fumbleLevel = JsonUtils.integer(json['nivelDePifia'], 3);
-    nature = JsonUtils.integer(json['natura'], 5);
-  }
 
   CharacterProfile copy({bool? isNpc, int? number}) {
     return CharacterProfile(

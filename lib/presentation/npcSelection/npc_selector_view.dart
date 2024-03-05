@@ -1,6 +1,6 @@
 import 'package:amt/models/character/character.dart';
-import 'package:amt/presentation/npcSelection/npc_card_view.dart';
 import 'package:amt/presentation/components/components.dart';
+import 'package:amt/presentation/npcSelection/npc_card_view.dart';
 import 'package:flutter/material.dart';
 
 class NPCSelector {
@@ -13,8 +13,8 @@ class NPCSelector {
     required Function() onAddNpc,
     required Function(Character) onRemove,
   }) {
-    var characters0 = characters;
-    var filter = "";
+    final characters0 = characters;
+    var filter = '';
 
     showDialog(
       context: context,
@@ -24,20 +24,19 @@ class NPCSelector {
             return AlertDialog(
               title: Row(
                 children: [
-                  Expanded(child: Text("Añadir NPC")),
+                  const Expanded(child: Text('Añadir NPC')),
                   Flexible(
-                      flex: 1,
                       child: AMTTextFormField(
-                        suffixIcon: Icon(Icons.search),
+                        suffixIcon: const Icon(Icons.search),
                         text: filter,
                         onChanged: (newFilter) => setState(() => filter = newFilter),
-                      )),
+                      ),),
                   IconButton(
                     onPressed: () {
                       Navigator.pop(context);
                       onAddNpc();
                     },
-                    icon: Icon(Icons.upload_file),
+                    icon: const Icon(Icons.upload_file),
                   ),
                   IconButton(
                     onPressed: () {
@@ -46,29 +45,29 @@ class NPCSelector {
                         context: context,
                         builder: (context) {
                           return AlertDialog(
-                            title: Text("Borrar todos los NPC"),
-                            content: Text("¿seguro que desea borrar todos los NPC de la lista de personajes activos?"),
+                            title: const Text('Borrar todos los NPC'),
+                            content: const Text('¿seguro que desea borrar todos los NPC de la lista de personajes activos?'),
                             actions: [
                               OutlinedButton(
                                 onPressed: () {
                                   Navigator.pop(context);
                                   onRemoveAll();
                                 },
-                                child: Text("Borrar"),
+                                child: const Text('Borrar'),
                               ),
                               TextButton(
                                 onPressed: () {
                                   Navigator.pop(context);
                                 },
-                                child: Text("Cancelar"),
-                              )
+                                child: const Text('Cancelar'),
+                              ),
                             ],
                           );
                         },
                       );
                     },
-                    icon: Icon(Icons.delete),
-                  )
+                    icon: const Icon(Icons.delete),
+                  ),
                 ],
               ),
               actions: [
@@ -76,7 +75,7 @@ class NPCSelector {
                     onPressed: () {
                       Navigator.pop(context);
                     },
-                    child: Text("Cerrar"))
+                    child: const Text('Cerrar'),),
               ],
               content: SizedBox(
                 height: 500,
@@ -85,7 +84,7 @@ class NPCSelector {
                   crossAxisCount: 1,
                   childAspectRatio: 1.5,
                   children: [
-                    for (var character in characters0.where((element) => element.isOn(filter)))
+                    for (final character in characters0.where((element) => element.isOn(filter)))
                       CharacterNPCCard(
                         character,
                         theme,

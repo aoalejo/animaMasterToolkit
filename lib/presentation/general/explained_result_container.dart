@@ -3,26 +3,23 @@ import 'package:flutter/material.dart';
 import 'package:flutter_tags_x/flutter_tags_x.dart';
 
 class ExplainedTextContainer extends StatelessWidget {
+
+  const ExplainedTextContainer({required this.info, required this.explanationsExpanded, required this.onExpanded, super.key,
+    this.parent = '',
+    this.hierarchy = 1,
+  });
   final ExplainedText info;
   final int hierarchy;
   final Map<String, bool> explanationsExpanded;
   final Function(String) onExpanded;
   final String parent;
 
-  ExplainedTextContainer({
-    required this.info,
-    required this.explanationsExpanded,
-    required this.onExpanded,
-    this.parent = "",
-    this.hierarchy = 1,
-  });
-
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    String titleForStatus = parent + info.title;
-    bool hasToBeExpanded = explanationsExpanded[titleForStatus] ?? false;
+    final titleForStatus = parent + info.title;
+    final hasToBeExpanded = explanationsExpanded[titleForStatus] ?? false;
 
     return Card(
       clipBehavior: Clip.hardEdge,
@@ -40,12 +37,12 @@ class ExplainedTextContainer extends StatelessWidget {
                   children: [
                     Expanded(
                         child: Padding(
-                      padding: EdgeInsets.all(6),
+                      padding: const EdgeInsets.all(6),
                       child: Text(
                         info.text,
                         style: theme.textTheme.bodyMedium!.copyWith(fontWeight: FontWeight.bold),
                       ),
-                    )),
+                    ),),
                     if (info.explanation.isNotEmpty || info.explanations.isNotEmpty)
                       IconButton(
                         visualDensity: VisualDensity.compact,
@@ -60,14 +57,14 @@ class ExplainedTextContainer extends StatelessWidget {
                 ),
                 if (hasToBeExpanded)
                   Padding(
-                    padding: EdgeInsets.all(4),
+                    padding: const EdgeInsets.all(4),
                     child: Text(
                       info.explanation,
                       style: theme.textTheme.bodySmall!.copyWith(fontStyle: FontStyle.italic, fontWeight: FontWeight.w600),
                     ),
                   ),
                 if (hasToBeExpanded)
-                  for (var explanation in info.explanations)
+                  for (final explanation in info.explanations)
                     ExplainedTextContainer(
                       onExpanded: onExpanded,
                       explanationsExpanded: explanationsExpanded,
@@ -77,7 +74,7 @@ class ExplainedTextContainer extends StatelessWidget {
                     ),
                 if (hasToBeExpanded)
                   Padding(
-                    padding: EdgeInsets.all(4),
+                    padding: const EdgeInsets.all(4),
                     child: Tags(
                       spacing: 2,
                       runSpacing: 4,
@@ -90,12 +87,11 @@ class ExplainedTextContainer extends StatelessWidget {
                           pressEnabled: false,
                           index: index,
                           activeColor: Colors.black54,
-                          textActiveColor: Colors.white,
                           alignment: MainAxisAlignment.spaceBetween,
-                          padding: EdgeInsets.symmetric(vertical: 5, horizontal: 4),
+                          padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 4),
                           borderRadius: BorderRadius.circular(8),
                           elevation: 1,
-                          title: "${info.references[index].bookName} P${info.references[index].page}",
+                          title: '${info.references[index].bookName} P${info.references[index].page}',
                         );
                       },
                     ),

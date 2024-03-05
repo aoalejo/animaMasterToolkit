@@ -5,21 +5,8 @@ import 'package:hive/hive.dart';
 
 part 'combat_data.g.dart';
 
-@HiveType(typeId: 5, adapterName: "CombatDataAdapter")
+@HiveType(typeId: 5, adapterName: 'CombatDataAdapter')
 class CombatData {
-  @HiveField(0)
-  late List<Weapon> weapons;
-  @HiveField(1)
-  late ArmourData armour;
-
-  updateWeapon(Weapon weapon) {
-    for (var i = 0; i > weapons.length; i++) {
-      if (weapons[i].name == weapon.name) {
-        weapons[i] = weapon;
-        return;
-      }
-    }
-  }
 
   CombatData({required this.armour, required this.weapons});
 
@@ -32,6 +19,19 @@ class CombatData {
     }
 
     armour = json['armadura'] != null ? ArmourData.fromJson(json['armadura']) : ArmourData(calculatedArmour: Armour(), armours: []);
+  }
+  @HiveField(0)
+  late List<Weapon> weapons;
+  @HiveField(1)
+  late ArmourData armour;
+
+  void updateWeapon(Weapon weapon) {
+    for (var i = 0; i > weapons.length; i++) {
+      if (weapons[i].name == weapon.name) {
+        weapons[i] = weapon;
+        return;
+      }
+    }
   }
 
   CombatData copy() {

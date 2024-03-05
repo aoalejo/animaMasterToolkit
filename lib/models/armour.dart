@@ -4,8 +4,53 @@ import 'package:hive/hive.dart';
 
 part 'armour.g.dart';
 
-@HiveType(typeId: 8, adapterName: "ArmourAdapter")
+@HiveType(typeId: 8, adapterName: 'ArmourAdapter')
 class Armour {
+  Armour({
+    this.name,
+    this.location,
+    this.quality,
+    this.fil = 0,
+    this.con = 0,
+    this.pen = 0,
+    this.cal = 0,
+    this.ele = 0,
+    this.fri = 0,
+    this.ene = 0,
+    this.endurance,
+    this.presence,
+    this.movementRestriction,
+    this.enchanted,
+  });
+
+  Armour.fromJson(Map<String, dynamic> json) {
+    name = json['nombre'].toString();
+    location = JsonUtils.armourLocation(json['Localizacion']);
+    quality = JsonUtils.integer(json['calidad'], 0);
+    fil = JsonUtils.integer(json['FIL'], 2);
+    con = JsonUtils.integer(json['CON'], 2);
+    pen = JsonUtils.integer(json['PEN'], 2);
+    cal = JsonUtils.integer(json['CAL'], 2);
+    ele = JsonUtils.integer(json['ELE'], 2);
+    fri = JsonUtils.integer(json['FRI'], 2);
+    ene = JsonUtils.integer(json['ENE'], 2);
+    endurance = JsonUtils.integer(json['Entereza'], 10);
+    presence = JsonUtils.integer(json['Presencia'], 10);
+    movementRestriction = JsonUtils.integer(json['RestMov'], 0);
+    enchanted = json['Enc'].toString() == 'Si';
+  }
+
+  Armour.fromValue({required String name, required int physical, required int energy}) {
+    name = name;
+    fil = physical;
+    con = physical;
+    pen = physical;
+    cal = physical;
+    ele = physical;
+    fri = physical;
+    ene = energy;
+    endurance = 99;
+  }
   @HiveField(0)
   String? name;
   @HiveField(1)
@@ -35,22 +80,6 @@ class Armour {
   @HiveField(13)
   bool? enchanted;
 
-  Armour(
-      {this.name,
-      this.location,
-      this.quality,
-      this.fil = 0,
-      this.con = 0,
-      this.pen = 0,
-      this.cal = 0,
-      this.ele = 0,
-      this.fri = 0,
-      this.ene = 0,
-      this.endurance,
-      this.presence,
-      this.movementRestriction,
-      this.enchanted});
-
   int armourFor(DamageTypes damage) {
     switch (damage) {
       case DamageTypes.fil:
@@ -71,10 +100,10 @@ class Armour {
   }
 
   String description() {
-    return "Fil: $fil Con: $con Pen: $pen Cal: $cal Ele: $ele Fri: $fri Ene: $ene";
+    return 'Fil: $fil Con: $con Pen: $pen Cal: $cal Ele: $ele Fri: $fri Ene: $ene';
   }
 
-  changeForAll({required int add}) {
+  void changeForAll({required int add}) {
     fil = fil + add;
     con = con + add;
     pen = pen + add;
@@ -82,34 +111,5 @@ class Armour {
     ele = ele + add;
     fri = fri + add;
     ene = ene + add;
-  }
-
-  Armour.fromJson(Map<String, dynamic> json) {
-    name = json['nombre'];
-    location = JsonUtils.armourLocation(json['Localizacion']);
-    quality = JsonUtils.integer(json['calidad'], 0);
-    fil = JsonUtils.integer(json['FIL'], 2);
-    con = JsonUtils.integer(json['CON'], 2);
-    pen = JsonUtils.integer(json['PEN'], 2);
-    cal = JsonUtils.integer(json['CAL'], 2);
-    ele = JsonUtils.integer(json['ELE'], 2);
-    fri = JsonUtils.integer(json['FRI'], 2);
-    ene = JsonUtils.integer(json['ENE'], 2);
-    endurance = JsonUtils.integer(json['Entereza'], 10);
-    presence = JsonUtils.integer(json['Presencia'], 10);
-    movementRestriction = JsonUtils.integer(json['RestMov'], 0);
-    enchanted = json['Enc'].toString() == "Si";
-  }
-
-  Armour.fromValue({required String name, required int physical, required int energy}) {
-    name = name;
-    fil = physical;
-    con = physical;
-    pen = physical;
-    cal = physical;
-    ele = physical;
-    fri = physical;
-    ene = energy;
-    endurance = 99;
   }
 }

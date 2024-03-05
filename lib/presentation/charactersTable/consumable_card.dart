@@ -4,17 +4,14 @@ import 'package:amt/presentation/components/components.dart';
 import 'package:flutter/material.dart';
 
 class ConsumableCard extends StatelessWidget {
+
+  const ConsumableCard(
+    this.consumable, {required this.onChangedMax, required this.onChangedActual, required this.onDelete, super.key,
+  });
   final ConsumableState consumable;
   final void Function(String) onChangedMax;
   final void Function(String) onChangedActual;
   final void Function(ConsumableState) onDelete;
-
-  ConsumableCard(
-    this.consumable, {
-    required this.onChangedMax,
-    required this.onChangedActual,
-    required this.onDelete,
-  });
 
   @override
   Widget build(BuildContext context) {
@@ -23,14 +20,14 @@ class ConsumableCard extends StatelessWidget {
     final styleS = theme.textTheme.bodySmall;
     final styleM = theme.textTheme.bodyMedium;
 
-    var header = Padding(
-      padding: EdgeInsets.fromLTRB(8, 4, 8, 0),
+    final header = Padding(
+      padding: const EdgeInsets.fromLTRB(8, 4, 8, 0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           if (consumable.type == ConsumableType.other)
             InkWell(
-              child: Icon(
+              child: const Icon(
                 Icons.delete,
                 size: 14,
                 color: Colors.grey,
@@ -40,25 +37,25 @@ class ConsumableCard extends StatelessWidget {
                     context: context,
                     builder: (context) {
                       return AlertDialog(
-                        title: Text("Borrar consumible"),
-                        content: Text("Seguro que desea borrar ${consumable.name}?"),
+                        title: const Text('Borrar consumible'),
+                        content: Text('Seguro que desea borrar ${consumable.name}?'),
                         actions: [
                           OutlinedButton(
                             onPressed: () {
                               Navigator.pop(context);
                               onDelete(consumable);
                             },
-                            child: Text("Borrar"),
+                            child: const Text('Borrar'),
                           ),
                           TextButton(
                             onPressed: () {
                               Navigator.pop(context);
                             },
-                            child: Text("Cancelar"),
-                          )
+                            child: const Text('Cancelar'),
+                          ),
                         ],
                       );
-                    });
+                    },);
               },
             ),
           Expanded(
@@ -70,12 +67,10 @@ class ConsumableCard extends StatelessWidget {
               overflow: TextOverflow.ellipsis,
             ),
           ),
-          consumable.step > 0 || consumable.description.isNotEmpty
-              ? Icon(
+          if (consumable.step > 0 || consumable.description.isNotEmpty) const Icon(
                   Icons.info,
                   size: 16,
-                )
-              : SizedBox.square(dimension: 16),
+                ) else const SizedBox.square(dimension: 16),
         ],
       ),
     );
@@ -83,26 +78,23 @@ class ConsumableCard extends StatelessWidget {
     return Card(
       color: theme.colorScheme.secondaryContainer,
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          consumable.step > 0 || consumable.description.isNotEmpty
-              ? Tooltip(
+          if (consumable.step > 0 || consumable.description.isNotEmpty) Tooltip(
                   textAlign: TextAlign.center,
                   message:
-                      '${consumable.step > 0 ? 'incremento: ${consumable.step.toString()}\n' : ''}${consumable.description.isNotEmpty ? consumable.description : ''}',
-                  child: header)
-              : header,
+                      '${consumable.step > 0 ? 'incremento: ${consumable.step}\n' : ''}${consumable.description.isNotEmpty ? consumable.description : ''}',
+                  child: header,) else header,
           Row(
             children: [
               IconButton(
                   onPressed: () {
                     onChangedActual((consumable.actualValue - consumable.step).toString());
                   },
-                  icon: Icon(Icons.remove)),
+                  icon: const Icon(Icons.remove),),
               Expanded(
                   child: AMTTextFormField(
                 align: TextAlign.center,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   isDense: true,
                   border: InputBorder.none,
                   contentPadding: EdgeInsets.all(4),
@@ -110,12 +102,12 @@ class ConsumableCard extends StatelessWidget {
                 style: consumable.actualValue > 999 ? styleS : styleM,
                 text: consumable.actualValue.toString(),
                 onChanged: onChangedActual,
-              )),
-              Text("/"),
+              ),),
+              const Text('/'),
               Expanded(
                 child: AMTTextFormField(
                   align: TextAlign.center,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     isDense: true,
                     border: InputBorder.none,
                     contentPadding: EdgeInsets.all(4),
@@ -129,9 +121,9 @@ class ConsumableCard extends StatelessWidget {
                   onPressed: () {
                     onChangedActual((consumable.actualValue + consumable.step).toString());
                   },
-                  icon: Icon(Icons.add)),
+                  icon: const Icon(Icons.add),),
             ],
-          )
+          ),
         ],
       ),
     );

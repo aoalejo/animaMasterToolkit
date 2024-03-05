@@ -20,7 +20,7 @@ class Modifiers {
   static List<StatusModifier> getSituationalModifiers(ModifiersType type) {
     var modifiers = <StatusModifier>[];
 
-    var json = jsonDecode(_valuesSituational);
+    final json = jsonDecode(_valuesSituational);
 
     if (json != null) {
       json.forEach((v) {
@@ -45,9 +45,9 @@ class Modifiers {
   }
 
   static List<StatusModifier> getStatusModifiers() {
-    var modifiers = <StatusModifier>[];
+    final modifiers = <StatusModifier>[];
 
-    var json = jsonDecode(_values);
+    final json = jsonDecode(_values);
 
     if (json != null) {
       json.forEach((v) {
@@ -58,7 +58,7 @@ class Modifiers {
     return modifiers;
   }
 
-  static var _valuesSituational = """
+  static const _valuesSituational = '''
 [
   { "name": "Cuello (Apuntado)", "attack":"-80" },
 { "name": "Cabeza (Apuntado)", "attack":"-60" },
@@ -253,9 +253,9 @@ class Modifiers {
     "physicalAction": 0
   }
 ]
-""";
+''';
 
-  static var _values = """
+  static const _values = '''
 [
 { "name": "4 puntos restantes de cansancio", "attack":"-10", "parry": -10, "dodge": -10, "turn": -10, "physicalAction": -10},
 { "name": "3 puntos restantes de cansancio", "attack":"-20", "parry": -20, "dodge": -20, "turn": -20, "physicalAction": -20},
@@ -381,5 +381,5 @@ class Modifiers {
     "physicalAction": 0
   }
 ]
-""";
+''';
 }

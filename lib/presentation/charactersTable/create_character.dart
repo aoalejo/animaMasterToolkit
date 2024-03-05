@@ -18,21 +18,21 @@ import 'package:uuid/uuid.dart';
 
 class CreateCharacter {
   static show(BuildContext context, Function(Character) onCreated) {
-    var name = "";
-    var fumble = "3";
-    var nature = "5";
-    var life = "125";
-    var fatigue = "7";
-    var zeon = "";
-    var ki = "";
-    var cv = "";
-    var turn = "35";
-    var attack = "90";
-    var damage = "50";
-    var defense = "90";
-    var armour = "2";
-    var armourEnergy = "0";
-    var physicalResistance = "40";
+    var name = '';
+    var fumble = '3';
+    var nature = '5';
+    var life = '125';
+    var fatigue = '7';
+    var zeon = '';
+    var ki = '';
+    var cv = '';
+    var turn = '35';
+    var attack = '90';
+    var damage = '50';
+    var defense = '90';
+    var armour = '2';
+    var armourEnergy = '0';
+    var physicalResistance = '40';
     var defenseType = DefenseType.parry;
     var principalDamage = DamageTypes.con;
 
@@ -41,7 +41,7 @@ class CreateCharacter {
       builder: (BuildContext context) {
         return StatefulBuilder(
           builder: (context, setState) => AMTBottomSheet(
-            title: Text('Crear nuevo personaje'),
+            title: const Text('Crear nuevo personaje'),
             bottomRow: [
               ElevatedButton(
                   child: const Text('Guardar'),
@@ -68,7 +68,7 @@ class CreateCharacter {
                       ),
                     );
                     Navigator.pop(context);
-                  }),
+                  },),
               ElevatedButton(
                 child: const Text('Cerrar'),
                 onPressed: () => Navigator.pop(context),
@@ -78,14 +78,14 @@ class CreateCharacter {
               ..._row(
                 [
                   AMTTextFormField(
-                    label: "Nombre",
+                    label: 'Nombre',
                     text: name,
                     onChanged: (value) => setState(
                       () => name = value,
                     ),
                   ),
                   AMTTextFormField(
-                    label: "Pifia",
+                    label: 'Pifia',
                     text: fumble,
                     inputType: TextInputType.number,
                     onChanged: (value) => setState(
@@ -93,7 +93,7 @@ class CreateCharacter {
                     ),
                   ),
                   AMTTextFormField(
-                    label: "Natura",
+                    label: 'Natura',
                     text: nature,
                     inputType: TextInputType.number,
                     onChanged: (value) => setState(
@@ -103,13 +103,13 @@ class CreateCharacter {
                 ],
               ),
               _separator,
-              Text(
-                "Detalles",
+              const Text(
+                'Detalles',
                 textAlign: TextAlign.center,
               ),
               ..._row([
                 AMTTextFormField(
-                  label: "Vida",
+                  label: 'Vida',
                   text: life,
                   inputType: TextInputType.number,
                   onChanged: (value) => setState(
@@ -117,7 +117,7 @@ class CreateCharacter {
                   ),
                 ),
                 AMTTextFormField(
-                  label: "Cansancio",
+                  label: 'Cansancio',
                   inputType: TextInputType.number,
                   text: fatigue,
                   onChanged: (value) => setState(
@@ -127,7 +127,7 @@ class CreateCharacter {
               ]),
               ..._row([
                 AMTTextFormField(
-                  label: "Zeon",
+                  label: 'Zeon',
                   text: zeon,
                   inputType: TextInputType.number,
                   onChanged: (value) => setState(
@@ -135,7 +135,7 @@ class CreateCharacter {
                   ),
                 ),
                 AMTTextFormField(
-                  label: "Ki",
+                  label: 'Ki',
                   inputType: TextInputType.number,
                   text: ki,
                   onChanged: (value) => setState(
@@ -143,7 +143,7 @@ class CreateCharacter {
                   ),
                 ),
                 AMTTextFormField(
-                  label: "CV",
+                  label: 'CV',
                   inputType: TextInputType.number,
                   text: cv,
                   onChanged: (value) => setState(
@@ -152,13 +152,13 @@ class CreateCharacter {
                 ),
               ]),
               _separator,
-              Text(
-                "Combate",
+              const Text(
+                'Combate',
                 textAlign: TextAlign.center,
               ),
               ..._row([
                 AMTTextFormField(
-                  label: "Turno",
+                  label: 'Turno',
                   text: turn,
                   inputType: TextInputType.number,
                   onChanged: (value) => setState(
@@ -166,7 +166,7 @@ class CreateCharacter {
                   ),
                 ),
                 AMTTextFormField(
-                  label: "Ataque",
+                  label: 'Ataque',
                   text: attack,
                   inputType: TextInputType.number,
                   onChanged: (value) => setState(
@@ -174,7 +174,7 @@ class CreateCharacter {
                   ),
                 ),
                 AMTTextFormField(
-                  label: "Daño",
+                  label: 'Daño',
                   text: damage,
                   inputType: TextInputType.number,
                   onChanged: (value) => setState(
@@ -182,7 +182,7 @@ class CreateCharacter {
                   ),
                 ),
                 AMTTextFormField(
-                  label: "RF",
+                  label: 'RF',
                   text: physicalResistance,
                   inputType: TextInputType.number,
                   onChanged: (value) => setState(
@@ -206,16 +206,16 @@ class CreateCharacter {
                   onPressed: (index) => {
                     setState(
                       () => principalDamage = DamageTypes.values[index],
-                    )
+                    ),
                   },
-                  children: [
-                    Text("fil"),
-                    Text("pen"),
-                    Text("con"),
-                    Text("fri"),
-                    Text("cal"),
-                    Text("ele"),
-                    Text("ene"),
+                  children: const [
+                    Text('fil'),
+                    Text('pen'),
+                    Text('con'),
+                    Text('fri'),
+                    Text('cal'),
+                    Text('ele'),
+                    Text('ene'),
                   ],
                 ),
               ),
@@ -223,7 +223,7 @@ class CreateCharacter {
               ..._row(
                 [
                   AMTTextFormField(
-                    label: "Defensa",
+                    label: 'Defensa',
                     text: defense,
                     inputType: TextInputType.number,
                     onChanged: (value) => setState(
@@ -231,7 +231,7 @@ class CreateCharacter {
                     ),
                   ),
                   AMTTextFormField(
-                    label: "TA",
+                    label: 'TA',
                     inputType: TextInputType.number,
                     text: armour,
                     onChanged: (value) => setState(
@@ -239,7 +239,7 @@ class CreateCharacter {
                     ),
                   ),
                   AMTTextFormField(
-                    label: "TA Energia",
+                    label: 'TA Energia',
                     inputType: TextInputType.number,
                     text: armourEnergy,
                     onChanged: (value) => setState(
@@ -255,11 +255,11 @@ class CreateCharacter {
                     onPressed: (index) => {
                       setState(
                         () => defenseType = DefenseType.values[index],
-                      )
+                      ),
                     },
-                    children: [
-                      Padding(padding: EdgeInsets.all(8), child: Text("Parada")),
-                      Padding(padding: EdgeInsets.all(8), child: Text("Esquiva")),
+                    children: const [
+                      Padding(padding: EdgeInsets.all(8), child: Text('Parada')),
+                      Padding(padding: EdgeInsets.all(8), child: Text('Esquiva')),
                     ],
                   ),
                 ],
@@ -290,25 +290,25 @@ class CreateCharacter {
     DefenseType defenseType,
     DamageTypes principalDamage,
   ) {
-    List<ConsumableState> consumables = [];
+    final var consumables = <ConsumableState>[];
 
-    consumables.add(ConsumableState.from(name: "Vida", value: life.intValue, type: ConsumableType.hitPoints));
-    consumables.add(ConsumableState.from(name: "Cansancio", value: fatigue.intValue, type: ConsumableType.fatigue));
+    consumables.add(ConsumableState.from(name: 'Vida', value: life.intValue, type: ConsumableType.hitPoints));
+    consumables.add(ConsumableState.from(name: 'Cansancio', value: fatigue.intValue, type: ConsumableType.fatigue));
 
     if (ki.isNotEmpty) {
-      consumables.add(ConsumableState.from(name: "Ki", value: ki.intValue, type: ConsumableType.other));
+      consumables.add(ConsumableState.from(name: 'Ki', value: ki.intValue, type: ConsumableType.other));
     }
 
     if (cv.isNotEmpty) {
-      consumables.add(ConsumableState.from(name: "Cv", value: cv.intValue, type: ConsumableType.other));
+      consumables.add(ConsumableState.from(name: 'Cv', value: cv.intValue, type: ConsumableType.other));
     }
 
     if (zeon.isNotEmpty) {
-      consumables.add(ConsumableState.from(name: "Zeon", value: zeon.intValue, type: ConsumableType.other));
+      consumables.add(ConsumableState.from(name: 'Zeon', value: zeon.intValue, type: ConsumableType.other));
     }
 
     return Character(
-        uuid: Uuid().v4(),
+        uuid: const Uuid().v4(),
         attributes: AttributesList.withDefault(6),
         skills: Map.fromEntries([]),
         profile: CharacterProfile(
@@ -320,15 +320,15 @@ class CreateCharacter {
         combat: CombatData(
           armour: ArmourData(
             calculatedArmour: Armour.fromValue(
-              name: "Armadura",
+              name: 'Armadura',
               physical: armour.intValue,
               energy: armourEnergy.intValue,
             ),
-            armours: [Armour(name: "Armadura")],
+            armours: [Armour(name: 'Armadura')],
           ),
           weapons: [
             Weapon(
-              name: "Arma",
+              name: 'Arma',
               turn: turn.intValue,
               attack: attack.intValue,
               defense: defense.intValue,
@@ -336,7 +336,7 @@ class CreateCharacter {
               damage: damage.intValue,
               principalDamage: principalDamage,
               secondaryDamage: principalDamage,
-            )
+            ),
           ],
         ),
         state: CharacterState(
@@ -347,7 +347,7 @@ class CreateCharacter {
         ki: null,
         mystical: null,
         psychic: null,
-        resistances: CharacterResistances.withDefault(physicalResistance.intValue));
+        resistances: CharacterResistances.withDefault(physicalResistance.intValue),);
   }
 
   static const _separator = SizedBox(
@@ -356,12 +356,12 @@ class CreateCharacter {
   );
 
   static List<Widget> _row(List<Widget> children) {
-    List<Widget> list = [];
+    final list = <Widget>[];
 
-    children.forEach((element) {
+    for (final element in children) {
       list.add(_separator);
       list.add(Expanded(child: element));
-    });
+    }
 
     return [_separator, Row(children: list)];
   }

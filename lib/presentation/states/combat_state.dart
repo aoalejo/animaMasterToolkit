@@ -6,34 +6,34 @@ import 'package:amt/resources/modifiers.dart';
 import 'package:amt/utils/explained_text.dart';
 
 class ScreenCombatStateAttack {
-  var roll = "";
-  var damage = "";
-  var attack = "";
+  String roll = '';
+  String damage = '';
+  String attack = '';
 
-  var damageType = DamageTypes.ene;
+  DamageTypes damageType = DamageTypes.ene;
   Character? character;
 
   ModifiersState modifiers = ModifiersState();
 }
 
 class ScreenCombatStateDefense {
-  var roll = "";
-  var armour = "";
-  var defense = "";
+  String roll = '';
+  String armour = '';
+  String defense = '';
 
-  var defenseType = DefenseType.parry;
+  DefenseType defenseType = DefenseType.parry;
   Character? character;
 
   ModifiersState modifiers = ModifiersState();
 }
 
 class ScreenCombatStateCritical {
-  var criticalRoll = "";
-  var localizationRoll = "";
-  var physicalResistanceBase = "";
-  var physicalResistanceRoll = "";
-  var damageDone = "";
-  var modifierReduction = "";
+  String criticalRoll = '';
+  String localizationRoll = '';
+  String physicalResistanceBase = '';
+  String physicalResistanceRoll = '';
+  String damageDone = '';
+  String modifierReduction = '';
 }
 
 class ScreenCombatState {
@@ -89,28 +89,28 @@ class ScreenCombatState {
   }
 
   List<ExplainedText> attackResult() {
-    List<ExplainedText> result = [];
+    final result = <ExplainedText>[];
 
-    var damage = calculateDamage();
+    final damage = calculateDamage();
 
     result.add(damage);
 
-    var critical = CombatRules.criticalDamage(
+    final critical = CombatRules.criticalDamage(
       defender: defense.character,
       damage: damage.result,
     );
 
     if (critical != null) result.add(critical);
 
-    var counter = CombatRules.calculateCounterBonus(attackValue: finalAttackValue, defenseValue: finalDefenseValue);
+    final counter = CombatRules.calculateCounterBonus(attackValue: finalAttackValue, defenseValue: finalDefenseValue);
 
     if (counter != null) {
       result.add(counter);
     }
 
-    print("counter ${counter?.text}");
+    Logger().d('counter ${counter?.text}');
 
-    var breakage = CombatRules.calculateBreakage(
+    final breakage = CombatRules.calculateBreakage(
       attacker: attack.character,
       defender: defense.character,
       defenseType: defense.defenseType,

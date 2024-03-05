@@ -1,28 +1,11 @@
-import 'package:amt/utils/key_value.dart';
 import 'package:amt/utils/json_utils.dart';
+import 'package:amt/utils/key_value.dart';
 import 'package:hive/hive.dart';
 
 part 'attributes_list.g.dart';
 
-@HiveType(typeId: 1, adapterName: "AttributesListAdapter")
+@HiveType(typeId: 1, adapterName: 'AttributesListAdapter')
 class AttributesList {
-  @HiveField(0)
-  late int agility;
-  @HiveField(1)
-  late int constitution;
-  @HiveField(2)
-  late int dexterity;
-  @HiveField(3)
-  late int strength;
-  @HiveField(4)
-  late int intelligence;
-  @HiveField(5)
-  late int perception;
-  @HiveField(6)
-  late int might;
-  @HiveField(7)
-  late int willpower;
-
   AttributesList({
     this.agility = 0,
     this.constitution = 0,
@@ -55,13 +38,29 @@ class AttributesList {
     might = JsonUtils.integer(json['POD'], 0);
     willpower = JsonUtils.integer(json['VOL'], 0);
   }
+  @HiveField(0)
+  late int agility;
+  @HiveField(1)
+  late int constitution;
+  @HiveField(2)
+  late int dexterity;
+  @HiveField(3)
+  late int strength;
+  @HiveField(4)
+  late int intelligence;
+  @HiveField(5)
+  late int perception;
+  @HiveField(6)
+  late int might;
+  @HiveField(7)
+  late int willpower;
 
   List<int> orderedList() {
     return [agility, constitution, dexterity, strength, intelligence, perception, might, willpower];
   }
 
   static List<String> names() {
-    return ["AGI", "CON", "DES", "STR", "INT", "PER", "POD", "VOL"];
+    return ['AGI', 'CON', 'DES', 'STR', 'INT', 'PER', 'POD', 'VOL'];
   }
 
   List<int> get values => [
@@ -83,67 +82,66 @@ class AttributesList {
   }
 
   List<KeyValue> toKeyValue({bool abbreviated = false}) {
-    List<KeyValue> list = [];
-
-    list.add(KeyValue(key: abbreviated ? "AGI" : "Agilidad", value: agility.toString()));
-    list.add(KeyValue(key: abbreviated ? "CON" : "Constitución", value: constitution.toString()));
-    list.add(KeyValue(key: abbreviated ? "DES" : "Destreza", value: dexterity.toString()));
-    list.add(KeyValue(key: abbreviated ? "FUE" : "Fuerza", value: strength.toString()));
-    list.add(KeyValue(key: abbreviated ? "INT" : "Inteligencia", value: intelligence.toString()));
-    list.add(KeyValue(key: abbreviated ? "PER" : "Percepción", value: perception.toString()));
-    list.add(KeyValue(key: abbreviated ? "POD" : "Poder", value: might.toString()));
-    list.add(KeyValue(key: abbreviated ? "VOL" : "Voluntad", value: willpower.toString()));
-
-    return list;
+    return <KeyValue>[
+      (KeyValue(key: abbreviated ? 'AGI' : 'Agilidad', value: agility.toString())),
+      KeyValue(key: abbreviated ? 'CON' : 'Constitución', value: constitution.toString()),
+      KeyValue(key: abbreviated ? 'DES' : 'Destreza', value: dexterity.toString()),
+      KeyValue(key: abbreviated ? 'FUE' : 'Fuerza', value: strength.toString()),
+      KeyValue(key: abbreviated ? 'INT' : 'Inteligencia', value: intelligence.toString()),
+      KeyValue(key: abbreviated ? 'PER' : 'Percepción', value: perception.toString()),
+      KeyValue(key: abbreviated ? 'POD' : 'Poder', value: might.toString()),
+      KeyValue(key: abbreviated ? 'VOL' : 'Voluntad', value: willpower.toString()),
+    ];
   }
 
   void edit(KeyValue value) {
-    var parsed = int.tryParse(value.value);
+    final parsed = int.tryParse(value.value);
 
     switch (value.key) {
-      case "Agilidad":
-      case "AGI":
+      case 'Agilidad':
+      case 'AGI':
         agility = parsed ?? agility;
 
-      case "Constitución":
-      case "CON":
+      case 'Constitución':
+      case 'CON':
         constitution = parsed ?? constitution;
 
-      case "Destreza":
-      case "DES":
+      case 'Destreza':
+      case 'DES':
         dexterity = parsed ?? dexterity;
 
-      case "Fuerza":
-      case "FUE":
+      case 'Fuerza':
+      case 'FUE':
         strength = parsed ?? strength;
 
-      case "Inteligencia":
-      case "INT":
+      case 'Inteligencia':
+      case 'INT':
         intelligence = parsed ?? intelligence;
 
-      case "Percepción":
-      case "PER":
+      case 'Percepción':
+      case 'PER':
         perception = parsed ?? perception;
 
-      case "Poder":
-      case "POD":
+      case 'Poder':
+      case 'POD':
         might = parsed ?? might;
 
-      case "Voluntad":
-      case "VOL":
+      case 'Voluntad':
+      case 'VOL':
         willpower = parsed ?? willpower;
     }
   }
 
   @override
   String toString() {
-    var string = "";
-    var names = AttributesList.names();
-    var values = orderedList();
-    for (int i = 0; i < names.length; i++) {
-      string = "$string ${names[i]}: ${values[i]}, ";
+    final buffer = StringBuffer();
+
+    final names = AttributesList.names();
+    final values = orderedList();
+    for (var i = 0; i < names.length; i++) {
+      buffer.write(' ${names[i]}: ${values[i]}, ');
     }
-    return string;
+    return buffer.toString();
   }
 
   AttributesList copy() {

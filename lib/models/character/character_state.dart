@@ -6,8 +6,16 @@ import 'package:hive/hive.dart';
 
 part 'character_state.g.dart';
 
-@HiveType(typeId: 3, adapterName: "CharacterStateAdapter")
+@HiveType(typeId: 3, adapterName: 'CharacterStateAdapter')
 class CharacterState {
+
+  CharacterState({
+    required this.currentTurn, required this.consumables, required this.modifiers, this.selectedWeaponIndex = 0,
+    this.hasAction = true,
+    this.notes = '',
+    this.defenseNumber = 1,
+    this.turnModifier = '',
+  });
   @HiveField(0)
   int selectedWeaponIndex = 0;
   @HiveField(1)
@@ -15,9 +23,9 @@ class CharacterState {
   @HiveField(2)
   List<ConsumableState> consumables = [];
   @HiveField(3)
-  String notes = "";
+  String notes = '';
   @HiveField(4)
-  Roll currentTurn = Roll(description: "", roll: 0, rolls: []);
+  Roll currentTurn = Roll(description: '', roll: 0, rolls: []);
   @HiveField(5)
   String turnModifier = '';
   @HiveField(6)
@@ -43,17 +51,6 @@ class CharacterState {
     }
   }
 
-  CharacterState({
-    this.selectedWeaponIndex = 0,
-    this.hasAction = true,
-    this.notes = '',
-    this.defenseNumber = 1,
-    this.turnModifier = '',
-    required this.currentTurn,
-    required this.consumables,
-    required this.modifiers,
-  });
-
   int getLifePointsPercentage() {
     final hitPoints = getConsumable(ConsumableType.hitPoints);
 
@@ -65,7 +62,7 @@ class CharacterState {
 
   CharacterState copy() {
     return CharacterState(
-      currentTurn: Roll(description: "", roll: 1, rolls: []),
+      currentTurn: Roll(description: '', roll: 1, rolls: []),
       consumables: consumables.map((e) => e.copy()).toList(),
       modifiers: ModifiersState(),
     );

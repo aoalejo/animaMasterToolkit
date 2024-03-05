@@ -5,22 +5,6 @@ part 'mystical.g.dart';
 
 @HiveType(typeId: 10)
 class Mystical {
-  @HiveField(0)
-  int zeonRegeneration;
-  @HiveField(1)
-  int act;
-  @HiveField(2)
-  int zeon;
-  @HiveField(3)
-  Map<String, String> paths;
-  @HiveField(4)
-  Map<String, String> subPaths;
-  @HiveField(5)
-  Map<String, String> metamagic;
-  @HiveField(6)
-  Map<String, String> spellsMaintained;
-  @HiveField(7)
-  Map<String, String> spellsPurchased;
 
   Mystical({
     required this.zeonRegeneration,
@@ -45,6 +29,22 @@ class Mystical {
       spellsPurchased: Map<String, String>.from(json['Libres']),
     );
   }
+  @HiveField(0)
+  int zeonRegeneration;
+  @HiveField(1)
+  int act;
+  @HiveField(2)
+  int zeon;
+  @HiveField(3)
+  Map<String, String> paths;
+  @HiveField(4)
+  Map<String, String> subPaths;
+  @HiveField(5)
+  Map<String, String> metamagic;
+  @HiveField(6)
+  Map<String, String> spellsMaintained;
+  @HiveField(7)
+  Map<String, String> spellsPurchased;
 
   Mystical copy() {
     return Mystical(

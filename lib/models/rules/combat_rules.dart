@@ -35,19 +35,19 @@ class CombatRules {
     required SurpriseType? surpriseType,
     required ModifiersState? modifiers,
   }) {
-    var rollNumber = roll?.safeInterpret ?? 0;
-    var attackBaseNumber = baseAttack?.safeInterpret ?? 0;
-    var modifierNumber = modifier?.safeInterpret ?? 0;
-    var surpriseNumber = surpriseType == SurpriseType.attacker ? 90 : 0;
-    var modifiersNumber = modifiers?.getAllModifiersForType(ModifiersType.attack) ?? 0;
+    final rollNumber = roll?.safeInterpret ?? 0;
+    final attackBaseNumber = baseAttack?.safeInterpret ?? 0;
+    final modifierNumber = modifier?.safeInterpret ?? 0;
+    final surpriseNumber = surpriseType == SurpriseType.attacker ? 90 : 0;
+    final modifiersNumber = modifiers?.getAllModifiersForType(ModifiersType.attack) ?? 0;
 
-    var total = attackBaseNumber + modifierNumber + rollNumber + modifiersNumber + surpriseNumber;
+    final total = attackBaseNumber + modifierNumber + rollNumber + modifiersNumber + surpriseNumber;
 
     return ExplainedText(
-      title: "Ataque final",
-      text: "Resultado en ataque: $total",
+      title: 'Ataque final',
+      text: 'Resultado en ataque: $total',
       explanation:
-          "Base: $attackBaseNumber + Modificador: $modifierNumber + Tirada: $rollNumber + Modificadores: $modifiersNumber + Sorpresa: $surpriseNumber",
+          'Base: $attackBaseNumber + Modificador: $modifierNumber + Tirada: $rollNumber + Modificadores: $modifiersNumber + Sorpresa: $surpriseNumber',
       result: total,
     );
   }
@@ -61,20 +61,20 @@ class CombatRules {
     required ModifiersType? defenseType,
     required int? defensesNumber,
   }) {
-    var rollNumber = roll?.safeInterpret ?? 0;
-    var baseDefenseNumber = baseDefense?.safeInterpret ?? 0;
-    var modifierNumber = modifier?.safeInterpret ?? 0;
-    var surpriseNumber = surpriseType == SurpriseType.defender ? 90 : 0;
-    var modifiersNumber = modifiers?.getAllModifiersForType(defenseType ?? ModifiersType.dodge) ?? 0;
-    var numberOfDefensesModifier = CombatRules.numberOfDefensesModifier(defensesNumber);
+    final rollNumber = roll?.safeInterpret ?? 0;
+    final baseDefenseNumber = baseDefense?.safeInterpret ?? 0;
+    final modifierNumber = modifier?.safeInterpret ?? 0;
+    final surpriseNumber = surpriseType == SurpriseType.defender ? 90 : 0;
+    final modifiersNumber = modifiers?.getAllModifiersForType(defenseType ?? ModifiersType.dodge) ?? 0;
+    final numberOfDefensesModifier = CombatRules.numberOfDefensesModifier(defensesNumber);
 
-    var total = modifiersNumber + rollNumber + baseDefenseNumber + numberOfDefensesModifier + modifierNumber + surpriseNumber;
+    final total = modifiersNumber + rollNumber + baseDefenseNumber + numberOfDefensesModifier + modifierNumber + surpriseNumber;
 
     return ExplainedText(
-      title: "Defensa final",
-      text: "Resultado en defensa: $total",
+      title: 'Defensa final',
+      text: 'Resultado en defensa: $total',
       explanation:
-          "Base: $baseDefenseNumber + Modificador: $modifierNumber + Tirada: $rollNumber + Modificadores: $modifiersNumber + Sorpresa: $surpriseNumber + Penalizador por defensas: $numberOfDefensesModifier",
+          'Base: $baseDefenseNumber + Modificador: $modifierNumber + Tirada: $rollNumber + Modificadores: $modifiersNumber + Sorpresa: $surpriseNumber + Penalizador por defensas: $numberOfDefensesModifier',
       result: total,
     );
   }
@@ -85,42 +85,42 @@ class CombatRules {
     required ExplainedText finalAbsorption,
     required int baseDamage,
   }) {
-    var info = ExplainedText(title: "Daño");
+    final info = ExplainedText(title: 'Daño');
 
     info.explanations.add(attackValue);
     info.explanations.add(defenseValue);
     info.explanations.add(finalAbsorption);
 
-    var difference = (attackValue.result ?? 0) - (defenseValue.result ?? 0);
+    final difference = (attackValue.result ?? 0) - (defenseValue.result ?? 0);
 
-    var finalResult = (difference - (finalAbsorption.result ?? 0)).roundToTens;
-    var damageDone = ((finalResult / 100) * baseDamage).toInt();
+    final finalResult = (difference - (finalAbsorption.result ?? 0)).roundToTens;
+    final damageDone = ((finalResult / 100) * baseDamage).toInt();
 
     info.add(
-      explanation: "Ataque final: ${attackValue.result}, Defensa final ${defenseValue.result} (Diferencia $difference)",
+      explanation: 'Ataque final: ${attackValue.result}, Defensa final ${defenseValue.result} (Diferencia $difference)',
     );
 
     info.add(
-      explanation: "Resultado final: $finalResult = diferencia - absorción total, redondeado a decenas",
+      explanation: 'Resultado final: $finalResult = diferencia - absorción total, redondeado a decenas',
     );
 
     info.add(
-      explanation: "Daño base: $baseDamage",
+      explanation: 'Daño base: $baseDamage',
     );
 
     info.add(
-      explanation: "Daño causado: $damageDone = (Resultado final / 100) * Daño base",
+      explanation: 'Daño causado: $damageDone = (Resultado final / 100) * Daño base',
       result: damageDone,
     );
 
     if (damageDone < 10) {
       info.add(
-        explanation: "Si el daño es menor a 10, impacta pero no realiza daños",
+        explanation: 'Si el daño es menor a 10, impacta pero no realiza daños',
         reference: BookReference(page: 87, book: Books.coreExxet),
-        text: "No realiza daños",
+        text: 'No realiza daños',
       );
     } else {
-      info.text = "Daño causado: $damageDone";
+      info.text = 'Daño causado: $damageDone';
     }
 
     info.result = damageDone;
@@ -131,12 +131,12 @@ class CombatRules {
     required ExplainedText attackValue,
     required ExplainedText defenseValue,
   }) {
-    var info = ExplainedText(title: "Contraataque");
+    final info = ExplainedText(title: 'Contraataque');
 
     info.explanations.add(attackValue);
     info.explanations.add(defenseValue);
 
-    var difference = (attackValue.result ?? 0) - (defenseValue.result ?? 0);
+    final difference = (attackValue.result ?? 0) - (defenseValue.result ?? 0);
 
     var counterBonus = 0;
 
@@ -145,8 +145,8 @@ class CombatRules {
       counterBonus = min(counterBonus, 150);
 
       info.add(
-        text: "Puede contraatacar con un bonificador de: $counterBonus",
-        explanation: "diferencia / 2 redondeado a 5, con un máximo de 150",
+        text: 'Puede contraatacar con un bonificador de: $counterBonus',
+        explanation: 'diferencia / 2 redondeado a 5, con un máximo de 150',
         reference: BookReference(page: 87, book: Books.coreExxet),
       );
     } else {
@@ -161,23 +161,23 @@ class CombatRules {
     required DamageTypes damageType,
     required String? armourTypeModifier,
   }) {
-    var info = ExplainedText(title: "Absorción");
+    final info = ExplainedText(title: 'Absorción');
 
-    var armourTypeBase = armour?.armourFor(damageType) ?? 0;
+    final armourTypeBase = armour?.armourFor(damageType) ?? 0;
 
-    var armourTypeModifierNumber = armourTypeModifier?.safeInterpret ?? 0;
+    final armourTypeModifierNumber = armourTypeModifier?.safeInterpret ?? 0;
 
-    var armourAbsorption = (armourTypeModifierNumber + armourTypeBase) * 10;
+    final armourAbsorption = (armourTypeModifierNumber + armourTypeBase) * 10;
 
     info.add(
-      explanation: "Absorción de armadura = (($armourTypeBase + $armourTypeModifier) * 10)",
+      explanation: 'Absorción de armadura = (($armourTypeBase + $armourTypeModifier) * 10)',
     );
-    var baseAbsorption = 20;
+    const baseAbsorption = 20;
     info.result = armourAbsorption + baseAbsorption;
 
     info.add(
-      text: "Absorición total: ${info.result}",
-      explanation: "Todos los seres tienen una absorción base de 20 que se suma a la anterior",
+      text: 'Absorición total: ${info.result}',
+      explanation: 'Todos los seres tienen una absorción base de 20 que se suma a la anterior',
       reference: BookReference(page: 86, book: Books.coreExxet),
     );
 
@@ -185,34 +185,34 @@ class CombatRules {
   }
 
   static int calculateBaseDamage({required Weapon? weapon, required String? damageModifier}) {
-    var baseDamageOfWeapon = weapon?.damage ?? 0;
-    var baseDamageModifier = damageModifier?.safeInterpret ?? 0;
+    final baseDamageOfWeapon = weapon?.damage ?? 0;
+    final baseDamageModifier = damageModifier?.safeInterpret ?? 0;
 
     return baseDamageOfWeapon + baseDamageModifier;
   }
 
   static ExplainedText? criticalDamage({required Character? defender, required int? damage}) {
-    var info = ExplainedText(title: "Critico");
-    var actualLife = (defender?.state.getConsumable(ConsumableType.hitPoints)?.actualValue ?? 999);
+    final info = ExplainedText(title: 'Critico');
+    final actualLife = defender?.state.getConsumable(ConsumableType.hitPoints)?.actualValue ?? 999;
     damage = damage ?? 0;
 
-    var porcentualDamage = ((damage / actualLife) * 100).toInt();
+    final porcentualDamage = ((damage / actualLife) * 100).toInt();
 
     info.add(
-      explanation: "Vida actual: $actualLife, Daño: $porcentualDamage%",
+      explanation: 'Vida actual: $actualLife, Daño: $porcentualDamage%',
     );
 
     if (actualLife / 2 < damage) {
       info.add(
-        text: "Realiza un daño crítico",
-        explanation: "Si un ataque daña más de la mitad de la vida actual del objetivo, se considera que realizó un crítico",
+        text: 'Realiza un daño crítico',
+        explanation: 'Si un ataque daña más de la mitad de la vida actual del objetivo, se considera que realizó un crítico',
         reference: BookReference(page: 95, book: Books.coreExxet),
       );
     } else if (actualLife / 10 < damage) {
       info.add(
-        text: "Realiza un daño crítico si fue apuntado a un punto vital",
+        text: 'Realiza un daño crítico si fue apuntado a un punto vital',
         explanation:
-            "Si un ataque apuntado a una zona vital daña más de un décimo de la vida actual del objetivo, se considera que realizó un crítico",
+            'Si un ataque apuntado a una zona vital daña más de un décimo de la vida actual del objetivo, se considera que realizó un crítico',
         reference: BookReference(page: 96, book: Books.coreExxet),
       );
     } else {
@@ -223,7 +223,7 @@ class CombatRules {
   }
 
   static int calculateStrengthBonusOnBreakage(Character? character) {
-    var strength = character?.attributes.strength ?? 0;
+    final strength = character?.attributes.strength ?? 0;
     if (strength == 8 || strength == 9) {
       return 1;
     }
@@ -244,30 +244,30 @@ class CombatRules {
   }
 
   static String getCriticalLocalization(String? localizationRoll) {
-    var roll = localizationRoll?.safeInterpret ?? -1;
+    final roll = localizationRoll?.safeInterpret ?? -1;
 
-    if (roll == -1) return " - ";
-    if (roll >= 91) return "($roll) Cabeza";
-    if (roll >= 89) return "($roll) Pierna izquierda - Pie";
-    if (roll >= 85) return "($roll) Pierna izquierda - Pantorilla";
-    if (roll >= 81) return "($roll) Pierna izquierda - Muslo";
-    if (roll >= 79) return "($roll) Pierna derecha - Pie";
-    if (roll >= 75) return "($roll) Pierna derecha - Pantorilla";
-    if (roll >= 71) return "($roll) Pierna derecha - Muslo";
-    if (roll >= 69) return "($roll) Brazo izquierdo - Mano";
-    if (roll >= 65) return "($roll) Brazo izquierdo - Antebrazo inferior";
-    if (roll >= 61) return "($roll) Brazo izquierdo - Antebrazo superior";
-    if (roll >= 59) return "($roll) Brazo derecho - Mano";
-    if (roll >= 55) return "($roll) Brazo derecho - Antebrazo inferior";
-    if (roll >= 51) return "($roll) Brazo derecho - Antebrazo superior";
-    if (roll >= 49) return "($roll) Torso - Corazón";
-    if (roll >= 36) return "($roll) Torso - Pecho";
-    if (roll >= 31) return "($roll) Torso - Riñones";
-    if (roll >= 21) return "($roll) Torso - Estómago";
-    if (roll >= 11) return "($roll) Torso - Hombro";
-    if (roll >= 1) return "($roll) Torso - Costillas";
+    if (roll == -1) return ' - ';
+    if (roll >= 91) return '($roll) Cabeza';
+    if (roll >= 89) return '($roll) Pierna izquierda - Pie';
+    if (roll >= 85) return '($roll) Pierna izquierda - Pantorilla';
+    if (roll >= 81) return '($roll) Pierna izquierda - Muslo';
+    if (roll >= 79) return '($roll) Pierna derecha - Pie';
+    if (roll >= 75) return '($roll) Pierna derecha - Pantorilla';
+    if (roll >= 71) return '($roll) Pierna derecha - Muslo';
+    if (roll >= 69) return '($roll) Brazo izquierdo - Mano';
+    if (roll >= 65) return '($roll) Brazo izquierdo - Antebrazo inferior';
+    if (roll >= 61) return '($roll) Brazo izquierdo - Antebrazo superior';
+    if (roll >= 59) return '($roll) Brazo derecho - Mano';
+    if (roll >= 55) return '($roll) Brazo derecho - Antebrazo inferior';
+    if (roll >= 51) return '($roll) Brazo derecho - Antebrazo superior';
+    if (roll >= 49) return '($roll) Torso - Corazón';
+    if (roll >= 36) return '($roll) Torso - Pecho';
+    if (roll >= 31) return '($roll) Torso - Riñones';
+    if (roll >= 21) return '($roll) Torso - Estómago';
+    if (roll >= 11) return '($roll) Torso - Hombro';
+    if (roll >= 1) return '($roll) Torso - Costillas';
 
-    return "$roll";
+    return '$roll';
   }
 
   static ExplainedText calculateBreakage({
@@ -275,77 +275,77 @@ class CombatRules {
     required Character? defender,
     required DefenseType defenseType,
   }) {
-    var info = ExplainedText(title: "Rotura");
-    var weaponAttacker = attacker?.selectedWeapon();
-    var weaponDefender = defender?.selectedWeapon();
-    var armourDefender = (defender?.combat.armour.armours.firstOrNull?.endurance ?? 999);
+    final info = ExplainedText(title: 'Rotura');
+    final weaponAttacker = attacker?.selectedWeapon();
+    final weaponDefender = defender?.selectedWeapon();
+    final armourDefender = defender?.combat.armour.armours.firstOrNull?.endurance ?? 999;
 
-    var breakageAttacker = (weaponAttacker?.breakage ?? 0);
-    var breakageDefender = (weaponDefender?.breakage ?? 0);
+    final breakageAttacker = weaponAttacker?.breakage ?? 0;
+    final breakageDefender = weaponDefender?.breakage ?? 0;
 
-    var rollAttacker = Roll.d10Roll().roll;
-    var rollDefender = Roll.d10Roll().roll;
+    final rollAttacker = Roll.d10Roll().roll;
+    final rollDefender = Roll.d10Roll().roll;
 
-    var modifierAttacker = CombatRules.calculateStrengthBonusOnBreakage(attacker);
-    var modifierDefender = CombatRules.calculateStrengthBonusOnBreakage(defender);
+    final modifierAttacker = CombatRules.calculateStrengthBonusOnBreakage(attacker);
+    final modifierDefender = CombatRules.calculateStrengthBonusOnBreakage(defender);
 
-    var totalBreakageAttacker = breakageAttacker + rollAttacker + modifierAttacker;
+    final totalBreakageAttacker = breakageAttacker + rollAttacker + modifierAttacker;
     info.add(
-      explanation: "Total rotura atacante: Rotura del arma ($breakageAttacker) + tirada ($rollAttacker) + Bono por fuerza ($modifierAttacker)",
+      explanation: 'Total rotura atacante: Rotura del arma ($breakageAttacker) + tirada ($rollAttacker) + Bono por fuerza ($modifierAttacker)',
       reference: BookReference(page: 91, book: Books.coreExxet),
     );
 
-    var totalBreakageDefender = breakageDefender + rollDefender + modifierDefender;
+    final totalBreakageDefender = breakageDefender + rollDefender + modifierDefender;
 
     // Checks attacker weapon vs defender weapon if parry, and vs armour if dodge
     if (defenseType == DefenseType.parry) {
-      info.add(explanation: "Como hace una parada, se calcula la rotura de ambas armas entre sí");
+      info.add(explanation: 'Como hace una parada, se calcula la rotura de ambas armas entre sí');
 
       info.add(
-        explanation: "Total rotura defensor: Rotura del arma ($breakageDefender) + tirada ($rollDefender) + Bono por fuerza ($modifierDefender)",
+        explanation: 'Total rotura defensor: Rotura del arma ($breakageDefender) + tirada ($rollDefender) + Bono por fuerza ($modifierDefender)',
       );
 
       if (totalBreakageDefender > (weaponAttacker?.endurance ?? 999)) {
         info.add(
-          text: "El arma del atacante baja una categoría de calidad",
+          text: 'El arma del atacante baja una categoría de calidad',
           explanation:
-              "defensor: (${breakageDefender + modifierDefender} + $rollDefender (=$totalBreakageDefender) vs atacante: ${(weaponAttacker?.endurance ?? 999)})",
+              'defensor: (${breakageDefender + modifierDefender} + $rollDefender (=$totalBreakageDefender) vs atacante: ${weaponAttacker?.endurance ?? 999})',
         );
       } else {
         info.add(
           explanation:
-              "El arma del atacante resiste. defensor: (${breakageDefender + modifierDefender} + $rollDefender (=$totalBreakageDefender) vs atacante: ${(weaponAttacker?.endurance ?? 999)})",
+              'El arma del atacante resiste. defensor: (${breakageDefender + modifierDefender} + $rollDefender (=$totalBreakageDefender) vs atacante: ${weaponAttacker?.endurance ?? 999})',
         );
       }
       if (totalBreakageAttacker > (weaponDefender?.endurance ?? 999)) {
         info.add(
-          text: "El arma del defensor baja una categoría de calidad",
+          text: 'El arma del defensor baja una categoría de calidad',
           explanation:
-              "atacante: (${breakageAttacker + modifierAttacker} + $rollAttacker (=$totalBreakageAttacker) vs defensor: ${(weaponDefender?.endurance ?? 999)})",
+              'atacante: (${breakageAttacker + modifierAttacker} + $rollAttacker (=$totalBreakageAttacker) vs defensor: ${weaponDefender?.endurance ?? 999})',
         );
       } else {
         info.add(
           explanation:
-              "El arma del defensor resiste. atacante: (${breakageAttacker + modifierAttacker} + $rollAttacker (=$totalBreakageAttacker) vs defensor: ${(weaponDefender?.endurance ?? 999)})",
+              'El arma del defensor resiste. atacante: (${breakageAttacker + modifierAttacker} + $rollAttacker (=$totalBreakageAttacker) vs defensor: ${weaponDefender?.endurance ?? 999})',
         );
       }
     } else {
-      info.add(explanation: "Como hace una esquiva, se calcula la entereza contra la armadura del defensor solamente");
+      info.add(explanation: 'Como hace una esquiva, se calcula la entereza contra la armadura del defensor solamente');
       if (totalBreakageAttacker > armourDefender) {
         info.add(
-          text: "La armadura del defensor se desgasta",
+          text: 'La armadura del defensor se desgasta',
           explanation:
-              "la armadura baja un nivel de TA (${breakageAttacker + modifierAttacker} + $rollAttacker (=$totalBreakageAttacker) vs $armourDefender)",
+              'la armadura baja un nivel de TA (${breakageAttacker + modifierAttacker} + $rollAttacker (=$totalBreakageAttacker) vs $armourDefender)',
         );
       } else {
         info.add(
-          explanation: "la armadura resiste: (${breakageAttacker + modifierAttacker} + $rollAttacker (=$totalBreakageAttacker) vs $armourDefender)",
+          explanation: 'la armadura resiste: (${breakageAttacker + modifierAttacker} + $rollAttacker (=$totalBreakageAttacker) vs $armourDefender)',
         );
       }
     }
 
     if (info.text.isEmpty) {
-      info.text = "No se desgastan las armas en el enfrentamiento";
+      info.text = 'No se desgastan las armas en el enfrentamiento';
     }
 
     return info;
@@ -357,20 +357,20 @@ class CombatRules {
     required String? physicalResistanceBase,
     required String? physicalResistanceRoll,
   }) {
-    var damageDoneInt = damageDone?.safeInterpret ?? 0;
-    var criticalRollInt = criticalRoll?.safeInterpret ?? 0;
+    final damageDoneInt = damageDone?.safeInterpret ?? 0;
+    final criticalRollInt = criticalRoll?.safeInterpret ?? 0;
 
-    var physicalResistanceBaseInt = physicalResistanceBase?.safeInterpret ?? 0;
-    var physicalResistanceRollInt = physicalResistanceRoll?.safeInterpret ?? 0;
+    final physicalResistanceBaseInt = physicalResistanceBase?.safeInterpret ?? 0;
+    final physicalResistanceRollInt = physicalResistanceRoll?.safeInterpret ?? 0;
 
-    var result = damageDoneInt + criticalRollInt - physicalResistanceBaseInt - physicalResistanceRollInt;
+    final result = damageDoneInt + criticalRollInt - physicalResistanceBaseInt - physicalResistanceRollInt;
 
     return ExplainedText(
-      title: "Resultado Critico",
-      text: "Resultado: $result",
+      title: 'Resultado Critico',
+      text: 'Resultado: $result',
       result: result,
       explanation:
-          "Daño realizado ($damageDoneInt) + Tirada ($criticalRollInt) - RF ($physicalResistanceBaseInt) - Tirada RF ($physicalResistanceRollInt) = Resultado ($result)",
+          'Daño realizado ($damageDoneInt) + Tirada ($criticalRollInt) - RF ($physicalResistanceBaseInt) - Tirada RF ($physicalResistanceRollInt) = Resultado ($result)',
     );
   }
 
@@ -378,7 +378,7 @@ class CombatRules {
     required String? reduction,
     required int? criticalResult,
   }) {
-    var reductionInt = reduction?.safeInterpret ?? 0;
+    final reductionInt = reduction?.safeInterpret ?? 0;
     return (criticalResult ?? 0) - reductionInt;
   }
 
@@ -386,48 +386,48 @@ class CombatRules {
     required Character? defender,
     required ExplainedText criticalResult,
   }) {
-    List<ExplainedText> list = [];
+    final list = <ExplainedText>[];
 
     list.add(criticalResult);
-    var critical = criticalResult.result ?? 0;
+    final critical = criticalResult.result ?? 0;
 
-    var criticalEffects = ExplainedText(title: "Efectos Critico");
+    final criticalEffects = ExplainedText(title: 'Efectos Critico');
     if ((criticalResult.result ?? 0) > 0) {
       list.add(criticalEffects);
     } else {
       return list;
     }
 
-    var text = "";
+    var text = '';
 
     if (critical > 1) {
-      text = "$text Se recibe un negativo a toda acción de $critical";
+      text = '$text Se recibe un negativo a toda acción de $critical';
       criticalEffects.add(
-        explanation: "El penalizador se recupera a un ritmo de 5 puntos por asalto.",
+        explanation: 'El penalizador se recupera a un ritmo de 5 puntos por asalto.',
       );
     }
 
     if (critical > 50) {
       criticalEffects.add(
-        explanation: "hasta la mitad de su valor",
+        explanation: 'hasta la mitad de su valor',
       );
     }
 
     if (critical > 100) {
-      text = "$text, destrozando si golpea un miembro";
+      text = '$text, destrozando si golpea un miembro';
 
       criticalEffects.add(
         explanation:
-            "Si la localización indica un miembro, este queda destrozado o amputado de manera irrecuperable. Si alcanza la cabeza o el corazón, el personaje muere.",
+            'Si la localización indica un miembro, este queda destrozado o amputado de manera irrecuperable. Si alcanza la cabeza o el corazón, el personaje muere.',
       );
     }
 
     if (critical > 150) {
-      text = "$text y quedando inconsciente. (Muere si no recibe atención médica en ${defender?.attributes.constitution} minutos)";
+      text = '$text y quedando inconsciente. (Muere si no recibe atención médica en ${defender?.attributes.constitution} minutos)';
 
       criticalEffects.add(
         explanation:
-            "Queda además inconsciente automáticamente, y muere en un número de minutos equivalente a su Constitución (${defender?.attributes.constitution}) si no recibe atención médica.",
+            'Queda además inconsciente automáticamente, y muere en un número de minutos equivalente a su Constitución (${defender?.attributes.constitution}) si no recibe atención médica.',
       );
     }
 
