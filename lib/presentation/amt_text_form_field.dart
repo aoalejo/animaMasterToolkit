@@ -11,9 +11,9 @@ class AMTTextFormField extends StatelessWidget {
   final TextStyle? style;
   final TextAlign? align;
   final bool? enabled;
-  final List<TextInputFormatter>? formatters;
+  late int maxLength;
 
-  const AMTTextFormField({
+  AMTTextFormField({
     super.key,
     this.text,
     this.label,
@@ -24,8 +24,7 @@ class AMTTextFormField extends StatelessWidget {
     this.style,
     this.align,
     this.enabled,
-    this.formatters,
-  });
+  }) : maxLength = inputType == TextInputType.number ? 4 : 20;
 
   @override
   Widget build(BuildContext context) {
@@ -41,8 +40,8 @@ class AMTTextFormField extends StatelessWidget {
         ),
       ),
       textInputAction: TextInputAction.done,
-      inputFormatters: formatters,
       keyboardType: inputType,
+      inputFormatters: [LengthLimitingTextInputFormatter(maxLength)],
       style: style,
       textAlign: align ?? TextAlign.start,
       decoration: decoration ??

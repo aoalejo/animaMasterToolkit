@@ -163,6 +163,7 @@ class ShowCharacterInfo {
                 child: (value.editable && onEdit != null)
                     ? AMTTextFormField(
                         text: value.text,
+                        inputType: TextInputType.number,
                         onChanged: (value) {
                           onEdit(value);
                         },

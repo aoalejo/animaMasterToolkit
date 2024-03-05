@@ -51,6 +51,7 @@ class CreateConsumable {
                   AMTTextFormField(
                     label: "Valor máximo",
                     text: max,
+                    inputType: TextInputType.number,
                     onChanged: (value) => setState(
                       () => max = value,
                     ),
@@ -58,6 +59,7 @@ class CreateConsumable {
                   AMTTextFormField(
                     label: "Incremento",
                     text: increment,
+                    inputType: TextInputType.number,
                     onChanged: (value) => setState(
                       () => increment = value,
                     ),
