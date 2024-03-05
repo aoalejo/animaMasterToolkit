@@ -1,6 +1,6 @@
 import 'package:amt/models/character/character.dart';
 import 'package:amt/models/enums.dart';
-import 'package:amt/presentation/text_form_field_custom.dart';
+import 'package:amt/presentation/amt_text_form_field.dart';
 import 'package:amt/utils/key_value.dart';
 import 'package:flutter/material.dart';
 import 'package:function_tree/function_tree.dart';
@@ -83,7 +83,7 @@ class ShowCharacterInfo {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Expanded(
-                                child: TextFormFieldCustom(
+                                child: AMTTextFormField(
                                     text: search,
                                     suffixIcon: Icon(Icons.search),
                                     onChanged: (value) => {
@@ -161,7 +161,7 @@ class ShowCharacterInfo {
               Expanded(
                 flex: value.flex,
                 child: (value.editable && onEdit != null)
-                    ? TextFormFieldCustom(
+                    ? AMTTextFormField(
                         text: value.text,
                         onChanged: (value) {
                           onEdit(value);

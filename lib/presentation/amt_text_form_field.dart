@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-class TextFormFieldCustom extends StatelessWidget {
+class AMTTextFormField extends StatelessWidget {
   final String? text;
   final String? label;
   final TextInputType? inputType;
@@ -13,7 +13,7 @@ class TextFormFieldCustom extends StatelessWidget {
   final bool? enabled;
   final List<TextInputFormatter>? formatters;
 
-  const TextFormFieldCustom({
+  const AMTTextFormField({
     super.key,
     this.text,
     this.label,

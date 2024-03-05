@@ -1,7 +1,7 @@
 import 'package:amt/models/character/status_modifier.dart';
 import 'package:amt/models/modifiers_state.dart';
-import 'package:amt/presentation/text_form_field_custom.dart';
-import 'package:amt/presentation/bottom_sheet_custom.dart';
+import 'package:amt/presentation/amt_text_form_field.dart';
+import 'package:amt/presentation/amt_bottom_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:function_tree/function_tree.dart';
 
@@ -30,7 +30,7 @@ class BottomSheetModifiers {
       builder: (BuildContext context) {
         return StatefulBuilder(
           builder: (BuildContext context, StateSetter setState) {
-            return BottomSheetCustom(
+            return AMTBottomSheet(
               title: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -116,10 +116,10 @@ class BottomSheetModifiers {
     showModalBottomSheet<void>(
       context: context,
       builder: (BuildContext context) {
-        return BottomSheetCustom(
+        return AMTBottomSheet(
           title: Text("Añadir modificador"),
           children: [
-            TextFormFieldCustom(
+            AMTTextFormField(
               label: "Nombre",
               text: modifier.name,
               onChanged: (value) {
@@ -130,7 +130,7 @@ class BottomSheetModifiers {
             SizedBox(
               height: 16,
             ),
-            TextFormFieldCustom(
+            AMTTextFormField(
               label: "Ataque",
               text: modifier.attack.toString(),
               onChanged: (value) {
@@ -141,7 +141,7 @@ class BottomSheetModifiers {
             SizedBox(
               height: 16,
             ),
-            TextFormFieldCustom(
+            AMTTextFormField(
               label: "Esquiva",
               text: modifier.dodge.toString(),
               onChanged: (value) {
@@ -152,7 +152,7 @@ class BottomSheetModifiers {
             SizedBox(
               height: 16,
             ),
-            TextFormFieldCustom(
+            AMTTextFormField(
               label: "Parada",
               text: modifier.parry.toString(),
               onChanged: (value) {
@@ -163,7 +163,7 @@ class BottomSheetModifiers {
             SizedBox(
               height: 16,
             ),
-            TextFormFieldCustom(
+            AMTTextFormField(
               label: "Turno",
               text: modifier.turn.toString(),
               onChanged: (value) {
@@ -174,7 +174,7 @@ class BottomSheetModifiers {
             SizedBox(
               height: 16,
             ),
-            TextFormFieldCustom(
+            AMTTextFormField(
               label: "Acciones",
               text: modifier.physicalAction.toString(),
               onChanged: (value) {

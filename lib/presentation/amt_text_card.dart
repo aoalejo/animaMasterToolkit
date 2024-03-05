@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class TextCard extends StatelessWidget {
+class AMTTextCard extends StatelessWidget {
   final String? text;
   final double padding;
   final Color? background;
@@ -8,7 +8,7 @@ class TextCard extends StatelessWidget {
   final TextStyle? style;
   final int? maxLines;
 
-  TextCard(
+  AMTTextCard(
     this.text, {
     this.padding = 8,
     this.background,

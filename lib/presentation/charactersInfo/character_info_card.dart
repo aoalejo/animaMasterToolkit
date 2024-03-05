@@ -1,7 +1,7 @@
 import 'package:amt/models/character/character.dart';
 import 'package:amt/presentation/charactersInfo/consumable_create_bottom_sheet.dart';
 import 'package:amt/presentation/charactersTable/armours_rack.dart';
-import 'package:amt/presentation/text_form_field_custom.dart';
+import 'package:amt/presentation/amt_text_form_field.dart';
 import 'package:amt/presentation/bottom_sheet_modifiers.dart';
 import 'package:amt/presentation/charactersTable/consumable_card.dart';
 import 'package:amt/presentation/charactersTable/modifiers_card.dart';
@@ -91,7 +91,7 @@ class CharacterInfoCard extends StatelessWidget {
                             spacer,
                             Expanded(
                                 flex: 2,
-                                child: TextFormFieldCustom(
+                                child: AMTTextFormField(
                                   text: character.state.turnModifier,
                                   onChanged: (value) {
                                     var newChar = _calculateTurn(character, value);
@@ -202,7 +202,7 @@ class CharacterInfoCard extends StatelessWidget {
                           spacer,
                           SizedBox(
                               height: 40,
-                              child: TextFormFieldCustom(
+                              child: AMTTextFormField(
                                 label: "Notas",
                                 text: character.state.notes,
                                 onChanged: (value) {

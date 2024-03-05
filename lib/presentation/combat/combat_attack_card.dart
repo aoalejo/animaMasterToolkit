@@ -1,6 +1,6 @@
 import 'package:amt/models/enums.dart';
 import 'package:amt/models/roll.dart';
-import 'package:amt/presentation/text_form_field_custom.dart';
+import 'package:amt/presentation/amt_text_form_field.dart';
 import 'package:amt/presentation/bottom_sheet_modifiers.dart';
 import 'package:amt/presentation/charactersTable/modifiers_card.dart';
 import 'package:amt/presentation/combat/custom_combat_card.dart';
@@ -40,7 +40,7 @@ class CombatAttackCard extends StatelessWidget {
             children: [
               Flexible(
                 flex: 2,
-                child: TextFormFieldCustom(
+                child: AMTTextFormField(
                   inputType: TextInputType.number,
                   text: attackState.roll,
                   label: "Tirada de ataque",
@@ -60,7 +60,7 @@ class CombatAttackCard extends StatelessWidget {
               if (character != null && !isVariableDamage)
                 Flexible(
                   flex: 1,
-                  child: TextFormFieldCustom(
+                  child: AMTTextFormField(
                     enabled: false,
                     label: "Daño base",
                     text: weapon?.damage.toString(),
@@ -77,7 +77,7 @@ class CombatAttackCard extends StatelessWidget {
               if (character != null) SizedBox(width: 4),
               Flexible(
                 flex: 2,
-                child: TextFormFieldCustom(
+                child: AMTTextFormField(
                   onChanged: (value) {
                     appState.updateCombatState(damageModifier: value);
                   },
@@ -163,7 +163,7 @@ class CombatAttackCard extends StatelessWidget {
                             flex: 1,
                             child: Tooltip(
                               message: character.calculateAttack(),
-                              child: TextFormFieldCustom(
+                              child: AMTTextFormField(
                                 enabled: false,
                                 label: "Ataque",
                                 text: character.calculateAttack(),
@@ -173,7 +173,7 @@ class CombatAttackCard extends StatelessWidget {
                         if (character != null) SizedBox(width: 4),
                         Flexible(
                           flex: 2,
-                          child: TextFormFieldCustom(
+                          child: AMTTextFormField(
                             inputType: TextInputType.number,
                             label: character != null ? "Modificador" : "Ataque",
                             suffixIcon: TextButton(

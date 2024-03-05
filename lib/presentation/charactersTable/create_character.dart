@@ -11,8 +11,8 @@ import 'package:amt/models/enums.dart';
 import 'package:amt/models/modifiers_state.dart';
 import 'package:amt/models/roll.dart';
 import 'package:amt/models/weapon.dart';
-import 'package:amt/presentation/bottom_sheet_custom.dart';
-import 'package:amt/presentation/text_form_field_custom.dart';
+import 'package:amt/presentation/amt_bottom_sheet.dart';
+import 'package:amt/presentation/amt_text_form_field.dart';
 import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
 
@@ -40,7 +40,7 @@ class CreateCharacter {
       context: context,
       builder: (BuildContext context) {
         return StatefulBuilder(
-          builder: (context, setState) => BottomSheetCustom(
+          builder: (context, setState) => AMTBottomSheet(
             title: Text('Crear nuevo personaje'),
             bottomRow: [
               ElevatedButton(
@@ -77,21 +77,21 @@ class CreateCharacter {
             children: [
               ..._row(
                 [
-                  TextFormFieldCustom(
+                  AMTTextFormField(
                     label: "Nombre",
                     text: name,
                     onChanged: (value) => setState(
                       () => name = value,
                     ),
                   ),
-                  TextFormFieldCustom(
+                  AMTTextFormField(
                     label: "Pifia",
                     text: fumble,
                     onChanged: (value) => setState(
                       () => fumble = value,
                     ),
                   ),
-                  TextFormFieldCustom(
+                  AMTTextFormField(
                     label: "Natura",
                     text: nature,
                     onChanged: (value) => setState(
@@ -106,14 +106,14 @@ class CreateCharacter {
                 textAlign: TextAlign.center,
               ),
               ..._row([
-                TextFormFieldCustom(
+                AMTTextFormField(
                   label: "Vida",
                   text: life,
                   onChanged: (value) => setState(
                     () => life = value,
                   ),
                 ),
-                TextFormFieldCustom(
+                AMTTextFormField(
                   label: "Cansancio",
                   text: fatigue,
                   onChanged: (value) => setState(
@@ -122,21 +122,21 @@ class CreateCharacter {
                 ),
               ]),
               ..._row([
-                TextFormFieldCustom(
+                AMTTextFormField(
                   label: "Zeon",
                   text: zeon,
                   onChanged: (value) => setState(
                     () => zeon = value,
                   ),
                 ),
-                TextFormFieldCustom(
+                AMTTextFormField(
                   label: "Ki",
                   text: ki,
                   onChanged: (value) => setState(
                     () => ki = value,
                   ),
                 ),
-                TextFormFieldCustom(
+                AMTTextFormField(
                   label: "CV",
                   text: cv,
                   onChanged: (value) => setState(
@@ -150,28 +150,28 @@ class CreateCharacter {
                 textAlign: TextAlign.center,
               ),
               ..._row([
-                TextFormFieldCustom(
+                AMTTextFormField(
                   label: "Turno",
                   text: turn,
                   onChanged: (value) => setState(
                     () => turn = value,
                   ),
                 ),
-                TextFormFieldCustom(
+                AMTTextFormField(
                   label: "Ataque",
                   text: attack,
                   onChanged: (value) => setState(
                     () => attack = value,
                   ),
                 ),
-                TextFormFieldCustom(
+                AMTTextFormField(
                   label: "Daño",
                   text: damage,
                   onChanged: (value) => setState(
                     () => damage = value,
                   ),
                 ),
-                TextFormFieldCustom(
+                AMTTextFormField(
                   label: "RF",
                   text: physicalResistance,
                   onChanged: (value) => setState(
@@ -211,21 +211,21 @@ class CreateCharacter {
               _separator,
               ..._row(
                 [
-                  TextFormFieldCustom(
+                  AMTTextFormField(
                     label: "Defensa",
                     text: defense,
                     onChanged: (value) => setState(
                       () => defense = value,
                     ),
                   ),
-                  TextFormFieldCustom(
+                  AMTTextFormField(
                     label: "TA",
                     text: armour,
                     onChanged: (value) => setState(
                       () => armour = value,
                     ),
                   ),
-                  TextFormFieldCustom(
+                  AMTTextFormField(
                     label: "TA Energia",
                     text: armourEnergy,
                     onChanged: (value) => setState(

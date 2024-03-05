@@ -1,6 +1,6 @@
 import 'package:amt/models/enums.dart';
 import 'package:amt/models/roll.dart';
-import 'package:amt/presentation/text_form_field_custom.dart';
+import 'package:amt/presentation/amt_text_form_field.dart';
 import 'package:amt/presentation/bottom_sheet_modifiers.dart';
 import 'package:amt/presentation/charactersTable/modifiers_card.dart';
 import 'package:amt/presentation/combat/custom_combat_card.dart';
@@ -42,7 +42,7 @@ class CombatDefenseCard extends StatelessWidget {
                 children: [
                   SizedBox(
                     height: 40,
-                    child: TextFormFieldCustom(
+                    child: AMTTextFormField(
                       inputType: TextInputType.number,
                       text: defense.roll,
                       label: "Tirada de defensa",
@@ -71,7 +71,7 @@ class CombatDefenseCard extends StatelessWidget {
                             flex: 1,
                             child: Tooltip(
                               message: character.calculateDefense(defense.defenseType),
-                              child: TextFormFieldCustom(
+                              child: AMTTextFormField(
                                 enabled: false,
                                 label: "Defensa",
                                 text: character.calculateDefense(defense.defenseType),
@@ -81,7 +81,7 @@ class CombatDefenseCard extends StatelessWidget {
                         if (character != null) SizedBox(width: 4),
                         Flexible(
                           flex: 2,
-                          child: TextFormFieldCustom(
+                          child: AMTTextFormField(
                             inputType: TextInputType.number,
                             label: character != null ? "Modificador" : "Defensa",
                             suffixIcon: TextButton(
@@ -119,7 +119,7 @@ class CombatDefenseCard extends StatelessWidget {
                           if (character != null)
                             Flexible(
                               flex: 1,
-                              child: TextFormFieldCustom(
+                              child: AMTTextFormField(
                                 enabled: false,
                                 label: "Armadura",
                                 text: character.combat.armour.calculatedArmour.armourFor(combatState.attack.damageType).toString(),
@@ -128,7 +128,7 @@ class CombatDefenseCard extends StatelessWidget {
                           if (character != null) SizedBox(width: 4),
                           Flexible(
                             flex: 2,
-                            child: TextFormFieldCustom(
+                            child: AMTTextFormField(
                               onChanged: (value) {
                                 appState.updateCombatState(armourModifier: value);
                               },

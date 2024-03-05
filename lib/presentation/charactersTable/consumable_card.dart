@@ -1,6 +1,6 @@
 import 'package:amt/models/character/consumable_state.dart';
 import 'package:amt/models/enums.dart';
-import 'package:amt/presentation/text_form_field_custom.dart';
+import 'package:amt/presentation/amt_text_form_field.dart';
 import 'package:flutter/material.dart';
 
 class ConsumableCard extends StatelessWidget {
@@ -100,7 +100,7 @@ class ConsumableCard extends StatelessWidget {
                   },
                   icon: Icon(Icons.remove)),
               Expanded(
-                  child: TextFormFieldCustom(
+                  child: AMTTextFormField(
                 align: TextAlign.center,
                 decoration: InputDecoration(
                   isDense: true,
@@ -113,7 +113,7 @@ class ConsumableCard extends StatelessWidget {
               )),
               Text("/"),
               Expanded(
-                child: TextFormFieldCustom(
+                child: AMTTextFormField(
                   align: TextAlign.center,
                   decoration: InputDecoration(
                     isDense: true,

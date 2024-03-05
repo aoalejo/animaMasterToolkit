@@ -1,7 +1,7 @@
 import 'package:amt/models/character/consumable_state.dart';
 import 'package:amt/models/enums.dart';
-import 'package:amt/presentation/bottom_sheet_custom.dart';
-import 'package:amt/presentation/text_form_field_custom.dart';
+import 'package:amt/presentation/amt_bottom_sheet.dart';
+import 'package:amt/presentation/amt_text_form_field.dart';
 import 'package:flutter/material.dart';
 
 class CreateConsumable {
@@ -16,7 +16,7 @@ class CreateConsumable {
       context: context,
       builder: (BuildContext context) {
         return StatefulBuilder(
-          builder: (context, setState) => BottomSheetCustom(
+          builder: (context, setState) => AMTBottomSheet(
             title: Text('Crear nuevo consumible'),
             bottomRow: [
               ElevatedButton(
@@ -41,21 +41,21 @@ class CreateConsumable {
             children: [
               ..._row(
                 [
-                  TextFormFieldCustom(
+                  AMTTextFormField(
                     label: "Nombre",
                     text: name,
                     onChanged: (value) => setState(
                       () => name = value,
                     ),
                   ),
-                  TextFormFieldCustom(
+                  AMTTextFormField(
                     label: "Valor máximo",
                     text: max,
                     onChanged: (value) => setState(
                       () => max = value,
                     ),
                   ),
-                  TextFormFieldCustom(
+                  AMTTextFormField(
                     label: "Incremento",
                     text: increment,
                     onChanged: (value) => setState(
@@ -65,7 +65,7 @@ class CreateConsumable {
                 ],
               ),
               ..._row([
-                TextFormFieldCustom(
+                AMTTextFormField(
                   label: "Descripción",
                   text: description,
                   onChanged: (value) => setState(

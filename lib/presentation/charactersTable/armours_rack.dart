@@ -1,7 +1,7 @@
 import 'package:amt/models/armour.dart';
 import 'package:amt/models/armour_data.dart';
-import 'package:amt/presentation/text_form_field_custom.dart';
-import 'package:amt/presentation/bottom_sheet_custom.dart';
+import 'package:amt/presentation/amt_text_form_field.dart';
+import 'package:amt/presentation/amt_bottom_sheet.dart';
 import 'package:amt/resources/armours.dart';
 import 'package:flutter/material.dart';
 import 'package:function_tree/function_tree.dart';
@@ -29,13 +29,13 @@ class ArmoursRack extends StatelessWidget {
           builder: (BuildContext context) {
             return StatefulBuilder(
               builder: (BuildContext context, StateSetter setState) {
-                return BottomSheetCustom(
+                return AMTBottomSheet(
                   title: Text("Modificar Armadura"),
                   children: [
                     SizedBox(
                       height: 16,
                     ),
-                    TextFormFieldCustom(
+                    AMTTextFormField(
                       label: "Nombre",
                       text: armour.armours.firstOrNull?.name ?? "Sin armadura",
                       onChanged: (value) {
@@ -52,7 +52,7 @@ class ArmoursRack extends StatelessWidget {
                     Row(
                       children: [
                         Flexible(
-                          child: TextFormFieldCustom(
+                          child: AMTTextFormField(
                             label: "Filo",
                             text: armour.calculatedArmour.fil.toString(),
                             onChanged: (value) {
@@ -65,7 +65,7 @@ class ArmoursRack extends StatelessWidget {
                           width: 16,
                         ),
                         Flexible(
-                          child: TextFormFieldCustom(
+                          child: AMTTextFormField(
                             label: "Penetrante",
                             text: armour.calculatedArmour.pen.toString(),
                             onChanged: (value) {
@@ -78,7 +78,7 @@ class ArmoursRack extends StatelessWidget {
                           width: 16,
                         ),
                         Flexible(
-                          child: TextFormFieldCustom(
+                          child: AMTTextFormField(
                             label: "Contundente",
                             text: armour.calculatedArmour.con.toString(),
                             onChanged: (value) {
@@ -95,7 +95,7 @@ class ArmoursRack extends StatelessWidget {
                     Row(
                       children: [
                         Flexible(
-                          child: TextFormFieldCustom(
+                          child: AMTTextFormField(
                             label: "Frio",
                             text: armour.calculatedArmour.fri.toString(),
                             onChanged: (value) {
@@ -108,7 +108,7 @@ class ArmoursRack extends StatelessWidget {
                           width: 16,
                         ),
                         Flexible(
-                          child: TextFormFieldCustom(
+                          child: AMTTextFormField(
                             label: "Calor",
                             text: armour.calculatedArmour.cal.toString(),
                             onChanged: (value) {
@@ -121,7 +121,7 @@ class ArmoursRack extends StatelessWidget {
                           width: 16,
                         ),
                         Flexible(
-                          child: TextFormFieldCustom(
+                          child: AMTTextFormField(
                             label: "Electricidad",
                             text: armour.calculatedArmour.ele.toString(),
                             onChanged: (value) {
@@ -135,7 +135,7 @@ class ArmoursRack extends StatelessWidget {
                     SizedBox(
                       height: 16,
                     ),
-                    TextFormFieldCustom(
+                    AMTTextFormField(
                       label: "Energía",
                       text: armour.calculatedArmour.ene.toString(),
                       onChanged: (value) {

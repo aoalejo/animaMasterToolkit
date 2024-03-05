@@ -1,6 +1,6 @@
 import 'package:amt/models/character/character.dart';
 import 'package:amt/models/enums.dart';
-import 'package:amt/presentation/text_form_field_custom.dart';
+import 'package:amt/presentation/amt_text_form_field.dart';
 import 'package:amt/utils/key_value.dart';
 import 'package:flutter/material.dart';
 import 'package:function_tree/function_tree.dart';
@@ -46,7 +46,7 @@ class ShowCharacterOptions {
                       SizedBox(
                         height: 12,
                       ),
-                      TextFormFieldCustom(
+                      AMTTextFormField(
                         label: "Nombre",
                         text: (character.profile.name).toString(),
                         onChanged: (value) {
@@ -60,7 +60,7 @@ class ShowCharacterOptions {
                       Row(
                         children: [
                           Expanded(
-                            child: TextFormFieldCustom(
+                            child: AMTTextFormField(
                               label: "Nivel de pifia",
                               text: (character.profile.fumbleLevel ?? 3).toString(),
                               onChanged: (value) {
@@ -77,7 +77,7 @@ class ShowCharacterOptions {
                             width: 12,
                           ),
                           Expanded(
-                            child: TextFormFieldCustom(
+                            child: AMTTextFormField(
                               label: "Natura",
                               text: (character.profile.nature ?? 5).toString(),
                               onChanged: (value) {
