@@ -142,11 +142,14 @@ class CharactersTable extends StatelessWidget {
                             child: Row(
                               children: [
                                 Expanded(
+                                    child: Tooltip(
+                                  message: character.profile.name,
                                   child: Text(
                                     character.profile.name,
                                     maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
                                   ),
-                                ),
+                                )),
                                 Stack(
                                   alignment: AlignmentDirectional.center,
                                   children: [

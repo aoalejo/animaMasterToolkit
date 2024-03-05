@@ -47,7 +47,7 @@ class CombatAttackCard extends StatelessWidget {
                   onChanged: (value) => {appState.updateCombatState(attackRoll: value)},
                   suffixIcon: IconButton(
                     onPressed: () {
-                      appState.updateCombatState(attackRoll: character?.roll().getRollsAsString());
+                      appState.updateCombatState(attackRoll: (character?.roll() ?? Roll.roll()).getRollsAsString());
                     },
                     icon: SizedBox.square(
                       dimension: 24,
