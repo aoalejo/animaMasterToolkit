@@ -6,7 +6,6 @@ part 'character_resistances.g.dart';
 
 @HiveType(typeId: 21, adapterName: 'CharacterResistancesAdapter')
 class CharacterResistances {
-
   CharacterResistances({
     this.presence = 0,
     this.physicalResistance = 0,
@@ -16,13 +15,17 @@ class CharacterResistances {
     this.physicResistance = 0,
   });
 
-  CharacterResistances.fromJson(Map<String, dynamic> json) {
-    presence = JsonUtils.integer(json['Pres. Base'], 0);
-    physicalResistance = JsonUtils.integer(json['RF'], 0);
-    diseasesResistance = JsonUtils.integer(json['RE'], 0);
-    poisonResistance = JsonUtils.integer(json['RV'], 0);
-    magicalResistance = JsonUtils.integer(json['RM'], 0);
-    physicResistance = JsonUtils.integer(json['RP'], 0);
+  static CharacterResistances? fromJson(Map<String, dynamic>? json) {
+    if (json == null) return null;
+
+    return CharacterResistances(
+      presence: JsonUtils.integer(json['Pres. Base'], 0),
+      physicalResistance: JsonUtils.integer(json['RF'], 0),
+      diseasesResistance: JsonUtils.integer(json['RE'], 0),
+      poisonResistance: JsonUtils.integer(json['RV'], 0),
+      magicalResistance: JsonUtils.integer(json['RM'], 0),
+      physicResistance: JsonUtils.integer(json['RP'], 0),
+    );
   }
 
   CharacterResistances.withDefault(int value) {

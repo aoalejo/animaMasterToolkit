@@ -28,16 +28,21 @@ class AttributesList {
     willpower = defaultValue;
   }
 
-  AttributesList.fromJson(Map<String, dynamic> json) {
-    agility = JsonUtils.integer(json['AGI'], 0);
-    constitution = JsonUtils.integer(json['CON'], 0);
-    dexterity = JsonUtils.integer(json['DES'], 0);
-    strength = JsonUtils.integer(json['FUE'], 0);
-    intelligence = JsonUtils.integer(json['INT'], 0);
-    perception = JsonUtils.integer(json['PER'], 0);
-    might = JsonUtils.integer(json['POD'], 0);
-    willpower = JsonUtils.integer(json['VOL'], 0);
+  static AttributesList? fromJson(Map<String, dynamic>? json) {
+    if (json == null) return null;
+
+    return AttributesList(
+      agility: JsonUtils.integer(json['AGI'], 0),
+      constitution: JsonUtils.integer(json['CON'], 0),
+      dexterity: JsonUtils.integer(json['DES'], 0),
+      strength: JsonUtils.integer(json['FUE'], 0),
+      intelligence: JsonUtils.integer(json['INT'], 0),
+      perception: JsonUtils.integer(json['PER'], 0),
+      might: JsonUtils.integer(json['POD'], 0),
+      willpower: JsonUtils.integer(json['VOL'], 0),
+    );
   }
+
   @HiveField(0)
   late int agility;
   @HiveField(1)

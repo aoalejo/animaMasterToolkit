@@ -21,14 +21,23 @@ extension DamageTypesDesc on DamageTypes {
   }
 }
 
-class JsonUtils {
-  static JsonEncoded tryCreate<JsonEncoded>(Map<String, dynamic> json, String key, JsonEncoded placeholder) {
-    if (json[key] is Map<String, dynamic>) {
-      return JsonEncoded.fromJson(json[key]);
+extension GetSubDictionary on Map<String, dynamic> {
+  Map<String, dynamic>? getMap(String key) {
+    if (this[key] is Map<String, dynamic>) {
+      return this[key] as Map<String, dynamic>;
     }
     return null;
   }
 
+  List<Map<String, dynamic>> getList(String key) {
+    if (this[key] is List<Map<String, dynamic>>) {
+      return this[key] as List<Map<String, dynamic>>;
+    }
+    return [];
+  }
+}
+
+class JsonUtils {
   static ArmourLocation armourLocation(dynamic base) {
     switch (base?.toString().toUpperCase()) {
       case 'completa':

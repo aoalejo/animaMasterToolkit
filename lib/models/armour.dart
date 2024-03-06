@@ -23,21 +23,25 @@ class Armour {
     this.enchanted,
   });
 
-  Armour.fromJson(Map<String, dynamic> json) {
-    name = json['nombre'].toString();
-    location = JsonUtils.armourLocation(json['Localizacion']);
-    quality = JsonUtils.integer(json['calidad'], 0);
-    fil = JsonUtils.integer(json['FIL'], 2);
-    con = JsonUtils.integer(json['CON'], 2);
-    pen = JsonUtils.integer(json['PEN'], 2);
-    cal = JsonUtils.integer(json['CAL'], 2);
-    ele = JsonUtils.integer(json['ELE'], 2);
-    fri = JsonUtils.integer(json['FRI'], 2);
-    ene = JsonUtils.integer(json['ENE'], 2);
-    endurance = JsonUtils.integer(json['Entereza'], 10);
-    presence = JsonUtils.integer(json['Presencia'], 10);
-    movementRestriction = JsonUtils.integer(json['RestMov'], 0);
-    enchanted = json['Enc'].toString() == 'Si';
+  static Armour? fromJson(Map<String, dynamic>? json) {
+    if (json == null) return null;
+
+    return Armour(
+      name: json['nombre'].toString(),
+      location: JsonUtils.armourLocation(json['Localizacion']),
+      quality: JsonUtils.integer(json['calidad'], 0),
+      fil: JsonUtils.integer(json['FIL'], 2),
+      con: JsonUtils.integer(json['CON'], 2),
+      pen: JsonUtils.integer(json['PEN'], 2),
+      cal: JsonUtils.integer(json['CAL'], 2),
+      ele: JsonUtils.integer(json['ELE'], 2),
+      fri: JsonUtils.integer(json['FRI'], 2),
+      ene: JsonUtils.integer(json['ENE'], 2),
+      endurance: JsonUtils.integer(json['Entereza'], 10),
+      presence: JsonUtils.integer(json['Presencia'], 10),
+      movementRestriction: JsonUtils.integer(json['RestMov'], 0),
+      enchanted: json['Enc'].toString() == 'Si',
+    );
   }
 
   Armour.fromValue({required String name, required int physical, required int energy}) {

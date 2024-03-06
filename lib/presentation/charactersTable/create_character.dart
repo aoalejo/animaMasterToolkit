@@ -17,7 +17,7 @@ import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
 
 class CreateCharacter {
-  static show(BuildContext context, Function(Character) onCreated) {
+  static void show(BuildContext context, void Function(Character) onCreated) {
     var name = '';
     var fumble = '3';
     var nature = '5';
@@ -44,31 +44,32 @@ class CreateCharacter {
             title: const Text('Crear nuevo personaje'),
             bottomRow: [
               ElevatedButton(
-                  child: const Text('Guardar'),
-                  onPressed: () {
-                    onCreated(
-                      _buildCharacter(
-                        name,
-                        fumble,
-                        nature,
-                        life,
-                        fatigue,
-                        zeon,
-                        ki,
-                        cv,
-                        turn,
-                        attack,
-                        damage,
-                        defense,
-                        armour,
-                        armourEnergy,
-                        physicalResistance,
-                        defenseType,
-                        principalDamage,
-                      ),
-                    );
-                    Navigator.pop(context);
-                  },),
+                child: const Text('Guardar'),
+                onPressed: () {
+                  onCreated(
+                    _buildCharacter(
+                      name,
+                      fumble,
+                      nature,
+                      life,
+                      fatigue,
+                      zeon,
+                      ki,
+                      cv,
+                      turn,
+                      attack,
+                      damage,
+                      defense,
+                      armour,
+                      armourEnergy,
+                      physicalResistance,
+                      defenseType,
+                      principalDamage,
+                    ),
+                  );
+                  Navigator.pop(context);
+                },
+              ),
               ElevatedButton(
                 child: const Text('Cerrar'),
                 onPressed: () => Navigator.pop(context),
@@ -290,10 +291,10 @@ class CreateCharacter {
     DefenseType defenseType,
     DamageTypes principalDamage,
   ) {
-    final var consumables = <ConsumableState>[];
-
-    consumables.add(ConsumableState.from(name: 'Vida', value: life.intValue, type: ConsumableType.hitPoints));
-    consumables.add(ConsumableState.from(name: 'Cansancio', value: fatigue.intValue, type: ConsumableType.fatigue));
+    final consumables = <ConsumableState>[
+      ConsumableState.from(name: 'Vida', value: life.intValue, type: ConsumableType.hitPoints),
+      ConsumableState.from(name: 'Cansancio', value: fatigue.intValue, type: ConsumableType.fatigue)
+    ];
 
     if (ki.isNotEmpty) {
       consumables.add(ConsumableState.from(name: 'Ki', value: ki.intValue, type: ConsumableType.other));
@@ -308,46 +309,47 @@ class CreateCharacter {
     }
 
     return Character(
-        uuid: const Uuid().v4(),
-        attributes: AttributesList.withDefault(6),
-        skills: Map.fromEntries([]),
-        profile: CharacterProfile(
-          fatigue: fatigue.intValue,
-          name: name,
-          nature: nature.intValue,
-          fumbleLevel: fumble.intValue,
-        ),
-        combat: CombatData(
-          armour: ArmourData(
-            calculatedArmour: Armour.fromValue(
-              name: 'Armadura',
-              physical: armour.intValue,
-              energy: armourEnergy.intValue,
-            ),
-            armours: [Armour(name: 'Armadura')],
+      uuid: const Uuid().v4(),
+      attributes: AttributesList.withDefault(6),
+      skills: Map.fromEntries([]),
+      profile: CharacterProfile(
+        fatigue: fatigue.intValue,
+        name: name,
+        nature: nature.intValue,
+        fumbleLevel: fumble.intValue,
+      ),
+      combat: CombatData(
+        armour: ArmourData(
+          calculatedArmour: Armour.fromValue(
+            name: 'Armadura',
+            physical: armour.intValue,
+            energy: armourEnergy.intValue,
           ),
-          weapons: [
-            Weapon(
-              name: 'Arma',
-              turn: turn.intValue,
-              attack: attack.intValue,
-              defense: defense.intValue,
-              defenseType: defenseType,
-              damage: damage.intValue,
-              principalDamage: principalDamage,
-              secondaryDamage: principalDamage,
-            ),
-          ],
+          armours: [Armour(name: 'Armadura')],
         ),
-        state: CharacterState(
-          currentTurn: Roll.turn(),
-          consumables: consumables,
-          modifiers: ModifiersState(),
-        ),
-        ki: null,
-        mystical: null,
-        psychic: null,
-        resistances: CharacterResistances.withDefault(physicalResistance.intValue),);
+        weapons: [
+          Weapon(
+            name: 'Arma',
+            turn: turn.intValue,
+            attack: attack.intValue,
+            defense: defense.intValue,
+            defenseType: defenseType,
+            damage: damage.intValue,
+            principalDamage: principalDamage,
+            secondaryDamage: principalDamage,
+          ),
+        ],
+      ),
+      state: CharacterState(
+        currentTurn: Roll.turn(),
+        consumables: consumables,
+        modifiers: ModifiersState(),
+      ),
+      ki: null,
+      mystical: null,
+      psychic: null,
+      resistances: CharacterResistances.withDefault(physicalResistance.intValue),
+    );
   }
 
   static const _separator = SizedBox(

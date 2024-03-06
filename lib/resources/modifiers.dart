@@ -2,6 +2,8 @@ import 'dart:convert';
 
 import 'package:amt/models/character/status_modifier.dart';
 import 'package:amt/models/enums.dart';
+import 'package:amt/utils/list_extension.dart';
+import 'package:amt/utils/string_extension.dart';
 
 enum ModifiersType { attack, parry, dodge, turn, action }
 
@@ -20,12 +22,8 @@ class Modifiers {
   static List<StatusModifier> getSituationalModifiers(ModifiersType type) {
     var modifiers = <StatusModifier>[];
 
-    final json = jsonDecode(_valuesSituational);
-
-    if (json != null) {
-      json.forEach((v) {
-        modifiers.add(StatusModifier.fromJson(v));
-      });
+    for (final element in _valuesSituational.jsonList) {
+      modifiers.tryAdd(StatusModifier.fromJson(element));
     }
 
     switch (type) {
@@ -47,12 +45,8 @@ class Modifiers {
   static List<StatusModifier> getStatusModifiers() {
     final modifiers = <StatusModifier>[];
 
-    final json = jsonDecode(_values);
-
-    if (json != null) {
-      json.forEach((v) {
-        modifiers.add(StatusModifier.fromJson(v));
-      });
+    for (final element in _valuesSituational.jsonList) {
+      modifiers.tryAdd(StatusModifier.fromJson(element));
     }
 
     return modifiers;
@@ -60,7 +54,7 @@ class Modifiers {
 
   static const _valuesSituational = '''
 [
-  { "name": "Cuello (Apuntado)", "attack":"-80" },
+{ "name": "Cuello (Apuntado)", "attack":"-80" },
 { "name": "Cabeza (Apuntado)", "attack":"-60" },
 { "name": "Codo (Apuntado)", "attack":"-60" },
 { "name": "Corazón (Apuntado)", "attack":"-60" },

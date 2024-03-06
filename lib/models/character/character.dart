@@ -14,6 +14,7 @@ import 'package:amt/models/psychic_data.dart';
 import 'package:amt/models/roll.dart';
 import 'package:amt/models/weapon.dart';
 import 'package:amt/resources/modifiers.dart';
+import 'package:amt/utils/json_utils.dart';
 import 'package:amt/utils/key_value.dart';
 import 'package:function_tree/function_tree.dart';
 import 'package:hive/hive.dart';
@@ -41,39 +42,20 @@ class Character extends HiveObject {
     profile = CharacterProfile(name: 'Nombre');
   }
 
-  Character.fromJson(Map<String, dynamic> json) {
-    uuid = const Uuid().v4();
+  static Character? fromJson(Map<String, dynamic>? json) {
+    if (json == null) return null;
 
-    attributes = json['Atributos'] != null ? AttributesList.fromJson(json.map['Atributos']) : AttributesList();
+    final profile = CharacterProfile.fromJson(json.getMap('datosElementales')) ?? CharacterProfile();
 
-    resistances = json['Resistencias'] != null ? CharacterResistances.fromJson(json['Resistencias']) : CharacterResistances();
-    var combatData = json.get('Combate');
-
-    combat = combatData != null
-        ? CombatData.fromJson(combatData)
-        : CombatData(
-            weapons: [],
-            armour: ArmourData(armours: [], calculatedArmour: Armour()),
-          );
-
-    skills = json['Habilidades'] ?? <String, String>{};
-
-    profile = json['datosElementales'] != null ? CharacterProfile?.fromJson(json['datosElementales']) : CharacterProfile();
-
-    final consumables = <ConsumableState>[];
-
-    consumables.add(
+    final consumables = <ConsumableState>[
       ConsumableState(
         name: 'Vida',
         maxValue: profile.hitPoints,
         actualValue: profile.hitPoints,
         step: 10,
         type: ConsumableType.hitPoints,
-        description: 'indice de regeneración: ${profile.regeneration}:\n${getRegenDescription()}',
+        description: 'indice de regeneración: ${profile.regeneration}:\n${getRegenerationDescription(profile.regeneration)}',
       ),
-    );
-
-    consumables.add(
       ConsumableState(
         name: 'Cansancio',
         maxValue: profile.fatigue,
@@ -82,77 +64,73 @@ class Character extends HiveObject {
         step: 1,
         description: '',
       ),
-    );
+    ];
 
-    if (json['Ki'] != null) {
-      ki = CharacterKi.fromJson(json['Ki']);
+    final ki = CharacterKi.fromJson(json.getMap('Ki'));
 
-      if (ki!.maximumPerAttribute.hasAValueWithMoreThanZero()) {
-        final names = AttributesList.names();
-        final max = ki!.maximumPerAttribute.orderedList();
-        final accumulation = ki!.accumulationsPerAttribute.orderedList();
+    if (ki!.maximumPerAttribute.hasAValueWithMoreThanZero()) {
+      final names = AttributesList.names();
+      final max = ki.maximumPerAttribute.orderedList();
+      final accumulation = ki.accumulationsPerAttribute.orderedList();
 
-        for (var i = 0; i < max.length; i++) {
-          if (max[i] > 0) {
-            consumables.add(
-              ConsumableState(name: 'Ki/${names[i]}', maxValue: max[i], actualValue: 1, step: accumulation[i], description: ''),
-            );
-          }
-        }
-      } else {
-        if (ki?.maximumAccumulation != 0) {
+      for (var i = 0; i < max.length; i++) {
+        if (max[i] > 0) {
           consumables.add(
-            ConsumableState(
-              name: 'Ki',
-              maxValue: ki?.maximumAccumulation ?? 0,
-              actualValue: 01,
-              step: ki?.genericAccumulation ?? 0,
-              description: 'Usando ki unificado',
-            ),
+            ConsumableState(name: 'Ki/${names[i]}', maxValue: max[i], actualValue: 1, step: accumulation[i], description: ''),
           );
         }
       }
     } else {
-      ki = null;
-    }
-
-    if (json['Misticos'] != null) {
-      mystical = Mystical.fromJson(json['Misticos']);
-
-      if (mystical?.zeon != 0) {
+      if (ki.maximumAccumulation != 0) {
         consumables.add(
           ConsumableState(
-            name: 'Zeon',
-            maxValue: mystical?.zeon ?? 0,
-            actualValue: mystical?.zeon ?? 0,
-            step: mystical?.act ?? 0,
-            description: 'Regenera ${mystical!.zeonRegeneration} por día',
+            name: 'Ki',
+            maxValue: ki.maximumAccumulation,
+            actualValue: 01,
+            step: ki.genericAccumulation,
+            description: 'Usando ki unificado',
           ),
         );
       }
-    } else {
-      mystical = null;
     }
 
-    if (json.get('Psiquicos') != null) {
-      psychic = PsychicData.fromJson(json.get('Psiquicos')!);
+    final mystical = Mystical.fromJson(json.getMap('Misticos'));
 
-      if (psychic?.freeCvs != 0) {
+    if (mystical?.zeon != 0) {
+      consumables.add(
+        ConsumableState(
+          name: 'Zeon',
+          maxValue: mystical?.zeon ?? 0,
+          actualValue: mystical?.zeon ?? 0,
+          step: mystical?.act ?? 0,
+          description: 'Regenera ${mystical!.zeonRegeneration} por día',
+        ),
+      );
+    }
+
+    final psychic = PsychicData.fromJson(json.getMap('Psiquicos'));
+
+    if (psychic != null) {
+      if (psychic.freeCvs != 0) {
         consumables.add(
           ConsumableState(
             name: 'CV',
-            maxValue: psychic?.freeCvs ?? 0,
-            actualValue: psychic?.freeCvs ?? 0,
+            maxValue: psychic.freeCvs,
+            actualValue: psychic.freeCvs,
             step: 1,
             description: '',
           ),
         );
       }
-    } else {
-      psychic = null;
     }
 
-    state = CharacterState(
+    final combat = CombatData.fromJson(json.getMap('Combate')) ??
+        CombatData(
+          weapons: [],
+          armour: ArmourData(armours: [], calculatedArmour: Armour()),
+        );
+
+    final state = CharacterState(
       consumables: consumables,
       modifiers: ModifiersState(),
       currentTurn: Roll.roll(
@@ -161,7 +139,21 @@ class Character extends HiveObject {
         nature: profile.nature ?? 0,
       ),
     );
+
+    return Character(
+      uuid: const Uuid().v4(),
+      attributes: AttributesList.fromJson(json.getMap('Atributos')) ?? AttributesList(),
+      resistances: CharacterResistances.fromJson(json.getMap('Resistencias')) ?? CharacterResistances(),
+      combat: combat,
+      skills: json.getMap('Habilidades') ?? <String, String>{},
+      mystical: mystical,
+      profile: profile,
+      psychic: psychic,
+      state: state,
+      ki: ki,
+    );
   }
+
   @HiveField(0)
   late String uuid;
   @HiveField(1)
@@ -210,7 +202,7 @@ class Character extends HiveObject {
     );
   }
 
-  String getRegenDescription() {
+  static String getRegenerationDescription(int index) {
     final values = [
       '0',
       'Regenera 10 PV al día descansando, y -5 a negativos', // 1
@@ -235,7 +227,7 @@ class Character extends HiveObject {
       'Regenera 250 PV por asalto, todos sus negativos por asalto', // 20
       '',
     ];
-    return values[profile.regeneration];
+    return values[index];
   }
 
   void removeFrom(int value, ConsumableType type) {
@@ -346,29 +338,17 @@ class Character extends HiveObject {
 class CharacterList {
   CharacterList({required this.characters});
 
-  CharacterList.fromJson(Map<String, dynamic> json) {
-    characters = [];
+  static CharacterList? fromJson(Map<String, dynamic>? json) {
+    if (json == null) return null;
 
-    if (json['characters'] != null) {
-      json['characters'].forEach((v) {
-        characters.add(Character.fromJson(v));
-      });
-    }
+    return CharacterList(characters: json.getList('characters').map(Character.fromJson).nonNulls.toList());
   }
+
   late List<Character> characters;
 }
 
 extension on String {
   String get normalized {
     return toLowerCase().replaceAll(' ', '');
-  }
-}
-
-extension on Map<String, dynamic> {
-  Map<String, dynamic>? get(String key) {
-    if (this[key] is Map<String, dynamic>) {
-      return this[key] as Map<String, dynamic>;
-    }
-    return null;
   }
 }

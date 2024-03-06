@@ -41,7 +41,7 @@ class ModifiersState {
   }
 
   String totalAttackingDescription() {
-    final var totalModifier = StatusModifier(name: 'total');
+    final totalModifier = StatusModifier(name: 'total');
     for (final modifier in _modifiers) {
       totalModifier.attack = totalModifier.attack + modifier.attack;
     }
@@ -50,7 +50,7 @@ class ModifiersState {
   }
 
   String totalDefendingDescription(DefenseType type) {
-    final var totalModifier = StatusModifier(name: 'total');
+    final totalModifier = StatusModifier(name: 'total');
 
     for (final modifier in _modifiers) {
       totalModifier.attack = totalModifier.attack + modifier.attack;

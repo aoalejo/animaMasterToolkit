@@ -6,7 +6,6 @@ part 'character_ki.g.dart';
 
 @HiveType(typeId: 9, adapterName: 'CharacterKiAdapter')
 class CharacterKi {
-
   CharacterKi({
     required this.accumulationsPerAttribute,
     required this.maximumPerAttribute,
@@ -23,14 +22,18 @@ class CharacterKi {
     genericAccumulation = 0;
   }
 
-  CharacterKi.fromJson(Map<String, dynamic> json) {
-    accumulationsPerAttribute = json['Acumulaciones'] != null ? AttributesList.fromJson(json['Acumulaciones']) : AttributesList();
-    maximumPerAttribute = json['Maximos'] != null ? AttributesList.fromJson(json['Maximos']) : AttributesList();
-    skills = json['Habilidades'] ?? <String, String>{};
+  static CharacterKi? fromJson(Map<String, dynamic>? json) {
+    if (json == null) return null;
 
-    maximumAccumulation = JsonUtils.integer(json['acumulacionMax'], 0);
-    genericAccumulation = JsonUtils.integer(json['acumulacionGenerica'], 0);
+    return CharacterKi(
+      accumulationsPerAttribute: AttributesList.fromJson(json.getMap('Acumulaciones')) ?? AttributesList(),
+      maximumPerAttribute: AttributesList.fromJson(json.getMap('Maximos')) ?? AttributesList(),
+      skills: json.getMap('Habilidades') ?? <String, String>{},
+      maximumAccumulation: JsonUtils.integer(json['acumulacionMax'], 0),
+      genericAccumulation: JsonUtils.integer(json['acumulacionGenerica'], 0),
+    );
   }
+
   @HiveField(0)
   late AttributesList accumulationsPerAttribute;
   @HiveField(1)

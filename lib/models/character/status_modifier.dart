@@ -6,7 +6,6 @@ part 'status_modifier.g.dart';
 
 @HiveType(typeId: 14, adapterName: 'StatusModifierAdapter')
 class StatusModifier extends Object {
-
   StatusModifier({
     required this.name,
     this.attack = 0,
@@ -18,17 +17,19 @@ class StatusModifier extends Object {
     this.midValue = 0,
   });
 
-  StatusModifier.fromJson(Map<String, dynamic> json) {
-    name = json['name'];
+  static StatusModifier? fromJson(Map<String, dynamic>? json) {
+    if (json == null) return null;
 
-    attack = JsonUtils.integer(json['attack'], 0);
-    dodge = JsonUtils.integer(json['dodge'], 0);
-    parry = JsonUtils.integer(json['parry'], 0);
-    turn = JsonUtils.integer(json['turn'], 0);
-    physicalAction = JsonUtils.integer(json['physicalAction'], 0);
-    isOfCritical = false;
-    midValue = 0;
+    return StatusModifier(
+      name: JsonUtils.string(json['name'], ''),
+      attack: JsonUtils.integer(json['attack'], 0),
+      dodge: JsonUtils.integer(json['dodge'], 0),
+      parry: JsonUtils.integer(json['parry'], 0),
+      turn: JsonUtils.integer(json['turn'], 0),
+      physicalAction: JsonUtils.integer(json['physicalAction'], 0),
+    );
   }
+
   @HiveField(0)
   late String name;
   @HiveField(1)

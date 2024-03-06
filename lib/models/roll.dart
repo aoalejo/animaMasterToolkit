@@ -7,7 +7,6 @@ part 'roll.g.dart';
 
 @HiveType(typeId: 4, adapterName: 'RollAdapter')
 class Roll {
-
   Roll({required this.description, required this.roll, required this.rolls});
 
   Roll.turn() {
@@ -78,7 +77,7 @@ class Roll {
         thisRollDescription = '$thisRollDescription\nPifia: $handicap';
         thisRoll = handicap;
       } else {
-        final var fumble = Roll.roll(
+        final fumble = Roll.roll(
           canCrit: false,
           canFumble: false,
           fumbleLevel: -1,

@@ -7,9 +7,9 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hive/hive.dart';
+import 'package:logger/web.dart';
 
 class NonPlayerCharactersState extends ChangeNotifier {
-
   NonPlayerCharactersState() {
     initAsync();
   }
@@ -46,13 +46,13 @@ class NonPlayerCharactersState extends ChangeNotifier {
       'assets/characters.json',
     );
 
-    final charactersWrapper = CharacterList.fromJson(jsonDecode(charactersString));
+    final charactersWrapper = CharacterList.fromJson(jsonDecode(charactersString) as Map<String, dynamic>);
 
-    return charactersWrapper.characters;
+    return charactersWrapper?.characters ?? [];
   }
 
   Future<void> getCharacters() async {
-    final var result = await FilePicker.platform.pickFiles(
+    final result = await FilePicker.platform.pickFiles(
       type: FileType.custom,
       allowedExtensions: ['json'],
       allowMultiple: true,
@@ -62,12 +62,14 @@ class NonPlayerCharactersState extends ChangeNotifier {
       if (result != null) {
         if (result.files.first.bytes != null) {
           // For web
-          final var files = result.files.map((file) => const Windows1252Codec().decode(file.bytes!.toList())).toList();
+          final files = result.files.map((file) => const Windows1252Codec().decode(file.bytes!.toList())).toList();
 
           for (final file in files) {
-            final character = Character.fromJson(jsonDecode(file));
-            characters.add(character);
-            await _box.add(character);
+            final character = Character.fromJson(jsonDecode(file) as Map<String, dynamic>);
+            if (character != null) {
+              characters.add(character);
+              await _box.add(character);
+            }
           }
         } else {
           // For desktop
@@ -75,12 +77,12 @@ class NonPlayerCharactersState extends ChangeNotifier {
 
           for (final file in files) {
             final json = await file.readAsString(encoding: const Windows1252Codec());
-            final character = Character.fromJson(jsonDecode(json));
-            Logger().d(character);
-            characters.add(character);
-            Logger().d('character added');
+            final character = Character.fromJson(jsonDecode(json) as Map<String, dynamic>);
 
-            await _box.add(character);
+            if (character != null) {
+              characters.add(character);
+              await _box.add(character);
+            }
           }
         }
       }

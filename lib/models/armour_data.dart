@@ -16,30 +16,24 @@ class ArmourData {
     this.finalNaturalPenalty,
   });
 
-  ArmourData.fromJson(Map<String, dynamic> json) {
-    movementRestriction = JsonUtils.integer(json['restriccionMov'], 0);
-    naturalPenalty = JsonUtils.integer(json['penNatural'], 0);
-    requirement = JsonUtils.integer(json['requisito'], 0);
-    physicalPenalty = JsonUtils.integer(json['penAccionFisica'], 0);
-    finalNaturalPenalty = JsonUtils.integer(json['penNaturalFinal'], 0);
-    calculatedArmour = json['armaduraTotal'] != null
-        ? Armour?.fromJson(
-            json['armaduraTotal'] as Map<String, dynamic>,
-          )
-        : Armour();
-    if (json['armaduras'] != null) {
-      armours = <Armour>[];
-      for (final v in json['armaduras'] as List<Map<String, dynamic>>) {
-        armours.add(Armour.fromJson(v));
-      }
-    } else {
-      armours = <Armour>[
-        Armour(
-          name: 'Sin armadura',
-        ),
-      ];
-    }
+  static ArmourData? fromJson(Map<String, dynamic>? json) {
+    if (json == null) return null;
+
+    final armours = json.getList('armaduras').map(Armour.fromJson).nonNulls.toList();
+
+    if (armours.isEmpty) armours.add(Armour(name: 'Sin armadura'));
+
+    return ArmourData(
+      movementRestriction: JsonUtils.integer(json['restriccionMov'], 0),
+      naturalPenalty: JsonUtils.integer(json['penNatural'], 0),
+      requirement: JsonUtils.integer(json['requisito'], 0),
+      physicalPenalty: JsonUtils.integer(json['penAccionFisica'], 0),
+      finalNaturalPenalty: JsonUtils.integer(json['penNaturalFinal'], 0),
+      calculatedArmour: Armour.fromJson(json.getMap('armaduraTotal')) ?? Armour(),
+      armours: armours.toList(),
+    );
   }
+
   @HiveField(0)
   int? movementRestriction;
   @HiveField(1)

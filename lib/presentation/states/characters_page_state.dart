@@ -9,11 +9,13 @@ import 'package:amt/models/modifiers_state.dart';
 import 'package:amt/models/rules/rules.dart';
 import 'package:amt/presentation/states/combat_state.dart';
 import 'package:amt/utils/cloud_excel_parser.dart';
+import 'package:amt/utils/string_extension.dart';
 import 'package:enough_convert/windows.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:logger/web.dart';
 import 'package:uuid/uuid.dart';
 
 class CharactersPageState extends ChangeNotifier {
@@ -271,8 +273,8 @@ class CharactersPageState extends ChangeNotifier {
 
             if (element.extension == 'json') {
               final jsonFile = const Windows1252Codec().decode(element.bytes!.toList());
-              final character = Character.fromJson(jsonDecode(jsonFile));
-              addCharacter(character);
+              final character = Character.fromJson(jsonFile.jsonMap);
+              if (character != null) addCharacter(character);
             } else {
               final character = CloudExcelParser.fromBytes(element.bytes!.toList());
               final characterDecoded = await character.parse();
@@ -293,8 +295,8 @@ class CharactersPageState extends ChangeNotifier {
             final extension = file.path.split('.').last;
             if (extension == 'json') {
               final json = await file.readAsString(encoding: const Windows1252Codec());
-              final character = Character.fromJson(jsonDecode(json));
-              addCharacter(character);
+              final character = Character.fromJson(json.jsonMap);
+              if (character != null) addCharacter(character);
             } else {
               final character = CloudExcelParser.fromFile(file);
               final characterDecoded = await character.parse();

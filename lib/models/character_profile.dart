@@ -5,7 +5,6 @@ part 'character_profile.g.dart';
 
 @HiveType(typeId: 2, adapterName: 'CharacterProfileAdapter')
 class CharacterProfile {
-
   CharacterProfile({
     this.fatigue = 6,
     this.hitPoints = 60,
@@ -21,20 +20,24 @@ class CharacterProfile {
     this.nature = 5,
   });
 
-  CharacterProfile.fromJson(Map<String, dynamic> json) {
-    fatigue = JsonUtils.integer(json['cansancio'], 6);
-    hitPoints = JsonUtils.integer(json['puntosDeVida'], 60);
-    regeneration = JsonUtils.integer(json['regeneracion'], 1);
-    name = json['nombre'] ?? '';
-    category = json['categoria'] ?? '';
-    level = json['nivel'] ?? '';
-    kind = json['clase'] ?? '';
-    speed = JsonUtils.integer(json['movimiento'], 6);
-    isNpc = false;
-    image = json['imagen'] ?? '';
-    fumbleLevel = JsonUtils.integer(json['nivelDePifia'], 3);
-    nature = JsonUtils.integer(json['natura'], 5);
+  static CharacterProfile? fromJson(Map<String, dynamic>? json) {
+    if (json == null) return null;
+
+    return CharacterProfile(
+      category: JsonUtils.string(json['categoria'], ''),
+      fatigue: JsonUtils.integer(json['cansancio'], 6),
+      hitPoints: JsonUtils.integer(json['puntosDeVida'], 60),
+      regeneration: JsonUtils.integer(json['regeneracion'], 1),
+      name: JsonUtils.string(json['nombre'], ''),
+      level: JsonUtils.string(json['nivel'], ''),
+      kind: JsonUtils.string(json['clase'], ''),
+      speed: JsonUtils.integer(json['movimiento'], 6),
+      image: JsonUtils.string(json['imagen'], ''),
+      fumbleLevel: JsonUtils.integer(json['nivelDePifia'], 3),
+      nature: JsonUtils.integer(json['natura'], 5),
+    );
   }
+
   @HiveField(0)
   late int fatigue;
   @HiveField(1)

@@ -5,7 +5,6 @@ part 'mystical.g.dart';
 
 @HiveType(typeId: 10)
 class Mystical {
-
   Mystical({
     required this.zeonRegeneration,
     required this.act,
@@ -17,18 +16,21 @@ class Mystical {
     required this.spellsPurchased,
   });
 
-  factory Mystical.fromJson(Map<String, dynamic> json) {
+  static Mystical? fromJson(Map<String, dynamic>? json) {
+    if (json == null) return null;
+
     return Mystical(
       zeonRegeneration: JsonUtils.integer(json['regen'], 0),
       act: JsonUtils.integer(json['act'], 0),
       zeon: JsonUtils.integer(json['zeon'], 0),
-      paths: Map<String, String>.from(json['Vias']),
-      subPaths: Map<String, String>.from(json['SubVias']),
-      metamagic: Map<String, String>.from(json['Metamagia']),
-      spellsMaintained: Map<String, String>.from(json['Conjuros']),
-      spellsPurchased: Map<String, String>.from(json['Libres']),
+      paths: Map<String, String>.from(json.getMap('Vias') ?? {}),
+      subPaths: Map<String, String>.from(json.getMap('SubVias') ?? {}),
+      metamagic: Map<String, String>.from(json.getMap('Metamagia') ?? {}),
+      spellsMaintained: Map<String, String>.from(json.getMap('Conjuros') ?? {}),
+      spellsPurchased: Map<String, String>.from(json.getMap('Libres') ?? {}),
     );
   }
+
   @HiveField(0)
   int zeonRegeneration;
   @HiveField(1)
