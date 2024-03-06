@@ -1,15 +1,16 @@
-import 'package:amt/models/character/status_modifier.dart';
+import 'package:amt/models/character_model/status_modifier.dart';
 import 'package:amt/utils/string_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_tags_x/flutter_tags_x.dart';
 
 class ModifiersCard extends StatelessWidget {
-
-  const ModifiersCard({required this.modifiers, super.key,
+  const ModifiersCard({
+    required this.modifiers,
+    super.key,
     this.onSelected,
   });
   final List<StatusModifier> modifiers;
-  final Function(StatusModifier)? onSelected;
+  final void Function(StatusModifier)? onSelected;
 
   @override
   Widget build(BuildContext context) {

@@ -1,4 +1,4 @@
-import 'package:amt/models/character/status_modifier.dart';
+import 'package:amt/models/character_model/status_modifier.dart';
 import 'package:amt/models/modifiers_state.dart';
 import 'package:amt/presentation/components/components.dart';
 import 'package:flutter/material.dart';
@@ -58,8 +58,9 @@ class BottomSheetModifiers {
                         modifier: modifier,
                         onEdit: (modifier) {
                           Logger().d(modifier);
-                          state.removeModifier(modifier);
-                          state.add(modifier);
+                          state
+                            ..removeModifier(modifier)
+                            ..add(modifier);
                           onModifiersChanged(state);
                         },
                       );
@@ -113,7 +114,7 @@ class BottomSheetModifiers {
     );
   }
 
-  static void _showModifierCreator(BuildContext context, {required StatusModifier modifier, required Function(StatusModifier) onEdit}) {
+  static void _showModifierCreator(BuildContext context, {required StatusModifier modifier, required void Function(StatusModifier) onEdit}) {
     showModalBottomSheet<void>(
       context: context,
       builder: (BuildContext context) {

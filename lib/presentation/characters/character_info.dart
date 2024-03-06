@@ -1,4 +1,4 @@
-import 'package:amt/models/character/character.dart';
+import 'package:amt/models/character_model/character.dart';
 import 'package:amt/models/enums.dart';
 import 'package:amt/presentation/components/components.dart';
 import 'package:amt/utils/key_value.dart';
@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:function_tree/function_tree.dart';
 
 class ShowCharacterInfo {
-  static Future call(BuildContext context, Character character, {required Function(Character) onEdit}) {
+  static Future<void> call(BuildContext context, Character character, {required void Function(Character) onEdit}) {
     final theme = Theme.of(context);
     final skills = character.skills.list();
     final attributes = character.attributes.toKeyValue();
@@ -34,17 +34,17 @@ class ShowCharacterInfo {
 
     var search = '';
 
-    onAttributeEdit(KeyValue element) {
+    void onAttributeEdit(KeyValue element) {
       character.attributes.edit(element);
       onEdit(character);
     }
 
-    onResistanceEdit(KeyValue element) {
+    void onResistanceEdit(KeyValue element) {
       character.resistances.editResistance(element);
       onEdit(character);
     }
 
-    onSkillEdit(KeyValue element) {
+    void onSkillEdit(KeyValue element) {
       character.skills[element.key] = element.value;
       onEdit(character);
     }
@@ -84,13 +84,14 @@ class ShowCharacterInfo {
                             children: [
                               Expanded(
                                 child: AMTTextFormField(
-                                    text: search,
-                                    suffixIcon: const Icon(Icons.search),
-                                    onChanged: (value) => {
-                                          setState(
-                                            () => search = value,
-                                          ),
-                                        },),
+                                  text: search,
+                                  suffixIcon: const Icon(Icons.search),
+                                  onChanged: (value) => {
+                                    setState(
+                                      () => search = value,
+                                    ),
+                                  },
+                                ),
                               ),
                             ],
                           ),
@@ -140,7 +141,9 @@ class ShowCharacterInfo {
 
   static Widget _row(
     List<AMTStringFlex> values, {
-    required ThemeData theme, required Function(String)? onEdit, bool title = false,
+    required ThemeData theme,
+    required void Function(String)? onEdit,
+    bool title = false,
     bool odd = false,
   }) {
     return Card(
@@ -184,7 +187,8 @@ class ShowCharacterInfo {
     List<KeyValue>? list,
     ThemeData theme,
     String search, {
-    required Function(KeyValue)? onEdit, List<DifficultyEnum> difficulties = SecondaryDifficulties.values,
+    required void Function(KeyValue)? onEdit,
+    List<DifficultyEnum> difficulties = SecondaryDifficulties.values,
     int diffDivisor = 1,
   }) {
     if (list == null) return [];
@@ -194,11 +198,16 @@ class ShowCharacterInfo {
     if (listFiltered.isEmpty) return [];
 
     return [
-      _row([
-        AMTStringFlex(name, flex: 4),
-        AMTStringFlex('Valor', flex: 2),
-        for (final diff in difficulties) AMTStringFlex('${diff.abbreviated}\n(${(diff.difficulty / diffDivisor).toStringAsFixed(0)})', flex: 1),
-      ], theme: theme, title: true, onEdit: null,),
+      _row(
+        [
+          AMTStringFlex(name, flex: 4),
+          AMTStringFlex('Valor', flex: 2),
+          for (final diff in difficulties) AMTStringFlex('${diff.abbreviated}\n(${(diff.difficulty / diffDivisor).toStringAsFixed(0)})', flex: 1),
+        ],
+        theme: theme,
+        title: true,
+        onEdit: null,
+      ),
       for (var i = 0; i < listFiltered.length; i++)
         _row(
           [
@@ -207,7 +216,7 @@ class ShowCharacterInfo {
             for (final diff in difficulties) AMTStringFlex(_differenceTo(listFiltered[i].value, diff.difficulty ~/ diffDivisor), flex: 1),
           ],
           theme: theme,
-          odd: i % 2 == 0,
+          odd: i.isEven,
           onEdit: onEdit == null
               ? null
               : (value) {
@@ -229,9 +238,5 @@ class ShowCharacterInfo {
     } catch (e) {
       return '-';
     }
-  }
-
-  static Color _colorForBackground(ThemeData theme, KeyValue value, List<KeyValue> values) {
-    return values.indexOf(value) % 2 == 0 ? theme.colorScheme.onPrimary : theme.colorScheme.primaryContainer;
   }
 }

@@ -1,5 +1,4 @@
-
-import 'package:amt/models/character/status_modifier.dart';
+import 'package:amt/models/character_model/status_modifier.dart';
 import 'package:amt/models/enums.dart';
 import 'package:amt/utils/list_extension.dart';
 import 'package:amt/utils/string_extension.dart';

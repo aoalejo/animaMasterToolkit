@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:math';
 
-import 'package:amt/models/character/character.dart';
+import 'package:amt/models/character_model/character.dart';
 import 'package:amt/models/enums.dart';
 import 'package:amt/models/modifiers_state.dart';
 import 'package:amt/models/rules/rules.dart';
@@ -21,6 +21,7 @@ class CharactersPageState extends ChangeNotifier {
   CharactersPageState() {
     initAsync();
   }
+
   List<Character> characters = [];
   ScreenCombatState combatState = ScreenCombatState();
   String? errorMessage = '';
@@ -28,27 +29,27 @@ class CharactersPageState extends ChangeNotifier {
   bool isLoading = false;
   String? message;
 
-  double sheetsLoadingPercentaje = -1;
+  double sheetsLoadingPercentage = -1;
 
   Map<String, bool> explanationsExpanded = {};
 
   late Box<Character> _box;
 
   void stepSheetLoading() {
-    if (sheetsLoadingPercentaje > 0.9) {
-      sheetsLoadingPercentaje = sheetsLoadingPercentaje + 0.0010;
-    } else if (sheetsLoadingPercentaje > 0.75) {
-      sheetsLoadingPercentaje = sheetsLoadingPercentaje + 0.0025;
-    } else if (sheetsLoadingPercentaje > 0.5) {
-      sheetsLoadingPercentaje = sheetsLoadingPercentaje + 0.0050;
+    if (sheetsLoadingPercentage > 0.9) {
+      sheetsLoadingPercentage = sheetsLoadingPercentage + 0.0010;
+    } else if (sheetsLoadingPercentage > 0.75) {
+      sheetsLoadingPercentage = sheetsLoadingPercentage + 0.0025;
+    } else if (sheetsLoadingPercentage > 0.5) {
+      sheetsLoadingPercentage = sheetsLoadingPercentage + 0.0050;
     } else {
-      sheetsLoadingPercentaje = sheetsLoadingPercentaje + 0.0100;
+      sheetsLoadingPercentage = sheetsLoadingPercentage + 0.0100;
     }
     notifyListeners();
   }
 
   void updateSheetLoading(double value) {
-    sheetsLoadingPercentaje = value;
+    sheetsLoadingPercentage = value;
     notifyListeners();
   }
 
@@ -75,7 +76,7 @@ class CharactersPageState extends ChangeNotifier {
     }
   }
 
-  toggleExplanationStatus(String name) {
+  void toggleExplanationStatus(String name) {
     if (explanationsExpanded.containsKey(name)) {
       explanationsExpanded[name] = !explanationsExpanded[name]!;
     } else {
@@ -84,7 +85,7 @@ class CharactersPageState extends ChangeNotifier {
     notifyListeners();
   }
 
-  addCharacter(Character character, {bool isNpc = false}) {
+  void addCharacter(Character character, {bool isNpc = false}) {
     // Numbering, get all characters with # in the name:
     var maxValue = 0;
     for (final element in characters.where(
@@ -115,17 +116,17 @@ class CharactersPageState extends ChangeNotifier {
     notifyListeners();
   }
 
-  removeAllNPC() {
+  void removeAllNPC() {
     for (final char in characters) {
-      if (char.profile.isNpc == true) {
+      if (char.profile.isNpc ?? false) {
         char.delete();
       }
     }
-    characters.removeWhere((element) => element.profile.isNpc == true);
+    characters.removeWhere((element) => element.profile.isNpc ?? false);
     notifyListeners();
   }
 
-  updatePageSelected(int index) {
+  void updatePageSelected(int index) {
     pageSelected = index;
     notifyListeners();
   }
@@ -216,11 +217,12 @@ class CharactersPageState extends ChangeNotifier {
 
       for (final element in allModifiers) {
         if (element.isOfCritical ?? false) {
-          element.attack = min(element.attack + 5, element.midValue ?? 0);
-          element.dodge = min(element.dodge + 5, element.midValue ?? 0);
-          element.parry = min(element.parry + 5, element.midValue ?? 0);
-          element.physicalAction = min(element.physicalAction + 5, element.midValue ?? 0);
-          element.turn = min(element.turn + 5, element.midValue ?? 0);
+          element
+            ..attack = min(element.attack + 5, element.midValue ?? 0)
+            ..dodge = min(element.dodge + 5, element.midValue ?? 0)
+            ..parry = min(element.parry + 5, element.midValue ?? 0)
+            ..physicalAction = min(element.physicalAction + 5, element.midValue ?? 0)
+            ..turn = min(element.turn + 5, element.midValue ?? 0);
         }
       }
 
@@ -256,7 +258,7 @@ class CharactersPageState extends ChangeNotifier {
     character.save();
   }
 
-  Future parseCharacters(FilePickerResult? filesPicked, Function(double) onUpdated) async {
+  Future<void> parseCharacters(FilePickerResult? filesPicked, void Function(double) onUpdated) async {
     Logger().d('result: ${filesPicked?.count}');
 
     try {
@@ -268,7 +270,6 @@ class CharactersPageState extends ChangeNotifier {
           // For web
           for (final element in filesPicked.files) {
             onUpdated(counter / total);
-            Logger().d('Progress: $counter / $total');
 
             if (element.extension == 'json') {
               final jsonFile = const Windows1252Codec().decode(element.bytes!.toList());
@@ -309,6 +310,7 @@ class CharactersPageState extends ChangeNotifier {
         errorMessage = '$errorMessage Error leyendo archivos';
       }
     } catch (e) {
+      Logger().e(e);
       errorMessage = '$errorMessage $e';
     }
     onUpdated(-1);

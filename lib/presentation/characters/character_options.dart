@@ -1,9 +1,6 @@
-import 'package:amt/models/character/character.dart';
-import 'package:amt/models/enums.dart';
-import 'package:amt/presentation/components/components.dart';
-import 'package:amt/utils/key_value.dart';
+import 'package:amt/models/character_model/character.dart';
+import 'package:amt/presentation/presentation.dart';
 import 'package:flutter/material.dart';
-import 'package:function_tree/function_tree.dart';
 
 class ShowCharacterOptions {
   static Future<void> call(
@@ -130,7 +127,7 @@ class ShowCharacterOptions {
                             onPressed: () {
                               Navigator.pop(context);
 
-                              showDialog(
+                              showDialog<void>(
                                 context: context,
                                 builder: (context) {
                                   return AlertDialog(
@@ -176,94 +173,5 @@ class ShowCharacterOptions {
         );
       },
     );
-  }
-
-  static Widget _row(
-    List<AMTStringFlex> values, {
-    required ThemeData theme,
-    bool title = false,
-    bool odd = false,
-  }) {
-    return Card(
-      color: title
-          ? theme.colorScheme.primary
-          : odd
-              ? theme.colorScheme.secondaryContainer
-              : theme.colorScheme.background,
-      child: SizedBox(
-        height: 40,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            for (final value in values)
-              Expanded(
-                flex: value.flex,
-                child: Text(
-                  value.text,
-                  textAlign: TextAlign.center,
-                  style: value.flex == 1
-                      ? theme.textTheme.bodySmall!.copyWith(color: title ? theme.colorScheme.onPrimary : theme.colorScheme.onBackground)
-                      : theme.textTheme.bodyLarge!.copyWith(color: title ? theme.colorScheme.onPrimary : theme.colorScheme.onBackground),
-                ),
-              ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  static List<Widget> _table(
-    String name,
-    List<KeyValue>? list,
-    ThemeData theme,
-    String search, {
-    List<DifficultyEnum> difficulties = SecondaryDifficulties.values,
-    int diffDivisor = 1,
-  }) {
-    if (list == null) return [];
-
-    final listFiltered = search.isEmpty ? list : list.where((element) => element.key.toLowerCase().contains(search.toLowerCase())).toList();
-
-    if (listFiltered.isEmpty) return [];
-
-    return [
-      _row(
-        [
-          AMTStringFlex(name, flex: 4),
-          AMTStringFlex('Valor', flex: 2),
-          for (final diff in difficulties) AMTStringFlex('${diff.abbreviated}\n(${(diff.difficulty / diffDivisor).toStringAsFixed(0)})', flex: 1),
-        ],
-        theme: theme,
-        title: true,
-      ),
-      for (var i = 0; i < listFiltered.length; i++)
-        _row(
-          [
-            AMTStringFlex(listFiltered[i].key, flex: 4),
-            AMTStringFlex(listFiltered[i].value, flex: 2),
-            for (final diff in difficulties) AMTStringFlex(_differenceTo(listFiltered[i].value, diff.difficulty ~/ diffDivisor), flex: 1),
-          ],
-          theme: theme,
-          odd: i % 2 == 0,
-        ),
-    ];
-  }
-
-  static String _differenceTo(String value, int difficulty) {
-    try {
-      final numericValue = difficulty - value.interpret().toInt();
-
-      if (numericValue > 0) {
-        return numericValue.toString();
-      } else {
-        return '-';
-      }
-    } catch (e) {
-      return '-';
-    }
-  }
-
-  static Color _colorForBackground(ThemeData theme, KeyValue value, List<KeyValue> values) {
-    return values.indexOf(value) % 2 == 0 ? theme.colorScheme.onPrimary : theme.colorScheme.primaryContainer;
   }
 }

@@ -1,4 +1,4 @@
-import 'package:amt/models/character/character.dart';
+import 'package:amt/models/character_model/character.dart';
 import 'package:amt/models/enums.dart';
 import 'package:amt/models/modifiers_state.dart';
 import 'package:amt/models/rules/rules.dart';

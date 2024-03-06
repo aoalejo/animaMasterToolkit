@@ -1,10 +1,10 @@
-import 'package:amt/models/character/consumable_state.dart';
+import 'package:amt/models/character_model/consumable_state.dart';
 import 'package:amt/models/enums.dart';
 import 'package:amt/presentation/components/components.dart';
 import 'package:flutter/material.dart';
 
 class CreateConsumable {
-  static show(BuildContext context, Function(ConsumableState) onCreated) {
+  static void show(BuildContext context, void Function(ConsumableState) onCreated) {
     var name = '';
     var max = '0';
     var increment = '1';
@@ -19,19 +19,20 @@ class CreateConsumable {
             title: const Text('Crear nuevo consumible'),
             bottomRow: [
               ElevatedButton(
-                  child: const Text('Guardar'),
-                  onPressed: () {
-                    onCreated(
-                      _buildConsumable(
-                        name,
-                        max,
-                        increment,
-                        description,
-                        type,
-                      ),
-                    );
-                    Navigator.pop(context);
-                  },),
+                child: const Text('Guardar'),
+                onPressed: () {
+                  onCreated(
+                    _buildConsumable(
+                      name,
+                      max,
+                      increment,
+                      description,
+                      type,
+                    ),
+                  );
+                  Navigator.pop(context);
+                },
+              ),
               ElevatedButton(
                 child: const Text('Cerrar'),
                 onPressed: () => Navigator.pop(context),
@@ -128,8 +129,9 @@ class CreateConsumable {
     final list = <Widget>[];
 
     for (final element in children) {
-      list.add(_separator);
-      list.add(Expanded(child: element));
+      list
+        ..add(_separator)
+        ..add(Expanded(child: element));
     }
 
     return [_separator, Row(children: list)];

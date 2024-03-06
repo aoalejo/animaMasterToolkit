@@ -1,6 +1,6 @@
 import 'dart:math';
 
-import 'package:amt/models/character/character.dart';
+import 'package:amt/models/character_model/character.dart';
 import 'package:hive/hive.dart';
 
 part 'roll.g.dart';
@@ -113,7 +113,7 @@ class Roll {
         if (roll >= 0) {
           output = '$output+$roll';
         } else {
-          output = "$output$roll";
+          output = '$output$roll';
         }
       }
     }

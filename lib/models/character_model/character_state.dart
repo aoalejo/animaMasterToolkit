@@ -1,4 +1,4 @@
-import 'package:amt/models/character/consumable_state.dart';
+import 'package:amt/models/character_model/consumable_state.dart';
 import 'package:amt/models/enums.dart';
 import 'package:amt/models/modifiers_state.dart';
 import 'package:amt/models/roll.dart';

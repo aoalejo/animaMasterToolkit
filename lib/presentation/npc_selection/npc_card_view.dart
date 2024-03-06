@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:amt/models/attributes_list.dart';
-import 'package:amt/models/character/character.dart';
+import 'package:amt/models/character_model/character.dart';
 import 'package:amt/models/character_profile.dart';
 import 'package:amt/utils/int_extension.dart';
 import 'package:amt/utils/key_value.dart';
@@ -10,10 +10,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_tags_x/flutter_tags_x.dart';
 
 class CharacterNPCCard extends StatelessWidget {
-
   CharacterNPCCard(
     this.character,
-    this.theme, {required this.onSelected, required this.onRemove, super.key,
+    this.theme, {
+    required this.onSelected,
+    required this.onRemove,
+    super.key,
   }) {
     _skills = character.skills.list().where((element) => (int.tryParse(element.value) ?? 0) > 0).toList();
     _profile = character.profile;
@@ -23,8 +25,8 @@ class CharacterNPCCard extends StatelessWidget {
   }
   final Character character;
   final ThemeData theme;
-  final Function(Character) onSelected;
-  final Function(Character) onRemove;
+  final void Function(Character) onSelected;
+  final void Function(Character) onRemove;
 
   late final List<KeyValue> _skills;
   late final CharacterProfile _profile;
@@ -61,7 +63,7 @@ class CharacterNPCCard extends StatelessWidget {
     final text = AttributesList.names()[value.toInt()];
 
     return SideTitleWidget(
-      axisSide: value.toInt() % 2 == 0 ? AxisSide.bottom : AxisSide.top,
+      axisSide: value.toInt().isEven ? AxisSide.bottom : AxisSide.top,
       space: 4,
       child: Text(text, style: theme.textTheme.bodySmall),
     );
@@ -121,15 +123,16 @@ class CharacterNPCCard extends StatelessWidget {
                   ),
                 ),
                 Expanded(
-                    child: Text(
-                  '${_profile.name} (${_profile.category})',
-                  textAlign: TextAlign.center,
-                  style: theme.textTheme.bodyLarge!.copyWith(
-                    fontWeight: FontWeight.bold,
+                  child: Text(
+                    '${_profile.name} (${_profile.category})',
+                    textAlign: TextAlign.center,
+                    style: theme.textTheme.bodyLarge!.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                   ),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),),
+                ),
                 IconButton(
                   onPressed: () => onRemove(character),
                   icon: const Icon(
@@ -147,7 +150,7 @@ class CharacterNPCCard extends StatelessWidget {
                     children: [
                       Card(
                         clipBehavior: Clip.hardEdge,
-                        child: Image.memory(base64Decode(_profile.image?.isEmpty ?? true ? _placeholder : _profile.image!)),
+                        child: Image.memory(base64Decode(_profile.image?.isEmpty ?? false ? _placeholder : _profile.image!)),
                       ),
                       Column(
                         children: [

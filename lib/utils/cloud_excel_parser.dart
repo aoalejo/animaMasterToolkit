@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:amt/models/character/character.dart';
+import 'package:amt/models/character_model/character.dart';
 import 'package:amt/utils/excel_parser.dart';
 import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
@@ -32,7 +32,7 @@ class CloudExcelParser implements ExcelParser {
   @override
   Future<Character?> parse() async {
     bytes ??= await file!.readAsBytes();
-    return await convertExcelFromBytes(bytes!);
+    return convertExcelFromBytes(bytes!);
   }
 
   Future<Character?> convertExcelFromBytes(List<int> bytes) async {

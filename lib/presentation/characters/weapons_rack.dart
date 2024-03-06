@@ -5,11 +5,16 @@ import 'package:flutter/material.dart';
 import 'package:function_tree/function_tree.dart';
 
 class WeaponsRack extends StatelessWidget {
-
-  const WeaponsRack({required this.weapons, required this.selectedWeapon, required this.onEdit, required this.onSelect, super.key,
+  const WeaponsRack({
+    required this.weapons,
+    required this.selectedWeapon,
+    required this.onEdit,
+    required this.onSelect,
+    super.key,
   });
-  final Function(Weapon) onEdit;
-  final Function(Weapon) onSelect;
+
+  final void Function(Weapon) onEdit;
+  final void Function(Weapon) onSelect;
 
   final List<Weapon> weapons;
   final Weapon selectedWeapon;
@@ -33,81 +38,83 @@ class WeaponsRack extends StatelessWidget {
           context: context,
           builder: (BuildContext context) {
             return AMTBottomSheet(
-                title: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Text('Selección/Edición de arma'),
-                    TextButton(
-                      onPressed: () {
-                        final newWeapon = Weapon.blank();
-                        weapons.add(newWeapon);
-                        Navigator.pop(context);
-                        onSelect(newWeapon);
-                        _showWeaponEditor(
-                          context,
-                          weapon: newWeapon,
-                          onEdit: onEdit,
-                        );
-                      },
-                      child: const Text('Crear nueva'),
-                    ),
-                  ],
-                ),
+              title: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Column(
-                    children: [
-                      for (final weapon in weapons)
-                        TextButton(
-                          style: TextButton.styleFrom(
-                              backgroundColor: weapon == selectedWeapon ? theme.colorScheme.primary : null,
-                              foregroundColor: weapon == selectedWeapon ? theme.colorScheme.onPrimary : null,),
-                          onPressed: () => {
-                            onSelect(weapon),
-                            Navigator.pop(context),
-                          },
-                          child: Padding(
-                            padding: const EdgeInsets.all(4),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(weapon.name),
-                                    Text(
-                                      weapon.description(),
-                                      style: weapon == selectedWeapon ? subtitleButtonOnPrimary : subtitleButton,
-                                    ),
-                                  ],
-                                ),
-                                Row(
-                                  children: [
-                                    IconButton(
-                                      onPressed: () {
-                                        final copy = weapon.copy();
-                                        weapons.add(copy);
-                                        Navigator.pop(context);
-                                        _showWeaponEditor(
-                                          context,
-                                          weapon: copy,
-                                          onEdit: onEdit,
-                                        );
-                                      },
-                                      icon: const Icon(Icons.copy),
-                                    ),
-                                    IconButton(
-                                      onPressed: () => {Navigator.pop(context), _showWeaponEditor(context, weapon: weapon, onEdit: onEdit)},
-                                      icon: const Icon(Icons.edit),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
+                  const Text('Selección/Edición de arma'),
+                  TextButton(
+                    onPressed: () {
+                      final newWeapon = Weapon.blank();
+                      weapons.add(newWeapon);
+                      Navigator.pop(context);
+                      onSelect(newWeapon);
+                      _showWeaponEditor(
+                        context,
+                        weapon: newWeapon,
+                        onEdit: onEdit,
+                      );
+                    },
+                    child: const Text('Crear nueva'),
+                  ),
+                ],
+              ),
+              children: [
+                Column(
+                  children: [
+                    for (final weapon in weapons)
+                      TextButton(
+                        style: TextButton.styleFrom(
+                          backgroundColor: weapon == selectedWeapon ? theme.colorScheme.primary : null,
+                          foregroundColor: weapon == selectedWeapon ? theme.colorScheme.onPrimary : null,
+                        ),
+                        onPressed: () => {
+                          onSelect(weapon),
+                          Navigator.pop(context),
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.all(4),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(weapon.name),
+                                  Text(
+                                    weapon.description(),
+                                    style: weapon == selectedWeapon ? subtitleButtonOnPrimary : subtitleButton,
+                                  ),
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  IconButton(
+                                    onPressed: () {
+                                      final copy = weapon.copy();
+                                      weapons.add(copy);
+                                      Navigator.pop(context);
+                                      _showWeaponEditor(
+                                        context,
+                                        weapon: copy,
+                                        onEdit: onEdit,
+                                      );
+                                    },
+                                    icon: const Icon(Icons.copy),
+                                  ),
+                                  IconButton(
+                                    onPressed: () => {Navigator.pop(context), _showWeaponEditor(context, weapon: weapon, onEdit: onEdit)},
+                                    icon: const Icon(Icons.edit),
+                                  ),
+                                ],
+                              ),
+                            ],
                           ),
                         ),
-                    ],
-                  ),
-                ],);
+                      ),
+                  ],
+                ),
+              ],
+            );
           },
         ),
       },
@@ -117,30 +124,31 @@ class WeaponsRack extends StatelessWidget {
         child: Card(
           color: theme.colorScheme.primary,
           child: Padding(
-              padding: const EdgeInsets.all(8),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Flexible(
-                    child: Text(
-                      selectedWeapon.name,
-                      style: style,
-                      overflow: TextOverflow.ellipsis,
-                    ),
+            padding: const EdgeInsets.all(8),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Flexible(
+                  child: Text(
+                    selectedWeapon.name,
+                    style: style,
+                    overflow: TextOverflow.ellipsis,
                   ),
-                  Icon(
-                    Icons.edit,
-                    color: theme.colorScheme.onPrimary,
-                    size: 18,
-                  ),
-                ],
-              ),),
+                ),
+                Icon(
+                  Icons.edit,
+                  color: theme.colorScheme.onPrimary,
+                  size: 18,
+                ),
+              ],
+            ),
+          ),
         ),
       ),
     );
   }
 
-  void _showWeaponEditor(BuildContext context, {required Weapon weapon, required Function(Weapon) onEdit}) {
+  void _showWeaponEditor(BuildContext context, {required Weapon weapon, required void Function(Weapon) onEdit}) {
     showModalBottomSheet<void>(
       context: context,
       builder: (BuildContext context) {

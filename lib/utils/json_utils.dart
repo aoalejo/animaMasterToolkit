@@ -30,8 +30,10 @@ extension GetSubDictionary on Map<String, dynamic> {
   }
 
   List<Map<String, dynamic>> getList(String key) {
-    if (this[key] is List<Map<String, dynamic>>) {
-      return this[key] as List<Map<String, dynamic>>;
+    final list = this[key];
+
+    if (list is List<dynamic>) {
+      return list.whereType<Map<String, dynamic>>().toList();
     }
     return [];
   }

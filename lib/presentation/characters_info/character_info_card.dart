@@ -1,20 +1,13 @@
-import 'package:amt/models/character/character.dart';
-import 'package:amt/presentation/bottom_sheet_modifiers.dart';
-import 'package:amt/presentation/charactersInfo/consumable_create_bottom_sheet.dart';
-import 'package:amt/presentation/charactersTable/armours_rack.dart';
-import 'package:amt/presentation/charactersTable/consumable_card.dart';
-import 'package:amt/presentation/charactersTable/modifiers_card.dart';
-import 'package:amt/presentation/charactersTable/weapons_rack.dart';
-import 'package:amt/presentation/components/components.dart';
-import 'package:amt/presentation/states/characters_page_state.dart';
+import 'package:amt/models/character_model/character.dart';
+import 'package:amt/presentation/presentation.dart';
 import 'package:amt/resources/modifiers.dart';
 import 'package:amt/utils/string_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:function_tree/function_tree.dart';
+import 'package:logger/web.dart';
 import 'package:provider/provider.dart';
 
 class CharacterInfoCard extends StatelessWidget {
-
   CharacterInfoCard({required this.attacking, super.key});
   final spacer = const SizedBox(height: 8, width: 8);
   final bool attacking;
@@ -93,14 +86,15 @@ class CharacterInfoCard extends StatelessWidget {
                             ),
                             spacer,
                             Expanded(
-                                flex: 2,
-                                child: AMTTextFormField(
-                                  text: character.state.turnModifier,
-                                  onChanged: (value) {
-                                    final newChar = _calculateTurn(character, value);
-                                    appState.updateCharacter(newChar);
-                                  },
-                                ),),
+                              flex: 2,
+                              child: AMTTextFormField(
+                                text: character.state.turnModifier,
+                                onChanged: (value) {
+                                  final newChar = _calculateTurn(character, value);
+                                  appState.updateCharacter(newChar);
+                                },
+                              ),
+                            ),
                             spacer,
                             Expanded(
                               flex: 2,
@@ -122,67 +116,73 @@ class CharacterInfoCard extends StatelessWidget {
                             spacer,
                           ]),
                           spacer,
-                          LayoutBuilder(builder: (context, constraints) {
-                            return AMTGrid(
-                              elements: consumables!,
-                              columns: constraints.constrainWidth() > 500 ? 3 : 2,
-                              builder: (element, index) => ConsumableCard(
-                                element,
-                                onDelete: (consumable) {
-                                  character.state.consumables.remove(consumable);
-                                  appState.updateCharacter(character);
-                                },
-                                onChangedActual: (actual) {
-                                  character.state.consumables[index].update(actual: actual);
-                                  appState.updateCharacter(character);
-                                },
-                                onChangedMax: (max) {
-                                  character.state.consumables[index].update(max: max);
-                                  appState.updateCharacter(character);
-                                },
-                              ),
-                              lastElementBuilder: () => Card(
-                                color: theme.colorScheme.secondaryContainer,
-                                child: Center(
+                          LayoutBuilder(
+                            builder: (context, constraints) {
+                              return AMTGrid(
+                                elements: consumables!,
+                                columns: constraints.constrainWidth() > 500 ? 3 : 2,
+                                builder: (element, index) => ConsumableCard(
+                                  element,
+                                  onDelete: (consumable) {
+                                    character.state.consumables.remove(consumable);
+                                    appState.updateCharacter(character);
+                                  },
+                                  onChangedActual: (actual) {
+                                    character.state.consumables[index].update(actual: actual);
+                                    appState.updateCharacter(character);
+                                  },
+                                  onChangedMax: (max) {
+                                    character.state.consumables[index].update(max: max);
+                                    appState.updateCharacter(character);
+                                  },
+                                ),
+                                lastElementBuilder: () => Card(
+                                  color: theme.colorScheme.secondaryContainer,
+                                  child: Center(
                                     child: TextButton(
-                                        onPressed: () {
-                                          CreateConsumable.show(context, (consumable) {
-                                            character.state.consumables.add(consumable);
-                                            appState.updateCharacter(character);
-                                          });
-                                        },
-                                        child: const Text('Añadir'),),),
-                              ),
-                            );
-                          },),
+                                      onPressed: () {
+                                        CreateConsumable.show(context, (consumable) {
+                                          character.state.consumables.add(consumable);
+                                          appState.updateCharacter(character);
+                                        });
+                                      },
+                                      child: const Text('Añadir'),
+                                    ),
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
                           spacer,
                           OutlinedButton(
                             child: Tooltip(
                               message: character.state.modifiers.totalModifierDescription(),
-                              child: Row(children: [
-                                const Text('Modificadores'),
-                                const SizedBox.square(
-                                  dimension: 8,
-                                ),
-                                Flexible(
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(4),
-                                    child: AMTGrid(
-                                      elements: character.state.modifiers.getAllModifiersString(),
-                                      columns: 3,
-                                      builder: (element, index) {
-                                        return Text(
-                                          '${element.key.abbreviated}: ${element.value}',
-                                          overflow: TextOverflow.ellipsis,
-                                          style: theme.textTheme.bodySmall,
-                                          textAlign: TextAlign.right,
-                                          maxLines: 1,
-                                        );
-                                      },
+                              child: Row(
+                                children: [
+                                  const Text('Modificadores'),
+                                  const SizedBox.square(
+                                    dimension: 8,
+                                  ),
+                                  Flexible(
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(4),
+                                      child: AMTGrid(
+                                        elements: character.state.modifiers.getAllModifiersString(),
+                                        columns: 3,
+                                        builder: (element, index) {
+                                          return Text(
+                                            '${element.key.abbreviated}: ${element.value}',
+                                            overflow: TextOverflow.ellipsis,
+                                            style: theme.textTheme.bodySmall,
+                                            textAlign: TextAlign.right,
+                                            maxLines: 1,
+                                          );
+                                        },
+                                      ),
                                     ),
                                   ),
-                                ),
-                              ],),
+                                ],
+                              ),
                             ),
                             onPressed: () {
                               BottomSheetModifiers.show(context, character.state.modifiers, Modifiers.getStatusModifiers(), (newModifiersState) {
@@ -201,15 +201,16 @@ class CharacterInfoCard extends StatelessWidget {
                           ),
                           spacer,
                           SizedBox(
-                              height: 40,
-                              child: AMTTextFormField(
-                                label: 'Notas',
-                                text: character.state.notes,
-                                onChanged: (value) {
-                                  character.state.notes = value;
-                                  appState.updateCharacter(character);
-                                },
-                              ),),
+                            height: 40,
+                            child: AMTTextFormField(
+                              label: 'Notas',
+                              text: character.state.notes,
+                              onChanged: (value) {
+                                character.state.notes = value;
+                                appState.updateCharacter(character);
+                              },
+                            ),
+                          ),
                         ],
                       ),
                     ),
@@ -229,7 +230,9 @@ class CharacterInfoCard extends StatelessWidget {
 
     try {
       modifier = value.interpret().toInt();
-    } catch (e) {}
+    } catch (e) {
+      Logger().e(e);
+    }
 
     final total = baseTurn + turn.rolls.reduce((value, element) => value + element) + modifier;
 

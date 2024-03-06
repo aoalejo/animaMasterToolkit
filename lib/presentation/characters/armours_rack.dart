@@ -6,9 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:function_tree/function_tree.dart';
 
 class ArmoursRack extends StatelessWidget {
-
   const ArmoursRack({required this.onEdit, required this.armourBase, super.key});
-  final Function(ArmourData) onEdit;
+  final void Function(ArmourData) onEdit;
   final ArmourData armourBase;
 
   @override
@@ -223,7 +222,7 @@ class ArmoursRack extends StatelessWidget {
     );
   }
 
-  Widget _armourLister(ThemeData theme, Armour armour, Function(Armour) onSelect) {
+  Widget _armourLister(ThemeData theme, Armour armour, void Function(Armour) onSelect) {
     final subtitleButton = theme.textTheme.bodySmall;
 
     return TextButton(

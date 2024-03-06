@@ -1,7 +1,7 @@
 import 'package:amt/models/enums.dart';
 import 'package:amt/models/roll.dart';
 import 'package:amt/presentation/bottom_sheet_modifiers.dart';
-import 'package:amt/presentation/charactersTable/modifiers_card.dart';
+import 'package:amt/presentation/characters/modifiers_card.dart';
 import 'package:amt/presentation/combat/custom_combat_card.dart';
 import 'package:amt/presentation/components/components.dart';
 import 'package:amt/presentation/states/characters_page_state.dart';
@@ -87,8 +87,9 @@ class CombatDefenseCard extends StatelessWidget {
                                   1,
                                   ConsumableType.fatigue,
                                 );
-                                appState.updateCombatState(baseDefenseModifiers: '${defense.defense}+15');
-                                appState.updateCharacter(character);
+                                appState
+                                  ..updateCombatState(baseDefenseModifiers: '${defense.defense}+15')
+                                  ..updateCharacter(character);
                               },
                             ),
                             text: defense.defense,
@@ -108,36 +109,37 @@ class CombatDefenseCard extends StatelessWidget {
               child: Column(
                 children: [
                   SizedBox(
-                      height: 40,
-                      child: Row(
-                        children: [
-                          if (character != null)
-                            Flexible(
-                              child: AMTTextFormField(
-                                enabled: false,
-                                label: 'Armadura',
-                                text: character.combat.armour.calculatedArmour.armourFor(combatState.attack.damageType).toString(),
-                              ),
-                            ),
-                          if (character != null) const SizedBox(width: 4),
+                    height: 40,
+                    child: Row(
+                      children: [
+                        if (character != null)
                           Flexible(
-                            flex: 2,
                             child: AMTTextFormField(
-                              onChanged: (value) {
-                                appState.updateCombatState(armourModifier: value);
-                              },
-                              text: defense.armour,
-                              label: character != null ? 'Modificador' : 'Armadura',
-                              suffixIcon: IconButton(
-                                icon: const Icon(Icons.delete),
-                                onPressed: () {
-                                  appState.updateCombatState(armourModifier: '');
-                                },
-                              ),
+                              enabled: false,
+                              label: 'Armadura',
+                              text: character.combat.armour.calculatedArmour.armourFor(combatState.attack.damageType).toString(),
                             ),
                           ),
-                        ],
-                      ),),
+                        if (character != null) const SizedBox(width: 4),
+                        Flexible(
+                          flex: 2,
+                          child: AMTTextFormField(
+                            onChanged: (value) {
+                              appState.updateCombatState(armourModifier: value);
+                            },
+                            text: defense.armour,
+                            label: character != null ? 'Modificador' : 'Armadura',
+                            suffixIcon: IconButton(
+                              icon: const Icon(Icons.delete),
+                              onPressed: () {
+                                appState.updateCombatState(armourModifier: '');
+                              },
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                   const SizedBox(
                     height: 20,
                   ),

@@ -1,4 +1,4 @@
-import 'package:amt/models/character/status_modifier.dart';
+import 'package:amt/models/character_model/status_modifier.dart';
 import 'package:amt/models/enums.dart';
 import 'package:amt/resources/modifiers.dart';
 import 'package:amt/utils/key_value.dart';
@@ -15,6 +15,7 @@ class ModifiersState {
     return _modifiers;
   }
 
+  // ignore: use_setters_to_change_properties
   void setAll(List<StatusModifier> modifiers) {
     _modifiers = modifiers;
   }
@@ -133,11 +134,12 @@ class ModifiersState {
   StatusModifier totalModifier() {
     final totalModifier = StatusModifier(name: 'total');
     for (final modifier in _modifiers) {
-      totalModifier.attack = totalModifier.attack + modifier.attack;
-      totalModifier.dodge = totalModifier.dodge + modifier.dodge;
-      totalModifier.parry = totalModifier.parry + modifier.parry;
-      totalModifier.turn = totalModifier.turn + modifier.turn;
-      totalModifier.physicalAction = totalModifier.physicalAction + modifier.physicalAction;
+      totalModifier
+        ..attack = totalModifier.attack + modifier.attack
+        ..dodge = totalModifier.dodge + modifier.dodge
+        ..parry = totalModifier.parry + modifier.parry
+        ..turn = totalModifier.turn + modifier.turn
+        ..physicalAction = totalModifier.physicalAction + modifier.physicalAction;
     }
 
     return totalModifier;

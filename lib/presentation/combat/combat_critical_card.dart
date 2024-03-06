@@ -1,4 +1,4 @@
-import 'package:amt/models/character/status_modifier.dart';
+import 'package:amt/models/character_model/status_modifier.dart';
 import 'package:amt/models/roll.dart';
 import 'package:amt/presentation/combat/custom_combat_card.dart';
 import 'package:amt/presentation/components/components.dart';
@@ -73,10 +73,11 @@ class CombatCriticalCard extends StatelessWidget {
                       suffixIcon: IconButton(
                         onPressed: () {
                           appState.updateCombatState(
-                              localizationRoll: Roll.roll(
-                            canCrit: false,
-                            canFumble: false,
-                          ).getRollsAsString(),);
+                            localizationRoll: Roll.roll(
+                              canCrit: false,
+                              canFumble: false,
+                            ).getRollsAsString(),
+                          );
                         },
                         icon: SizedBox.square(
                           dimension: 24,

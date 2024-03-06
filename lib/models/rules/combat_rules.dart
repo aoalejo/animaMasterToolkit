@@ -1,7 +1,7 @@
 import 'dart:math';
 
 import 'package:amt/models/armour.dart';
-import 'package:amt/models/character/character.dart';
+import 'package:amt/models/character_model/character.dart';
 import 'package:amt/models/enums.dart';
 import 'package:amt/models/modifiers_state.dart';
 import 'package:amt/models/roll.dart';
@@ -384,9 +384,7 @@ class CombatRules {
     required Character? defender,
     required ExplainedText criticalResult,
   }) {
-    final list = <ExplainedText>[];
-
-    list.add(criticalResult);
+    final list = <ExplainedText>[criticalResult];
     final critical = criticalResult.result ?? 0;
 
     final criticalEffects = ExplainedText(title: 'Efectos Critico');

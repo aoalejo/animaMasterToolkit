@@ -1,7 +1,7 @@
 import 'package:amt/models/enums.dart';
 import 'package:amt/models/roll.dart';
 import 'package:amt/presentation/bottom_sheet_modifiers.dart';
-import 'package:amt/presentation/charactersTable/modifiers_card.dart';
+import 'package:amt/presentation/characters/modifiers_card.dart';
 import 'package:amt/presentation/combat/custom_combat_card.dart';
 import 'package:amt/presentation/components/components.dart';
 import 'package:amt/presentation/states/characters_page_state.dart';
@@ -116,7 +116,7 @@ class CombatAttackCard extends StatelessWidget {
                         ],
                       )
                     : Padding(
-                        padding: const EdgeInsets.all(0),
+                        padding: EdgeInsets.zero,
                         child: ToggleButtons(
                           isSelected: [
                             weapon?.principalDamage == attackState.damageType,
@@ -177,9 +177,9 @@ class CombatAttackCard extends StatelessWidget {
                                   1,
                                   ConsumableType.fatigue,
                                 );
-                                appState.updateCombatState(baseAttackModifiers: '${attackState.attack}+15');
-
-                                appState.updateCharacter(character);
+                                appState
+                                  ..updateCombatState(baseAttackModifiers: '${attackState.attack}+15')
+                                  ..updateCharacter(character);
                               },
                             ),
                             text: attackState.attack,
@@ -202,8 +202,12 @@ class CombatAttackCard extends StatelessWidget {
                     height: 40,
                     child: TextButton(
                       onPressed: () {
-                        BottomSheetModifiers.show(context, attackState.modifiers, Modifiers.getSituationalModifiers(ModifiersType.attack),
-                            appState.updateAttackingModifiers,);
+                        BottomSheetModifiers.show(
+                          context,
+                          attackState.modifiers,
+                          Modifiers.getSituationalModifiers(ModifiersType.attack),
+                          appState.updateAttackingModifiers,
+                        );
                       },
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.stretch,

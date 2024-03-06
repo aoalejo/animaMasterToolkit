@@ -1,10 +1,7 @@
 import 'package:amt/models/armour.dart';
 import 'package:amt/models/armour_data.dart';
 import 'package:amt/models/attributes_list.dart';
-import 'package:amt/models/character/character.dart';
-import 'package:amt/models/character/character_resistances.dart';
-import 'package:amt/models/character/character_state.dart';
-import 'package:amt/models/character/consumable_state.dart';
+import 'package:amt/models/character_model/character_model.dart';
 import 'package:amt/models/character_profile.dart';
 import 'package:amt/models/combat_data.dart';
 import 'package:amt/models/enums.dart';
@@ -12,7 +9,6 @@ import 'package:amt/models/modifiers_state.dart';
 import 'package:amt/models/roll.dart';
 import 'package:amt/models/weapon.dart';
 import 'package:amt/presentation/components/components.dart';
-
 import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
 
@@ -361,8 +357,9 @@ class CreateCharacter {
     final list = <Widget>[];
 
     for (final element in children) {
-      list.add(_separator);
-      list.add(Expanded(child: element));
+      list
+        ..add(_separator)
+        ..add(Expanded(child: element));
     }
 
     return [_separator, Row(children: list)];

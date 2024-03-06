@@ -1,4 +1,4 @@
-import 'package:amt/models/character/character.dart';
+import 'package:amt/models/character_model/character.dart';
 
 enum SurpriseType {
   attacker,

@@ -1,18 +1,4 @@
-import 'package:amt/models/armour.dart';
-import 'package:amt/models/armour_data.dart';
-import 'package:amt/models/attributes_list.dart';
-import 'package:amt/models/character/character_ki.dart';
-import 'package:amt/models/character/character_resistances.dart';
-import 'package:amt/models/character/character_state.dart';
-import 'package:amt/models/character/consumable_state.dart';
-import 'package:amt/models/character_profile.dart';
-import 'package:amt/models/combat_data.dart';
-import 'package:amt/models/enums.dart';
-import 'package:amt/models/modifiers_state.dart';
-import 'package:amt/models/mystical.dart';
-import 'package:amt/models/psychic_data.dart';
-import 'package:amt/models/roll.dart';
-import 'package:amt/models/weapon.dart';
+import 'package:amt/models/models.dart';
 import 'package:amt/resources/modifiers.dart';
 import 'package:amt/utils/json_utils.dart';
 import 'package:amt/utils/key_value.dart';
@@ -68,60 +54,60 @@ class Character extends HiveObject {
 
     final ki = CharacterKi.fromJson(json.getMap('Ki'));
 
-    if (ki!.maximumPerAttribute.hasAValueWithMoreThanZero()) {
-      final names = AttributesList.names();
-      final max = ki.maximumPerAttribute.orderedList();
-      final accumulation = ki.accumulationsPerAttribute.orderedList();
+    if (ki != null) {
+      if (ki.maximumPerAttribute.hasAValueWithMoreThanZero()) {
+        final names = AttributesList.names();
+        final max = ki.maximumPerAttribute.orderedList();
+        final accumulation = ki.accumulationsPerAttribute.orderedList();
 
-      for (var i = 0; i < max.length; i++) {
-        if (max[i] > 0) {
+        for (var i = 0; i < max.length; i++) {
+          if (max[i] > 0) {
+            consumables.add(
+              ConsumableState(name: 'Ki/${names[i]}', maxValue: max[i], actualValue: 1, step: accumulation[i], description: ''),
+            );
+          }
+        }
+      } else {
+        if (ki.maximumAccumulation != 0) {
           consumables.add(
-            ConsumableState(name: 'Ki/${names[i]}', maxValue: max[i], actualValue: 1, step: accumulation[i], description: ''),
+            ConsumableState(
+              name: 'Ki',
+              maxValue: ki.maximumAccumulation,
+              actualValue: 01,
+              step: ki.genericAccumulation,
+              description: 'Usando ki unificado',
+            ),
           );
         }
-      }
-    } else {
-      if (ki.maximumAccumulation != 0) {
-        consumables.add(
-          ConsumableState(
-            name: 'Ki',
-            maxValue: ki.maximumAccumulation,
-            actualValue: 01,
-            step: ki.genericAccumulation,
-            description: 'Usando ki unificado',
-          ),
-        );
       }
     }
 
     final mystical = Mystical.fromJson(json.getMap('Misticos'));
 
-    if (mystical?.zeon != 0) {
+    if (mystical != null && mystical.zeon != 0) {
       consumables.add(
         ConsumableState(
           name: 'Zeon',
           maxValue: mystical?.zeon ?? 0,
           actualValue: mystical?.zeon ?? 0,
           step: mystical?.act ?? 0,
-          description: 'Regenera ${mystical!.zeonRegeneration} por día',
+          description: 'Regenera ${mystical?.zeonRegeneration} por día',
         ),
       );
     }
 
     final psychic = PsychicData.fromJson(json.getMap('Psiquicos'));
 
-    if (psychic != null) {
-      if (psychic.freeCvs != 0) {
-        consumables.add(
-          ConsumableState(
-            name: 'CV',
-            maxValue: psychic.freeCvs,
-            actualValue: psychic.freeCvs,
-            step: 1,
-            description: '',
-          ),
-        );
-      }
+    if (psychic != null && psychic.freeCvs != 0) {
+      consumables.add(
+        ConsumableState(
+          name: 'CV',
+          maxValue: psychic.freeCvs,
+          actualValue: psychic.freeCvs,
+          step: 1,
+          description: '',
+        ),
+      );
     }
 
     final combat = CombatData.fromJson(json.getMap('Combate')) ??
@@ -340,7 +326,11 @@ class CharacterList {
   static CharacterList? fromJson(Map<String, dynamic>? json) {
     if (json == null) return null;
 
-    return CharacterList(characters: json.getList('characters').map(Character.fromJson).nonNulls.toList());
+    final jsonCharList = json.getList('characters');
+
+    final charList = jsonCharList.map(Character.fromJson);
+
+    return CharacterList(characters: charList.nonNulls.toList());
   }
 
   late List<Character> characters;

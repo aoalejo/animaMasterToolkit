@@ -3,15 +3,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter_tags_x/flutter_tags_x.dart';
 
 class ExplainedTextContainer extends StatelessWidget {
-
-  const ExplainedTextContainer({required this.info, required this.explanationsExpanded, required this.onExpanded, super.key,
+  const ExplainedTextContainer({
+    required this.info,
+    required this.explanationsExpanded,
+    required this.onExpanded,
+    super.key,
     this.parent = '',
     this.hierarchy = 1,
   });
+
   final ExplainedText info;
   final int hierarchy;
   final Map<String, bool> explanationsExpanded;
-  final Function(String) onExpanded;
+  final void Function(String) onExpanded;
   final String parent;
 
   @override
@@ -36,13 +40,14 @@ class ExplainedTextContainer extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Expanded(
-                        child: Padding(
-                      padding: const EdgeInsets.all(6),
-                      child: Text(
-                        info.text,
-                        style: theme.textTheme.bodyMedium!.copyWith(fontWeight: FontWeight.bold),
+                      child: Padding(
+                        padding: const EdgeInsets.all(6),
+                        child: Text(
+                          info.text,
+                          style: theme.textTheme.bodyMedium!.copyWith(fontWeight: FontWeight.bold),
+                        ),
                       ),
-                    ),),
+                    ),
                     if (info.explanation.isNotEmpty || info.explanations.isNotEmpty)
                       IconButton(
                         visualDensity: VisualDensity.compact,
@@ -105,7 +110,7 @@ class ExplainedTextContainer extends StatelessWidget {
   }
 
   Color _colorForHierarchy(ThemeData theme, int hierarchy) {
-    if (hierarchy % 2 == 0) {
+    if (hierarchy.isEven) {
       return theme.colorScheme.secondaryContainer;
     }
 

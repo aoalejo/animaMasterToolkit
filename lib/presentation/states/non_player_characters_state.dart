@@ -1,7 +1,8 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:amt/models/character/character.dart';
+import 'package:amt/models/character_model/character.dart';
+import 'package:amt/utils/string_extension.dart';
 import 'package:enough_convert/windows.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
@@ -13,6 +14,7 @@ class NonPlayerCharactersState extends ChangeNotifier {
   NonPlayerCharactersState() {
     initAsync();
   }
+
   late Box<Character> _box;
   List<Character> characters = [];
 
@@ -42,11 +44,9 @@ class NonPlayerCharactersState extends ChangeNotifier {
   }
 
   Future<List<Character>> loadNpc() async {
-    final charactersString = await rootBundle.loadString(
-      'assets/characters.json',
-    );
+    final charactersString = await rootBundle.loadString('assets/characters.json');
 
-    final charactersWrapper = CharacterList.fromJson(jsonDecode(charactersString) as Map<String, dynamic>);
+    final charactersWrapper = CharacterList.fromJson(charactersString.jsonMap);
 
     return charactersWrapper?.characters ?? [];
   }
@@ -58,40 +58,42 @@ class NonPlayerCharactersState extends ChangeNotifier {
       allowMultiple: true,
     );
 
-    try {
-      if (result != null) {
-        if (result.files.first.bytes != null) {
-          // For web
-          final files = result.files.map((file) => const Windows1252Codec().decode(file.bytes!.toList())).toList();
+    //try {
+    if (result != null) {
+      if (result.files.first.bytes != null) {
+        // For web
+        final files = result.files.map((file) => const Windows1252Codec().decode(file.bytes!.toList())).toList();
 
-          for (final file in files) {
-            final character = Character.fromJson(jsonDecode(file) as Map<String, dynamic>);
-            if (character != null) {
-              characters.add(character);
-              await _box.add(character);
-            }
+        for (final file in files) {
+          final character = Character.fromJson(jsonDecode(file) as Map<String, dynamic>);
+          if (character != null) {
+            characters.add(character);
+            await _box.add(character);
           }
-        } else {
-          // For desktop
-          final files = result.paths.map((path) => File(path ?? '')).toList();
+        }
+      } else {
+        // For desktop
+        final files = result.paths.map((path) => File(path ?? '')).toList();
 
-          for (final file in files) {
-            final json = await file.readAsString(encoding: const Windows1252Codec());
-            final character = Character.fromJson(jsonDecode(json) as Map<String, dynamic>);
+        for (final file in files) {
+          final json = await file.readAsString(encoding: const Windows1252Codec());
+          final character = Character.fromJson(jsonDecode(json) as Map<String, dynamic>);
 
-            if (character != null) {
-              characters.add(character);
-              await _box.add(character);
-            }
+          if (character != null) {
+            characters.add(character);
+            await _box.add(character);
           }
         }
       }
-    } catch (e) {}
+    }
+    /*} catch (e) {
+      Logger().e(e);
+    }*/
 
     notifyListeners();
   }
 
-  removeNPC(Character character) {
+  void removeNPC(Character character) {
     characters.remove(character);
     character.delete();
     notifyListeners();

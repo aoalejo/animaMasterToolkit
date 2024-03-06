@@ -49,8 +49,8 @@ extension JsonDecode on String {
   List<Map<String, dynamic>> get jsonList {
     final json = jsonDecode(this);
 
-    if (json is List<Map<String, dynamic>>) {
-      return json;
+    if (json is List<dynamic>) {
+      return json.whereType<Map<String, dynamic>>().toList();
     }
     return [];
   }
