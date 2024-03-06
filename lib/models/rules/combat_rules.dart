@@ -96,22 +96,20 @@ class CombatRules {
     final finalResult = (difference - (finalAbsorption.result ?? 0)).roundToTens;
     final damageDone = ((finalResult / 100) * baseDamage).toInt();
 
-    info.add(
-      explanation: 'Ataque final: ${attackValue.result}, Defensa final ${defenseValue.result} (Diferencia $difference)',
-    );
-
-    info.add(
-      explanation: 'Resultado final: $finalResult = diferencia - absorción total, redondeado a decenas',
-    );
-
-    info.add(
-      explanation: 'Daño base: $baseDamage',
-    );
-
-    info.add(
-      explanation: 'Daño causado: $damageDone = (Resultado final / 100) * Daño base',
-      result: damageDone,
-    );
+    info
+      ..add(
+        explanation: 'Ataque final: ${attackValue.result}, Defensa final ${defenseValue.result} (Diferencia $difference)',
+      )
+      ..add(
+        explanation: 'Resultado final: $finalResult = diferencia - absorción total, redondeado a decenas',
+      )
+      ..add(
+        explanation: 'Daño base: $baseDamage',
+      )
+      ..add(
+        explanation: 'Daño causado: $damageDone = (Resultado final / 100) * Daño base',
+        result: damageDone,
+      );
 
     if (damageDone < 10) {
       info.add(
@@ -173,13 +171,13 @@ class CombatRules {
       explanation: 'Absorción de armadura = (($armourTypeBase + $armourTypeModifier) * 10)',
     );
     const baseAbsorption = 20;
-    info.result = armourAbsorption + baseAbsorption;
-
-    info.add(
-      text: 'Absorición total: ${info.result}',
-      explanation: 'Todos los seres tienen una absorción base de 20 que se suma a la anterior',
-      reference: BookReference(page: 86, book: Books.coreExxet),
-    );
+    info
+      ..result = armourAbsorption + baseAbsorption
+      ..add(
+        text: 'Absorición total: ${info.result}',
+        explanation: 'Todos los seres tienen una absorción base de 20 que se suma a la anterior',
+        reference: BookReference(page: 86, book: Books.coreExxet),
+      );
 
     return info;
   }
@@ -299,11 +297,11 @@ class CombatRules {
 
     // Checks attacker weapon vs defender weapon if parry, and vs armour if dodge
     if (defenseType == DefenseType.parry) {
-      info.add(explanation: 'Como hace una parada, se calcula la rotura de ambas armas entre sí');
-
-      info.add(
-        explanation: 'Total rotura defensor: Rotura del arma ($breakageDefender) + tirada ($rollDefender) + Bono por fuerza ($modifierDefender)',
-      );
+      info
+        ..add(explanation: 'Como hace una parada, se calcula la rotura de ambas armas entre sí')
+        ..add(
+          explanation: 'Total rotura defensor: Rotura del arma ($breakageDefender) + tirada ($rollDefender) + Bono por fuerza ($modifierDefender)',
+        );
 
       if (totalBreakageDefender > (weaponAttacker?.endurance ?? 999)) {
         info.add(

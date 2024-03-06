@@ -15,6 +15,16 @@ class CharacterResistances {
     this.physicResistance = 0,
   });
 
+  CharacterResistances.withDefault(int value) {
+    presence = value;
+
+    physicalResistance = value;
+    diseasesResistance = value;
+    poisonResistance = value;
+    magicalResistance = value;
+    physicResistance = value;
+  }
+
   static CharacterResistances? fromJson(Map<String, dynamic>? json) {
     if (json == null) return null;
 
@@ -28,15 +38,6 @@ class CharacterResistances {
     );
   }
 
-  CharacterResistances.withDefault(int value) {
-    presence = value;
-
-    physicalResistance = value;
-    diseasesResistance = value;
-    poisonResistance = value;
-    magicalResistance = value;
-    physicResistance = value;
-  }
   @HiveField(0)
   late int presence;
   @HiveField(1)
@@ -50,7 +51,7 @@ class CharacterResistances {
   @HiveField(5)
   late int physicResistance;
 
-  editResistance(KeyValue element) {
+  void editResistance(KeyValue element) {
     switch (element.key) {
       case 'Pres':
         presence = int.tryParse(element.value) ?? presence;
@@ -68,16 +69,14 @@ class CharacterResistances {
   }
 
   List<KeyValue> toKeyValue() {
-    final list = <KeyValue>[];
-
-    list.add(KeyValue(key: 'Pres', value: presence.toString()));
-    list.add(KeyValue(key: 'RF', value: physicalResistance.toString()));
-    list.add(KeyValue(key: 'RE', value: diseasesResistance.toString()));
-    list.add(KeyValue(key: 'RV', value: poisonResistance.toString()));
-    list.add(KeyValue(key: 'RM', value: magicalResistance.toString()));
-    list.add(KeyValue(key: 'RP', value: physicResistance.toString()));
-
-    return list;
+    return <KeyValue>[
+      KeyValue(key: 'Pres', value: presence.toString()),
+      KeyValue(key: 'RF', value: physicalResistance.toString()),
+      KeyValue(key: 'RE', value: diseasesResistance.toString()),
+      KeyValue(key: 'RV', value: poisonResistance.toString()),
+      KeyValue(key: 'RM', value: magicalResistance.toString()),
+      KeyValue(key: 'RP', value: physicResistance.toString()),
+    ];
   }
 
   CharacterResistances copy() {

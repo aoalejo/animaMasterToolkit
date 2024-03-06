@@ -1,4 +1,3 @@
-import 'dart:convert';
 
 import 'package:amt/models/character/status_modifier.dart';
 import 'package:amt/models/enums.dart';

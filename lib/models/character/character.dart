@@ -231,8 +231,7 @@ class Character extends HiveObject {
   }
 
   void removeFrom(int value, ConsumableType type) {
-    final firstOfType = state.consumables.where((element) => element.type == type).first;
-    firstOfType.actualValue -= value;
+    state.consumables.where((element) => element.type == type).first.actualValue -= value;
   }
 
   String calculateAttack() {
@@ -240,7 +239,7 @@ class Character extends HiveObject {
 
     final modifiers = state.modifiers.getAllModifiersForTypeString(ModifiersType.attack);
 
-    return "${weapon.attack}$modifiers";
+    return '${weapon.attack}$modifiers';
   }
 
   String calculateDefense(DefenseType type) {
@@ -265,9 +264,7 @@ class Character extends HiveObject {
       Logger().d('cannot interpret modifier!');
     }
 
-    totalTurn = totalTurn + state.modifiers.getAllModifiersForType(ModifiersType.turn);
-
-    return totalTurn;
+    return totalTurn + state.modifiers.getAllModifiersForType(ModifiersType.turn);
   }
 
   List<KeyValue> getCombatItems() {
@@ -293,7 +290,9 @@ class Character extends HiveObject {
       var value = 0;
       try {
         value = int.parse(element.value);
-      } catch (e) {}
+      } catch (e) {
+        Logger().e(e);
+      }
       return value > 0;
     }).map((e) => '${e.key}: ${e.value}');
 
@@ -318,7 +317,7 @@ class Character extends HiveObject {
   bool isOn(String filter) {
     if (filter.isEmpty) return true;
 
-    final string = "${profile.name}${profile.category}lv.${profile.level}level";
+    final string = '${profile.name}${profile.category}lv.${profile.level}level';
     var result = true;
 
     filter.split(' ').forEach((element) {

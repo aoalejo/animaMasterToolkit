@@ -69,7 +69,7 @@ class StatusModifier extends Object {
       list.add(KeyValue(key: 'Acc. Físicas', value: physicalAction.toString()));
     }
 
-    if (isOfCritical == true && midValue != null) {
+    if (isOfCritical ?? false) {
       if (attack != midValue) {
         list.add(KeyValue(key: 'Recuperación', value: 'hasta: $midValue a 5/turno'));
       }
@@ -84,6 +84,7 @@ class StatusModifier extends Object {
   }
 
   @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
   bool operator ==(Object other) {
     if (other is StatusModifier) {
       return other.name == name;
@@ -92,5 +93,6 @@ class StatusModifier extends Object {
   }
 
   @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
   int get hashCode => name.hashCode;
 }

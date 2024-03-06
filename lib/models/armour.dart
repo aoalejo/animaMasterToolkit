@@ -23,6 +23,18 @@ class Armour {
     this.enchanted,
   });
 
+  Armour.fromValue({required String name, required int physical, required int energy}) {
+    name = name;
+    fil = physical;
+    con = physical;
+    pen = physical;
+    cal = physical;
+    ele = physical;
+    fri = physical;
+    ene = energy;
+    endurance = 99;
+  }
+
   static Armour? fromJson(Map<String, dynamic>? json) {
     if (json == null) return null;
 
@@ -42,18 +54,6 @@ class Armour {
       movementRestriction: JsonUtils.integer(json['RestMov'], 0),
       enchanted: json['Enc'].toString() == 'Si',
     );
-  }
-
-  Armour.fromValue({required String name, required int physical, required int energy}) {
-    name = name;
-    fil = physical;
-    con = physical;
-    pen = physical;
-    cal = physical;
-    ele = physical;
-    fri = physical;
-    ene = energy;
-    endurance = 99;
   }
   @HiveField(0)
   String? name;

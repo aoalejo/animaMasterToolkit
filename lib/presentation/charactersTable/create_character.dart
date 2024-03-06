@@ -293,7 +293,7 @@ class CreateCharacter {
   ) {
     final consumables = <ConsumableState>[
       ConsumableState.from(name: 'Vida', value: life.intValue, type: ConsumableType.hitPoints),
-      ConsumableState.from(name: 'Cansancio', value: fatigue.intValue, type: ConsumableType.fatigue)
+      ConsumableState.from(name: 'Cansancio', value: fatigue.intValue, type: ConsumableType.fatigue),
     ];
 
     if (ki.isNotEmpty) {

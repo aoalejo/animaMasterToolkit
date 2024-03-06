@@ -91,6 +91,8 @@ enum PrimaryDifficulties implements DifficultyEnum {
   complex(15),
   extreme(20);
 
+  const PrimaryDifficulties(this.difficulty);
+
   @override
   final int difficulty;
 
@@ -121,8 +123,6 @@ enum PrimaryDifficulties implements DifficultyEnum {
         return 'EXT';
     }
   }
-
-  const PrimaryDifficulties(this.difficulty);
 }
 
 enum SecondaryDifficulties implements DifficultyEnum {
@@ -136,6 +136,8 @@ enum SecondaryDifficulties implements DifficultyEnum {
   impossible(280),
   inhumane(320),
   zen(440);
+
+  const SecondaryDifficulties(this.difficulty);
 
   @override
   final int difficulty;
@@ -191,8 +193,6 @@ enum SecondaryDifficulties implements DifficultyEnum {
         return 'ZEN';
     }
   }
-
-  const SecondaryDifficulties(this.difficulty);
 }
 
 class EnumConverter {

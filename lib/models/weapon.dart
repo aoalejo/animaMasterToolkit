@@ -29,6 +29,16 @@ class Weapon {
     this.variableDamage = false,
   });
 
+  Weapon.blank() {
+    name = '';
+    turn = 0;
+
+    attack = 0;
+    defense = 0;
+    defenseType = DefenseType.dodge;
+    damage = 0;
+  }
+
   static Weapon? fromJson(Map<String, dynamic>? json) {
     if (json == null) return null;
 
@@ -54,16 +64,6 @@ class Weapon {
       special: JsonUtils.string(json['especial'], ''),
       variableDamage: JsonUtils.boolean(json['variable'], placeholder: false),
     );
-  }
-
-  Weapon.blank() {
-    name = '';
-    turn = 0;
-
-    attack = 0;
-    defense = 0;
-    defenseType = DefenseType.dodge;
-    damage = 0;
   }
   @HiveField(0)
   late String name;

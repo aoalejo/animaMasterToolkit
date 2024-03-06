@@ -8,9 +8,11 @@ part 'character_state.g.dart';
 
 @HiveType(typeId: 3, adapterName: 'CharacterStateAdapter')
 class CharacterState {
-
   CharacterState({
-    required this.currentTurn, required this.consumables, required this.modifiers, this.selectedWeaponIndex = 0,
+    required this.currentTurn,
+    required this.consumables,
+    required this.modifiers,
+    this.selectedWeaponIndex = 0,
     this.hasAction = true,
     this.notes = '',
     this.defenseNumber = 1,
@@ -32,10 +34,6 @@ class CharacterState {
   int defenseNumber = 1;
   @HiveField(7)
   ModifiersState modifiers = ModifiersState();
-
-  void updateTurn(String newValue) {
-    turnModifier = newValue;
-  }
 
   ConsumableState? getConsumable(ConsumableType type) {
     try {
