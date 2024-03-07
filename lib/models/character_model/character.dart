@@ -88,10 +88,10 @@ class Character extends HiveObject {
       consumables.add(
         ConsumableState(
           name: 'Zeon',
-          maxValue: mystical?.zeon ?? 0,
-          actualValue: mystical?.zeon ?? 0,
-          step: mystical?.act ?? 0,
-          description: 'Regenera ${mystical?.zeonRegeneration} por día',
+          maxValue: mystical.zeon,
+          actualValue: mystical.zeon,
+          step: mystical.act,
+          description: 'Regenera ${mystical.zeonRegeneration} por día',
         ),
       );
     }
