@@ -1,3 +1,4 @@
+import 'package:amt/resources/modifiers.dart';
 import 'package:amt/utils/json_utils.dart';
 import 'package:amt/utils/key_value.dart';
 import 'package:hive/hive.dart';
@@ -76,6 +77,21 @@ class StatusModifier extends Object {
     }
 
     return list;
+  }
+
+  StatusModifier pruneOthers(ModifiersType type) {
+    switch (type) {
+      case ModifiersType.attack:
+        return StatusModifier(name: name, attack: attack);
+      case ModifiersType.parry:
+        return StatusModifier(name: name, parry: parry);
+      case ModifiersType.dodge:
+        return StatusModifier(name: name, dodge: dodge);
+      case ModifiersType.turn:
+        return StatusModifier(name: name, turn: turn);
+      case ModifiersType.action:
+        return StatusModifier(name: name, physicalAction: physicalAction);
+    }
   }
 
   @override
