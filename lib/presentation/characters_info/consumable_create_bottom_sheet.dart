@@ -1,14 +1,14 @@
-import 'package:amt/models/character/consumable_state.dart';
+import 'package:amt/models/character_model/consumable_state.dart';
 import 'package:amt/models/enums.dart';
 import 'package:amt/presentation/components/components.dart';
 import 'package:flutter/material.dart';
 
 class CreateConsumable {
-  static show(BuildContext context, Function(ConsumableState) onCreated) {
-    var name = "";
-    var max = "0";
-    var increment = "1";
-    var description = "";
+  static void show(BuildContext context, void Function(ConsumableState) onCreated) {
+    var name = '';
+    var max = '0';
+    var increment = '1';
+    var description = '';
     var type = ConsumableType.other;
 
     showModalBottomSheet<void>(
@@ -16,22 +16,23 @@ class CreateConsumable {
       builder: (BuildContext context) {
         return StatefulBuilder(
           builder: (context, setState) => AMTBottomSheet(
-            title: Text('Crear nuevo consumible'),
+            title: const Text('Crear nuevo consumible'),
             bottomRow: [
               ElevatedButton(
-                  child: const Text('Guardar'),
-                  onPressed: () {
-                    onCreated(
-                      _buildConsumable(
-                        name,
-                        max,
-                        increment,
-                        description,
-                        type,
-                      ),
-                    );
-                    Navigator.pop(context);
-                  }),
+                child: const Text('Guardar'),
+                onPressed: () {
+                  onCreated(
+                    _buildConsumable(
+                      name,
+                      max,
+                      increment,
+                      description,
+                      type,
+                    ),
+                  );
+                  Navigator.pop(context);
+                },
+              ),
               ElevatedButton(
                 child: const Text('Cerrar'),
                 onPressed: () => Navigator.pop(context),
@@ -41,14 +42,14 @@ class CreateConsumable {
               ..._row(
                 [
                   AMTTextFormField(
-                    label: "Nombre",
+                    label: 'Nombre',
                     text: name,
                     onChanged: (value) => setState(
                       () => name = value,
                     ),
                   ),
                   AMTTextFormField(
-                    label: "Valor máximo",
+                    label: 'Valor máximo',
                     text: max,
                     inputType: TextInputType.number,
                     onChanged: (value) => setState(
@@ -56,7 +57,7 @@ class CreateConsumable {
                     ),
                   ),
                   AMTTextFormField(
-                    label: "Incremento",
+                    label: 'Incremento',
                     text: increment,
                     inputType: TextInputType.number,
                     onChanged: (value) => setState(
@@ -67,7 +68,7 @@ class CreateConsumable {
               ),
               ..._row([
                 AMTTextFormField(
-                  label: "Descripción",
+                  label: 'Descripción',
                   text: description,
                   onChanged: (value) => setState(
                     () => description = value,
@@ -86,12 +87,12 @@ class CreateConsumable {
                   onPressed: (index) => {
                     setState(
                       () => type = ConsumableType.values[index],
-                    )
+                    ),
                   },
-                  children: [
-                    Text("Vida"),
-                    Text("Fatiga"),
-                    Text("Otros"),
+                  children: const [
+                    Text('Vida'),
+                    Text('Fatiga'),
+                    Text('Otros'),
                   ],
                 ),
               ),
@@ -125,12 +126,13 @@ class CreateConsumable {
   );
 
   static List<Widget> _row(List<Widget> children) {
-    List<Widget> list = [];
+    final list = <Widget>[];
 
-    children.forEach((element) {
-      list.add(_separator);
-      list.add(Expanded(child: element));
-    });
+    for (final element in children) {
+      list
+        ..add(_separator)
+        ..add(Expanded(child: element));
+    }
 
     return [_separator, Row(children: list)];
   }

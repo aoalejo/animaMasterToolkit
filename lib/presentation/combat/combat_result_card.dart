@@ -7,22 +7,24 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class CombatReturnCard extends StatelessWidget {
+  const CombatReturnCard({super.key});
+
   @override
   Widget build(BuildContext context) {
-    var appState = context.watch<CharactersPageState>();
+    final appState = context.watch<CharactersPageState>();
     final theme = Theme.of(context);
 
     return CustomCombatCard(
       padding: 4,
-      title: "Resultado",
+      title: 'Resultado',
       children: [
-        for (var explanation in appState.combatState.attackResult())
+        for (final explanation in appState.combatState.attackResult())
           ExplainedTextContainer(
             explanationsExpanded: appState.explanationsExpanded,
-            onExpanded: (name) => appState.toggleExplanationStatus(name),
+            onExpanded: appState.toggleExplanationStatus,
             info: explanation,
           ),
-        SizedBox(height: 8),
+        const SizedBox(height: 8),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -30,7 +32,7 @@ class CombatReturnCard extends StatelessWidget {
               height: 32,
               child: Row(
                 children: [
-                  Text("Sorprende: "),
+                  const Text('Sorprende: '),
                   ToggleButtons(
                     isSelected: [
                       appState.combatState.surpriseType == SurpriseType.attacker,
@@ -49,18 +51,18 @@ class CombatReturnCard extends StatelessWidget {
                     },
                     borderRadius: const BorderRadius.all(Radius.circular(8)),
                     children: [
-                      Text(" Atacante ", style: theme.textTheme.bodySmall),
-                      Text(" Defensor ", style: theme.textTheme.bodySmall),
-                      Text(" Ninguno ", style: theme.textTheme.bodySmall),
+                      Text(' Atacante ', style: theme.textTheme.bodySmall),
+                      Text(' Defensor ', style: theme.textTheme.bodySmall),
+                      Text(' Ninguno ', style: theme.textTheme.bodySmall),
                     ],
                   ),
                 ],
               ),
             ),
             TextButton(
-              style: ButtonStyle(),
+              style: const ButtonStyle(),
               onPressed: () {
-                var character = appState.combatState.defense.character;
+                final character = appState.combatState.defense.character;
 
                 var damage = appState.combatState.calculateDamage().result ?? 0;
 
@@ -77,10 +79,10 @@ class CombatReturnCard extends StatelessWidget {
 
                 appState.updateCharacter(character);
               },
-              child: Text("Aplicar daño / Añadir defensa"),
-            )
+              child: const Text('Aplicar daño / Añadir defensa'),
+            ),
           ],
-        )
+        ),
       ],
     );
   }

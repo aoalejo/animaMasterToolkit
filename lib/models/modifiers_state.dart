@@ -1,4 +1,4 @@
-import 'package:amt/models/character/status_modifier.dart';
+import 'package:amt/models/character_model/status_modifier.dart';
 import 'package:amt/models/enums.dart';
 import 'package:amt/resources/modifiers.dart';
 import 'package:amt/utils/key_value.dart';
@@ -15,12 +15,13 @@ class ModifiersState {
     return _modifiers;
   }
 
+  // ignore: use_setters_to_change_properties
   void setAll(List<StatusModifier> modifiers) {
     _modifiers = modifiers;
   }
 
   bool containsModifier(StatusModifier modifier) {
-    for (var element in _modifiers) {
+    for (final element in _modifiers) {
       if (element.name == modifier.name) {
         return true;
       }
@@ -41,18 +42,18 @@ class ModifiersState {
   }
 
   String totalAttackingDescription() {
-    StatusModifier totalModifier = StatusModifier(name: "total");
-    for (var modifier in _modifiers) {
+    final totalModifier = StatusModifier(name: 'total');
+    for (final modifier in _modifiers) {
       totalModifier.attack = totalModifier.attack + modifier.attack;
     }
 
-    return totalModifier.description().isEmpty ? "0" : totalModifier.description();
+    return totalModifier.description().isEmpty ? '0' : totalModifier.description();
   }
 
   String totalDefendingDescription(DefenseType type) {
-    StatusModifier totalModifier = StatusModifier(name: "total");
+    final totalModifier = StatusModifier(name: 'total');
 
-    for (var modifier in _modifiers) {
+    for (final modifier in _modifiers) {
       totalModifier.attack = totalModifier.attack + modifier.attack;
     }
 
@@ -62,7 +63,7 @@ class ModifiersState {
   int getAllModifiersForType(ModifiersType type) {
     var total = 0;
 
-    for (var modifier in _modifiers) {
+    for (final modifier in _modifiers) {
       switch (type) {
         case ModifiersType.attack:
           total = total + modifier.attack;
@@ -85,9 +86,9 @@ class ModifiersState {
   }
 
   String getAllModifiersForTypeString(ModifiersType type) {
-    var total = "";
+    var total = '';
 
-    for (var modifier in _modifiers) {
+    for (final modifier in _modifiers) {
       switch (type) {
         case ModifiersType.attack:
           if (modifier.attack != 0) {
@@ -118,7 +119,7 @@ class ModifiersState {
   int getAllModifiersForDefense(DefenseType type) {
     var total = 0;
 
-    for (var modifier in _modifiers) {
+    for (final modifier in _modifiers) {
       switch (type) {
         case DefenseType.parry:
           total = total + modifier.parry;
@@ -131,13 +132,14 @@ class ModifiersState {
   }
 
   StatusModifier totalModifier() {
-    StatusModifier totalModifier = StatusModifier(name: "total");
-    for (var modifier in _modifiers) {
-      totalModifier.attack = totalModifier.attack + modifier.attack;
-      totalModifier.dodge = totalModifier.dodge + modifier.dodge;
-      totalModifier.parry = totalModifier.parry + modifier.parry;
-      totalModifier.turn = totalModifier.turn + modifier.turn;
-      totalModifier.physicalAction = totalModifier.physicalAction + modifier.physicalAction;
+    final totalModifier = StatusModifier(name: 'total');
+    for (final modifier in _modifiers) {
+      totalModifier
+        ..attack = totalModifier.attack + modifier.attack
+        ..dodge = totalModifier.dodge + modifier.dodge
+        ..parry = totalModifier.parry + modifier.parry
+        ..turn = totalModifier.turn + modifier.turn
+        ..physicalAction = totalModifier.physicalAction + modifier.physicalAction;
     }
 
     return totalModifier;

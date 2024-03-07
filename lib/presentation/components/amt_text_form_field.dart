@@ -2,18 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class AMTTextFormField extends StatelessWidget {
-  final String? text;
-  final String? label;
-  final TextInputType? inputType;
-  final void Function(String)? onChanged;
-  final Widget? suffixIcon;
-  final InputDecoration? decoration;
-  final TextStyle? style;
-  final TextAlign? align;
-  final bool? enabled;
-  final int maxLength;
 
-  AMTTextFormField({
+  const AMTTextFormField({
     super.key,
     this.text,
     this.label,
@@ -25,6 +15,16 @@ class AMTTextFormField extends StatelessWidget {
     this.align,
     this.enabled,
   }) : maxLength = inputType == TextInputType.number ? 4 : 20;
+  final String? text;
+  final String? label;
+  final TextInputType? inputType;
+  final void Function(String)? onChanged;
+  final Widget? suffixIcon;
+  final InputDecoration? decoration;
+  final TextStyle? style;
+  final TextAlign? align;
+  final bool? enabled;
+  final int maxLength;
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +33,7 @@ class AMTTextFormField extends StatelessWidget {
       enabled: enabled ?? true,
       controller: TextEditingController.fromValue(
         TextEditingValue(
-          text: text ?? "",
+          text: text ?? '',
           selection: TextSelection.collapsed(
             offset: text?.length ?? 0,
           ),
@@ -48,8 +48,8 @@ class AMTTextFormField extends StatelessWidget {
           InputDecoration(
             floatingLabelBehavior: FloatingLabelBehavior.always,
             labelText: label,
-            border: OutlineInputBorder(),
-            contentPadding: EdgeInsets.all(8),
+            border: const OutlineInputBorder(),
+            contentPadding: const EdgeInsets.all(8),
             suffixIcon: suffixIcon,
           ),
     );

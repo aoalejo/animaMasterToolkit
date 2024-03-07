@@ -1,67 +1,44 @@
 import 'dart:math';
 
-import 'package:amt/models/armour.dart';
-import 'package:amt/models/armour_data.dart';
-import 'package:amt/models/attributes_list.dart';
-import 'package:amt/models/character/character.dart';
-import 'package:amt/models/character/character_ki.dart';
-import 'package:amt/models/character/character_resistances.dart';
-import 'package:amt/models/character/character_state.dart';
-import 'package:amt/models/character/consumable_state.dart';
-import 'package:amt/models/character/status_modifier.dart';
-import 'package:amt/models/character_profile.dart';
-import 'package:amt/models/combat_data.dart';
-import 'package:amt/models/enums.dart';
-import 'package:amt/models/modifiers_state.dart';
-import 'package:amt/models/mystical.dart';
-import 'package:amt/models/psychic_data.dart';
-import 'package:amt/models/roll.dart';
-import 'package:amt/models/weapon.dart';
-import 'package:amt/presentation/charactersInfo/character_info_card.dart';
-import 'package:amt/presentation/charactersTable/characters_table.dart';
-import 'package:amt/presentation/combat/combat_attack_card.dart';
-import 'package:amt/presentation/combat/combat_critical_card.dart';
-import 'package:amt/presentation/combat/combat_defense_card.dart';
-import 'package:amt/presentation/combat/combat_result_card.dart';
-import 'package:amt/presentation/npcSelection/npc_selector_view.dart';
-import 'package:amt/presentation/states/characters_page_state.dart';
-import 'package:amt/presentation/states/non_player_characters_state.dart';
+import 'package:amt/models/models.dart';
+import 'package:amt/presentation/presentation.dart';
 import 'package:amt/utils/assets.dart';
 import 'package:flutter/material.dart';
-import 'package:hive_flutter/hive_flutter.dart';
-import 'package:provider/provider.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:logger/web.dart';
+import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 void main() async {
   await Hive.initFlutter();
-  Hive.registerAdapter(ArmourAdapter());
-  Hive.registerAdapter(ArmourDataAdapter());
-  Hive.registerAdapter(AttributesListAdapter());
-  Hive.registerAdapter(CharacterAdapter());
-  Hive.registerAdapter(CharacterKiAdapter());
-  Hive.registerAdapter(CharacterProfileAdapter());
-  Hive.registerAdapter(CharacterStateAdapter());
-  Hive.registerAdapter(CombatDataAdapter());
-  Hive.registerAdapter(ConsumableStateAdapter());
-  Hive.registerAdapter(ModifiersStateAdapter());
-  Hive.registerAdapter(MysticalAdapter());
-  Hive.registerAdapter(PsychicDataAdapter());
-  Hive.registerAdapter(RollAdapter());
-  Hive.registerAdapter(StatusModifierAdapter());
-  Hive.registerAdapter(WeaponAdapter());
+  Hive
+    ..registerAdapter(ArmourAdapter())
+    ..registerAdapter(ArmourDataAdapter())
+    ..registerAdapter(AttributesListAdapter())
+    ..registerAdapter(CharacterAdapter())
+    ..registerAdapter(CharacterKiAdapter())
+    ..registerAdapter(CharacterProfileAdapter())
+    ..registerAdapter(CharacterStateAdapter())
+    ..registerAdapter(CombatDataAdapter())
+    ..registerAdapter(ConsumableStateAdapter())
+    ..registerAdapter(ModifiersStateAdapter())
+    ..registerAdapter(MysticalAdapter())
+    ..registerAdapter(PsychicDataAdapter())
+    ..registerAdapter(RollAdapter())
+    ..registerAdapter(StatusModifierAdapter())
+    ..registerAdapter(WeaponAdapter())
+    ..registerAdapter(DefenseTypeAdapter())
+    ..registerAdapter(DamageTypesAdapter())
+    ..registerAdapter(WeaponSizeAdapter())
+    ..registerAdapter(KnownTypeAdapter())
+    ..registerAdapter(ArmourLocationAdapter())
+    ..registerAdapter(ConsumableTypeAdapter())
+    ..registerAdapter(CharacterResistancesAdapter());
 
-  Hive.registerAdapter(DefenseTypeAdapter());
-  Hive.registerAdapter(DamageTypesAdapter());
-  Hive.registerAdapter(WeaponSizeAdapter());
-  Hive.registerAdapter(KnownTypeAdapter());
-  Hive.registerAdapter(ArmourLocationAdapter());
-  Hive.registerAdapter(ConsumableTypeAdapter());
-  Hive.registerAdapter(CharacterResistancesAdapter());
+  Logger().d('registered adapters');
 
-  print("registered adapters");
-
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatefulWidget {
@@ -84,10 +61,10 @@ class MyAppState extends State {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => CharactersPageState()),
-        ChangeNotifierProvider(create: (context) => NonPlayerCharactersState())
+        ChangeNotifierProvider(create: (context) => NonPlayerCharactersState()),
       ],
       child: MaterialApp(
-        localizationsDelegates: [
+        localizationsDelegates: const [
           GlobalMaterialLocalizations.delegate,
           GlobalWidgetsLocalizations.delegate,
         ],
@@ -96,47 +73,51 @@ class MyAppState extends State {
           useMaterial3: true,
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepOrangeAccent),
         ),
-        home: MyHomePage(),
+        home: const MyHomePage(),
       ),
     );
   }
 }
 
 class MyHomePage extends StatelessWidget {
+  const MyHomePage({super.key});
+
   @override
   Widget build(BuildContext context) {
-    return GeneratorPage();
+    return const GeneratorPage();
   }
 }
 
 class GeneratorPage extends StatelessWidget {
+  const GeneratorPage({super.key});
+
   @override
   Widget build(BuildContext context) {
-    var theme = Theme.of(context);
-    var screenSize = MediaQuery.of(context).size;
-    var small = screenSize.width < 1120;
-    var appState = context.watch<CharactersPageState>();
-    var nonCharactersState = context.watch<NonPlayerCharactersState>();
-    final Uri repository = Uri.parse('https://github.com/aoalejo/animaMasterToolkit');
+    final theme = Theme.of(context);
+    final screenSize = MediaQuery.of(context).size;
+    final small = screenSize.width < 1120;
+    final appState = context.watch<CharactersPageState>();
+    final nonCharactersState = context.watch<NonPlayerCharactersState>();
+    final repository = Uri.parse('https://github.com/aoalejo/animaMasterToolkit');
 
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: 50,
         title: Row(
           children: [
-            if (appState.sheetsLoadingPercentaje != -1)
+            if (appState.sheetsLoadingPercentage != -1)
               SizedBox.square(
                 dimension: 24,
                 child: Stack(
                   children: [
                     CircularProgressIndicator(
-                      value: appState.sheetsLoadingPercentaje,
+                      value: appState.sheetsLoadingPercentage,
                       color: Colors.white,
                     ),
                     Center(
                       child: Text(
-                        "${(appState.sheetsLoadingPercentaje * 100).toInt()}",
-                        style: TextStyle(
+                        '${(appState.sheetsLoadingPercentage * 100).toInt()}',
+                        style: const TextStyle(
                           color: Colors.white,
                           fontSize: 10,
                           fontWeight: FontWeight.w700,
@@ -146,9 +127,9 @@ class GeneratorPage extends StatelessWidget {
                   ],
                 ),
               ),
-            if (appState.sheetsLoadingPercentaje != -1) SizedBox.square(dimension: 8),
-            if (appState.sheetsLoadingPercentaje != -1) Text("Cargando planillas..."),
-            if (appState.sheetsLoadingPercentaje == -1) Text("Anima Master Toolkit v3"),
+            if (appState.sheetsLoadingPercentage != -1) const SizedBox.square(dimension: 8),
+            if (appState.sheetsLoadingPercentage != -1) const Text('Cargando planillas...'),
+            if (appState.sheetsLoadingPercentage == -1) const Text('Anima Master Toolkit v3'),
           ],
         ),
         backgroundColor: theme.primaryColor,
@@ -156,7 +137,7 @@ class GeneratorPage extends StatelessWidget {
         actions: [
           IconButton(
             onPressed: () {
-              launchUrl(repository, webOnlyWindowName: "_blank");
+              launchUrl(repository, webOnlyWindowName: '_blank');
             },
             icon: SizedBox(
               width: 24,
@@ -173,31 +154,30 @@ class GeneratorPage extends StatelessWidget {
                 onSelected: (npc) {
                   appState.addCharacter(npc, isNpc: true);
                 },
-                onRemoveAll: () => appState.removeAllNPC(),
-                onAddNpc: () => nonCharactersState.getCharacters(),
-                onRemove: (character) => nonCharactersState.removeNPC(character),
+                onRemoveAll: appState.removeAllNPC,
+                onAddNpc: nonCharactersState.getCharacters,
+                onRemove: nonCharactersState.removeNPC,
               );
             },
-            icon: Icon(Icons.group),
+            icon: const Icon(Icons.group),
           ),
         ],
       ),
       body: Column(
         children: [
           Expanded(child: _content(theme, screenSize, small, appState.pageSelected, appState.isLoading, appState.message)),
-          small
-              ? BottomNavigationBar(
-                  items: [
-                    BottomNavigationBarItem(icon: Icon(Icons.list), label: "Listado"),
-                    BottomNavigationBarItem(icon: Icon(Icons.receipt), label: "Detalle"),
-                    BottomNavigationBarItem(icon: Icon(Icons.bolt), label: "Combate"),
-                  ],
-                  onTap: (index) {
-                    appState.updatePageSelected(index);
-                  },
-                  currentIndex: appState.pageSelected,
-                )
-              : Container()
+          if (small)
+            BottomNavigationBar(
+              items: const [
+                BottomNavigationBarItem(icon: Icon(Icons.list), label: 'Listado'),
+                BottomNavigationBarItem(icon: Icon(Icons.receipt), label: 'Detalle'),
+                BottomNavigationBarItem(icon: Icon(Icons.bolt), label: 'Combate'),
+              ],
+              onTap: appState.updatePageSelected,
+              currentIndex: appState.pageSelected,
+            )
+          else
+            Container(),
         ],
       ),
     );
@@ -213,68 +193,71 @@ class GeneratorPage extends StatelessWidget {
             Flex(
               direction: Axis.horizontal,
               children: [
-                pageSelected == 0 || !small
-                    ? SizedBox(
-                        height: screenSize.height,
+                if (pageSelected == 0 || !small)
+                  SizedBox(
+                    height: screenSize.height,
+                    width: small ? screenSize.width : screenSize.width / 3,
+                    child: const CharactersTable(),
+                  )
+                else
+                  Container(),
+                if (pageSelected == 1 || !small)
+                  Column(
+                    children: [
+                      SizedBox(
+                        height: small ? (screenSize.height / 2) - 54 : (screenSize.height / 2) - 25,
                         width: small ? screenSize.width : screenSize.width / 3,
-                        child: CharactersTable(),
-                      )
-                    : Container(),
-                pageSelected == 1 || !small
-                    ? Column(
-                        children: [
-                          SizedBox(
-                            height: small ? (screenSize.height / 2) - 54 : (screenSize.height / 2) - 25,
-                            width: small ? screenSize.width : screenSize.width / 3,
-                            child: CharacterInfoCard(attacking: true),
-                          ),
-                          SizedBox(
-                            height: small ? (screenSize.height / 2) - 54 : (screenSize.height / 2) - 25,
-                            width: small ? screenSize.width : screenSize.width / 3,
-                            child: CharacterInfoCard(attacking: false),
-                          ),
-                        ],
-                      )
-                    : Container(),
-                pageSelected == 2 || !small
-                    ? SizedBox(
-                        height: screenSize.height,
+                        child: CharacterInfoCard(attacking: true),
+                      ),
+                      SizedBox(
+                        height: small ? (screenSize.height / 2) - 54 : (screenSize.height / 2) - 25,
                         width: small ? screenSize.width : screenSize.width / 3,
-                        child: CombatSection(
-                          isLandscape: true,
-                        ),
-                      )
-                    : Container(),
+                        child: CharacterInfoCard(attacking: false),
+                      ),
+                    ],
+                  )
+                else
+                  Container(),
+                if (pageSelected == 2 || !small)
+                  SizedBox(
+                    height: screenSize.height,
+                    width: small ? screenSize.width : screenSize.width / 3,
+                    child: const CombatSection(
+                      isLandscape: true,
+                    ),
+                  )
+                else
+                  Container(),
               ],
             ),
             if (loading)
               Stack(
                 children: [
-                  SizedBox.expand(child: ColoredBox(color: Colors.black26)),
+                  const SizedBox.expand(child: ColoredBox(color: Colors.black26)),
                   Center(
                     child: SizedBox(
                       width: max(screenSize.width / 3, 300),
                       height: max(screenSize.width / 4, 300),
                       child: Container(
-                        decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(16)), color: Colors.white),
+                        decoration: const BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(16)), color: Colors.white),
                         child: Padding(
-                          padding: EdgeInsets.all(16),
+                          padding: const EdgeInsets.all(16),
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: [
-                              CircularProgressIndicator(),
+                              const CircularProgressIndicator(),
                               Text(
-                                message?.split("#").first ?? "",
+                                message?.split('#').first ?? '',
                                 textAlign: TextAlign.center,
-                                style: TextStyle(
+                                style: const TextStyle(
                                   fontSize: 24,
                                   fontWeight: FontWeight.w700,
                                 ),
                               ),
                               Text(
-                                message?.split("#").last ?? "",
+                                message?.split('#').last ?? '',
                                 textAlign: TextAlign.center,
-                                style: TextStyle(
+                                style: const TextStyle(
                                   fontSize: 12,
                                   fontWeight: FontWeight.w400,
                                 ),
@@ -286,7 +269,7 @@ class GeneratorPage extends StatelessWidget {
                     ),
                   ),
                 ],
-              )
+              ),
           ],
         ),
       ),
@@ -295,17 +278,16 @@ class GeneratorPage extends StatelessWidget {
 }
 
 class CombatSection extends StatelessWidget {
+  const CombatSection({required this.isLandscape, super.key});
   final bool isLandscape;
-  CombatSection({required this.isLandscape});
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.all(0),
+    return const Padding(
+      padding: EdgeInsets.zero,
       child: SingleChildScrollView(
         child: Flex(
           direction: Axis.vertical,
-          mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             CombatAttackCard(),

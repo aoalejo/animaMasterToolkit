@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:amt/models/character/character.dart';
+import 'package:amt/models/character_model/character.dart';
 
 abstract class ExcelParser {
   ExcelParser.fromFile(this.file);

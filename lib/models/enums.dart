@@ -12,9 +12,9 @@ enum DefenseType {
   String get displayable {
     switch (this) {
       case DefenseType.parry:
-        return "Parada";
+        return 'Parada';
       case DefenseType.dodge:
-        return "Esquiva";
+        return 'Esquiva';
     }
   }
 }
@@ -91,6 +91,8 @@ enum PrimaryDifficulties implements DifficultyEnum {
   complex(15),
   extreme(20);
 
+  const PrimaryDifficulties(this.difficulty);
+
   @override
   final int difficulty;
 
@@ -98,13 +100,13 @@ enum PrimaryDifficulties implements DifficultyEnum {
   String get displayable {
     switch (this) {
       case PrimaryDifficulties.simple:
-        return "Simple";
+        return 'Simple';
       case PrimaryDifficulties.normal:
-        return "Normal";
+        return 'Normal';
       case PrimaryDifficulties.complex:
-        return "Complejo";
+        return 'Complejo';
       case PrimaryDifficulties.extreme:
-        return "Extremo";
+        return 'Extremo';
     }
   }
 
@@ -112,17 +114,15 @@ enum PrimaryDifficulties implements DifficultyEnum {
   String get abbreviated {
     switch (this) {
       case PrimaryDifficulties.simple:
-        return "SMP";
+        return 'SMP';
       case PrimaryDifficulties.normal:
-        return "NOR";
+        return 'NOR';
       case PrimaryDifficulties.complex:
-        return "COM";
+        return 'COM';
       case PrimaryDifficulties.extreme:
-        return "EXT";
+        return 'EXT';
     }
   }
-
-  const PrimaryDifficulties(this.difficulty);
 }
 
 enum SecondaryDifficulties implements DifficultyEnum {
@@ -137,6 +137,8 @@ enum SecondaryDifficulties implements DifficultyEnum {
   inhumane(320),
   zen(440);
 
+  const SecondaryDifficulties(this.difficulty);
+
   @override
   final int difficulty;
 
@@ -144,25 +146,25 @@ enum SecondaryDifficulties implements DifficultyEnum {
   String get displayable {
     switch (this) {
       case SecondaryDifficulties.routine:
-        return "Rutinario";
+        return 'Rutinario';
       case SecondaryDifficulties.easy:
-        return "Fácil";
+        return 'Fácil';
       case SecondaryDifficulties.medium:
-        return "Media";
+        return 'Media';
       case SecondaryDifficulties.hard:
-        return "Dificil";
+        return 'Dificil';
       case SecondaryDifficulties.veryHard:
-        return "Muy Dificil";
+        return 'Muy Dificil';
       case SecondaryDifficulties.absurd:
-        return "Absurdo";
+        return 'Absurdo';
       case SecondaryDifficulties.almostImpossible:
-        return "Casi Imposible";
+        return 'Casi Imposible';
       case SecondaryDifficulties.impossible:
-        return "Imposible";
+        return 'Imposible';
       case SecondaryDifficulties.inhumane:
-        return "Inhumano";
+        return 'Inhumano';
       case SecondaryDifficulties.zen:
-        return "Zen";
+        return 'Zen';
     }
   }
 
@@ -170,34 +172,32 @@ enum SecondaryDifficulties implements DifficultyEnum {
   String get abbreviated {
     switch (this) {
       case SecondaryDifficulties.routine:
-        return "RUT";
+        return 'RUT';
       case SecondaryDifficulties.easy:
-        return "FAC";
+        return 'FAC';
       case SecondaryDifficulties.medium:
-        return "MED";
+        return 'MED';
       case SecondaryDifficulties.hard:
-        return "DIF";
+        return 'DIF';
       case SecondaryDifficulties.veryHard:
-        return "MDF";
+        return 'MDF';
       case SecondaryDifficulties.absurd:
-        return "ABS";
+        return 'ABS';
       case SecondaryDifficulties.almostImpossible:
-        return "CIM";
+        return 'CIM';
       case SecondaryDifficulties.impossible:
-        return "IMP";
+        return 'IMP';
       case SecondaryDifficulties.inhumane:
-        return "UNH";
+        return 'UNH';
       case SecondaryDifficulties.zen:
-        return "ZEN";
+        return 'ZEN';
     }
   }
-
-  const SecondaryDifficulties(this.difficulty);
 }
 
 class EnumConverter {
   static T from<T extends Enum>(String name, List<T> types) {
-    for (var type in types) {
+    for (final type in types) {
       if (type.name == name) {
         return type;
       }

@@ -1,20 +1,18 @@
-import 'dart:convert';
-
 import 'package:amt/models/armour.dart';
+import 'package:amt/utils/list_extension.dart';
+import 'package:amt/utils/string_extension.dart';
 
 class Armours {
   static List<Armour> getPresetArmours() {
-    var modifiers = <Armour>[];
+    final armours = <Armour>[];
 
-    var json = jsonDecode(_presets);
+    final json = _presets.jsonList;
 
-    if (json != null) {
-      json.forEach((v) {
-        modifiers.add(Armour.fromJson(v));
-      });
+    for (final element in json) {
+      armours.tryAdd(Armour.fromJson(element));
     }
 
-    return modifiers;
+    return armours;
   }
 
   static const _presets = '''

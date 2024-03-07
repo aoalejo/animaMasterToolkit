@@ -1,9 +1,9 @@
 import 'package:amt/models/enums.dart';
 import 'package:amt/models/roll.dart';
-import 'package:amt/presentation/components/components.dart';
 import 'package:amt/presentation/bottom_sheet_modifiers.dart';
-import 'package:amt/presentation/charactersTable/modifiers_card.dart';
+import 'package:amt/presentation/characters/modifiers_card.dart';
 import 'package:amt/presentation/combat/custom_combat_card.dart';
+import 'package:amt/presentation/components/components.dart';
 import 'package:amt/presentation/states/characters_page_state.dart';
 import 'package:amt/resources/modifiers.dart';
 import 'package:amt/utils/assets.dart';
@@ -11,9 +11,11 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class CombatAttackCard extends StatelessWidget {
+  const CombatAttackCard({super.key});
+
   @override
   Widget build(BuildContext context) {
-    var appState = context.watch<CharactersPageState>();
+    final appState = context.watch<CharactersPageState>();
     final theme = Theme.of(context);
     final attackState = appState.combatState.attack;
     final character = attackState.character;
@@ -29,9 +31,7 @@ class CombatAttackCard extends StatelessWidget {
                 Icons.close,
                 color: theme.colorScheme.onPrimary,
               ),
-              onPressed: () {
-                appState.removeAttacker();
-              },
+              onPressed: appState.removeAttacker,
             ),
       children: [
         SizedBox(
@@ -42,7 +42,7 @@ class CombatAttackCard extends StatelessWidget {
                 flex: 2,
                 child: AMTTextFormField(
                   text: attackState.roll,
-                  label: "Tirada de ataque",
+                  label: 'Tirada de ataque',
                   onChanged: (value) => {appState.updateCombatState(attackRoll: value)},
                   suffixIcon: IconButton(
                     onPressed: () {
@@ -55,16 +55,15 @@ class CombatAttackCard extends StatelessWidget {
                   ),
                 ),
               ),
-              if (character != null) SizedBox(width: 12),
+              if (character != null) const SizedBox(width: 12),
               if (character != null && !isVariableDamage)
                 Flexible(
-                  flex: 1,
                   child: AMTTextFormField(
                     enabled: false,
-                    label: "Daño base",
+                    label: 'Daño base',
                     text: weapon?.damage.toString(),
                     onChanged: (newText) {
-                      var newValue = int.tryParse(newText);
+                      final newValue = int.tryParse(newText);
 
                       if (newValue != null) {
                         weapon?.damage = newValue;
@@ -73,7 +72,7 @@ class CombatAttackCard extends StatelessWidget {
                     },
                   ),
                 ),
-              if (character != null) SizedBox(width: 4),
+              if (character != null) const SizedBox(width: 4),
               Flexible(
                 flex: 2,
                 child: AMTTextFormField(
@@ -81,20 +80,20 @@ class CombatAttackCard extends StatelessWidget {
                     appState.updateCombatState(damageModifier: value);
                   },
                   text: attackState.damage,
-                  label: isVariableDamage ? "Daño" : "Modificador",
+                  label: isVariableDamage ? 'Daño' : 'Modificador',
                   suffixIcon: IconButton(
-                    icon: Icon(Icons.delete),
+                    icon: const Icon(Icons.delete),
                     onPressed: () {
-                      appState.updateCombatState(damageModifier: "");
+                      appState.updateCombatState(damageModifier: '');
                     },
                   ),
                 ),
               ),
-              if (character != null) SizedBox(width: 12),
+              if (character != null) const SizedBox(width: 12),
               if (character != null)
                 isVariableDamage
                     ? ToggleButtons(
-                        constraints: BoxConstraints(minWidth: 30, minHeight: 40),
+                        constraints: const BoxConstraints(minWidth: 30, minHeight: 40),
                         isSelected: [
                           attackState.damageType == DamageTypes.fil,
                           attackState.damageType == DamageTypes.pen,
@@ -107,17 +106,17 @@ class CombatAttackCard extends StatelessWidget {
                         onPressed: (index) => {appState.updateCombatState(damageType: DamageTypes.values[index])},
                         borderRadius: const BorderRadius.all(Radius.circular(8)),
                         children: [
-                          Text("fil", style: theme.textTheme.bodySmall),
-                          Text("pen", style: theme.textTheme.bodySmall),
-                          Text("con", style: theme.textTheme.bodySmall),
-                          Text("fri", style: theme.textTheme.bodySmall),
-                          Text("cal", style: theme.textTheme.bodySmall),
-                          Text("ele", style: theme.textTheme.bodySmall),
-                          Text("ene", style: theme.textTheme.bodySmall),
+                          Text('fil', style: theme.textTheme.bodySmall),
+                          Text('pen', style: theme.textTheme.bodySmall),
+                          Text('con', style: theme.textTheme.bodySmall),
+                          Text('fri', style: theme.textTheme.bodySmall),
+                          Text('cal', style: theme.textTheme.bodySmall),
+                          Text('ele', style: theme.textTheme.bodySmall),
+                          Text('ene', style: theme.textTheme.bodySmall),
                         ],
                       )
                     : Padding(
-                        padding: EdgeInsets.all(0),
+                        padding: EdgeInsets.zero,
                         child: ToggleButtons(
                           isSelected: [
                             weapon?.principalDamage == attackState.damageType,
@@ -128,11 +127,11 @@ class CombatAttackCard extends StatelessWidget {
                           borderRadius: const BorderRadius.all(Radius.circular(8)),
                           children: [
                             Text(
-                              weapon?.principalDamage?.name ?? "con",
+                              weapon?.principalDamage?.name ?? 'con',
                               style: theme.textTheme.bodySmall,
                             ),
                             Text(
-                              weapon?.secondaryDamage?.name ?? "con",
+                              weapon?.secondaryDamage?.name ?? 'con',
                               style: theme.textTheme.bodySmall,
                             ),
                           ],
@@ -141,14 +140,13 @@ class CombatAttackCard extends StatelessWidget {
             ],
           ),
         ),
-        SizedBox(
+        const SizedBox(
           height: 20,
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Flexible(
-              flex: 1,
               child: Column(
                 children: [
                   SizedBox(
@@ -158,31 +156,30 @@ class CombatAttackCard extends StatelessWidget {
                       children: [
                         if (character != null)
                           Flexible(
-                            flex: 1,
                             child: Tooltip(
                               message: character.calculateAttack(),
                               child: AMTTextFormField(
                                 enabled: false,
-                                label: "Ataque",
+                                label: 'Ataque',
                                 text: character.calculateAttack(),
                               ),
                             ),
                           ),
-                        if (character != null) SizedBox(width: 4),
+                        if (character != null) const SizedBox(width: 4),
                         Flexible(
                           flex: 2,
                           child: AMTTextFormField(
-                            label: character != null ? "Modificador" : "Ataque",
+                            label: character != null ? 'Modificador' : 'Ataque',
                             suffixIcon: TextButton(
-                              child: Text("+Can"),
+                              child: const Text('+Can'),
                               onPressed: () {
                                 character?.removeFrom(
                                   1,
                                   ConsumableType.fatigue,
                                 );
-                                appState.updateCombatState(baseAttackModifiers: "${attackState.attack}+15");
-
-                                appState.updateCharacter(character);
+                                appState
+                                  ..updateCombatState(baseAttackModifiers: '${attackState.attack}+15')
+                                  ..updateCharacter(character);
                               },
                             ),
                             text: attackState.attack,
@@ -195,27 +192,28 @@ class CombatAttackCard extends StatelessWidget {
                 ],
               ),
             ),
-            SizedBox(
+            const SizedBox(
               width: 12,
             ),
             Flexible(
-              flex: 1,
               child: Column(
                 children: [
                   SizedBox(
                     height: 40,
                     child: TextButton(
                       onPressed: () {
-                        BottomSheetModifiers.show(context, attackState.modifiers, Modifiers.getSituationalModifiers(ModifiersType.attack),
-                            (newModifiers) {
-                          appState.updateAttackingModifiers(newModifiers);
-                        });
+                        BottomSheetModifiers.show(
+                          context,
+                          attackState.modifiers,
+                          Modifiers.getSituationalModifiers(ModifiersType.attack),
+                          appState.updateAttackingModifiers,
+                        );
                       },
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
-                          Text(
-                            "Situacionales",
+                          const Text(
+                            'Situacionales',
                             textAlign: TextAlign.center,
                           ),
                           Text(
@@ -232,7 +230,7 @@ class CombatAttackCard extends StatelessWidget {
             ),
           ],
         ),
-        SizedBox(
+        const SizedBox(
           height: 10,
         ),
         SizedBox(

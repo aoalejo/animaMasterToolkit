@@ -1,22 +1,21 @@
-import 'package:amt/models/character/character.dart';
-import 'package:amt/presentation/npcSelection/npc_card_view.dart';
-import 'package:amt/presentation/components/components.dart';
+import 'package:amt/models/character_model/character.dart';
+import 'package:amt/presentation/presentation.dart';
 import 'package:flutter/material.dart';
 
 class NPCSelector {
-  static open(
+  static void open(
     BuildContext context,
     ThemeData theme, {
     required List<Character> characters,
-    required Function(Character) onSelected,
-    required Function() onRemoveAll,
-    required Function() onAddNpc,
-    required Function(Character) onRemove,
+    required void Function(Character) onSelected,
+    required void Function() onRemoveAll,
+    required void Function() onAddNpc,
+    required void Function(Character) onRemove,
   }) {
-    var characters0 = characters;
-    var filter = "";
+    final characters0 = characters;
+    var filter = '';
 
-    showDialog(
+    showDialog<void>(
       context: context,
       builder: (builder) {
         return StatefulBuilder(
@@ -24,59 +23,60 @@ class NPCSelector {
             return AlertDialog(
               title: Row(
                 children: [
-                  Expanded(child: Text("Añadir NPC")),
+                  const Expanded(child: Text('Añadir NPC')),
                   Flexible(
-                      flex: 1,
-                      child: AMTTextFormField(
-                        suffixIcon: Icon(Icons.search),
-                        text: filter,
-                        onChanged: (newFilter) => setState(() => filter = newFilter),
-                      )),
+                    child: AMTTextFormField(
+                      suffixIcon: const Icon(Icons.search),
+                      text: filter,
+                      onChanged: (newFilter) => setState(() => filter = newFilter),
+                    ),
+                  ),
                   IconButton(
                     onPressed: () {
                       Navigator.pop(context);
                       onAddNpc();
                     },
-                    icon: Icon(Icons.upload_file),
+                    icon: const Icon(Icons.upload_file),
                   ),
                   IconButton(
                     onPressed: () {
                       Navigator.pop(context);
-                      showDialog(
+                      showDialog<void>(
                         context: context,
                         builder: (context) {
                           return AlertDialog(
-                            title: Text("Borrar todos los NPC"),
-                            content: Text("¿seguro que desea borrar todos los NPC de la lista de personajes activos?"),
+                            title: const Text('Borrar todos los NPC'),
+                            content: const Text('¿seguro que desea borrar todos los NPC de la lista de personajes activos?'),
                             actions: [
                               OutlinedButton(
                                 onPressed: () {
                                   Navigator.pop(context);
                                   onRemoveAll();
                                 },
-                                child: Text("Borrar"),
+                                child: const Text('Borrar'),
                               ),
                               TextButton(
                                 onPressed: () {
                                   Navigator.pop(context);
                                 },
-                                child: Text("Cancelar"),
-                              )
+                                child: const Text('Cancelar'),
+                              ),
                             ],
                           );
                         },
                       );
                     },
-                    icon: Icon(Icons.delete),
-                  )
+                    icon: const Icon(Icons.delete),
+                  ),
                 ],
               ),
               actions: [
                 TextButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    child: Text("Cerrar"))
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: const Text('Cerrar'),
+                ),
               ],
               content: SizedBox(
                 height: 500,
@@ -85,7 +85,7 @@ class NPCSelector {
                   crossAxisCount: 1,
                   childAspectRatio: 1.5,
                   children: [
-                    for (var character in characters0.where((element) => element.isOn(filter)))
+                    for (final character in characters0.where((element) => element.isOn(filter)))
                       CharacterNPCCard(
                         character,
                         theme,

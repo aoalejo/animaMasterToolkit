@@ -4,90 +4,108 @@ extension DamageTypesDesc on DamageTypes {
   String name() {
     switch (this) {
       case DamageTypes.fil:
-        return "Fil";
+        return 'Fil';
       case DamageTypes.pen:
-        return "Pen";
+        return 'Pen';
       case DamageTypes.con:
-        return "Con";
+        return 'Con';
       case DamageTypes.fri:
-        return "Fri";
+        return 'Fri';
       case DamageTypes.cal:
-        return "Cal";
+        return 'Cal';
       case DamageTypes.ele:
-        return "Ele";
+        return 'Ele';
       case DamageTypes.ene:
-        return "Ene";
+        return 'Ene';
     }
   }
 }
 
+extension GetSubDictionary on Map<String, dynamic> {
+  Map<String, dynamic>? getMap(String key) {
+    if (this[key] is Map<String, dynamic>) {
+      return this[key] as Map<String, dynamic>;
+    }
+    return null;
+  }
+
+  List<Map<String, dynamic>> getList(String key) {
+    final list = this[key];
+
+    if (list is List<dynamic>) {
+      return list.whereType<Map<String, dynamic>>().toList();
+    }
+    return [];
+  }
+}
+
 class JsonUtils {
-  static ArmourLocation armourLocation(String? base) {
-    switch (base?.toUpperCase()) {
-      case "completa":
+  static ArmourLocation armourLocation(dynamic base) {
+    switch (base?.toString().toUpperCase()) {
+      case 'completa':
         return ArmourLocation.complete;
-      case "peto":
+      case 'peto':
         return ArmourLocation.breastplate;
-      case "camisola":
+      case 'camisola':
         return ArmourLocation.camisole;
-      case "cabeza":
+      case 'cabeza':
         return ArmourLocation.head;
     }
     return ArmourLocation.complete;
   }
 
-  static DamageTypes damage(String? base) {
-    switch (base?.toUpperCase()) {
-      case "FIL":
+  static DamageTypes damage(dynamic base) {
+    switch (base?.toString().toUpperCase()) {
+      case 'FIL':
         return DamageTypes.fil;
-      case "PEN":
+      case 'PEN':
         return DamageTypes.pen;
-      case "CON":
+      case 'CON':
         return DamageTypes.con;
-      case "FRI":
+      case 'FRI':
         return DamageTypes.fri;
-      case "CAL":
+      case 'CAL':
         return DamageTypes.cal;
-      case "ELE":
+      case 'ELE':
         return DamageTypes.ele;
-      case "ENE":
+      case 'ENE':
         return DamageTypes.ene;
     }
 
     return DamageTypes.fil;
   }
 
-  static WeaponSize weaponSize(String? base) {
-    switch (base?.toLowerCase()) {
-      case "normal":
+  static WeaponSize weaponSize(dynamic base) {
+    switch (base?.toString().toLowerCase()) {
+      case 'normal':
         return WeaponSize.normal;
-      case "enorme":
+      case 'enorme':
         return WeaponSize.big;
-      case "gigante":
+      case 'gigante':
         return WeaponSize.giant;
     }
 
     return WeaponSize.normal;
   }
 
-  static DefenseType defenseType(String? base) {
-    switch (base?.toLowerCase()) {
-      case "par":
+  static DefenseType defenseType(dynamic base) {
+    switch (base?.toString().toLowerCase()) {
+      case 'par':
         return DefenseType.parry;
-      case "esq":
+      case 'esq':
         return DefenseType.dodge;
     }
 
     return DefenseType.dodge;
   }
 
-  static KnownType knownType(String? base) {
-    switch (base?.toLowerCase()) {
-      case "conocida":
+  static KnownType knownType(dynamic base) {
+    switch (base?.toString().toLowerCase()) {
+      case 'conocida':
         return KnownType.known;
-      case "similar":
+      case 'similar':
         return KnownType.similar;
-      case "distinta":
+      case 'distinta':
         return KnownType.unknown;
     }
 
@@ -110,9 +128,9 @@ class JsonUtils {
     }
   }
 
-  static bool boolean(dynamic base, bool placeholder) {
+  static bool boolean(dynamic base, {bool placeholder = true}) {
     try {
-      return bool.tryParse(base) ?? placeholder;
+      return bool.tryParse(base.toString()) ?? placeholder;
     } catch (e) {
       return placeholder;
     }

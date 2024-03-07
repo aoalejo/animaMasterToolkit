@@ -1,54 +1,55 @@
 import 'dart:async';
-import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
 
-import 'package:amt/models/character/character.dart';
+import 'package:amt/models/character_model/character.dart';
 import 'package:amt/models/enums.dart';
 import 'package:amt/models/modifiers_state.dart';
 import 'package:amt/models/rules/rules.dart';
 import 'package:amt/presentation/states/combat_state.dart';
 import 'package:amt/utils/cloud_excel_parser.dart';
+import 'package:amt/utils/string_extension.dart';
 import 'package:enough_convert/windows.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:logger/web.dart';
 import 'package:uuid/uuid.dart';
 
 class CharactersPageState extends ChangeNotifier {
+  CharactersPageState() {
+    initAsync();
+  }
+
   List<Character> characters = [];
-  var combatState = ScreenCombatState();
-  String? errorMessage = "";
+  ScreenCombatState combatState = ScreenCombatState();
+  String? errorMessage = '';
   int pageSelected = 0;
   bool isLoading = false;
   String? message;
 
-  double sheetsLoadingPercentaje = -1;
+  double sheetsLoadingPercentage = -1;
 
   Map<String, bool> explanationsExpanded = {};
 
   late Box<Character> _box;
 
-  CharactersPageState() {
-    initAsync();
-  }
-
   void stepSheetLoading() {
-    if (sheetsLoadingPercentaje > 0.9) {
-      sheetsLoadingPercentaje = sheetsLoadingPercentaje + 0.0010;
-    } else if (sheetsLoadingPercentaje > 0.75) {
-      sheetsLoadingPercentaje = sheetsLoadingPercentaje + 0.0025;
-    } else if (sheetsLoadingPercentaje > 0.5) {
-      sheetsLoadingPercentaje = sheetsLoadingPercentaje + 0.0050;
+    if (sheetsLoadingPercentage > 0.9) {
+      sheetsLoadingPercentage = sheetsLoadingPercentage + 0.0010;
+    } else if (sheetsLoadingPercentage > 0.75) {
+      sheetsLoadingPercentage = sheetsLoadingPercentage + 0.0025;
+    } else if (sheetsLoadingPercentage > 0.5) {
+      sheetsLoadingPercentage = sheetsLoadingPercentage + 0.0050;
     } else {
-      sheetsLoadingPercentaje = sheetsLoadingPercentaje + 0.0100;
+      sheetsLoadingPercentage = sheetsLoadingPercentage + 0.0100;
     }
     notifyListeners();
   }
 
   void updateSheetLoading(double value) {
-    sheetsLoadingPercentaje = value;
+    sheetsLoadingPercentage = value;
     notifyListeners();
   }
 
@@ -64,18 +65,18 @@ class CharactersPageState extends ChangeNotifier {
     notifyListeners();
   }
 
-  void initAsync() async {
+  Future<void> initAsync() async {
     try {
       _box = await Hive.openBox('characters');
       characters.addAll(_box.values.toList());
       notifyListeners();
     } catch (e) {
-      Hive.deleteBoxFromDisk('characters');
+      await Hive.deleteBoxFromDisk('characters');
       _box = await Hive.openBox('characters');
     }
   }
 
-  toggleExplanationStatus(String name) {
+  void toggleExplanationStatus(String name) {
     if (explanationsExpanded.containsKey(name)) {
       explanationsExpanded[name] = !explanationsExpanded[name]!;
     } else {
@@ -84,20 +85,20 @@ class CharactersPageState extends ChangeNotifier {
     notifyListeners();
   }
 
-  addCharacter(Character character, {bool isNpc = false}) {
+  void addCharacter(Character character, {bool isNpc = false}) {
     // Numbering, get all characters with # in the name:
     var maxValue = 0;
-    for (var element in characters.where(
+    for (final element in characters.where(
       (element) => element.nameNormalized() == character.nameNormalized(),
     )) {
-      final split = element.profile.name.split("#");
+      final split = element.profile.name.split('#');
       final value = int.tryParse(split.last);
       maxValue = max(value ?? 0, maxValue);
     }
 
     if (isNpc) {
-      var newChar = character.copyWith(
-        uuid: Uuid().v4(),
+      final newChar = character.copyWith(
+        uuid: const Uuid().v4(),
         isNpc: isNpc,
         number: maxValue + 1,
       );
@@ -105,7 +106,7 @@ class CharactersPageState extends ChangeNotifier {
       _box.add(newChar);
     } else {
       if (maxValue > 0) {
-        character.profile.name = "${character.profile.name} #${maxValue + 1}";
+        character.profile.name = '${character.profile.name} #${maxValue + 1}';
       }
 
       characters.add(character);
@@ -115,17 +116,17 @@ class CharactersPageState extends ChangeNotifier {
     notifyListeners();
   }
 
-  removeAllNPC() {
-    for (var char in characters) {
-      if (char.profile.isNpc == true) {
+  void removeAllNPC() {
+    for (final char in characters) {
+      if (char.profile.isNpc ?? false) {
         char.delete();
       }
     }
-    characters.removeWhere((element) => element.profile.isNpc == true);
+    characters.removeWhere((element) => element.profile.isNpc ?? false);
     notifyListeners();
   }
 
-  updatePageSelected(int index) {
+  void updatePageSelected(int index) {
     pageSelected = index;
     notifyListeners();
   }
@@ -211,16 +212,17 @@ class CharactersPageState extends ChangeNotifier {
   }
 
   void rollTurns() {
-    for (Character character in characters) {
-      var allModifiers = character.state.modifiers.getAll();
+    for (final character in characters) {
+      final allModifiers = character.state.modifiers.getAll();
 
-      for (var element in allModifiers) {
+      for (final element in allModifiers) {
         if (element.isOfCritical ?? false) {
-          element.attack = min(element.attack + 5, element.midValue ?? 0);
-          element.dodge = min(element.dodge + 5, element.midValue ?? 0);
-          element.parry = min(element.parry + 5, element.midValue ?? 0);
-          element.physicalAction = min(element.physicalAction + 5, element.midValue ?? 0);
-          element.turn = min(element.turn + 5, element.midValue ?? 0);
+          element
+            ..attack = min(element.attack + 5, element.midValue ?? 0)
+            ..dodge = min(element.dodge + 5, element.midValue ?? 0)
+            ..parry = min(element.parry + 5, element.midValue ?? 0)
+            ..physicalAction = min(element.physicalAction + 5, element.midValue ?? 0)
+            ..turn = min(element.turn + 5, element.midValue ?? 0);
         }
       }
 
@@ -236,8 +238,8 @@ class CharactersPageState extends ChangeNotifier {
   }
 
   void resetConsumables() {
-    for (Character character in characters) {
-      for (var consumable in character.state.consumables) {
+    for (final character in characters) {
+      for (final consumable in character.state.consumables) {
         consumable.actualValue = consumable.maxValue;
       }
       character.save();
@@ -248,7 +250,7 @@ class CharactersPageState extends ChangeNotifier {
   void updateCharacter(Character? character) {
     if (character == null) return;
 
-    int index = characters.indexWhere((element) => element.uuid == character.uuid);
+    final index = characters.indexWhere((element) => element.uuid == character.uuid);
 
     characters[index] = character;
 
@@ -256,8 +258,8 @@ class CharactersPageState extends ChangeNotifier {
     character.save();
   }
 
-  Future parseCharacters(FilePickerResult? filesPicked, Function(double) onUpdated) async {
-    print("result: ${filesPicked?.count}");
+  Future<void> parseCharacters(FilePickerResult? filesPicked, void Function(double) onUpdated) async {
+    Logger().d('result: ${filesPicked?.count}');
 
     try {
       if (filesPicked != null) {
@@ -266,16 +268,15 @@ class CharactersPageState extends ChangeNotifier {
 
         if (filesPicked.files.first.bytes != null) {
           // For web
-          for (var element in filesPicked.files) {
+          for (final element in filesPicked.files) {
             onUpdated(counter / total);
-            print("Progress: $counter / $total");
 
             if (element.extension == 'json') {
-              var jsonFile = Windows1252Codec().decode(element.bytes!.toList());
-              var character = Character.fromJson(jsonDecode(jsonFile));
-              addCharacter(character);
+              final jsonFile = const Windows1252Codec().decode(element.bytes!.toList());
+              final character = Character.fromJson(jsonFile.jsonMap);
+              if (character != null) addCharacter(character);
             } else {
-              var character = CloudExcelParser.fromBytes(element.bytes!.toList());
+              final character = CloudExcelParser.fromBytes(element.bytes!.toList());
               final characterDecoded = await character.parse();
 
               if (characterDecoded != null) addCharacter(characterDecoded);
@@ -285,19 +286,19 @@ class CharactersPageState extends ChangeNotifier {
           }
         } else {
           // For desktop
-          List<File> files = filesPicked.paths.map((path) => File(path ?? "")).toList();
+          final files = filesPicked.paths.map((path) => File(path ?? '')).toList();
 
-          for (var file in files) {
+          for (final file in files) {
             onUpdated(counter / total);
-            print("Progress: $counter / $total");
+            Logger().d('Progress: $counter / $total');
 
-            var extension = file.path.split(".").last;
-            if (extension == "json") {
-              final json = await file.readAsString(encoding: Windows1252Codec());
-              var character = Character.fromJson(jsonDecode(json));
-              addCharacter(character);
+            final extension = file.path.split('.').last;
+            if (extension == 'json') {
+              final json = await file.readAsString(encoding: const Windows1252Codec());
+              final character = Character.fromJson(json.jsonMap);
+              if (character != null) addCharacter(character);
             } else {
-              var character = CloudExcelParser.fromFile(file);
+              final character = CloudExcelParser.fromFile(file);
               final characterDecoded = await character.parse();
 
               if (characterDecoded != null) addCharacter(characterDecoded);
@@ -306,23 +307,24 @@ class CharactersPageState extends ChangeNotifier {
           }
         }
       } else {
-        errorMessage = "$errorMessage Error leyendo archivos";
+        errorMessage = '$errorMessage Error leyendo archivos';
       }
     } catch (e) {
-      errorMessage = "$errorMessage ${e.toString()}";
+      Logger().e(e);
+      errorMessage = '$errorMessage $e';
     }
     onUpdated(-1);
   }
 
   Future<FilePickerResult?> getCharacters() async {
-    FilePickerResult? result = await FilePicker.platform.pickFiles(
+    final result = await FilePicker.platform.pickFiles(
       type: FileType.custom,
       allowedExtensions: ['json', 'xlsm', 'xlsx'],
       allowMultiple: true,
     );
 
     if (result?.files.isEmpty ?? true) {
-      errorMessage = "$errorMessage Sin archivos encontrados";
+      errorMessage = '$errorMessage Sin archivos encontrados';
     }
 
     return result;

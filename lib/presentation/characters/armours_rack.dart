@@ -1,15 +1,14 @@
 import 'package:amt/models/armour.dart';
 import 'package:amt/models/armour_data.dart';
-import 'package:amt/resources/armours.dart';
 import 'package:amt/presentation/components/components.dart';
+import 'package:amt/resources/armours.dart';
 import 'package:flutter/material.dart';
 import 'package:function_tree/function_tree.dart';
 
 class ArmoursRack extends StatelessWidget {
-  final Function(ArmourData) onEdit;
+  const ArmoursRack({required this.onEdit, required this.armourBase, super.key});
+  final void Function(ArmourData) onEdit;
   final ArmourData armourBase;
-
-  ArmoursRack({required this.onEdit, required this.armourBase});
 
   @override
   Widget build(BuildContext context) {
@@ -29,14 +28,14 @@ class ArmoursRack extends StatelessWidget {
             return StatefulBuilder(
               builder: (BuildContext context, StateSetter setState) {
                 return AMTBottomSheet(
-                  title: Text("Modificar Armadura"),
+                  title: const Text('Modificar Armadura'),
                   children: [
-                    SizedBox(
+                    const SizedBox(
                       height: 16,
                     ),
                     AMTTextFormField(
-                      label: "Nombre",
-                      text: armour.armours.firstOrNull?.name ?? "Sin armadura",
+                      label: 'Nombre',
+                      text: armour.armours.firstOrNull?.name ?? 'Sin armadura',
                       onChanged: (value) {
                         if (armour.armours.firstOrNull == null) {
                           armour.armours.add(Armour());
@@ -45,14 +44,14 @@ class ArmoursRack extends StatelessWidget {
                         onEdit(armour);
                       },
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 16,
                     ),
                     Row(
                       children: [
                         Flexible(
                           child: AMTTextFormField(
-                            label: "Filo",
+                            label: 'Filo',
                             text: armour.calculatedArmour.fil.toString(),
                             onChanged: (value) {
                               armour.calculatedArmour.fil = _parseInput(value);
@@ -60,12 +59,12 @@ class ArmoursRack extends StatelessWidget {
                             },
                           ),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           width: 16,
                         ),
                         Flexible(
                           child: AMTTextFormField(
-                            label: "Penetrante",
+                            label: 'Penetrante',
                             text: armour.calculatedArmour.pen.toString(),
                             onChanged: (value) {
                               armour.calculatedArmour.pen = _parseInput(value);
@@ -73,12 +72,12 @@ class ArmoursRack extends StatelessWidget {
                             },
                           ),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           width: 16,
                         ),
                         Flexible(
                           child: AMTTextFormField(
-                            label: "Contundente",
+                            label: 'Contundente',
                             text: armour.calculatedArmour.con.toString(),
                             onChanged: (value) {
                               armour.calculatedArmour.con = _parseInput(value);
@@ -88,14 +87,14 @@ class ArmoursRack extends StatelessWidget {
                         ),
                       ],
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 16,
                     ),
                     Row(
                       children: [
                         Flexible(
                           child: AMTTextFormField(
-                            label: "Frio",
+                            label: 'Frio',
                             text: armour.calculatedArmour.fri.toString(),
                             onChanged: (value) {
                               armour.calculatedArmour.fri = _parseInput(value);
@@ -103,12 +102,12 @@ class ArmoursRack extends StatelessWidget {
                             },
                           ),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           width: 16,
                         ),
                         Flexible(
                           child: AMTTextFormField(
-                            label: "Calor",
+                            label: 'Calor',
                             text: armour.calculatedArmour.cal.toString(),
                             onChanged: (value) {
                               armour.calculatedArmour.cal = _parseInput(value);
@@ -116,12 +115,12 @@ class ArmoursRack extends StatelessWidget {
                             },
                           ),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           width: 16,
                         ),
                         Flexible(
                           child: AMTTextFormField(
-                            label: "Electricidad",
+                            label: 'Electricidad',
                             text: armour.calculatedArmour.ele.toString(),
                             onChanged: (value) {
                               armour.calculatedArmour.ele = _parseInput(value);
@@ -131,18 +130,18 @@ class ArmoursRack extends StatelessWidget {
                         ),
                       ],
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 16,
                     ),
                     AMTTextFormField(
-                      label: "Energía",
+                      label: 'Energía',
                       text: armour.calculatedArmour.ene.toString(),
                       onChanged: (value) {
                         armour.calculatedArmour.ene = _parseInput(value);
                         onEdit(armour);
                       },
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 16,
                     ),
                     Row(
@@ -153,8 +152,8 @@ class ArmoursRack extends StatelessWidget {
                             setState(() => armour.calculatedArmour.changeForAll(add: -1));
                             onEdit(armour);
                           },
-                          child: Row(
-                            children: [Icon(Icons.remove), Text("Eliminar 1 TA a todo")],
+                          child: const Row(
+                            children: [Icon(Icons.remove), Text('Eliminar 1 TA a todo')],
                           ),
                         ),
                         TextButton(
@@ -163,17 +162,17 @@ class ArmoursRack extends StatelessWidget {
 
                             onEdit(armour);
                           },
-                          child: Row(
-                            children: [Icon(Icons.remove), Text("Añadir 1 TA a todo")],
+                          child: const Row(
+                            children: [Icon(Icons.remove), Text('Añadir 1 TA a todo')],
                           ),
                         ),
                       ],
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 16,
                     ),
-                    Text("Reemplazar por otra:"),
-                    for (var preset in Armours.getPresetArmours())
+                    const Text('Reemplazar por otra:'),
+                    for (final preset in Armours.getPresetArmours())
                       _armourLister(theme, preset, (newArmour) {
                         setState(() {
                           armour.calculatedArmour = newArmour;
@@ -191,21 +190,21 @@ class ArmoursRack extends StatelessWidget {
               },
             );
           },
-        )
+        ),
       },
       child: Tooltip(
         textAlign: TextAlign.start,
-        message: armour.armours.map((e) => e.name).join(", "),
+        message: armour.armours.map((e) => e.name).join(', '),
         child: Card(
           color: theme.colorScheme.primary,
           child: Padding(
-            padding: EdgeInsets.all(8),
+            padding: const EdgeInsets.all(8),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Flexible(
                   child: Text(
-                    armour.armours.firstOrNull?.name ?? "Sin armadura",
+                    armour.armours.firstOrNull?.name ?? 'Sin armadura',
                     style: style,
                     overflow: TextOverflow.ellipsis,
                   ),
@@ -214,7 +213,7 @@ class ArmoursRack extends StatelessWidget {
                   Icons.edit,
                   color: theme.colorScheme.onPrimary,
                   size: 18,
-                )
+                ),
               ],
             ),
           ),
@@ -223,21 +222,20 @@ class ArmoursRack extends StatelessWidget {
     );
   }
 
-  Widget _armourLister(ThemeData theme, Armour armour, Function(Armour) onSelect) {
+  Widget _armourLister(ThemeData theme, Armour armour, void Function(Armour) onSelect) {
     final subtitleButton = theme.textTheme.bodySmall;
 
     return TextButton(
       onPressed: () => onSelect(armour),
       child: Padding(
-        padding: EdgeInsets.all(4),
+        padding: const EdgeInsets.all(4),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Column(
-              mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(armour.name ?? ""),
+                Text(armour.name ?? ''),
                 Text(
                   armour.description(),
                   style: subtitleButton,

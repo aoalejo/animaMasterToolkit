@@ -1,16 +1,16 @@
-import 'package:amt/models/character/status_modifier.dart';
+import 'package:amt/models/character_model/status_modifier.dart';
 import 'package:amt/utils/string_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_tags_x/flutter_tags_x.dart';
 
 class ModifiersCard extends StatelessWidget {
-  final List<StatusModifier> modifiers;
-  final Function(StatusModifier)? onSelected;
-
-  ModifiersCard({
+  const ModifiersCard({
     required this.modifiers,
+    super.key,
     this.onSelected,
   });
+  final List<StatusModifier> modifiers;
+  final void Function(StatusModifier)? onSelected;
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +24,7 @@ class ModifiersCard extends StatelessWidget {
       clipBehavior: Clip.antiAlias,
       color: theme.colorScheme.secondaryContainer,
       child: Padding(
-        padding: EdgeInsets.all(8),
+        padding: const EdgeInsets.all(8),
         child: IntrinsicHeight(
           child: Tags(
             spacing: 2,
@@ -49,9 +49,8 @@ class ModifiersCard extends StatelessWidget {
                     },
                   ),
                   activeColor: theme.colorScheme.primary,
-                  textActiveColor: Colors.white,
                   alignment: MainAxisAlignment.spaceBetween,
-                  padding: EdgeInsets.symmetric(vertical: 2, horizontal: 4),
+                  padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 4),
                   borderRadius: BorderRadius.circular(8),
                   elevation: 1,
                   title: modifiers[index].name.abbreviated,
