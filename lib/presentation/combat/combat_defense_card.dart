@@ -148,8 +148,12 @@ class CombatDefenseCard extends StatelessWidget {
                     child: TextButton(
                       onPressed: () {
                         BottomSheetModifiers.show(
-                            context, combatState.defense.modifiers, Modifiers.getSituationalModifiers(defense.defenseType.toModifierType()),
-                            (newModifiers) {
+                            context,
+                            combatState.defense.modifiers,
+                            Modifiers.getSituationalModifiers(
+                              defense.defenseType.toModifierType(),
+                              includeAllDefense: character == null,
+                            ), (newModifiers) {
                           appState.updateCombatState(defenderModifiers: newModifiers);
                         });
                       },

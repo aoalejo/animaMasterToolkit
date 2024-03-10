@@ -79,14 +79,14 @@ class StatusModifier extends Object {
     return list;
   }
 
-  StatusModifier pruneOthers(ModifiersType type) {
+  StatusModifier pruneOthers(ModifiersType type, {bool includeAllDefense = false}) {
     switch (type) {
       case ModifiersType.attack:
         return StatusModifier(name: name, attack: attack);
       case ModifiersType.parry:
-        return StatusModifier(name: name, parry: parry);
+        return StatusModifier(name: name, parry: parry, dodge: includeAllDefense ? dodge : 0);
       case ModifiersType.dodge:
-        return StatusModifier(name: name, dodge: dodge);
+        return StatusModifier(name: name, dodge: dodge, parry: includeAllDefense ? parry : 0);
       case ModifiersType.turn:
         return StatusModifier(name: name, turn: turn);
       case ModifiersType.action:

@@ -17,7 +17,7 @@ extension ToModifiersType on DefenseType {
 }
 
 class Modifiers {
-  static List<StatusModifier> getSituationalModifiers(ModifiersType type) {
+  static List<StatusModifier> getSituationalModifiers(ModifiersType type, {bool includeAllDefense = false}) {
     var modifiers = <StatusModifier>[];
 
     for (final element in _valuesSituational.jsonList) {
@@ -37,7 +37,8 @@ class Modifiers {
         modifiers = modifiers.where((element) => element.physicalAction != 0).toList();
     }
 
-    return modifiers.map((e) => e.pruneOthers(type)).toList()..sort((left, right) => left.name.compareTo(right.name));
+    return modifiers.map((e) => e.pruneOthers(type, includeAllDefense: includeAllDefense)).toList()
+      ..sort((left, right) => left.name.compareTo(right.name));
   }
 
   static List<StatusModifier> getStatusModifiers() {
@@ -607,15 +608,6 @@ class Modifiers {
     {
         "name": "Arma mixta",
         "attack": -40,
-        "parry": 0,
-        "dodge": 0,
-        "turn": 0,
-        "type": 2,
-        "physicalAction": 0
-    },
-    {
-        "name": "Arma similar",
-        "attack": -20,
         "parry": 0,
         "dodge": 0,
         "turn": 0,
