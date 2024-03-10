@@ -70,7 +70,6 @@ class CharacterNPCCard extends StatelessWidget {
   }
 
   FlTitlesData get titlesData => FlTitlesData(
-        show: true,
         bottomTitles: AxisTitles(
           sideTitles: SideTitles(
             showTitles: true,
@@ -78,15 +77,9 @@ class CharacterNPCCard extends StatelessWidget {
             getTitlesWidget: getTitles,
           ),
         ),
-        leftTitles: AxisTitles(
-          sideTitles: SideTitles(showTitles: false),
-        ),
-        topTitles: AxisTitles(
-          sideTitles: SideTitles(showTitles: false),
-        ),
-        rightTitles: AxisTitles(
-          sideTitles: SideTitles(showTitles: false),
-        ),
+        leftTitles: const AxisTitles(),
+        topTitles: const AxisTitles(),
+        rightTitles: const AxisTitles(),
       );
 
   FlBorderData get borderData => FlBorderData(
@@ -181,7 +174,7 @@ class CharacterNPCCard extends StatelessWidget {
                       titlesData: titlesData,
                       borderData: borderData,
                       barGroups: barGroups,
-                      gridData: FlGridData(show: false),
+                      gridData: const FlGridData(show: false),
                       alignment: BarChartAlignment.spaceBetween,
                       maxY: 20,
                     ),
