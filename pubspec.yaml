@@ -33,7 +33,7 @@ dependencies:
   enough_convert: ^1.6.0
   excel: ^4.0.2
   file_picker: ^6.1.1
-  fl_chart: ^0.62.0
+  fl_chart: ^0.66.2
   flutter:
       sdk: flutter
   flutter_localizations:
