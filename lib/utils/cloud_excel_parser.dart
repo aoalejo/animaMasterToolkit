@@ -47,7 +47,6 @@ class CloudExcelParser implements ExcelParser {
     );
 
     multipart.headers.addAll({
-      'Access-Control-Allow-Origin': 'https://amt-v3.web.app',
       'Accept': '*/*',
     });
 
