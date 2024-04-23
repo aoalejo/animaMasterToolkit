@@ -17,14 +17,14 @@ class CharacterStateAdapter extends TypeAdapter<CharacterState> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return CharacterState(
+      currentTurn: fields[4] as Roll,
+      consumables: (fields[2] as List).cast<ConsumableState>(),
+      modifiers: fields[7] as ModifiersState,
       selectedWeaponIndex: fields[0] as int,
       hasAction: fields[1] as bool,
       notes: fields[3] as String,
       defenseNumber: fields[6] as int,
       turnModifier: fields[5] as String,
-      currentTurn: fields[4] as Roll,
-      consumables: (fields[2] as List).cast<ConsumableState>(),
-      modifiers: fields[7] as ModifiersState,
     );
   }
 

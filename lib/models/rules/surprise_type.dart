@@ -12,11 +12,14 @@ enum SurpriseType {
     final attackerRoll = attacker?.state.currentTurn.roll ?? 0;
     final defenderRoll = defendant?.state.currentTurn.roll ?? 0;
 
-    if (attackerRoll - 150 > defenderRoll) {
+    final attackerDifference = attacker?.profile.uroboros ?? false ? 100 : 150;
+    final defenderDifference = defendant?.profile.uroboros ?? false ? 100 : 150;
+
+    if (attackerRoll - attackerDifference > defenderRoll) {
       return SurpriseType.attacker;
     }
 
-    if (defenderRoll - 150 > attackerRoll) {
+    if (defenderRoll - defenderDifference > attackerRoll) {
       return SurpriseType.defender;
     }
 

@@ -17,13 +17,13 @@ class ArmourDataAdapter extends TypeAdapter<ArmourData> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return ArmourData(
+      calculatedArmour: fields[5] as Armour,
+      armours: (fields[6] as List).cast<Armour>(),
       movementRestriction: fields[0] as int?,
       naturalPenalty: fields[1] as int?,
       requirement: fields[2] as int?,
       physicalPenalty: fields[3] as int?,
       finalNaturalPenalty: fields[4] as int?,
-      calculatedArmour: fields[5] as Armour,
-      armours: (fields[6] as List).cast<Armour>(),
     );
   }
 

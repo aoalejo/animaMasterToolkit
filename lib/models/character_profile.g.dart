@@ -29,13 +29,14 @@ class CharacterProfileAdapter extends TypeAdapter<CharacterProfile> {
       image: fields[9] as String?,
       fumbleLevel: fields[10] as int?,
       nature: fields[11] as int?,
+      uroboros: fields[12] as bool?,
     );
   }
 
   @override
   void write(BinaryWriter writer, CharacterProfile obj) {
     writer
-      ..writeByte(12)
+      ..writeByte(13)
       ..writeByte(0)
       ..write(obj.fatigue)
       ..writeByte(1)
@@ -59,7 +60,9 @@ class CharacterProfileAdapter extends TypeAdapter<CharacterProfile> {
       ..writeByte(10)
       ..write(obj.fumbleLevel)
       ..writeByte(11)
-      ..write(obj.nature);
+      ..write(obj.nature)
+      ..writeByte(12)
+      ..write(obj.uroboros);
   }
 
   @override

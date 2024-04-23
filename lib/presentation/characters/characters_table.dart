@@ -245,6 +245,7 @@ class CharactersTable extends StatelessWidget {
                                     },
                                   ),
                                 ),
+                                _surpriseDesc(appState.characters, character),
                                 Tooltip(
                                   message: 'Opciones',
                                   child: IconButton(
@@ -259,7 +260,6 @@ class CharactersTable extends StatelessWidget {
                                     },
                                   ),
                                 ),
-                                _surpriseDesc(appState.characters, character),
                               ],
                             ),
                           ),
@@ -310,10 +310,11 @@ class CharactersTable extends StatelessWidget {
     return Tooltip(
       message: '$surprisesToMessage$surprisesFromMessage'.trim(),
       child: Container(
-        clipBehavior: Clip.antiAlias,
+        clipBehavior: Clip.hardEdge,
         decoration: BoxDecoration(
           shape: BoxShape.circle,
           color: background,
+          border: Border.all(color: character.profile.uroboros ?? false ? Colors.red : Colors.transparent),
         ),
         child: SizedBox(
           width: 24,

@@ -13,7 +13,7 @@ class ShowCharacterOptions {
 
     return showModalBottomSheet(
       context: context,
-      constraints: BoxConstraints.tight(const Size(500, 500)),
+      constraints: BoxConstraints.tight(const Size(750, 500)),
       builder: (context) {
         return StatefulBuilder(
           builder: (BuildContext context, StateSetter setState) {
@@ -42,13 +42,54 @@ class ShowCharacterOptions {
                       const SizedBox(
                         height: 12,
                       ),
-                      AMTTextFormField(
-                        label: 'Nombre',
-                        text: character.profile.name,
-                        onChanged: (value) {
-                          character.profile.name = value;
-                          onEdit(character);
-                        },
+                      Row(
+                        children: [
+                          Expanded(
+                            child: AMTTextFormField(
+                              label: 'Nombre',
+                              text: character.profile.name,
+                              onChanged: (value) {
+                                character.profile.name = value;
+                                onEdit(character);
+                              },
+                            ),
+                          ),
+                          const SizedBox(
+                            width: 12,
+                          ),
+                          Expanded(
+                            child: Row(
+                              children: [
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      'La Sangre de Uroboros',
+                                      style: theme.textTheme.bodyMedium,
+                                    ),
+                                    Text(
+                                      '(Aplica sorpresa con 100 en vez de 150)',
+                                      style: theme.textTheme.bodySmall,
+                                    ),
+                                  ],
+                                ),
+                                Expanded(child: Container()),
+                                Switch(
+                                  value: character.profile.uroboros ?? false,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      character.profile.uroboros = value;
+                                      onEdit(character);
+                                    });
+                                  },
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 12,
                       ),
                       const SizedBox(
                         height: 12,

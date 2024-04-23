@@ -18,6 +18,11 @@ class WeaponAdapter extends TypeAdapter<Weapon> {
     };
     return Weapon(
       name: fields[0] as String,
+      turn: fields[9] as int,
+      attack: fields[10] as int,
+      defense: fields[11] as int,
+      defenseType: fields[12] as DefenseType,
+      damage: fields[13] as int,
       type: fields[1] as String?,
       known: fields[2] as KnownType?,
       size: fields[3] as WeaponSize?,
@@ -26,17 +31,12 @@ class WeaponAdapter extends TypeAdapter<Weapon> {
       endurance: fields[6] as int?,
       breakage: fields[7] as int?,
       presence: fields[8] as int?,
-      turn: fields[9] as int,
-      attack: fields[10] as int,
-      defense: fields[11] as int,
-      defenseType: fields[12] as DefenseType,
-      damage: fields[13] as int,
       quality: fields[14] as int?,
       characteristic: fields[15] as String?,
       warning: fields[16] as String?,
       ammunition: fields[17] as String?,
       special: fields[18] as String?,
-      variableDamage: fields[19] as bool? ?? false,
+      variableDamage: fields[19] as bool?,
     );
   }
 
@@ -90,5 +90,9 @@ class WeaponAdapter extends TypeAdapter<Weapon> {
   int get hashCode => typeId.hashCode;
 
   @override
-  bool operator ==(Object other) => identical(this, other) || other is WeaponAdapter && runtimeType == other.runtimeType && typeId == other.typeId;
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is WeaponAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
 }
