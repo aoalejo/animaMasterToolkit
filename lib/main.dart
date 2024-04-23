@@ -138,12 +138,12 @@ class GeneratorPage extends StatelessWidget {
         actions: [
           IconButton(
             onPressed: () {
-              launchUrl(repository, webOnlyWindowName: '_blank');
+              launchUrl(excelToJsonRelease, webOnlyWindowName: '_blank');
             },
             icon: SizedBox(
               width: 24,
               height: 24,
-              child: Assets.github,
+              child: Assets.excelConvert,
             ),
           ),
           IconButton(
