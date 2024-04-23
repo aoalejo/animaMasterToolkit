@@ -41,4 +41,9 @@ class Assets {
     'assets/github.svg',
     semanticsLabel: 'github icon',
   );
+
+  static final Widget excelConvert = SvgPicture.asset(
+    'assets/excelConvert.svg',
+    semanticsLabel: 'excel convert icon',
+  );
 }

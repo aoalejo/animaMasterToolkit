@@ -319,7 +319,7 @@ class CharactersPageState extends ChangeNotifier {
   Future<FilePickerResult?> getCharacters() async {
     final result = await FilePicker.platform.pickFiles(
       type: FileType.custom,
-      allowedExtensions: ['json', 'xlsm', 'xlsx'],
+      allowedExtensions: ['json'], // , 'xlsm', 'xlsx'
       allowMultiple: true,
     );
 

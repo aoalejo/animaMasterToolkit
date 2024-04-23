@@ -99,6 +99,7 @@ class GeneratorPage extends StatelessWidget {
     final appState = context.watch<CharactersPageState>();
     final nonCharactersState = context.watch<NonPlayerCharactersState>();
     final repository = Uri.parse('https://github.com/aoalejo/animaMasterToolkit');
+    final excelToJsonRelease = Uri.parse('https://github.com/aoalejo/animaExcelToJson/releases');
 
     return Scaffold(
       appBar: AppBar(
@@ -135,6 +136,16 @@ class GeneratorPage extends StatelessWidget {
         backgroundColor: theme.primaryColor,
         foregroundColor: theme.colorScheme.onPrimary,
         actions: [
+          IconButton(
+            onPressed: () {
+              launchUrl(repository, webOnlyWindowName: '_blank');
+            },
+            icon: SizedBox(
+              width: 24,
+              height: 24,
+              child: Assets.github,
+            ),
+          ),
           IconButton(
             onPressed: () {
               launchUrl(repository, webOnlyWindowName: '_blank');

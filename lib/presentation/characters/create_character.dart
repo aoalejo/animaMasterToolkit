@@ -23,6 +23,8 @@ class CreateCharacter {
     var ki = '';
     var cv = '';
     var turn = '35';
+    var mysticalProjection = '0';
+    var psychicProjection = '0';
     var attack = '90';
     var damage = '50';
     var defense = '90';
@@ -61,6 +63,8 @@ class CreateCharacter {
                       physicalResistance,
                       defenseType,
                       principalDamage,
+                      psychicProjection,
+                      mysticalProjection,
                     ),
                   );
                   Navigator.pop(context);
@@ -171,14 +175,6 @@ class CreateCharacter {
                   ),
                 ),
                 AMTTextFormField(
-                  label: 'Daño',
-                  text: damage,
-                  inputType: TextInputType.number,
-                  onChanged: (value) => setState(
-                    () => damage = value,
-                  ),
-                ),
-                AMTTextFormField(
                   label: 'RF',
                   text: physicalResistance,
                   inputType: TextInputType.number,
@@ -188,33 +184,67 @@ class CreateCharacter {
                 ),
               ]),
               _separator,
-              Center(
-                child: ToggleButtons(
-                  borderRadius: const BorderRadius.all(Radius.circular(8)),
-                  isSelected: [
-                    principalDamage == DamageTypes.fil,
-                    principalDamage == DamageTypes.pen,
-                    principalDamage == DamageTypes.con,
-                    principalDamage == DamageTypes.fri,
-                    principalDamage == DamageTypes.cal,
-                    principalDamage == DamageTypes.ele,
-                    principalDamage == DamageTypes.ene,
-                  ],
-                  onPressed: (index) => {
-                    setState(
-                      () => principalDamage = DamageTypes.values[index],
-                    ),
-                  },
-                  children: const [
-                    Text('fil'),
-                    Text('pen'),
-                    Text('con'),
-                    Text('fri'),
-                    Text('cal'),
-                    Text('ele'),
-                    Text('ene'),
-                  ],
+              ..._row([
+                AMTTextFormField(
+                  label: 'Proyección Psiquica',
+                  text: psychicProjection,
+                  inputType: TextInputType.number,
+                  onChanged: (value) => setState(
+                    () => psychicProjection = value,
+                  ),
                 ),
+                AMTTextFormField(
+                  label: 'Proyección Mística',
+                  text: mysticalProjection,
+                  inputType: TextInputType.number,
+                  onChanged: (value) => setState(
+                    () => mysticalProjection = value,
+                  ),
+                ),
+              ]),
+              _separator,
+              Row(
+                children: [
+                  _separator,
+                  Flexible(
+                    flex: 4,
+                    child: AMTTextFormField(
+                      label: 'Daño',
+                      text: damage,
+                      inputType: TextInputType.number,
+                      onChanged: (value) => setState(
+                        () => damage = value,
+                      ),
+                    ),
+                  ),
+                  _separator,
+                  ToggleButtons(
+                    borderRadius: const BorderRadius.all(Radius.circular(8)),
+                    isSelected: [
+                      principalDamage == DamageTypes.fil,
+                      principalDamage == DamageTypes.pen,
+                      principalDamage == DamageTypes.con,
+                      principalDamage == DamageTypes.fri,
+                      principalDamage == DamageTypes.cal,
+                      principalDamage == DamageTypes.ele,
+                      principalDamage == DamageTypes.ene,
+                    ],
+                    onPressed: (index) => {
+                      setState(
+                        () => principalDamage = DamageTypes.values[index],
+                      ),
+                    },
+                    children: const [
+                      Text('fil'),
+                      Text('pen'),
+                      Text('con'),
+                      Text('fri'),
+                      Text('cal'),
+                      Text('ele'),
+                      Text('ene'),
+                    ],
+                  ),
+                ],
               ),
               _separator,
               ..._row(
@@ -286,6 +316,8 @@ class CreateCharacter {
     String physicalResistance,
     DefenseType defenseType,
     DamageTypes principalDamage,
+    String psychicProjection,
+    String mysticalProjection,
   ) {
     final consumables = <ConsumableState>[
       ConsumableState.from(name: 'Vida', value: life.intValue, type: ConsumableType.hitPoints),
@@ -334,6 +366,30 @@ class CreateCharacter {
             principalDamage: principalDamage,
             secondaryDamage: principalDamage,
           ),
+          if (psychicProjection != '0' && psychicProjection.isNotEmpty)
+            Weapon(
+              name: 'Proyección Psiquica',
+              turn: turn.intValue,
+              attack: psychicProjection.intValue,
+              defense: psychicProjection.intValue,
+              defenseType: defenseType,
+              damage: 0,
+              principalDamage: principalDamage,
+              secondaryDamage: principalDamage,
+              variableDamage: true,
+            ),
+          if (mysticalProjection != '0' && mysticalProjection.isNotEmpty)
+            Weapon(
+              name: 'Proyección Mágica',
+              turn: turn.intValue,
+              attack: mysticalProjection.intValue,
+              defense: mysticalProjection.intValue,
+              defenseType: defenseType,
+              damage: 0,
+              principalDamage: principalDamage,
+              secondaryDamage: principalDamage,
+              variableDamage: true,
+            ),
         ],
       ),
       state: CharacterState(
