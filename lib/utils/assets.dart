@@ -45,4 +45,9 @@ class Assets {
   static final Widget excelConvert = Image.asset(
     'assets/convert.png',
   );
+
+  static final Widget surprised = SvgPicture.asset(
+    'assets/surprised.svg',
+    semanticsLabel: 'surprised icon',
+  );
 }

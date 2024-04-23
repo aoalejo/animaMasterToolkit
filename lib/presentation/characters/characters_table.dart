@@ -259,6 +259,7 @@ class CharactersTable extends StatelessWidget {
                                     },
                                   ),
                                 ),
+                                _surpriseDesc(appState.characters, character),
                               ],
                             ),
                           ),
@@ -271,6 +272,55 @@ class CharactersTable extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+
+  Widget _surpriseDesc(List<Character> characters, Character character) {
+    final surprisesTo = <Character>[];
+    final getsSurprisedFrom = <Character>[];
+
+    for (final element in characters) {
+      final surprise = SurpriseType.calculate(
+        attacker: element,
+        defendant: character,
+      );
+
+      if (surprise == SurpriseType.attacker) {
+        getsSurprisedFrom.add(element);
+      } else if (surprise == SurpriseType.defender) {
+        surprisesTo.add(element);
+      }
+    }
+
+    var background = Colors.transparent;
+
+    if (surprisesTo.isNotEmpty && getsSurprisedFrom.isNotEmpty) {
+      background = Colors.grey.shade100;
+    } else if (surprisesTo.isNotEmpty) {
+      background = Colors.green.shade100;
+    } else if (getsSurprisedFrom.isNotEmpty) {
+      background = Colors.orange.shade100;
+      ;
+    }
+
+    final surprisesToMessage = surprisesTo.isNotEmpty ? 'Sorprende a: \n${surprisesTo.map((e) => e.profile.name).join('\n')}\n' : '';
+    final surprisesFromMessage =
+        getsSurprisedFrom.isNotEmpty ? '\nEs sorprendido por: \n${getsSurprisedFrom.map((e) => e.profile.name).join('\n')}' : '';
+
+    return Tooltip(
+      message: '$surprisesToMessage$surprisesFromMessage'.trim(),
+      child: Container(
+        clipBehavior: Clip.antiAlias,
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          color: background,
+        ),
+        child: SizedBox(
+          width: 24,
+          height: 24,
+          child: Assets.surprised,
+        ),
+      ),
     );
   }
 
