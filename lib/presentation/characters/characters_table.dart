@@ -105,11 +105,7 @@ class CharactersTable extends StatelessWidget {
               children: [
                 for (final character in appState.characters)
                   Card(
-                    shape: appState.combatState.attack.character?.uuid == character.uuid
-                        ? _border(theme.colorScheme.primary)
-                        : appState.combatState.defense.character?.uuid == character.uuid
-                            ? _border(theme.colorScheme.secondary)
-                            : null,
+                    shape: _characterShape(character, appState, theme),
                     child: Row(
                       children: [
                         _cell(
@@ -245,7 +241,7 @@ class CharactersTable extends StatelessWidget {
                                     },
                                   ),
                                 ),
-                                _surpriseDesc(appState.characters, character),
+                                _surpriseDesc(appState.characters, character, appState),
                                 Tooltip(
                                   message: 'Opciones',
                                   child: IconButton(
@@ -275,7 +271,21 @@ class CharactersTable extends StatelessWidget {
     );
   }
 
-  Widget _surpriseDesc(List<Character> characters, Character character) {
+  ShapeBorder? _characterShape(Character character, CharactersPageState appState, ThemeData theme) {
+    if (character.state.isSurprised > 0) {
+      return _border(Colors.orange.shade700, width: 2);
+    } else if (character.state.isSurprised < 0) {
+      return _border(Colors.green.shade700, width: 2);
+    }
+
+    return appState.combatState.attack.character?.uuid == character.uuid
+        ? _border(theme.colorScheme.primary)
+        : appState.combatState.defense.character?.uuid == character.uuid
+            ? _border(theme.colorScheme.secondary)
+            : _border(Colors.transparent);
+  }
+
+  Widget _surpriseDesc(List<Character> characters, Character character, CharactersPageState appState) {
     final surprisesTo = <Character>[];
     final getsSurprisedFrom = <Character>[];
 
@@ -300,33 +310,75 @@ class CharactersTable extends StatelessWidget {
       background = Colors.green.shade100;
     } else if (getsSurprisedFrom.isNotEmpty) {
       background = Colors.orange.shade100;
-      ;
     }
 
-    final surprisesToMessage = surprisesTo.isNotEmpty ? 'Sorprende a: \n${surprisesTo.map((e) => e.profile.name).join('\n')}\n' : '';
-    final surprisesFromMessage =
-        getsSurprisedFrom.isNotEmpty ? '\nEs sorprendido por: \n${getsSurprisedFrom.map((e) => e.profile.name).join('\n')}' : '';
+    final surprisesToMessage = surprisesTo.isNotEmpty
+        ? <InlineSpan>[
+            const TextSpan(
+              text: 'Sorprende a:\n',
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+            TextSpan(
+              text: surprisesTo.map((e) => e.profile.name).join('\n'),
+              style: const TextStyle(fontWeight: FontWeight.normal),
+            ),
+          ]
+        : <InlineSpan>[];
 
-    return Tooltip(
-      message: '$surprisesToMessage$surprisesFromMessage'.trim(),
-      child: Container(
-        clipBehavior: Clip.hardEdge,
-        decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          color: background,
-          border: Border.all(color: character.profile.uroboros ?? false ? Colors.red : Colors.transparent),
+    final surprisesFromMessage = getsSurprisedFrom.isNotEmpty
+        ? <InlineSpan>[
+            if (surprisesTo.isNotEmpty) const TextSpan(text: '\n'),
+            const TextSpan(
+              text: 'Es sorprendido por:\n',
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+            TextSpan(
+              text: getsSurprisedFrom.map((e) => e.profile.name).join('\n'),
+              style: const TextStyle(fontWeight: FontWeight.normal),
+            ),
+          ]
+        : <InlineSpan>[];
+
+    return MouseRegion(
+      onEnter: (e) {
+        for (final element in surprisesTo) {
+          element.state.isSurprised = -1;
+        }
+        for (final element in getsSurprisedFrom) {
+          element.state.isSurprised = 1;
+        }
+        appState.notify();
+      },
+      onExit: (e) {
+        for (final element in characters) {
+          element.state.isSurprised = 0;
+        }
+        appState.notify();
+      },
+      child: Tooltip(
+        richMessage: TextSpan(
+          text: '',
+          children: <InlineSpan>[...surprisesToMessage, ...surprisesFromMessage],
         ),
-        child: SizedBox(
-          width: 24,
-          height: 24,
-          child: Assets.surprised,
+        child: Container(
+          clipBehavior: Clip.hardEdge,
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: background,
+            border: Border.all(color: character.profile.uroboros ?? false ? Colors.red : Colors.transparent),
+          ),
+          child: SizedBox(
+            width: 24,
+            height: 24,
+            child: Assets.surprised,
+          ),
         ),
       ),
     );
   }
 
-  ShapeBorder _border(Color color) {
-    return StadiumBorder(side: BorderSide(color: color));
+  ShapeBorder _border(Color color, {double width = 1}) {
+    return StadiumBorder(side: BorderSide(color: color, width: width));
   }
 
   Widget _header(int size, String text) {

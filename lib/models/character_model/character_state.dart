@@ -17,6 +17,7 @@ class CharacterState {
     this.notes = '',
     this.defenseNumber = 1,
     this.turnModifier = '',
+    this.isSurprised = 0,
   });
   @HiveField(0)
   int selectedWeaponIndex = 0;
@@ -34,6 +35,8 @@ class CharacterState {
   int defenseNumber = 1;
   @HiveField(7)
   ModifiersState modifiers = ModifiersState();
+  @HiveField(8)
+  int isSurprised;
 
   ConsumableState? getConsumable(ConsumableType type) {
     try {

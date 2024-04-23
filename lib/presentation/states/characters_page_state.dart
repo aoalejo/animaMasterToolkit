@@ -116,6 +116,10 @@ class CharactersPageState extends ChangeNotifier {
     notifyListeners();
   }
 
+  void notify() {
+    notifyListeners();
+  }
+
   void removeAllNPC() {
     for (final char in characters) {
       if (char.profile.isNpc ?? false) {
