@@ -32,9 +32,9 @@ class CloudExcelParser implements ExcelParser {
   @override
   Future<Character?> parse() async {
     return parseWithBase64();
-    /*
-    bytes ??= await file!.readAsBytes();
-    return convertExcelFromBytes(bytes!);*/
+    // Don't use this code, the new provider is using only base64
+    // bytes ??= await file!.readAsBytes();
+    // return convertExcelFromBytes(bytes!);
   }
 
   Future<Character?> parseWithBase64() async {
