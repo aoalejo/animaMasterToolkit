@@ -14,7 +14,7 @@ class _CloudExcelService {
     if (isDev) {
       return Uri.http('127.0.0.1:5001', '/amt-v3/us-central1/convertSheet');
     } else {
-      return Uri.https('convertsheet-y5zbymdrcq-uc.a.run.app', '/convertSheet');
+      return Uri.https('aoalejo.pythonanywhere.com', '/api/v1/excelToJson');
     }
   }
 }
@@ -31,8 +31,44 @@ class CloudExcelParser implements ExcelParser {
 
   @override
   Future<Character?> parse() async {
+    return parseWithBase64();
+    /*
     bytes ??= await file!.readAsBytes();
-    return convertExcelFromBytes(bytes!);
+    return convertExcelFromBytes(bytes!);*/
+  }
+
+  Future<Character?> parseWithBase64() async {
+    String base64;
+
+    try {
+      if (bytes != null) {
+        base64 = base64Encode(bytes!);
+      } else {
+        base64 = base64Encode(await file!.readAsBytes());
+      }
+
+      return await convertExcelFrom(base64: base64);
+    } catch (e) {
+      print(e);
+      print(e.toString());
+      return null;
+    }
+  }
+
+  Future<Character?> convertExcelFrom({required String base64}) async {
+    final body = '{"sheet": "$base64"}';
+
+    final response = await http.post(_CloudExcelService.getUri, body: body, headers: {
+      'Content-Type': 'application/json',
+      'Accept': '*/*',
+      'Access-Control-Allow-Origin': '*',
+    });
+
+    final json = jsonDecode(response.body) as Map<String, dynamic>;
+
+    final character = json['sheet'];
+
+    return Character.fromJson(character as Map<String, dynamic>);
   }
 
   Future<Character?> convertExcelFromBytes(List<int> bytes) async {
