@@ -58,11 +58,14 @@ class CloudExcelParser implements ExcelParser {
   Future<Character?> convertExcelFrom({required String base64}) async {
     final body = '{"sheet": "$base64"}';
 
-    final response = await http.post(_CloudExcelService.getUri, body: body, headers: {
-      'Content-Type': 'application/json',
-      'Accept': '*/*',
-      'Access-Control-Allow-Origin': '*',
-    });
+    final response = await http.post(
+      _CloudExcelService.getUri,
+      body: body,
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': '*/*',
+      },
+    );
 
     final json = jsonDecode(response.body) as Map<String, dynamic>;
 

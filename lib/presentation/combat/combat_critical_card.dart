@@ -167,7 +167,6 @@ class CombatCriticalCard extends StatelessWidget {
                   child: TextButton(
                     onPressed: () {
                       final character = combatState.defense.character;
-
                       final result = criticalResultResult;
 
                       var midValue = -(result ~/ 2);
