@@ -79,7 +79,7 @@ class CombatRules {
     );
   }
 
-  static ExplainedText calculateDamage({
+  static ExplainedText? calculateDamage({
     required ExplainedText attackValue,
     required ExplainedText defenseValue,
     required ExplainedText finalAbsorption,
@@ -94,7 +94,7 @@ class CombatRules {
     final difference = (attackValue.result ?? 0) - (defenseValue.result ?? 0);
 
     final finalResult = (difference - (finalAbsorption.result ?? 0)).roundToTens;
-    final damageDone = ((finalResult / 100) * baseDamage).toInt();
+    final damageDone = max(((finalResult / 100) * baseDamage).toInt(), 0);
 
     info
       ..add(
@@ -111,11 +111,17 @@ class CombatRules {
         result: damageDone,
       );
 
-    if (damageDone < 10) {
+    if (difference <= 0) {
+      info.add(
+        explanation: 'No realiza daños',
+        reference: BookReference(page: 87, book: Books.coreExxet),
+        text: 'No realiza daños',
+      );
+    } else if (damageDone < 10) {
       info.add(
         explanation: 'Si el daño es menor a 10, impacta pero no realiza daños',
         reference: BookReference(page: 87, book: Books.coreExxet),
-        text: 'No realiza daños',
+        text: 'No realiza daños, pero queda a la defensiva',
       );
     } else {
       info.text = 'Daño causado: $damageDone';
@@ -143,7 +149,7 @@ class CombatRules {
       counterBonus = min(counterBonus, 150);
 
       info.add(
-        text: 'Puede contraatacar con un bonificador de: $counterBonus',
+        text: 'El defensor puede contraatacar con un bonificador de: $counterBonus',
         explanation: 'diferencia / 2 redondeado a 5, con un máximo de 150',
         reference: BookReference(page: 87, book: Books.coreExxet),
       );

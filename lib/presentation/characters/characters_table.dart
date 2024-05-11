@@ -93,7 +93,7 @@ class CharactersTable extends StatelessWidget {
             children: [
               _header(1, ''),
               _header(3, 'Nombre'),
-              _header(1, 'Turno'),
+              _header(2, 'Turno'),
               _header(5, 'Acciones'),
             ],
           ),
@@ -152,17 +152,24 @@ class CharactersTable extends StatelessWidget {
                           ),
                         ),
                         _cell(
-                          size: 1,
-                          child: Tooltip(
-                            message: character.state.currentTurn.description,
-                            child: Card(
-                              color: theme.colorScheme.primary,
-                              child: Text(
-                                character.state.currentTurn.roll.toString(),
-                                style: theme.textTheme.bodyMedium!.copyWith(color: theme.colorScheme.onPrimary),
-                                textAlign: TextAlign.center,
+                          size: 2,
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: Tooltip(
+                                  message: character.state.currentTurn.description,
+                                  child: Card(
+                                    color: theme.colorScheme.primary,
+                                    child: Text(
+                                      character.state.currentTurn.roll.toString(),
+                                      style: theme.textTheme.bodyMedium!.copyWith(color: theme.colorScheme.onPrimary),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ),
+                                ),
                               ),
-                            ),
+                              _surpriseDesc(appState.characters, character, appState),
+                            ],
                           ),
                         ),
                         _cell(
@@ -241,7 +248,6 @@ class CharactersTable extends StatelessWidget {
                                     },
                                   ),
                                 ),
-                                _surpriseDesc(appState.characters, character, appState),
                                 Tooltip(
                                   message: 'Opciones',
                                   child: IconButton(
@@ -365,12 +371,15 @@ class CharactersTable extends StatelessWidget {
           decoration: BoxDecoration(
             shape: BoxShape.circle,
             color: background,
-            border: Border.all(color: character.profile.uroboros ?? false ? Colors.red : Colors.transparent),
+            border: Border.all(
+              color: character.profile.uroboros ?? false ? Colors.red : Colors.grey.shade300,
+              width: character.profile.uroboros ?? false ? 1 : 0,
+            ),
           ),
           child: SizedBox(
             width: 24,
             height: 24,
-            child: Assets.surprised,
+            child: Assets.surprised(surprisesTo.isEmpty && getsSurprisedFrom.isEmpty ? Colors.black12 : Colors.black),
           ),
         ),
       ),

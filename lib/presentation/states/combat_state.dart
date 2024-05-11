@@ -77,7 +77,7 @@ class ScreenCombatState {
     );
   }
 
-  ExplainedText calculateDamage() {
+  ExplainedText? calculateDamage() {
     return CombatRules.calculateDamage(
       attackValue: finalAttackValue,
       defenseValue: finalDefenseValue,
@@ -94,20 +94,18 @@ class ScreenCombatState {
 
     final damage = calculateDamage();
 
-    result.add(damage);
+    if (damage != null) result.add(damage);
 
     final critical = CombatRules.criticalDamage(
       defender: defense.character,
-      damage: damage.result,
+      damage: damage?.result ?? 0,
     );
 
     if (critical != null) result.add(critical);
 
     final counter = CombatRules.calculateCounterBonus(attackValue: finalAttackValue, defenseValue: finalDefenseValue);
 
-    if (counter != null) {
-      result.add(counter);
-    }
+    if (counter != null) result.add(counter);
 
     Logger().d('counter ${counter?.text}');
 

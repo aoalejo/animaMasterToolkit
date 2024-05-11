@@ -46,8 +46,9 @@ class Assets {
     'assets/convert.png',
   );
 
-  static final Widget surprised = SvgPicture.asset(
-    'assets/surprised.svg',
-    semanticsLabel: 'surprised icon',
-  );
+  static SvgPicture surprised(Color color) => SvgPicture.asset(
+        'assets/surprised.svg',
+        semanticsLabel: 'surprised icon',
+        colorFilter: ColorFilter.mode(color, BlendMode.modulate),
+      );
 }
