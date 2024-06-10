@@ -258,6 +258,9 @@ class CharactersTable extends StatelessWidget {
                                         character,
                                         onRemove: (character) => {appState.removeCharacter(character)},
                                         onEdit: appState.updateCharacter,
+                                        onDuplicate: (character) {
+                                          appState.addCharacter(character.copyWith(), isNpc: character.profile.isNpc ?? false);
+                                        },
                                       );
                                     },
                                   ),

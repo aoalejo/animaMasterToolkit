@@ -42,6 +42,16 @@ class Assets {
     semanticsLabel: 'github icon',
   );
 
+  static final Widget uprising = SvgPicture.asset(
+    'assets/uprising.svg',
+    semanticsLabel: 'uprising icon',
+  );
+
+  static final Widget faceToFace = SvgPicture.asset(
+    'assets/face-to-face.svg',
+    semanticsLabel: 'face-to-face icon',
+  );
+
   static final Widget excelConvert = Image.asset(
     'assets/convert.png',
   );

@@ -1,5 +1,4 @@
-import 'package:amt/models/character_model/character.dart';
-import 'package:amt/presentation/presentation.dart';
+import 'package:amt/lib.dart';
 import 'package:flutter/material.dart';
 
 class ShowCharacterOptions {
@@ -8,6 +7,7 @@ class ShowCharacterOptions {
     Character character, {
     required void Function(Character) onRemove,
     required void Function(Character) onEdit,
+    required void Function(Character) onDuplicate,
   }) {
     final theme = Theme.of(context);
 
@@ -158,52 +158,89 @@ class ShowCharacterOptions {
                         ],
                       ),
                       const SizedBox(
-                        height: 48,
+                        height: 32,
                       ),
                       Row(
                         children: [
-                          const Text('Borrar personaje'),
-                          const Spacer(),
-                          IconButton(
-                            onPressed: () {
-                              Navigator.pop(context);
+                          Expanded(
+                            child: InkWell(
+                              onTap: () {},
+                              child: Column(
+                                children: [
+                                  SizedBox(
+                                    width: 36,
+                                    height: 36,
+                                    child: Assets.uprising,
+                                  ),
+                                  const Text('Crear masa de enemigos'),
+                                ],
+                              ),
+                            ),
+                          ),
+                          Expanded(
+                            child: InkWell(
+                              onTap: () {
+                                Navigator.pop(context);
+                                onDuplicate(character);
+                              },
+                              child: Column(
+                                children: [
+                                  SizedBox(
+                                    width: 36,
+                                    height: 36,
+                                    child: Assets.faceToFace,
+                                  ),
+                                  const Text('Duplicar personaje'),
+                                ],
+                              ),
+                            ),
+                          ),
+                          Expanded(
+                            child: InkWell(
+                              onTap: () {
+                                Navigator.pop(context);
 
-                              showDialog<void>(
-                                context: context,
-                                builder: (context) {
-                                  return AlertDialog(
-                                    title: const Text('Borrar personaje'),
-                                    content: Text('Seguro que desea borrar ${character.profile.name}?'),
-                                    actions: [
-                                      OutlinedButton(
-                                        onPressed: () {
-                                          Navigator.pop(context);
-                                          onRemove(character);
-                                        },
-                                        child: const Text('Borrar'),
-                                      ),
-                                      TextButton(
-                                        onPressed: () {
-                                          Navigator.pop(context);
-                                        },
-                                        child: const Text('Cancelar'),
-                                      ),
-                                    ],
-                                  );
-                                },
-                              );
-                            },
-                            icon: const Row(
-                              children: [
-                                Icon(
-                                  Icons.delete,
-                                  color: Colors.red,
-                                  size: 36,
-                                ),
-                              ],
+                                showDialog<void>(
+                                  context: context,
+                                  builder: (context) {
+                                    return AlertDialog(
+                                      title: const Text('Borrar personaje'),
+                                      content: Text('Seguro que desea borrar ${character.profile.name}?'),
+                                      actions: [
+                                        OutlinedButton(
+                                          onPressed: () {
+                                            Navigator.pop(context);
+                                            onRemove(character);
+                                          },
+                                          child: const Text('Borrar'),
+                                        ),
+                                        TextButton(
+                                          onPressed: () {
+                                            Navigator.pop(context);
+                                          },
+                                          child: const Text('Cancelar'),
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                );
+                              },
+                              child: const Column(
+                                children: [
+                                  Icon(
+                                    Icons.delete,
+                                    color: Colors.red,
+                                    size: 36,
+                                  ),
+                                  Text('Borrar personaje'),
+                                ],
+                              ),
                             ),
                           ),
                         ],
+                      ),
+                      const SizedBox(
+                        height: 48,
                       ),
                     ],
                   ),

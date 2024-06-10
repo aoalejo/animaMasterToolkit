@@ -72,7 +72,7 @@ class CharacterProfile {
       fatigue: fatigue,
       hitPoints: hitPoints,
       regeneration: regeneration,
-      name: number != null ? '$name #$number' : name,
+      name: number != null ? '${name.split('#').first.trim()} #$number' : name,
       category: category,
       level: level,
       kind: kind,

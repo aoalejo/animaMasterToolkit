@@ -87,7 +87,7 @@ class CharactersPageState extends ChangeNotifier {
 
   void addCharacter(Character character, {bool isNpc = false}) {
     // Numbering, get all characters with # in the name:
-    var maxValue = 0;
+    var maxValue = characters.where((element) => element.nameNormalized() == character.nameNormalized()).length;
     for (final element in characters.where(
       (element) => element.nameNormalized() == character.nameNormalized(),
     )) {
