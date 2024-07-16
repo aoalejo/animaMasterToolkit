@@ -21,8 +21,11 @@ class CombatDefenseCard extends StatelessWidget {
     final defense = combatState.defense;
     final character = defense.character;
 
+    final damageAccumulation = defense.character?.profile.damageAccumulation ?? false;
+
     return CustomCombatCard(
-      title: "${character?.profile.name ?? ""} ${defense.defenseType.displayable} (Total: ${combatState.finalDefenseValue.result})",
+      title:
+          "${character?.profile.name ?? ""} ${damageAccumulation ? '(Acumulación de daño)' : '${defense.defenseType.displayable} (Total: ${combatState.finalDefenseValue.result})'}",
       actionTitle: character == null
           ? null
           : IconButton(
@@ -42,6 +45,7 @@ class CombatDefenseCard extends StatelessWidget {
                   SizedBox(
                     height: 40,
                     child: AMTTextFormField(
+                      enabled: !damageAccumulation,
                       text: defense.roll,
                       label: 'Tirada de defensa',
                       onChanged: (value) => {appState.updateCombatState(defenseRoll: value)},
@@ -71,7 +75,7 @@ class CombatDefenseCard extends StatelessWidget {
                               child: AMTTextFormField(
                                 enabled: false,
                                 label: 'Defensa',
-                                text: character.calculateDefense(defense.defenseType),
+                                text: damageAccumulation ? '-' : character.calculateDefense(defense.defenseType),
                               ),
                             ),
                           ),
@@ -79,6 +83,7 @@ class CombatDefenseCard extends StatelessWidget {
                         Flexible(
                           flex: 2,
                           child: AMTTextFormField(
+                            enabled: !damageAccumulation,
                             label: character != null ? 'Modificador' : 'Defensa',
                             suffixIcon: TextButton(
                               child: const Text('+Can'),
@@ -147,6 +152,7 @@ class CombatDefenseCard extends StatelessWidget {
                     height: 40,
                     child: TextButton(
                       onPressed: () {
+                        if (damageAccumulation) return;
                         BottomSheetModifiers.show(
                             context,
                             combatState.defense.modifiers,
@@ -160,8 +166,8 @@ class CombatDefenseCard extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
-                          const Text(
-                            'Situacionales',
+                          Text(
+                            damageAccumulation ? ' - ' : 'Situacionales',
                             textAlign: TextAlign.center,
                           ),
                           Text(
@@ -191,7 +197,7 @@ class CombatDefenseCard extends StatelessWidget {
             },
           ),
         ),
-        if (character != null)
+        if (character != null && !damageAccumulation)
           SizedBox(
             height: 60,
             child: Row(

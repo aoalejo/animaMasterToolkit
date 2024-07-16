@@ -1,5 +1,6 @@
 import 'package:amt/lib.dart';
 import 'package:flutter/material.dart';
+import 'package:uuid/uuid.dart';
 
 class ShowCharacterOptions {
   static Future<void> call(
@@ -7,7 +8,7 @@ class ShowCharacterOptions {
     Character character, {
     required void Function(Character) onRemove,
     required void Function(Character) onEdit,
-    required void Function(Character) onDuplicate,
+    required void Function(Character) onAddCharacter,
   }) {
     final theme = Theme.of(context);
 
@@ -54,6 +55,42 @@ class ShowCharacterOptions {
                               },
                             ),
                           ),
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 24,
+                      ),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: Row(
+                              children: [
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      'Acumulación de daño',
+                                      style: theme.textTheme.bodyMedium,
+                                    ),
+                                    Text(
+                                      '(Seres que no se defienden activamente)',
+                                      style: theme.textTheme.bodySmall,
+                                    ),
+                                  ],
+                                ),
+                                Expanded(child: Container()),
+                                Switch(
+                                  value: character.profile.damageAccumulation ?? false,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      character.profile.damageAccumulation = value;
+                                      onEdit(character);
+                                    });
+                                  },
+                                ),
+                              ],
+                            ),
+                          ),
                           const SizedBox(
                             width: 12,
                           ),
@@ -89,10 +126,7 @@ class ShowCharacterOptions {
                         ],
                       ),
                       const SizedBox(
-                        height: 12,
-                      ),
-                      const SizedBox(
-                        height: 12,
+                        height: 24,
                       ),
                       Row(
                         children: [
@@ -106,6 +140,22 @@ class ShowCharacterOptions {
                                   character.profile.fumbleLevel = fumble;
                                 }
 
+                                onEdit(character);
+                              },
+                            ),
+                          ),
+                          const SizedBox(
+                            width: 12,
+                          ),
+                          Expanded(
+                            child: AMTTextFormField(
+                              label: 'Nivel de crítico',
+                              text: (character.profile.critLevel ?? 90).toString(),
+                              onChanged: (value) {
+                                final crit = int.tryParse(value);
+                                if (crit != null) {
+                                  character.profile.critLevel = crit;
+                                }
                                 onEdit(character);
                               },
                             ),
@@ -151,6 +201,15 @@ class ShowCharacterOptions {
                           ),
                           Expanded(
                             child: Text(
+                              'Valores mayores o iguales se consideran crítico',
+                              style: theme.textTheme.bodySmall,
+                            ),
+                          ),
+                          const SizedBox(
+                            width: 12,
+                          ),
+                          Expanded(
+                            child: Text(
                               'Indica el tipo de tirada critica',
                               style: theme.textTheme.bodySmall,
                             ),
@@ -162,7 +221,7 @@ class ShowCharacterOptions {
                       ),
                       Row(
                         children: [
-                          Expanded(
+                          /*Expanded(
                             child: InkWell(
                               onTap: () {},
                               child: Column(
@@ -176,12 +235,12 @@ class ShowCharacterOptions {
                                 ],
                               ),
                             ),
-                          ),
+                          ),*/
                           Expanded(
                             child: InkWell(
                               onTap: () {
                                 Navigator.pop(context);
-                                onDuplicate(character);
+                                onAddCharacter(character.copyWith(uuid: const Uuid().v4()));
                               },
                               child: Column(
                                 children: [

@@ -30,13 +30,15 @@ class CharacterProfileAdapter extends TypeAdapter<CharacterProfile> {
       fumbleLevel: fields[10] as int?,
       nature: fields[11] as int?,
       uroboros: fields[12] as bool?,
+      damageAccumulation: fields[13] as bool?,
+      critLevel: fields[14] as int?,
     );
   }
 
   @override
   void write(BinaryWriter writer, CharacterProfile obj) {
     writer
-      ..writeByte(13)
+      ..writeByte(14)
       ..writeByte(0)
       ..write(obj.fatigue)
       ..writeByte(1)
@@ -62,7 +64,11 @@ class CharacterProfileAdapter extends TypeAdapter<CharacterProfile> {
       ..writeByte(11)
       ..write(obj.nature)
       ..writeByte(12)
-      ..write(obj.uroboros);
+      ..write(obj.uroboros)
+      ..writeByte(13)
+      ..write(obj.damageAccumulation)
+      ..writeByte(14)
+      ..write(obj.critLevel);
   }
 
   @override
@@ -70,8 +76,5 @@ class CharacterProfileAdapter extends TypeAdapter<CharacterProfile> {
 
   @override
   bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is CharacterProfileAdapter &&
-          runtimeType == other.runtimeType &&
-          typeId == other.typeId;
+      identical(this, other) || other is CharacterProfileAdapter && runtimeType == other.runtimeType && typeId == other.typeId;
 }

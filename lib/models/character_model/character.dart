@@ -122,6 +122,7 @@ class Character extends HiveObject {
       currentTurn: Roll.roll(
         base: combat.weapons.firstOrNull?.turn ?? 0,
         fumbleLevel: profile.fumbleLevel ?? 3,
+        critLevel: profile.critLevel ?? 90,
         nature: profile.nature ?? 0,
       ),
     );
@@ -183,6 +184,7 @@ class Character extends HiveObject {
     state.currentTurn = Roll.roll(
       base: calculateTurnBase(),
       fumbleLevel: profile.fumbleLevel ?? 3,
+      critLevel: profile.critLevel ?? 90,
       nature: profile.nature ?? 0,
       turnFumble: true,
     );
@@ -317,6 +319,10 @@ class Character extends HiveObject {
 
   String nameNormalized() {
     return profile.name.split('#').first.normalized;
+  }
+
+  Character massOfSameType() {
+    return copyWith(uuid: const Uuid().v4());
   }
 }
 

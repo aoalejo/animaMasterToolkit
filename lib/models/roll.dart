@@ -34,6 +34,7 @@ class Roll {
     int fumbleLevel = 3,
     int nature = 0,
     bool turnFumble = false,
+    bool firstRoll = true,
   }) {
     rolls = [];
 
@@ -42,7 +43,7 @@ class Roll {
     rolls.add(thisRoll);
 
     if (base != 0) thisRollDescription = 'Base: $base';
-    thisRollDescription = '$thisRollDescription\nTirada: $thisRoll';
+    thisRollDescription = '$thisRollDescription${firstRoll ? "\nTirada: " : ""}$thisRoll';
 
     if (thisRoll.isPalindrome && nature > 15) {
       final newRoll = Roll.d10Roll();
@@ -61,11 +62,13 @@ class Roll {
         fumbleLevel: -1,
         critLevel: nature >= 5 ? critLevel + 1 : 999,
         nature: nature,
+        firstRoll: false,
       );
 
       rolls.addAll(crit.rolls);
 
-      thisRollDescription = '$thisRollDescription\nCritico: ${crit.roll}';
+      thisRollDescription =
+          '$thisRollDescription\n ${firstRoll ? "Critico ($critLevel) ${crit.description}" : "   ++($critLevel) ${crit.description}"}';
       thisRoll = thisRoll + crit.roll;
     }
 
@@ -124,7 +127,7 @@ class Roll {
 
 extension Rolls on Character {
   Roll roll() {
-    return Roll.roll(fumbleLevel: profile.fumbleLevel ?? 3, nature: profile.nature ?? 5);
+    return Roll.roll(fumbleLevel: profile.fumbleLevel ?? 3, critLevel: profile.critLevel ?? 90, nature: profile.nature ?? 5);
   }
 }
 

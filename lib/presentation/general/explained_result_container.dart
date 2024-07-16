@@ -43,7 +43,7 @@ class ExplainedTextContainer extends StatelessWidget {
                       child: Padding(
                         padding: const EdgeInsets.all(6),
                         child: Text(
-                          info.text,
+                          '${info.specialRule?.name ?? ''} ${info.text}',
                           style: theme.textTheme.bodyMedium!.copyWith(fontWeight: FontWeight.bold),
                         ),
                       ),
@@ -96,7 +96,7 @@ class ExplainedTextContainer extends StatelessWidget {
                           padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 4),
                           borderRadius: BorderRadius.circular(8),
                           elevation: 1,
-                          title: '${info.references[index].bookName} P${info.references[index].page}',
+                          title: '${info.references[index].book.name} P${info.references[index].page}',
                         );
                       },
                     ),

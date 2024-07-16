@@ -12,7 +12,11 @@ import 'package:amt/utils/explained_text.dart';
 import 'package:amt/utils/int_extension.dart';
 
 class CombatRules {
-  static int numberOfDefensesModifier(int? defenseNumber) {
+  static int numberOfDefensesModifier(int? defenseNumber, {bool? damageAccumulation = false}) {
+    if (damageAccumulation ?? false) {
+      return 0;
+    }
+
     switch (defenseNumber ?? 1) {
       case 0:
       case 1:
@@ -38,7 +42,7 @@ class CombatRules {
     final rollNumber = roll?.safeInterpret ?? 0;
     final attackBaseNumber = baseAttack?.safeInterpret ?? 0;
     final modifierNumber = modifier?.safeInterpret ?? 0;
-    final surpriseNumber = surpriseType == SurpriseType.attacker ? 90 : 0;
+    final surpriseNumber = surpriseType == SurpriseType.defender ? -90 : 0;
     final modifiersNumber = modifiers?.getAllModifiersForType(ModifiersType.attack) ?? 0;
 
     final total = attackBaseNumber + modifierNumber + rollNumber + modifiersNumber + surpriseNumber;
@@ -60,13 +64,30 @@ class CombatRules {
     required ModifiersState? modifiers,
     required ModifiersType? defenseType,
     required int? defensesNumber,
+    required Character? defender,
   }) {
     final rollNumber = roll?.safeInterpret ?? 0;
     final baseDefenseNumber = baseDefense?.safeInterpret ?? 0;
+
+    final damageAccumulation = defender?.profile.damageAccumulation ?? false;
+
+    if (damageAccumulation) {
+      final result = ExplainedText(
+        title: 'Defensa final',
+        text: 'Resultado en defensa: 0 (Acumulación de daño)',
+        explanation:
+            'Cuando son victima de un ataque no tiran ningún dado para defenderse, sino que directamente el agresor resta la Absorción del ser a su tirada de ataque.',
+        result: 0,
+      )..add(
+          reference: BookReference(page: 97, book: Books.coreExxet),
+        );
+      return result;
+    }
+
     final modifierNumber = modifier?.safeInterpret ?? 0;
-    final surpriseNumber = surpriseType == SurpriseType.defender ? 90 : 0;
+    final surpriseNumber = surpriseType == SurpriseType.attacker ? -90 : 0;
     final modifiersNumber = modifiers?.getAllModifiersForType(defenseType ?? ModifiersType.dodge) ?? 0;
-    final numberOfDefensesModifier = CombatRules.numberOfDefensesModifier(defensesNumber);
+    final numberOfDefensesModifier = CombatRules.numberOfDefensesModifier(defensesNumber, damageAccumulation: damageAccumulation);
 
     final total = modifiersNumber + rollNumber + baseDefenseNumber + numberOfDefensesModifier + modifierNumber + surpriseNumber;
 
@@ -74,7 +95,7 @@ class CombatRules {
       title: 'Defensa final',
       text: 'Resultado en defensa: $total',
       explanation:
-          'Base: $baseDefenseNumber + Modificador: $modifierNumber + Tirada: $rollNumber + Modificadores: $modifiersNumber + Sorpresa: $surpriseNumber + Penalizador por defensas: $numberOfDefensesModifier',
+          'Base: $baseDefenseNumber + Modificador: $modifierNumber + "Tirada: $rollNumber + Modificadores: $modifiersNumber + Sorpresa: $surpriseNumber + Penalizador por defensas: $numberOfDefensesModifier',
       result: total,
     );
   }
@@ -83,11 +104,13 @@ class CombatRules {
     required ExplainedText attackValue,
     required ExplainedText defenseValue,
     required ExplainedText finalAbsorption,
+    required Character? defender,
     required int baseDamage,
   }) {
     final info = ExplainedText(title: 'Daño');
 
     info.explanations.add(attackValue);
+
     info.explanations.add(defenseValue);
     info.explanations.add(finalAbsorption);
 
@@ -119,9 +142,9 @@ class CombatRules {
       );
     } else if (damageDone < 10) {
       info.add(
+        text: 'No realiza daños ${(defender?.profile.damageAccumulation ?? false) ? "" : ", pero queda a la defensiva"}',
         explanation: 'Si el daño es menor a 10, impacta pero no realiza daños',
         reference: BookReference(page: 87, book: Books.coreExxet),
-        text: 'No realiza daños, pero queda a la defensiva',
       );
     } else {
       info.text = 'Daño causado: $damageDone';
@@ -134,6 +157,7 @@ class CombatRules {
   static ExplainedText? calculateCounterBonus({
     required ExplainedText attackValue,
     required ExplainedText defenseValue,
+    required Character? defender,
   }) {
     final info = ExplainedText(title: 'Contraataque');
 
@@ -143,6 +167,15 @@ class CombatRules {
     final difference = (attackValue.result ?? 0) - (defenseValue.result ?? 0);
 
     var counterBonus = 0;
+
+    if (difference < 0 && (defender?.profile.damageAccumulation ?? false)) {
+      info.add(
+        text: 'Sin coontrataque posible',
+        explanation: 'El defensor podría lograr un coontraataque, pero al ser un ser con acumulación de daño no se permite',
+        reference: BookReference(page: 97, book: Books.coreExxet),
+      );
+      return info;
+    }
 
     if (difference < 0) {
       counterBonus = (-difference ~/ 2).roundToFives;
@@ -164,6 +197,8 @@ class CombatRules {
     required Armour? armour,
     required DamageTypes damageType,
     required String? armourTypeModifier,
+    required Character? defender,
+    required SurpriseType? surpriseType,
   }) {
     final info = ExplainedText(title: 'Absorción');
 
@@ -174,16 +209,35 @@ class CombatRules {
     final armourAbsorption = (armourTypeModifierNumber + armourTypeBase) * 10;
 
     info.add(
-      explanation: 'Absorción de armadura = (($armourTypeBase + $armourTypeModifier) * 10)',
+      explanation: 'Absorción de armadura = (($armourTypeBase + ${armourTypeModifier?.isEmpty ?? true ? 0 : armourTypeModifier}) * 10)',
     );
+
     const baseAbsorption = 20;
-    info
-      ..result = armourAbsorption + baseAbsorption
-      ..add(
-        text: 'Absorición total: ${info.result}',
-        explanation: 'Todos los seres tienen una absorción base de 20 que se suma a la anterior',
-        reference: BookReference(page: 86, book: Books.coreExxet),
-      );
+
+    if ((defender?.profile.damageAccumulation ?? false) && surpriseType == SurpriseType.attacker) {
+      final result = ((armourAbsorption + baseAbsorption) / 2).floor();
+
+      info
+        ..add(
+          text: 'La absorción se reduce a la mitad',
+          explanation: 'Si un ser con acumulación recibe un ataque con sorpresa disminuye a la mitad el valor de su Absorción',
+          reference: BookReference(page: 97, book: Books.coreExxet),
+          result: result,
+        )
+        ..add(
+          text: 'Absorición total: $result',
+          explanation: 'Todos los seres tienen una absorción base de 20 que se suma a la anterior',
+          reference: BookReference(page: 86, book: Books.coreExxet),
+        );
+    } else {
+      info
+        ..result = armourAbsorption + baseAbsorption
+        ..add(
+          text: 'Absorición total: ${info.result}',
+          explanation: 'Todos los seres tienen una absorción base de 20 que se suma a la anterior',
+          reference: BookReference(page: 86, book: Books.coreExxet),
+        );
+    }
 
     return info;
   }
@@ -360,22 +414,46 @@ class CombatRules {
     required String? criticalRoll,
     required String? physicalResistanceBase,
     required String? physicalResistanceRoll,
+    required Character? defender,
   }) {
     final damageDoneInt = damageDone?.safeInterpret ?? 0;
     final criticalRollInt = criticalRoll?.safeInterpret ?? 0;
 
+    final damageAccumulation = defender?.profile.damageAccumulation ?? false;
+
     final physicalResistanceBaseInt = physicalResistanceBase?.safeInterpret ?? 0;
     final physicalResistanceRollInt = physicalResistanceRoll?.safeInterpret ?? 0;
 
-    final result = damageDoneInt + criticalRollInt - physicalResistanceBaseInt - physicalResistanceRollInt;
+    var result = damageDoneInt + criticalRollInt - physicalResistanceBaseInt - physicalResistanceRollInt;
 
-    return ExplainedText(
+    if (damageAccumulation) {
+      result = result ~/ 2;
+    } else if (result > 200) {
+      result = 200 + (result - 200) ~/ 2;
+    }
+
+    final info = ExplainedText(
       title: 'Resultado Critico',
       text: 'Resultado: $result',
       result: result,
-      explanation:
-          'Daño realizado ($damageDoneInt) + Tirada ($criticalRollInt) - RF ($physicalResistanceBaseInt) - Tirada RF ($physicalResistanceRollInt) = Resultado ($result)',
+      explanation: 'Daño realizado ($damageDoneInt) + Tirada ($criticalRollInt) - RF ($physicalResistanceBaseInt) '
+          '- Tirada RF ($physicalResistanceRollInt) ${result > 200 ? "(exceso recortado)" : ""} '
+          '${damageAccumulation ? "(reducido por acumulación de daño)" : ""}= Resultado ($result)',
     );
+
+    if (damageAccumulation) {
+      info.add(
+        text: 'El nivel del crítico se reduce automáticamente a la mitad',
+        reference: BookReference(page: 97, book: Books.coreExxet),
+      );
+    } else if (result > 200) {
+      info.add(
+        text: 'Si la cifra es mayor de 200, cualquier exceso por encima de dicha cantidad debe de reducirse a la mitad',
+        reference: BookReference(page: 95, book: Books.coreExxet),
+      );
+    }
+
+    return info;
   }
 
   static int criticalResultWithReduction({

@@ -19,6 +19,8 @@ class CharacterProfile {
     this.fumbleLevel = 3,
     this.nature = 5,
     this.uroboros = false,
+    this.damageAccumulation = false,
+    this.critLevel = 90,
   });
 
   static CharacterProfile? fromJson(Map<String, dynamic>? json) {
@@ -37,6 +39,8 @@ class CharacterProfile {
       fumbleLevel: JsonUtils.integer(json['nivelDePifia'], 3),
       nature: JsonUtils.integer(json['natura'], 5),
       uroboros: JsonUtils.boolean(json['uruboros'], placeholder: false),
+      damageAccumulation: JsonUtils.boolean(json['acumulacionDeDanio'], placeholder: false),
+      critLevel: JsonUtils.integer(json['nivelDeCritico'], 90),
     );
   }
 
@@ -66,6 +70,10 @@ class CharacterProfile {
   late int? nature;
   @HiveField(12)
   late bool? uroboros;
+  @HiveField(13)
+  late bool? damageAccumulation;
+  @HiveField(14)
+  late int? critLevel;
 
   CharacterProfile copy({bool? isNpc, int? number}) {
     return CharacterProfile(
@@ -81,6 +89,8 @@ class CharacterProfile {
       fumbleLevel: fumbleLevel,
       nature: nature,
       uroboros: uroboros,
+      damageAccumulation: damageAccumulation,
+      critLevel: critLevel,
     );
   }
 }

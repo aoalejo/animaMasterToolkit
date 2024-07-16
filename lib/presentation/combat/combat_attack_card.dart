@@ -55,7 +55,7 @@ class CombatAttackCard extends StatelessWidget {
                   ),
                 ),
               ),
-              if (character != null) const SizedBox(width: 12),
+              const SizedBox(width: 12),
               if (character != null && !isVariableDamage)
                 Flexible(
                   child: AMTTextFormField(
@@ -80,7 +80,7 @@ class CombatAttackCard extends StatelessWidget {
                     appState.updateCombatState(damageModifier: value);
                   },
                   text: attackState.damage,
-                  label: isVariableDamage ? 'Daño' : 'Modificador',
+                  label: isVariableDamage || character == null ? 'Daño' : 'Modificador',
                   suffixIcon: IconButton(
                     icon: const Icon(Icons.delete),
                     onPressed: () {

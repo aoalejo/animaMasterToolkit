@@ -2535,7 +2535,7 @@
             "armas": [
                 {
                     "nombre": "Espada Larga",
-                    "critPrincipal": "45",
+                    "critPrincipal": "FIL",
                     "turno": "45",
                     "ataque": "110",
                     "defensa": "110",
@@ -2608,7 +2608,7 @@
             "armas": [
                 {
                     "nombre": "Espada Larga",
-                    "critPrincipal": "55",
+                    "critPrincipal": "FIL",
                     "turno": "60",
                     "ataque": "130",
                     "defensa": "130",

@@ -66,6 +66,7 @@ class ScreenCombatState {
       modifiers: defense.modifiers,
       defenseType: defense.defenseType.toModifierType(),
       defensesNumber: defense.character?.state.defenseNumber,
+      defender: defense.character,
     );
   }
 
@@ -74,6 +75,8 @@ class ScreenCombatState {
       armour: defense.character?.combat.armour.calculatedArmour,
       damageType: attack.damageType,
       armourTypeModifier: defense.armour,
+      defender: defense.character,
+      surpriseType: surpriseType,
     );
   }
 
@@ -86,6 +89,7 @@ class ScreenCombatState {
         weapon: attack.character?.selectedWeapon(),
         damageModifier: attack.damage,
       ),
+      defender: defense.character,
     );
   }
 
@@ -96,6 +100,63 @@ class ScreenCombatState {
 
     if (damage != null) result.add(damage);
 
+    final additionalRules = ExplainedText(
+      title: 'Reglas a tener en cuenta',
+      text: 'Reglas a tener en cuenta',
+      explanation: 'Algunas reglas que se utilizaron para este cálculo',
+    );
+
+    if (defense.character?.profile.damageAccumulation ?? false) {
+      additionalRules.explanations
+        ..add(
+          ExplainedText(
+            title: 'Doble daño según área de ataque',
+            text: 'Doble daño según área de ataque',
+            explanation:
+                'Si una criatura con acumulación recibe un Ataque con un área que cubra por lo menos la mitad de su cuerpo, recibirá el doble de daño de lo que indique el resultado',
+            reference: BookReference(
+              page: 97,
+              book: Books.coreExxet,
+            ),
+            specialRule: SpecialRule.damageAccumulation,
+          ),
+        )
+        ..add(
+          ExplainedText(
+            title: 'Sorpresa en el ataque',
+            text: 'Sorpresa en el ataque',
+            explanation:
+                'Si la sorpresa ha sido provocada por no saber dónde se encuentra su adversario no puede realizar una devolución ese asalto en contra de dicho individuo.',
+            reference: BookReference(
+              page: 97,
+              book: Books.coreExxet,
+            ),
+            specialRule: SpecialRule.damageAccumulation,
+          ),
+        );
+    }
+
+    if ((attack.character?.profile.uroboros ?? false) || (defense.character?.profile.uroboros ?? false)) {
+      additionalRules.explanations.add(
+        ExplainedText(
+          title: 'La Sangre de Uroboros',
+          text: 'La Sangre de Uroboros',
+          explanation:
+              'Legado de Uroboros obtiene Sorpresa contra cualquier adversario, superándolo simplemente por un resultado de 100 puntos en lugar de necesitar 150. '
+              'Ademas, cuando declara que desea retirarse de un combate, no aplica el penalizador de Flanco a su habilidad de defensa',
+          reference: BookReference(
+            page: 77,
+            book: Books.prometheus,
+          ),
+          specialRule: SpecialRule.uruboros,
+        ),
+      );
+    }
+
+    if (additionalRules.explanations.isNotEmpty) {
+      result.add(additionalRules);
+    }
+
     final critical = CombatRules.criticalDamage(
       defender: defense.character,
       damage: damage?.result ?? 0,
@@ -103,7 +164,11 @@ class ScreenCombatState {
 
     if (critical != null) result.add(critical);
 
-    final counter = CombatRules.calculateCounterBonus(attackValue: finalAttackValue, defenseValue: finalDefenseValue);
+    final counter = CombatRules.calculateCounterBonus(
+      attackValue: finalAttackValue,
+      defenseValue: finalDefenseValue,
+      defender: defense.character,
+    );
 
     if (counter != null) result.add(counter);
 
@@ -135,6 +200,7 @@ class ScreenCombatState {
       criticalRoll: critical.criticalRoll,
       physicalResistanceBase: critical.physicalResistanceBase,
       physicalResistanceRoll: critical.physicalResistanceRoll,
+      defender: defense.character,
     );
   }
 

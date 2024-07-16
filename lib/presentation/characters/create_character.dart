@@ -16,6 +16,7 @@ class CreateCharacter {
   static void show(BuildContext context, void Function(Character) onCreated) {
     var name = '';
     var fumble = '3';
+    var crit = '90';
     var nature = '5';
     var life = '125';
     var fatigue = '7';
@@ -48,6 +49,7 @@ class CreateCharacter {
                     _buildCharacter(
                       name,
                       fumble,
+                      crit,
                       nature,
                       life,
                       fatigue,
@@ -91,6 +93,14 @@ class CreateCharacter {
                     inputType: TextInputType.number,
                     onChanged: (value) => setState(
                       () => fumble = value,
+                    ),
+                  ),
+                  AMTTextFormField(
+                    label: 'Critico',
+                    text: crit,
+                    inputType: TextInputType.number,
+                    onChanged: (value) => setState(
+                      () => crit = value,
                     ),
                   ),
                   AMTTextFormField(
@@ -301,6 +311,7 @@ class CreateCharacter {
   static Character _buildCharacter(
     String name,
     String fumble,
+    String crit,
     String nature,
     String life,
     String fatigue,
@@ -345,6 +356,7 @@ class CreateCharacter {
         name: name,
         nature: nature.intValue,
         fumbleLevel: fumble.intValue,
+        critLevel: crit.intValue,
       ),
       combat: CombatData(
         armour: ArmourData(
