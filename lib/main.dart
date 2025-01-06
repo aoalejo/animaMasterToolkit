@@ -196,7 +196,7 @@ class GeneratorPage extends StatelessWidget {
 
   Widget _content(ThemeData theme, Size screenSize, bool small, int pageSelected, bool loading, String? message) {
     return ColoredBox(
-      color: theme.colorScheme.background,
+      color: theme.colorScheme.surface,
       child: Align(
         alignment: Alignment.topLeft,
         child: Stack(

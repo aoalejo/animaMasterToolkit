@@ -151,7 +151,7 @@ class ShowCharacterInfo {
           ? theme.colorScheme.primary
           : odd
               ? theme.colorScheme.secondaryContainer
-              : theme.colorScheme.background,
+              : theme.colorScheme.surface,
       child: SizedBox(
         height: 40,
         child: Row(
@@ -172,8 +172,8 @@ class ShowCharacterInfo {
                         value.text,
                         textAlign: TextAlign.center,
                         style: value.flex == 1
-                            ? theme.textTheme.bodySmall!.copyWith(color: title ? theme.colorScheme.onPrimary : theme.colorScheme.onBackground)
-                            : theme.textTheme.bodyLarge!.copyWith(color: title ? theme.colorScheme.onPrimary : theme.colorScheme.onBackground),
+                            ? theme.textTheme.bodySmall!.copyWith(color: title ? theme.colorScheme.onPrimary : theme.colorScheme.onSurface)
+                            : theme.textTheme.bodyLarge!.copyWith(color: title ? theme.colorScheme.onPrimary : theme.colorScheme.onSurface),
                       ),
               ),
           ],

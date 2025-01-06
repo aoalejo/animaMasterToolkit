@@ -14,9 +14,13 @@ class BottomSheetModifiers {
   ) {
     void toggleModifier(StateSetter setState, StatusModifier modifier) {
       setState(
-        () => {
-          if (state.containsModifier(modifier)) {state.removeModifier(modifier)} else {state.add(modifier)},
-          onModifiersChanged(state),
+        () {
+          if (state.containsModifier(modifier)) {
+            state.removeModifier(modifier);
+          } else {
+            state.add(modifier);
+          }
+          onModifiersChanged(state);
         },
       );
     }

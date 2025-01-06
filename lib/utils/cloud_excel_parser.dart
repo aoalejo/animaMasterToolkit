@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:amt/models/character_model/character.dart';
@@ -49,8 +50,7 @@ class CloudExcelParser implements ExcelParser {
 
       return await convertExcelFrom(base64: base64);
     } catch (e) {
-      print(e);
-      print(e.toString());
+      log(e.toString());
       return null;
     }
   }

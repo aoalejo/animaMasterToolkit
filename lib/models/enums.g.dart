@@ -27,10 +27,8 @@ class DefenseTypeAdapter extends TypeAdapter<DefenseType> {
     switch (obj) {
       case DefenseType.parry:
         writer.writeByte(0);
-        break;
       case DefenseType.dodge:
         writer.writeByte(1);
-        break;
     }
   }
 
@@ -39,10 +37,7 @@ class DefenseTypeAdapter extends TypeAdapter<DefenseType> {
 
   @override
   bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is DefenseTypeAdapter &&
-          runtimeType == other.runtimeType &&
-          typeId == other.typeId;
+      identical(this, other) || other is DefenseTypeAdapter && runtimeType == other.runtimeType && typeId == other.typeId;
 }
 
 class DamageTypesAdapter extends TypeAdapter<DamageTypes> {
@@ -76,25 +71,18 @@ class DamageTypesAdapter extends TypeAdapter<DamageTypes> {
     switch (obj) {
       case DamageTypes.fil:
         writer.writeByte(0);
-        break;
       case DamageTypes.pen:
         writer.writeByte(1);
-        break;
       case DamageTypes.con:
         writer.writeByte(2);
-        break;
       case DamageTypes.fri:
         writer.writeByte(3);
-        break;
       case DamageTypes.cal:
         writer.writeByte(4);
-        break;
       case DamageTypes.ele:
         writer.writeByte(5);
-        break;
       case DamageTypes.ene:
         writer.writeByte(6);
-        break;
     }
   }
 
@@ -103,10 +91,7 @@ class DamageTypesAdapter extends TypeAdapter<DamageTypes> {
 
   @override
   bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is DamageTypesAdapter &&
-          runtimeType == other.runtimeType &&
-          typeId == other.typeId;
+      identical(this, other) || other is DamageTypesAdapter && runtimeType == other.runtimeType && typeId == other.typeId;
 }
 
 class WeaponSizeAdapter extends TypeAdapter<WeaponSize> {
@@ -132,13 +117,10 @@ class WeaponSizeAdapter extends TypeAdapter<WeaponSize> {
     switch (obj) {
       case WeaponSize.normal:
         writer.writeByte(0);
-        break;
       case WeaponSize.big:
         writer.writeByte(1);
-        break;
       case WeaponSize.giant:
         writer.writeByte(2);
-        break;
     }
   }
 
@@ -147,10 +129,7 @@ class WeaponSizeAdapter extends TypeAdapter<WeaponSize> {
 
   @override
   bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is WeaponSizeAdapter &&
-          runtimeType == other.runtimeType &&
-          typeId == other.typeId;
+      identical(this, other) || other is WeaponSizeAdapter && runtimeType == other.runtimeType && typeId == other.typeId;
 }
 
 class KnownTypeAdapter extends TypeAdapter<KnownType> {
@@ -176,13 +155,10 @@ class KnownTypeAdapter extends TypeAdapter<KnownType> {
     switch (obj) {
       case KnownType.known:
         writer.writeByte(0);
-        break;
       case KnownType.similar:
         writer.writeByte(1);
-        break;
       case KnownType.unknown:
         writer.writeByte(2);
-        break;
     }
   }
 
@@ -190,11 +166,7 @@ class KnownTypeAdapter extends TypeAdapter<KnownType> {
   int get hashCode => typeId.hashCode;
 
   @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is KnownTypeAdapter &&
-          runtimeType == other.runtimeType &&
-          typeId == other.typeId;
+  bool operator ==(Object other) => identical(this, other) || other is KnownTypeAdapter && runtimeType == other.runtimeType && typeId == other.typeId;
 }
 
 class ArmourLocationAdapter extends TypeAdapter<ArmourLocation> {
@@ -222,16 +194,12 @@ class ArmourLocationAdapter extends TypeAdapter<ArmourLocation> {
     switch (obj) {
       case ArmourLocation.complete:
         writer.writeByte(0);
-        break;
       case ArmourLocation.breastplate:
         writer.writeByte(1);
-        break;
       case ArmourLocation.camisole:
         writer.writeByte(2);
-        break;
       case ArmourLocation.head:
         writer.writeByte(3);
-        break;
     }
   }
 
@@ -240,10 +208,7 @@ class ArmourLocationAdapter extends TypeAdapter<ArmourLocation> {
 
   @override
   bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is ArmourLocationAdapter &&
-          runtimeType == other.runtimeType &&
-          typeId == other.typeId;
+      identical(this, other) || other is ArmourLocationAdapter && runtimeType == other.runtimeType && typeId == other.typeId;
 }
 
 class ConsumableTypeAdapter extends TypeAdapter<ConsumableType> {
@@ -269,13 +234,10 @@ class ConsumableTypeAdapter extends TypeAdapter<ConsumableType> {
     switch (obj) {
       case ConsumableType.hitPoints:
         writer.writeByte(1);
-        break;
       case ConsumableType.fatigue:
         writer.writeByte(2);
-        break;
       case ConsumableType.other:
         writer.writeByte(0);
-        break;
     }
   }
 
@@ -284,8 +246,5 @@ class ConsumableTypeAdapter extends TypeAdapter<ConsumableType> {
 
   @override
   bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is ConsumableTypeAdapter &&
-          runtimeType == other.runtimeType &&
-          typeId == other.typeId;
+      identical(this, other) || other is ConsumableTypeAdapter && runtimeType == other.runtimeType && typeId == other.typeId;
 }
