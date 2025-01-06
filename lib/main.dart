@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:amt/generated/l10n.dart';
 import 'package:amt/models/models.dart';
 import 'package:amt/presentation/presentation.dart';
 import 'package:amt/utils/assets.dart';
@@ -67,6 +68,7 @@ class MyAppState extends State {
         localizationsDelegates: const [
           GlobalMaterialLocalizations.delegate,
           GlobalWidgetsLocalizations.delegate,
+          S.delegate,
         ],
         title: 'Anima Master Toolkit v3',
         theme: ThemeData(
