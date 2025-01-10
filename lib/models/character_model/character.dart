@@ -116,16 +116,17 @@ class Character extends HiveObject {
           armour: ArmourData(armours: [], calculatedArmour: Armour()),
         );
 
-    final state = CharacterState(
-      consumables: consumables,
-      modifiers: ModifiersState(),
-      currentTurn: Roll.roll(
-        base: combat.weapons.firstOrNull?.turn ?? 0,
-        fumbleLevel: profile.fumbleLevel ?? 3,
-        critLevel: profile.critLevel ?? 90,
-        nature: profile.nature ?? 0,
-      ),
-    );
+    final state = CharacterState.fromJson(json.getMap('estado')) ??
+        CharacterState(
+          consumables: consumables,
+          modifiers: ModifiersState(),
+          currentTurn: Roll.roll(
+            base: combat.weapons.firstOrNull?.turn ?? 0,
+            fumbleLevel: profile.fumbleLevel ?? 3,
+            critLevel: profile.critLevel ?? 90,
+            nature: profile.nature ?? 0,
+          ),
+        );
 
     return Character(
       uuid: const Uuid().v4(),
@@ -161,6 +162,21 @@ class Character extends HiveObject {
   late PsychicData? psychic;
   @HiveField(9)
   late CharacterResistances resistances;
+
+  Map<String, dynamic> toJson() {
+    return {
+      'uuid': uuid,
+      'Atributos': attributes.toJson(),
+      'Habilidades': skills,
+      'datosElementales': profile.toJson(),
+      'estado': state.toJson(),
+      'Combate': combat.toJson(),
+      'Ki': ki?.toJson(),
+      'Misticos': mystical?.toJson(),
+      'Psiquicos': psychic?.toJson(),
+      'Resistencias': resistances.toJson(),
+    };
+  }
 
   static int initiativeSort(Character a, Character b) {
     if (a.state.currentTurn.roll > b.state.currentTurn.roll) {

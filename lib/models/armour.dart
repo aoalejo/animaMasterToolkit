@@ -55,6 +55,26 @@ class Armour {
       enchanted: json['Enc'].toString() == 'Si',
     );
   }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'nombre': name,
+      'Localizacion': location?.name,
+      'calidad': quality,
+      'FIL': fil,
+      'CON': con,
+      'PEN': pen,
+      'CAL': cal,
+      'ELE': ele,
+      'FRI': fri,
+      'ENE': ene,
+      'Entereza': endurance,
+      'Presencia': presence,
+      'RestMov': movementRestriction,
+      'Enc': enchanted == true ? 'Si' : 'No',
+    };
+  }
+
   @HiveField(0)
   String? name;
   @HiveField(1)

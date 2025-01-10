@@ -1,3 +1,5 @@
+import 'dart:async';
+import 'dart:html' as web;
 import 'dart:math';
 
 import 'package:amt/firebase_options.dart';
@@ -6,9 +8,11 @@ import 'package:amt/models/models.dart';
 import 'package:amt/presentation/login/login_screen.dart';
 import 'package:amt/presentation/presentation.dart';
 import 'package:amt/utils/assets.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_ui_localizations/firebase_ui_localizations.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -101,21 +105,89 @@ class MainPage extends StatefulWidget {
 
 class _MainPageState extends State<MainPage> {
   @override
+  void dispose() {
+    // Optionally clean up if necessary
+    web.window.onBeforeUnload.drain<void>();
+    super.dispose();
+  }
+
+  Future<void> saveState() async {
+    final appState = Provider.of<CharactersPageState>(context, listen: false);
+    final snapshot = appState.getJsonSnapshot();
+
+    appState.showLoading(message: 'Guardando...#Sincronizando partida en la nube');
+    lastSnapshotSavedTime = DateTime.now();
+
+    lastSnapshotUploaded = snapshot;
+
+    final db = FirebaseFirestore.instance;
+
+    await db.collection('campaigns').doc(user!.uid).set(snapshot);
+
+    appState.hideLoading();
+  }
+
+  Future<void> loadState() async {
+    final appState = Provider.of<CharactersPageState>(context, listen: false);
+
+    // ignore: cascade_invocations
+    appState.showLoading(message: 'Cargando...#Sincronizando partida en la nube');
+
+    final db = FirebaseFirestore.instance;
+    final snapshot = await db.collection('campaigns').doc(user!.uid).get();
+
+    if (snapshot.exists && snapshot.data() != null) {
+      appState.loadJsonSnapshot(snapshot.data()!);
+    }
+
+    lastSnapshotUploaded = appState.getJsonSnapshot();
+
+    appState.hideLoading();
+  }
+
+  @override
   void initState() {
     super.initState();
+
+    if (kIsWeb) {
+      web.window.onBeforeUnload.listen((e) async {
+        if (user != null && lastSnapshot.toString().hashCode != lastSnapshotUploaded.toString().hashCode) {
+          (e as web.BeforeUnloadEvent).returnValue = 'Tienes cambios sin guardar';
+        }
+      });
+    }
 
     FirebaseAuth.instance.authStateChanges().listen((User? user) {
       setState(() {
         this.user = user;
       });
+
+      if (user != null) {
+        loadState();
+      }
     });
 
-    WidgetsBinding.instance.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
       if (user == null) {
         setState(() {
           showWelcomeMessage = true;
         });
+      } else {
+        await loadState();
       }
+    });
+    // Autosave every five minutes if no changes detected:
+    Timer.periodic(const Duration(minutes: 5), (timer) async {
+      final appState = Provider.of<CharactersPageState>(context, listen: false);
+
+      final snapshot = appState.getJsonSnapshot();
+
+      if (snapshot.toString().hashCode != lastSnapshotUploaded.toString().hashCode &&
+          snapshot.toString().hashCode == lastSnapshot.toString().hashCode) {
+        await saveState();
+      }
+
+      lastSnapshot = snapshot;
     });
   }
 
@@ -123,6 +195,10 @@ class _MainPageState extends State<MainPage> {
   final repository = Uri.parse('https://github.com/aoalejo/animaMasterToolkit');
   final excelToJsonRelease = Uri.parse('https://github.com/aoalejo/animaExcelToJson/releases');
   bool showWelcomeMessage = false;
+
+  Map<String, dynamic> lastSnapshotUploaded = {};
+  Map<String, dynamic> lastSnapshot = {};
+  DateTime? lastSnapshotSavedTime;
 
   @override
   Widget build(BuildContext context) {
@@ -156,6 +232,30 @@ class _MainPageState extends State<MainPage> {
                       await LoginScreen.showLoginBottomSheet(context);
                     },
                   ),
+                  if (user != null)
+                    ListTile(
+                      title: const Text('Guardar estado'),
+                      leading: const Icon(
+                        Icons.cloud_upload,
+                        color: Colors.black,
+                      ),
+                      onTap: () async {
+                        Navigator.pop(context);
+                        await saveState();
+                      },
+                    ),
+                  if (user != null)
+                    ListTile(
+                      title: const Text('Cargar estado'),
+                      leading: const Icon(
+                        Icons.cloud_download,
+                        color: Colors.black,
+                      ),
+                      onTap: () async {
+                        Navigator.pop(context);
+                        await loadState();
+                      },
+                    ),
                   ListTile(
                     title: const Text('Ver el código fuente'),
                     leading: SizedBox(
@@ -236,6 +336,9 @@ class _MainPageState extends State<MainPage> {
             if (appState.sheetsLoadingPercentage != -1) const SizedBox.square(dimension: 8),
             if (appState.sheetsLoadingPercentage != -1) const Text('Cargando planillas...'),
             if (appState.sheetsLoadingPercentage == -1) Text('Anima Master Toolkit v3 - ${user?.displayName ?? user?.email ?? 'Usuario Anonimo'}'),
+            const Spacer(),
+            // Show time of last save is available:
+            if (lastSnapshotSavedTime != null) Text('Ultimo guardado: ${lastSnapshotSavedTime!.hour}:${lastSnapshotSavedTime!.minute}'),
           ],
         ),
         backgroundColor: theme.primaryColor,
@@ -300,15 +403,15 @@ class _MainPageState extends State<MainPage> {
                               },
                               child: const Text('Iniciar sesión'),
                             ),
+                            const Spacer(),
                             const Text(
-                              '*El sistema soportaba guardado local, pero fueron reportadas fallas en la persistencia de datos, por lo que la solución fue directamente implementar el guardado en la nube, que es algo que tenía pendiente hace rato',
+                              '*El sistema soportaba guardado local, pero fueron reportadas fallas en la persistencia de datos, por lo que la solución fue directamente implementar el guardado en la nube, que es algo que tenía pendiente hace rato. \n\nNo eliminé el sistema de guardado local anterior, por lo que si te venía funcionando bien, debería seguir haciendolo, aunque recomiendo guardar las partidas en la nube para evitar problemas.',
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                 fontSize: 12,
                                 fontWeight: FontWeight.w400,
                               ),
                             ),
-                            const Spacer(),
                             TextButton(
                               onPressed: () {
                                 setState(() {

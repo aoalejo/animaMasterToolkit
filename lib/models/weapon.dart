@@ -65,6 +65,32 @@ class Weapon {
       variableDamage: JsonUtils.boolean(json['variable'], placeholder: false),
     );
   }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'nombre': name,
+      'tipo': type,
+      'conocimiento': known?.name,
+      'tamanio': size?.name,
+      'critPrincipal': principalDamage?.name(),
+      'critSecundario': secondaryDamage?.name(),
+      'entereza': endurance,
+      'rotura': breakage,
+      'presencia': presence,
+      'turno': turn,
+      'ataque': attack,
+      'defensa': defense,
+      'defensaTipo': defenseType.name,
+      'danio': damage,
+      'calidad': quality,
+      'caracteristica': characteristic,
+      'advertencia': warning,
+      'municion': ammunition,
+      'especial': special,
+      'variable': variableDamage,
+    };
+  }
+
   @HiveField(0)
   late String name;
   @HiveField(1)

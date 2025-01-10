@@ -53,6 +53,29 @@ class CharactersPageState extends ChangeNotifier {
     notifyListeners();
   }
 
+  Map<String, dynamic> getJsonSnapshot() {
+    final charactersJson = characters.map((e) => e.toJson()).toList();
+
+    return {
+      'characters': charactersJson,
+    };
+  }
+
+  Future<void> loadJsonSnapshot(Map<String, dynamic> json) async {
+    final charactersJson = (json['characters'] as List).map((e) => Character.fromJson(e as Map<String, dynamic>)).whereType<Character>().toList();
+
+    characters = charactersJson;
+
+    await Hive.deleteBoxFromDisk('characters');
+    _box = await Hive.openBox('characters');
+
+    for (final element in characters) {
+      await _box.add(element);
+    }
+
+    notifyListeners();
+  }
+
   void showLoading({String? message}) {
     this.message = message;
     isLoading = true;
@@ -246,7 +269,11 @@ class CharactersPageState extends ChangeNotifier {
       for (final consumable in character.state.consumables) {
         consumable.actualValue = consumable.maxValue;
       }
-      character.save();
+      try {
+        character.save();
+      } catch (e) {
+        Logger().e(e);
+      }
     }
     notifyListeners();
   }
@@ -259,7 +286,11 @@ class CharactersPageState extends ChangeNotifier {
     characters[index] = character;
 
     notifyListeners();
-    character.save();
+    try {
+      character.save();
+    } catch (e) {
+      Logger().e(e);
+    }
   }
 
   Future<void> parseCharacters(FilePickerResult? filesPicked, void Function(double) onUpdated) async {

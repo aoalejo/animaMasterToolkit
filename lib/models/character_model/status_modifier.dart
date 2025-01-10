@@ -31,6 +31,17 @@ class StatusModifier extends Object {
     );
   }
 
+  Map<String, dynamic> toJson() {
+    return {
+      'name': name,
+      'attack': attack,
+      'dodge': dodge,
+      'parry': parry,
+      'turn': turn,
+      'physicalAction': physicalAction,
+    };
+  }
+
   @HiveField(0)
   late String name;
   @HiveField(1)

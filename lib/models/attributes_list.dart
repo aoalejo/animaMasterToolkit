@@ -43,6 +43,19 @@ class AttributesList {
     );
   }
 
+  Map<String, dynamic> toJson() {
+    return {
+      'AGI': agility,
+      'CON': constitution,
+      'DES': dexterity,
+      'FUE': strength,
+      'INT': intelligence,
+      'PER': perception,
+      'POD': might,
+      'VOL': willpower,
+    };
+  }
+
   @HiveField(0)
   late int agility;
   @HiveField(1)

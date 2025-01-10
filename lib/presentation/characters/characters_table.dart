@@ -92,8 +92,10 @@ class CharactersTable extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               _header(1, ''),
-              _header(3, 'Nombre'),
+              _header(2, 'Nombre'),
+              _header(1, 'HP'),
               _header(2, 'Turno'),
+              _header(1, 'C'),
               _header(5, 'Acciones'),
             ],
           ),
@@ -119,7 +121,7 @@ class CharactersTable extends StatelessWidget {
                           ),
                         ),
                         _cell(
-                          size: 3,
+                          size: 2,
                           child: Row(
                             children: [
                               Expanded(
@@ -132,21 +134,24 @@ class CharactersTable extends StatelessWidget {
                                   ),
                                 ),
                               ),
-                              Stack(
-                                alignment: AlignmentDirectional.center,
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.all(8),
-                                    child: CircularProgressIndicator(
-                                      value: character.state.getLifePointsPercentage().toDouble() / 100,
-                                      color: character.state.getLifePointsPercentage().percentageColor(),
-                                    ),
-                                  ),
-                                  Text(
-                                    '${character.state.getLifePointsPercentage()}%',
-                                    style: theme.textTheme.bodySmall!.copyWith(fontWeight: FontWeight.bold),
-                                  ),
-                                ],
+                            ],
+                          ),
+                        ),
+                        _cell(
+                          size: 1,
+                          child: Stack(
+                            alignment: AlignmentDirectional.center,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.all(8),
+                                child: CircularProgressIndicator(
+                                  value: character.state.getLifePointsPercentage().toDouble() / 100,
+                                  color: character.state.getLifePointsPercentage().percentageColor(),
+                                ),
+                              ),
+                              Text(
+                                '${character.state.getLifePointsPercentage()}%',
+                                style: theme.textTheme.bodySmall!.copyWith(fontWeight: FontWeight.bold),
                               ),
                             ],
                           ),
@@ -170,6 +175,28 @@ class CharactersTable extends StatelessWidget {
                               ),
                               _surpriseDesc(appState.characters, character, appState),
                             ],
+                          ),
+                        ),
+                        _cell(
+                          size: 1,
+                          child: Tooltip(
+                            message: '${character.state.getFirstOtherConsumable()?.name}\n${character.state.getFirstOtherConsumable()?.description}',
+                            child: Stack(
+                              alignment: AlignmentDirectional.center,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.all(8),
+                                  child: CircularProgressIndicator(
+                                    value: character.state.getOtherConsumablePercentage().toDouble() / 100,
+                                    color: character.state.getOtherConsumablePercentage().percentageColor(),
+                                  ),
+                                ),
+                                Text(
+                                  character.state.getFirstOtherConsumable()?.actualValue.toString() ?? '',
+                                  style: theme.textTheme.bodySmall!.copyWith(fontWeight: FontWeight.bold),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                         _cell(

@@ -34,6 +34,16 @@ class CharacterKi {
     );
   }
 
+  Map<String, dynamic> toJson() {
+    return {
+      'Acumulaciones': accumulationsPerAttribute.toJson(),
+      'Maximos': maximumPerAttribute.toJson(),
+      'Habilidades': skills,
+      'acumulacionMax': maximumAccumulation,
+      'acumulacionGenerica': genericAccumulation,
+    };
+  }
+
   @HiveField(0)
   late AttributesList accumulationsPerAttribute;
   @HiveField(1)

@@ -172,7 +172,7 @@ class ScreenCombatState {
 
     if (counter != null) result.add(counter);
 
-    Logger().d('counter ${counter?.text}');
+    // Logger().d('counter ${counter?.text}');
 
     final breakage = CombatRules.calculateBreakage(
       attacker: attack.character,

@@ -44,6 +44,25 @@ class CharacterProfile {
     );
   }
 
+  Map<String, dynamic> toJson() {
+    return {
+      'categoria': category,
+      'cansancio': fatigue,
+      'puntosDeVida': hitPoints,
+      'regeneracion': regeneration,
+      'nombre': name,
+      'nivel': level,
+      'clase': kind,
+      'movimiento': speed,
+      'imagen': image,
+      'nivelDePifia': fumbleLevel,
+      'natura': nature,
+      'uruboros': uroboros,
+      'acumulacionDeDanio': damageAccumulation,
+      'nivelDeCritico': critLevel,
+    };
+  }
+
   @HiveField(0)
   late int fatigue;
   @HiveField(1)
