@@ -1,9 +1,14 @@
 import 'dart:math';
 
+import 'package:amt/firebase_options.dart';
 import 'package:amt/generated/l10n.dart';
 import 'package:amt/models/models.dart';
+import 'package:amt/presentation/login/login_screen.dart';
 import 'package:amt/presentation/presentation.dart';
 import 'package:amt/utils/assets.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_ui_localizations/firebase_ui_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -39,6 +44,11 @@ void main() async {
 
   Logger().d('registered adapters');
 
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+
   runApp(const MyApp());
 }
 
@@ -65,45 +75,138 @@ class MyAppState extends State {
         ChangeNotifierProvider(create: (context) => NonPlayerCharactersState()),
       ],
       child: MaterialApp(
-        localizationsDelegates: const [
+        localizationsDelegates: [
           GlobalMaterialLocalizations.delegate,
           GlobalWidgetsLocalizations.delegate,
+          FirebaseUILocalizations.withDefaultOverrides(const EsLocalizations()),
           S.delegate,
         ],
-        title: 'Anima Master Toolkit v3',
+        title: 'Anima Master Toolkit v3 - Usuario Anonimo',
         theme: ThemeData(
           useMaterial3: true,
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepOrangeAccent),
         ),
-        home: const MyHomePage(),
+        home: const MainPage(),
       ),
     );
   }
 }
 
-class MyHomePage extends StatelessWidget {
-  const MyHomePage({super.key});
+class MainPage extends StatefulWidget {
+  const MainPage({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return const GeneratorPage();
-  }
+  State<MainPage> createState() => _MainPageState();
 }
 
-class GeneratorPage extends StatelessWidget {
-  const GeneratorPage({super.key});
+class _MainPageState extends State<MainPage> {
+  @override
+  void initState() {
+    super.initState();
+
+    FirebaseAuth.instance.authStateChanges().listen((User? user) {
+      setState(() {
+        this.user = user;
+      });
+    });
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (user == null) {
+        setState(() {
+          showWelcomeMessage = true;
+        });
+      }
+    });
+  }
+
+  User? user;
+  final repository = Uri.parse('https://github.com/aoalejo/animaMasterToolkit');
+  final excelToJsonRelease = Uri.parse('https://github.com/aoalejo/animaExcelToJson/releases');
+  bool showWelcomeMessage = false;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final screenSize = MediaQuery.of(context).size;
     final small = screenSize.width < 1120;
-    final appState = context.watch<CharactersPageState>();
     final nonCharactersState = context.watch<NonPlayerCharactersState>();
-    final repository = Uri.parse('https://github.com/aoalejo/animaMasterToolkit');
-    final excelToJsonRelease = Uri.parse('https://github.com/aoalejo/animaExcelToJson/releases');
+    final appState = context.watch<CharactersPageState>();
 
     return Scaffold(
+      drawer: Drawer(
+        child: Column(
+          children: [
+            Expanded(
+              child: ListView(
+                children: [
+                  ListTile(
+                    title: user == null ? const Text('Iniciar sesión') : const Text('Cerrar sesión'),
+                    leading: const Icon(
+                      Icons.login,
+                      color: Colors.black,
+                    ),
+                    onTap: () async {
+                      Navigator.pop(context);
+                      if (user != null) {
+                        await FirebaseAuth.instance.signOut();
+
+                        return;
+                      }
+
+                      await LoginScreen.showLoginBottomSheet(context);
+                    },
+                  ),
+                  ListTile(
+                    title: const Text('Ver el código fuente'),
+                    leading: SizedBox(
+                      width: 24,
+                      height: 24,
+                      child: Assets.github,
+                    ),
+                    onTap: () {
+                      launchUrl(repository, webOnlyWindowName: '_blank');
+                      Navigator.pop(context);
+                    },
+                  ),
+                  ListTile(
+                    title: const Text('Conversor Excel a JSON'),
+                    leading: SizedBox(
+                      width: 24,
+                      height: 24,
+                      child: Assets.excelConvert,
+                    ),
+                    onTap: () {
+                      launchUrl(excelToJsonRelease, webOnlyWindowName: '_blank');
+                      Navigator.pop(context);
+                    },
+                  ),
+                  ListTile(
+                    title: const Text('Añadir NPC'),
+                    leading: const Icon(
+                      Icons.group,
+                      color: Colors.black,
+                    ),
+                    onTap: () {
+                      Navigator.pop(context);
+                      NPCSelector.open(
+                        context,
+                        theme,
+                        characters: nonCharactersState.characters,
+                        onSelected: (npc) {
+                          appState.addCharacter(npc, isNpc: true);
+                        },
+                        onRemoveAll: appState.removeAllNPC,
+                        onAddNpc: nonCharactersState.getCharacters,
+                        onRemove: nonCharactersState.removeNPC,
+                      );
+                    },
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
       appBar: AppBar(
         toolbarHeight: 50,
         title: Row(
@@ -132,65 +235,96 @@ class GeneratorPage extends StatelessWidget {
               ),
             if (appState.sheetsLoadingPercentage != -1) const SizedBox.square(dimension: 8),
             if (appState.sheetsLoadingPercentage != -1) const Text('Cargando planillas...'),
-            if (appState.sheetsLoadingPercentage == -1) const Text('Anima Master Toolkit v3'),
+            if (appState.sheetsLoadingPercentage == -1) Text('Anima Master Toolkit v3 - ${user?.displayName ?? user?.email ?? 'Usuario Anonimo'}'),
           ],
         ),
         backgroundColor: theme.primaryColor,
         foregroundColor: theme.colorScheme.onPrimary,
-        actions: [
-          IconButton(
-            onPressed: () {
-              launchUrl(excelToJsonRelease, webOnlyWindowName: '_blank');
-            },
-            icon: SizedBox(
-              width: 24,
-              height: 24,
-              child: Assets.excelConvert,
-            ),
-          ),
-          IconButton(
-            onPressed: () {
-              launchUrl(repository, webOnlyWindowName: '_blank');
-            },
-            icon: SizedBox(
-              width: 24,
-              height: 24,
-              child: Assets.github,
-            ),
-          ),
-          IconButton(
-            onPressed: () {
-              NPCSelector.open(
-                context,
-                theme,
-                characters: nonCharactersState.characters,
-                onSelected: (npc) {
-                  appState.addCharacter(npc, isNpc: true);
-                },
-                onRemoveAll: appState.removeAllNPC,
-                onAddNpc: nonCharactersState.getCharacters,
-                onRemove: nonCharactersState.removeNPC,
-              );
-            },
-            icon: const Icon(Icons.group),
-          ),
-        ],
+        actions: const [],
       ),
-      body: Column(
+      body: Stack(
         children: [
-          Expanded(child: _content(theme, screenSize, small, appState.pageSelected, appState.isLoading, appState.message)),
-          if (small)
-            BottomNavigationBar(
-              items: const [
-                BottomNavigationBarItem(icon: Icon(Icons.list), label: 'Listado'),
-                BottomNavigationBarItem(icon: Icon(Icons.receipt), label: 'Detalle'),
-                BottomNavigationBarItem(icon: Icon(Icons.bolt), label: 'Combate'),
+          Column(
+            children: [
+              Expanded(child: _content(theme, screenSize, small, appState.pageSelected, appState.isLoading, appState.message)),
+              if (small)
+                BottomNavigationBar(
+                  items: const [
+                    BottomNavigationBarItem(icon: Icon(Icons.list), label: 'Listado'),
+                    BottomNavigationBarItem(icon: Icon(Icons.receipt), label: 'Detalle'),
+                    BottomNavigationBarItem(icon: Icon(Icons.bolt), label: 'Combate'),
+                  ],
+                  onTap: appState.updatePageSelected,
+                  currentIndex: appState.pageSelected,
+                )
+              else
+                Container(),
+            ],
+          ),
+          if (showWelcomeMessage)
+            Stack(
+              children: [
+                const SizedBox.expand(child: ColoredBox(color: Colors.black26)),
+                Center(
+                  child: SizedBox(
+                    width: max(screenSize.width / 3, 300),
+                    height: max(screenSize.width / 4, 300),
+                    child: Container(
+                      decoration: const BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(16)), color: Colors.white),
+                      child: Padding(
+                        padding: const EdgeInsets.all(16),
+                        child: Column(
+                          children: [
+                            const Text(
+                              '¡Bienvenido a Anima Master Toolkit!',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontSize: 24,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                            const Text(
+                              'Para guardar las partidas es necesario* iniciar sesión\n En caso de no requerir esta función puedes usarla de forma anonima',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                            TextButton(
+                              onPressed: () {
+                                setState(() {
+                                  showWelcomeMessage = false;
+                                });
+                                LoginScreen.showLoginBottomSheet(context);
+                              },
+                              child: const Text('Iniciar sesión'),
+                            ),
+                            const Text(
+                              '*El sistema soportaba guardado local, pero fueron reportadas fallas en la persistencia de datos, por lo que la solución fue directamente implementar el guardado en la nube, que es algo que tenía pendiente hace rato',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontSize: 12,
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                            const Spacer(),
+                            TextButton(
+                              onPressed: () {
+                                setState(() {
+                                  showWelcomeMessage = false;
+                                });
+                              },
+                              child: const Text('Cerrar'),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
               ],
-              onTap: appState.updatePageSelected,
-              currentIndex: appState.pageSelected,
-            )
-          else
-            Container(),
+            ),
         ],
       ),
     );

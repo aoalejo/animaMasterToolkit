@@ -1,13 +1,37 @@
 {
   "hosting": {
     "source": ".",
-    "ignore": [
-      "firebase.json",
-      "**/.*",
-      "**/node_modules/**"
-    ],
-    "frameworksBackend": {
-      "region": "us-east1"
+    "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+    "frameworksBackend": { "region": "us-east1" }
+  },
+  "flutter": {
+    "platforms": {
+      "android": {
+        "default": {
+          "projectId": "amt-v3",
+          "appId": "1:932283109096:android:4fca1ca76dc6e1f362035d",
+          "fileOutput": "android/app/google-services.json"
+        }
+      },
+      "macos": {
+        "default": {
+          "projectId": "amt-v3",
+          "appId": "1:932283109096:ios:5b64508c6399f71f62035d",
+          "uploadDebugSymbols": false,
+          "fileOutput": "macos/Runner/GoogleService-Info.plist"
+        }
+      },
+      "dart": {
+        "lib/firebase_options.dart": {
+          "projectId": "amt-v3",
+          "configurations": {
+            "android": "1:932283109096:android:4fca1ca76dc6e1f362035d",
+            "macos": "1:932283109096:ios:5b64508c6399f71f62035d",
+            "web": "1:932283109096:web:88e6abe95100fb3462035d",
+            "windows": "1:932283109096:web:86e3bc98f701a60e62035d"
+          }
+        }
+      }
     }
   }
 }
