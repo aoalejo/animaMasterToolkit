@@ -41,7 +41,7 @@ class ModifiersCard extends StatelessWidget {
                   index: index,
                   removeButton: ItemTagsRemoveButton(
                     icon: Icons.delete,
-                    backgroundColor: theme.colorScheme.background,
+                    backgroundColor: theme.colorScheme.surface,
                     color: theme.colorScheme.primary,
                     onRemoved: () {
                       onSelected?.call(modifiers[index]);

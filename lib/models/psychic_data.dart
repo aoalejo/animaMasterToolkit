@@ -24,6 +24,16 @@ class PsychicData {
     );
   }
 
+  Map<String, dynamic> toJson() {
+    return {
+      'cvsLibres': freeCvs,
+      'Disciplinas': disciplines,
+      'Patrones': patterns,
+      'Poderes': powers,
+      'Innatos': innate,
+    };
+  }
+
   @HiveField(0)
   int freeCvs;
   @HiveField(1)

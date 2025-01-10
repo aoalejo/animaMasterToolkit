@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:amt/lib.dart';
 import 'package:amt/models/character_model/character.dart';
 import 'package:hive/hive.dart';
 
@@ -103,6 +104,24 @@ class Roll {
   late String description;
   @HiveField(2)
   late List<int> rolls;
+
+  Map<String, dynamic> toJson() {
+    return {
+      'roll': roll,
+      'description': description,
+      'rolls': rolls,
+    };
+  }
+
+  static Roll? fromJson(Map<String, dynamic>? json) {
+    if (json == null) return null;
+
+    return Roll(
+      roll: JsonUtils.integer(json['roll'], 0),
+      description: JsonUtils.string(json['description'], ''),
+      rolls: json.getList('rolls').map((e) => e as int).toList(),
+    );
+  }
 
   String getRollsAsString() {
     var output = '';

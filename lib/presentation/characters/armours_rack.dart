@@ -1,3 +1,4 @@
+import 'package:amt/generated/l10n.dart';
 import 'package:amt/models/armour.dart';
 import 'package:amt/models/armour_data.dart';
 import 'package:amt/presentation/components/components.dart';
@@ -28,14 +29,14 @@ class ArmoursRack extends StatelessWidget {
             return StatefulBuilder(
               builder: (BuildContext context, StateSetter setState) {
                 return AMTBottomSheet(
-                  title: const Text('Modificar Armadura'),
+                  title: Text(S.of(context).modifyArmor),
                   children: [
                     const SizedBox(
                       height: 16,
                     ),
                     AMTTextFormField(
-                      label: 'Nombre',
-                      text: armour.armours.firstOrNull?.name ?? 'Sin armadura',
+                      label: S.of(context).name,
+                      text: armour.armours.firstOrNull?.name ?? S.of(context).withoutArmour,
                       onChanged: (value) {
                         if (armour.armours.firstOrNull == null) {
                           armour.armours.add(Armour());
@@ -51,7 +52,7 @@ class ArmoursRack extends StatelessWidget {
                       children: [
                         Flexible(
                           child: AMTTextFormField(
-                            label: 'Filo',
+                            label: S.of(context).damageFIL,
                             text: armour.calculatedArmour.fil.toString(),
                             onChanged: (value) {
                               armour.calculatedArmour.fil = _parseInput(value);
@@ -64,7 +65,7 @@ class ArmoursRack extends StatelessWidget {
                         ),
                         Flexible(
                           child: AMTTextFormField(
-                            label: 'Penetrante',
+                            label: S.of(context).damagePEN,
                             text: armour.calculatedArmour.pen.toString(),
                             onChanged: (value) {
                               armour.calculatedArmour.pen = _parseInput(value);
@@ -77,7 +78,7 @@ class ArmoursRack extends StatelessWidget {
                         ),
                         Flexible(
                           child: AMTTextFormField(
-                            label: 'Contundente',
+                            label: S.of(context).damageCON,
                             text: armour.calculatedArmour.con.toString(),
                             onChanged: (value) {
                               armour.calculatedArmour.con = _parseInput(value);
@@ -94,7 +95,7 @@ class ArmoursRack extends StatelessWidget {
                       children: [
                         Flexible(
                           child: AMTTextFormField(
-                            label: 'Frio',
+                            label: S.of(context).damageFRI,
                             text: armour.calculatedArmour.fri.toString(),
                             onChanged: (value) {
                               armour.calculatedArmour.fri = _parseInput(value);
@@ -107,7 +108,7 @@ class ArmoursRack extends StatelessWidget {
                         ),
                         Flexible(
                           child: AMTTextFormField(
-                            label: 'Calor',
+                            label: S.of(context).damageCAL,
                             text: armour.calculatedArmour.cal.toString(),
                             onChanged: (value) {
                               armour.calculatedArmour.cal = _parseInput(value);
@@ -120,7 +121,7 @@ class ArmoursRack extends StatelessWidget {
                         ),
                         Flexible(
                           child: AMTTextFormField(
-                            label: 'Electricidad',
+                            label: S.of(context).damageELE,
                             text: armour.calculatedArmour.ele.toString(),
                             onChanged: (value) {
                               armour.calculatedArmour.ele = _parseInput(value);
@@ -134,7 +135,7 @@ class ArmoursRack extends StatelessWidget {
                       height: 16,
                     ),
                     AMTTextFormField(
-                      label: 'Energía',
+                      label: S.of(context).damageENE,
                       text: armour.calculatedArmour.ene.toString(),
                       onChanged: (value) {
                         armour.calculatedArmour.ene = _parseInput(value);
@@ -152,8 +153,8 @@ class ArmoursRack extends StatelessWidget {
                             setState(() => armour.calculatedArmour.changeForAll(add: -1));
                             onEdit(armour);
                           },
-                          child: const Row(
-                            children: [Icon(Icons.remove), Text('Eliminar 1 TA a todo')],
+                          child: Row(
+                            children: [const Icon(Icons.remove), Text(S.of(context).removeTAtoAll)],
                           ),
                         ),
                         TextButton(
@@ -162,8 +163,8 @@ class ArmoursRack extends StatelessWidget {
 
                             onEdit(armour);
                           },
-                          child: const Row(
-                            children: [Icon(Icons.remove), Text('Añadir 1 TA a todo')],
+                          child: Row(
+                            children: [const Icon(Icons.remove), Text(S.of(context).addTAtoAll)],
                           ),
                         ),
                       ],
@@ -171,7 +172,7 @@ class ArmoursRack extends StatelessWidget {
                     const SizedBox(
                       height: 16,
                     ),
-                    const Text('Reemplazar por otra:'),
+                    Text(S.of(context).replaceForAnother),
                     for (final preset in Armours.getPresetArmours())
                       _armourLister(theme, preset, (newArmour) {
                         setState(() {
@@ -204,7 +205,7 @@ class ArmoursRack extends StatelessWidget {
               children: [
                 Flexible(
                   child: Text(
-                    armour.armours.firstOrNull?.name ?? 'Sin armadura',
+                    armour.armours.firstOrNull?.name ?? S.of(context).withoutArmour,
                     style: style,
                     overflow: TextOverflow.ellipsis,
                   ),

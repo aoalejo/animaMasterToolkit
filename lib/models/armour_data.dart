@@ -34,6 +34,18 @@ class ArmourData {
     );
   }
 
+  Map<String, dynamic> toJson() {
+    return {
+      'restriccionMov': movementRestriction,
+      'penNatural': naturalPenalty,
+      'requisito': requirement,
+      'penAccionFisica': physicalPenalty,
+      'penNaturalFinal': finalNaturalPenalty,
+      'armaduraTotal': calculatedArmour.toJson(),
+      'armaduras': armours.map((e) => e.toJson()).toList(),
+    };
+  }
+
   @HiveField(0)
   int? movementRestriction;
   @HiveField(1)

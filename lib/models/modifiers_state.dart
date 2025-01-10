@@ -1,6 +1,7 @@
 import 'package:amt/models/character_model/status_modifier.dart';
 import 'package:amt/models/enums.dart';
 import 'package:amt/resources/modifiers.dart';
+import 'package:amt/utils/json_utils.dart';
 import 'package:amt/utils/key_value.dart';
 import 'package:hive/hive.dart';
 
@@ -13,6 +14,18 @@ class ModifiersState {
 
   List<StatusModifier> getAll() {
     return _modifiers;
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'modifiers': _modifiers.map((e) => e.toJson()).toList(),
+    };
+  }
+
+  static ModifiersState? fromJson(Map<String, dynamic>? json) {
+    if (json == null) return null;
+
+    return ModifiersState()..setAll(json.getList('modifiers').map(StatusModifier.fromJson).nonNulls.toList());
   }
 
   // ignore: use_setters_to_change_properties

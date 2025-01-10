@@ -19,6 +19,13 @@ class CombatData {
     );
   }
 
+  Map<String, dynamic> toJson() {
+    return {
+      'armadura': armour.toJson(),
+      'armas': weapons.map((e) => e.toJson()).toList(),
+    };
+  }
+
   @HiveField(0)
   late List<Weapon> weapons;
   @HiveField(1)

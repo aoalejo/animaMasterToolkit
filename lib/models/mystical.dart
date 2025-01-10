@@ -31,6 +31,19 @@ class Mystical {
     );
   }
 
+  Map<String, dynamic> toJson() {
+    return {
+      'regen': zeonRegeneration,
+      'act': act,
+      'zeon': zeon,
+      'Vias': paths,
+      'SubVias': subPaths,
+      'Metamagia': metamagic,
+      'Conjuros': spellsMaintained,
+      'Libres': spellsPurchased,
+    };
+  }
+
   @HiveField(0)
   int zeonRegeneration;
   @HiveField(1)

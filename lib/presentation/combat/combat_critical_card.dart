@@ -17,9 +17,6 @@ class CombatCriticalCard extends StatelessWidget {
     final combatState = appState.combatState;
     final criticalResult = combatState.criticalResult();
 
-    final attacker = combatState.attack.character;
-    final defender = combatState.defense.character;
-
     final criticalResultResult = combatState.criticalResultWithReduction(criticalResult: criticalResult.result);
 
     return CustomCombatCard(

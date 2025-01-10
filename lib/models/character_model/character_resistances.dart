@@ -51,6 +51,17 @@ class CharacterResistances {
   @HiveField(5)
   late int physicResistance;
 
+  Map<String, dynamic> toJson() {
+    return {
+      'Pres. Base': presence,
+      'RF': physicalResistance,
+      'RE': diseasesResistance,
+      'RV': poisonResistance,
+      'RM': magicalResistance,
+      'RP': physicResistance,
+    };
+  }
+
   void editResistance(KeyValue element) {
     switch (element.key) {
       case 'Pres':

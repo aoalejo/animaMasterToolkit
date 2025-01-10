@@ -14,7 +14,7 @@ class CustomCombatCard extends StatelessWidget {
 
     return Card(
       clipBehavior: Clip.hardEdge,
-      color: theme.colorScheme.background,
+      color: theme.colorScheme.surface,
       elevation: 12,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,

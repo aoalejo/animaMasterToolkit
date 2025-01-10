@@ -179,9 +179,9 @@ class WeaponsRack extends StatelessWidget {
                       enabled: !(weapon.variableDamage ?? false),
                       onChanged: (value) {
                         setState(
-                          () => {
-                            weapon.damage = _parseInput(value),
-                            onEdit(weapon),
+                          () {
+                            weapon.damage = _parseInput(value);
+                            onEdit(weapon);
                           },
                         );
                       },
@@ -195,10 +195,11 @@ class WeaponsRack extends StatelessWidget {
                     value: weapon.variableDamage ?? false,
                     onChanged: (newValue) {
                       setState(
-                        () => {
-                          if (newValue) {weapon.damage = 0},
-                          weapon.variableDamage = newValue,
-                          onEdit(weapon),
+                        () {
+                          if (newValue) weapon.damage = 0;
+
+                          weapon.variableDamage = newValue;
+                          onEdit(weapon);
                         },
                       );
                     },
@@ -259,9 +260,9 @@ class WeaponsRack extends StatelessWidget {
                       ],
                       onPressed: (index) => {
                         setState(
-                          () => {
-                            weapon.principalDamage = DamageTypes.values[index],
-                            onEdit(weapon),
+                          () {
+                            weapon.principalDamage = DamageTypes.values[index];
+                            onEdit(weapon);
                           },
                         ),
                       },
@@ -299,9 +300,9 @@ class WeaponsRack extends StatelessWidget {
                       ],
                       onPressed: (index) => {
                         setState(
-                          () => {
-                            weapon.secondaryDamage = DamageTypes.values[index],
-                            onEdit(weapon),
+                          () {
+                            weapon.secondaryDamage = DamageTypes.values[index];
+                            onEdit(weapon);
                           },
                         ),
                       },
@@ -333,9 +334,9 @@ class WeaponsRack extends StatelessWidget {
                       ],
                       onPressed: (index) => {
                         setState(
-                          () => {
-                            weapon.defenseType = DefenseType.values[index],
-                            onEdit(weapon),
+                          () {
+                            weapon.defenseType = DefenseType.values[index];
+                            onEdit(weapon);
                           },
                         ),
                       },

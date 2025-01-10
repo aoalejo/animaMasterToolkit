@@ -40,6 +40,7 @@ class Assets {
   static final Widget github = SvgPicture.asset(
     'assets/github.svg',
     semanticsLabel: 'github icon',
+    colorFilter: const ColorFilter.mode(Colors.black, BlendMode.srcIn),
   );
 
   static final Widget uprising = SvgPicture.asset(
@@ -54,6 +55,7 @@ class Assets {
 
   static final Widget excelConvert = Image.asset(
     'assets/convert.png',
+    color: Colors.black,
   );
 
   static Image surprised(Color color) => Image.asset(
