@@ -50,130 +50,130 @@ class S {
     return Localizations.of<S>(context, S);
   }
 
-  /// `Modificar Armadura`
+  /// `Modify Armour`
   String get modifyArmor {
     return Intl.message(
-      'Modificar Armadura',
+      'Modify Armour',
       name: 'modifyArmor',
       desc: '',
       args: [],
     );
   }
 
-  /// `Nombre`
+  /// `Name`
   String get name {
     return Intl.message(
-      'Nombre',
+      'Name',
       name: 'name',
       desc: '',
       args: [],
     );
   }
 
-  /// `Sin armadura`
+  /// `Without armour`
   String get withoutArmour {
     return Intl.message(
-      'Sin armadura',
+      'Without armour',
       name: 'withoutArmour',
       desc: '',
       args: [],
     );
   }
 
-  /// `Filo`
+  /// `Cutting`
   String get damageFIL {
     return Intl.message(
-      'Filo',
+      'Cutting',
       name: 'damageFIL',
       desc: '',
       args: [],
     );
   }
 
-  /// `Penetrante`
+  /// `Piercing`
   String get damagePEN {
     return Intl.message(
-      'Penetrante',
+      'Piercing',
       name: 'damagePEN',
       desc: '',
       args: [],
     );
   }
 
-  /// `Contundente`
+  /// `Blunt`
   String get damageCON {
     return Intl.message(
-      'Contundente',
+      'Blunt',
       name: 'damageCON',
       desc: '',
       args: [],
     );
   }
 
-  /// `Frio`
+  /// `Cold`
   String get damageFRI {
     return Intl.message(
-      'Frio',
+      'Cold',
       name: 'damageFRI',
       desc: '',
       args: [],
     );
   }
 
-  /// `Calor`
+  /// `Heat`
   String get damageCAL {
     return Intl.message(
-      'Calor',
+      'Heat',
       name: 'damageCAL',
       desc: '',
       args: [],
     );
   }
 
-  /// `Electricidad`
+  /// `Electricity`
   String get damageELE {
     return Intl.message(
-      'Electricidad',
+      'Electricity',
       name: 'damageELE',
       desc: '',
       args: [],
     );
   }
 
-  /// `Energía`
+  /// `Energy`
   String get damageENE {
     return Intl.message(
-      'Energía',
+      'Energy',
       name: 'damageENE',
       desc: '',
       args: [],
     );
   }
 
-  /// `Eliminar 1 TA a todo`
+  /// `Remove 1 TA to all`
   String get removeTAtoAll {
     return Intl.message(
-      'Eliminar 1 TA a todo',
+      'Remove 1 TA to all',
       name: 'removeTAtoAll',
       desc: '',
       args: [],
     );
   }
 
-  /// `Añadir 1 TA a todo`
+  /// `Add 1 TA to all`
   String get addTAtoAll {
     return Intl.message(
-      'Añadir 1 TA a todo',
+      'Add 1 TA to all',
       name: 'addTAtoAll',
       desc: '',
       args: [],
     );
   }
 
-  /// `Reemplazar por otra:`
+  /// `Replace for another:`
   String get replaceForAnother {
     return Intl.message(
-      'Reemplazar por otra:',
+      'Replace for another:',
       name: 'replaceForAnother',
       desc: '',
       args: [],
@@ -187,6 +187,7 @@ class AppLocalizationDelegate extends LocalizationsDelegate<S> {
   List<Locale> get supportedLocales {
     return const <Locale>[
       Locale.fromSubtags(languageCode: 'en'),
+      Locale.fromSubtags(languageCode: 'es'),
     ];
   }
 

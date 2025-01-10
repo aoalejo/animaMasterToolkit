@@ -22,22 +22,20 @@ class MessageLookup extends MessageLookupByLibrary {
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
-        "addTAtoAll":
-            MessageLookupByLibrary.simpleMessage("Añadir 1 TA a todo"),
-        "damageCAL": MessageLookupByLibrary.simpleMessage("Calor"),
-        "damageCON": MessageLookupByLibrary.simpleMessage("Contundente"),
-        "damageELE": MessageLookupByLibrary.simpleMessage("Electricidad"),
-        "damageENE": MessageLookupByLibrary.simpleMessage("Energía"),
-        "damageFIL": MessageLookupByLibrary.simpleMessage("Filo"),
-        "damageFRI": MessageLookupByLibrary.simpleMessage("Frio"),
-        "damagePEN": MessageLookupByLibrary.simpleMessage("Penetrante"),
-        "modifyArmor":
-            MessageLookupByLibrary.simpleMessage("Modificar Armadura"),
-        "name": MessageLookupByLibrary.simpleMessage("Nombre"),
+        "addTAtoAll": MessageLookupByLibrary.simpleMessage("Add 1 TA to all"),
+        "damageCAL": MessageLookupByLibrary.simpleMessage("Heat"),
+        "damageCON": MessageLookupByLibrary.simpleMessage("Blunt"),
+        "damageELE": MessageLookupByLibrary.simpleMessage("Electricity"),
+        "damageENE": MessageLookupByLibrary.simpleMessage("Energy"),
+        "damageFIL": MessageLookupByLibrary.simpleMessage("Cutting"),
+        "damageFRI": MessageLookupByLibrary.simpleMessage("Cold"),
+        "damagePEN": MessageLookupByLibrary.simpleMessage("Piercing"),
+        "modifyArmor": MessageLookupByLibrary.simpleMessage("Modify Armour"),
+        "name": MessageLookupByLibrary.simpleMessage("Name"),
         "removeTAtoAll":
-            MessageLookupByLibrary.simpleMessage("Eliminar 1 TA a todo"),
+            MessageLookupByLibrary.simpleMessage("Remove 1 TA to all"),
         "replaceForAnother":
-            MessageLookupByLibrary.simpleMessage("Reemplazar por otra:"),
-        "withoutArmour": MessageLookupByLibrary.simpleMessage("Sin armadura")
+            MessageLookupByLibrary.simpleMessage("Replace for another:"),
+        "withoutArmour": MessageLookupByLibrary.simpleMessage("Without armour")
       };
 }

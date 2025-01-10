@@ -4,7 +4,6 @@ import 'package:amt/models/modifiers_state.dart';
 import 'package:amt/models/rules/rules.dart';
 import 'package:amt/resources/modifiers.dart';
 import 'package:amt/utils/explained_text.dart';
-import 'package:logger/web.dart';
 
 class ScreenCombatStateAttack {
   String roll = '';

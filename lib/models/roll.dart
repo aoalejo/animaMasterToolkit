@@ -1,7 +1,6 @@
 import 'dart:math';
 
 import 'package:amt/lib.dart';
-import 'package:amt/models/character_model/character.dart';
 import 'package:hive/hive.dart';
 
 part 'roll.g.dart';

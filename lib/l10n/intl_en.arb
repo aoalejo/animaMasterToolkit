@@ -1,15 +1,15 @@
 {
-  "modifyArmor": "Modificar Armadura",
-  "name": "Nombre",
-  "withoutArmour": "Sin armadura",
-  "damageFIL": "Filo",
-  "damagePEN": "Penetrante",
-  "damageCON": "Contundente",
-  "damageFRI": "Frio",
-  "damageCAL": "Calor",
-  "damageELE": "Electricidad",
-  "damageENE": "Energía",
-  "removeTAtoAll": "Eliminar 1 TA a todo",
-  "addTAtoAll": "Añadir 1 TA a todo",
-  "replaceForAnother": "Reemplazar por otra:"
+  "modifyArmor": "Modify Armour",
+  "name": "Name",
+  "withoutArmour": "Without armour",
+  "damageFIL": "Cutting",
+  "damagePEN": "Piercing",
+  "damageCON": "Blunt",
+  "damageFRI": "Cold",
+  "damageCAL": "Heat",
+  "damageELE": "Electricity",
+  "damageENE": "Energy",
+  "removeTAtoAll": "Remove 1 TA to all",
+  "addTAtoAll": "Add 1 TA to all",
+  "replaceForAnother": "Replace for another:"
 }
