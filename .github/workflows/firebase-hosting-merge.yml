@@ -1,6 +1,6 @@
 name: Deploy to Firebase Hosting on merge
 
-'on':
+"on":
   push:
     branches:
       - main
@@ -21,7 +21,7 @@ jobs:
         uses: subosito/flutter-action@v2
         with:
           channel: "stable"
-          flutter-version: 3.16.2
+          flutter-version: 3.24.3
       - name: 📦 Install Dependencies
         run: |
           flutter pub global activate very_good_cli
