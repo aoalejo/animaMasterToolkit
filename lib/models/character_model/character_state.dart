@@ -99,7 +99,11 @@ class CharacterState {
 
     if (other == null) return 100;
 
-    return ((other.actualValue / other.maxValue) * 100).toInt();
+    try {
+      return ((other.actualValue / other.maxValue) * 100).toInt();
+    } catch (e) {
+      return 100;
+    }
   }
 
   ConsumableState? getFirstOtherConsumable() {
