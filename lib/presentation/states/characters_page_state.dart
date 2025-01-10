@@ -14,8 +14,36 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:logger/web.dart';
 import 'package:uuid/uuid.dart';
+
+class SafeBox {
+  SafeBox() {
+    openBox('characters');
+  }
+
+  Box<Character>? _box;
+
+  Future<void> openBox(String name) async {
+    try {
+      _box = await Hive.openBox(name);
+    } catch (e) {
+      await Hive.deleteBoxFromDisk(name);
+      _box = await Hive.openBox(name);
+    }
+  }
+
+  void add(Character character) async {
+    try {
+      await _box?.add(character);
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Iterable<Character> get values {
+    return _box?.values.cast<Character>() ?? [];
+  }
+}
 
 class CharactersPageState extends ChangeNotifier {
   CharactersPageState() {
@@ -33,7 +61,7 @@ class CharactersPageState extends ChangeNotifier {
 
   Map<String, bool> explanationsExpanded = {};
 
-  late Box<Character> _box;
+  late SafeBox _box = SafeBox();
 
   void stepSheetLoading() {
     if (sheetsLoadingPercentage > 0.9) {
@@ -66,14 +94,10 @@ class CharactersPageState extends ChangeNotifier {
 
     characters = charactersJson;
 
-    await Hive.deleteBoxFromDisk('characters');
-    _box = await Hive.openBox('characters');
-
     for (final element in characters) {
-      await _box.add(element);
+      _box.add(element);
+      notifyListeners();
     }
-
-    notifyListeners();
   }
 
   void showLoading({String? message}) {
@@ -89,14 +113,8 @@ class CharactersPageState extends ChangeNotifier {
   }
 
   Future<void> initAsync() async {
-    try {
-      _box = await Hive.openBox('characters');
-      characters.addAll(_box.values.toList());
-      notifyListeners();
-    } catch (e) {
-      await Hive.deleteBoxFromDisk('characters');
-      _box = await Hive.openBox('characters');
-    }
+    characters.addAll(_box.values.toList());
+    notifyListeners();
   }
 
   void toggleExplanationStatus(String name) {
@@ -272,7 +290,7 @@ class CharactersPageState extends ChangeNotifier {
       try {
         character.save();
       } catch (e) {
-        Logger().e(e);
+        print(e);
       }
     }
     notifyListeners();
@@ -289,12 +307,12 @@ class CharactersPageState extends ChangeNotifier {
     try {
       character.save();
     } catch (e) {
-      Logger().e(e);
+      print(e);
     }
   }
 
   Future<void> parseCharacters(FilePickerResult? filesPicked, void Function(double) onUpdated) async {
-    Logger().d('result: ${filesPicked?.count}');
+    print(e);
 
     try {
       if (filesPicked != null) {
@@ -325,7 +343,7 @@ class CharactersPageState extends ChangeNotifier {
 
           for (final file in files) {
             onUpdated(counter / total);
-            Logger().d('Progress: $counter / $total');
+            print('Progress: $counter / $total');
 
             final extension = file.path.split('.').last;
             if (extension == 'json') {
@@ -345,7 +363,7 @@ class CharactersPageState extends ChangeNotifier {
         errorMessage = '$errorMessage Error leyendo archivos';
       }
     } catch (e) {
-      Logger().e(e);
+      print(e);
       errorMessage = '$errorMessage $e';
     }
     onUpdated(-1);
