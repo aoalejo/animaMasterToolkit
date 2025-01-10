@@ -8,7 +8,7 @@ import 'package:amt/models/models.dart';
 import 'package:amt/presentation/login/login_screen.dart';
 import 'package:amt/presentation/presentation.dart';
 import 'package:amt/utils/assets.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:amt/utils/cloud_firestore_sync.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_ui_localizations/firebase_ui_localizations.dart';
@@ -104,6 +104,12 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
+  CloudSync database = CloudFirestoreSync();
+  User? user;
+  final repository = Uri.parse('https://github.com/aoalejo/animaMasterToolkit');
+  final excelToJsonRelease = Uri.parse('https://github.com/aoalejo/animaExcelToJson/releases');
+  bool showWelcomeMessage = false;
+
   @override
   void dispose() {
     // Optionally clean up if necessary
@@ -116,31 +122,19 @@ class _MainPageState extends State<MainPage> {
     final snapshot = appState.getJsonSnapshot();
 
     appState.showLoading(message: 'Guardando...#Sincronizando partida en la nube');
-    lastSnapshotSavedTime = DateTime.now();
-
-    lastSnapshotUploaded = snapshot;
-
-    final db = FirebaseFirestore.instance;
-
-    await db.collection('campaigns').doc(user!.uid).set(snapshot);
-
+    await database.saveSnapshot(snapshot, '1');
     appState.hideLoading();
   }
 
   Future<void> loadState() async {
     final appState = Provider.of<CharactersPageState>(context, listen: false);
-
-    // ignore: cascade_invocations
     appState.showLoading(message: 'Cargando...#Sincronizando partida en la nube');
 
-    final db = FirebaseFirestore.instance;
-    final snapshot = await db.collection('campaigns').doc(user!.uid).get();
+    final snapshot = await database.getSnapshot('1');
 
-    if (snapshot.exists && snapshot.data() != null) {
-      appState.loadJsonSnapshot(snapshot.data()!);
+    if (snapshot != null) {
+      appState.loadJsonSnapshot(snapshot);
     }
-
-    lastSnapshotUploaded = appState.getJsonSnapshot();
 
     appState.hideLoading();
   }
@@ -151,7 +145,8 @@ class _MainPageState extends State<MainPage> {
 
     if (kIsWeb) {
       web.window.onBeforeUnload.listen((e) async {
-        if (user != null && lastSnapshot.toString().hashCode != lastSnapshotUploaded.toString().hashCode) {
+        final appState = Provider.of<CharactersPageState>(context, listen: false);
+        if (user != null && !database.snapshotIsUploaded(appState.getJsonSnapshot())) {
           (e as web.BeforeUnloadEvent).returnValue = 'Tienes cambios sin guardar';
         }
       });
@@ -176,29 +171,16 @@ class _MainPageState extends State<MainPage> {
         await loadState();
       }
     });
+
     // Autosave every five minutes if no changes detected:
     Timer.periodic(const Duration(minutes: 5), (timer) async {
       final appState = Provider.of<CharactersPageState>(context, listen: false);
-
       final snapshot = appState.getJsonSnapshot();
-
-      if (snapshot.toString().hashCode != lastSnapshotUploaded.toString().hashCode &&
-          snapshot.toString().hashCode == lastSnapshot.toString().hashCode) {
-        await saveState();
+      if (database.snapshotNeedsToBeUploaded(snapshot)) {
+        saveState();
       }
-
-      lastSnapshot = snapshot;
     });
   }
-
-  User? user;
-  final repository = Uri.parse('https://github.com/aoalejo/animaMasterToolkit');
-  final excelToJsonRelease = Uri.parse('https://github.com/aoalejo/animaExcelToJson/releases');
-  bool showWelcomeMessage = false;
-
-  Map<String, dynamic> lastSnapshotUploaded = {};
-  Map<String, dynamic> lastSnapshot = {};
-  DateTime? lastSnapshotSavedTime;
 
   @override
   Widget build(BuildContext context) {
@@ -338,7 +320,7 @@ class _MainPageState extends State<MainPage> {
             if (appState.sheetsLoadingPercentage == -1) Text('Anima Master Toolkit v3 - ${user?.displayName ?? user?.email ?? 'Usuario Anonimo'}'),
             const Spacer(),
             // Show time of last save is available:
-            if (lastSnapshotSavedTime != null) Text('Ultimo guardado: ${lastSnapshotSavedTime!.hour}:${lastSnapshotSavedTime!.minute}'),
+            if (database.lastUpdatedTime != null) Text('Ultimo guardado: ${database.lastUpdatedTime!.hour}:${database.lastUpdatedTime!.minute}'),
           ],
         ),
         backgroundColor: theme.primaryColor,
@@ -376,52 +358,85 @@ class _MainPageState extends State<MainPage> {
                       decoration: const BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(16)), color: Colors.white),
                       child: Padding(
                         padding: const EdgeInsets.all(16),
-                        child: Column(
-                          children: [
-                            const Text(
-                              '¡Bienvenido a Anima Master Toolkit!',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                fontSize: 24,
-                                fontWeight: FontWeight.w700,
+                        child: Column(children: [
+                          const Text(
+                            '¡Bienvenido a Anima Master Toolkit!',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontSize: 24,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                          Expanded(
+                            child: SingleChildScrollView(
+                              child: Column(
+                                children: [
+                                  const Text(
+                                    '''
+Para acceder a la funcionalidad de guardado de partidas, es necesario iniciar sesión en el sistema. Esto garantiza que tus datos estén seguros y disponibles en cualquier dispositivo que utilices.
+                                
+Si no deseas utilizar esta función, puedes acceder al sistema de forma anónima. Sin embargo, debes tener en cuenta que no podrás guardar tus avances de manera persistente, ya que esta opción está disponible exclusivamente para los usuarios registrados.''',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w400,
+                                    ),
+                                  ),
+                                  const Text(
+                                    '''
+*El sistema anteriormente soportaba el guardado de partidas de forma local. Sin embargo, se identificaron problemas de persistencia en esta modalidad, lo que generaba riesgos para la integridad de los datos almacenados.
+
+Para abordar esta situación, se implementó el guardado en la nube como solución principal. Este enfoque no solo resuelve los problemas previos, sino que también permite que los usuarios accedan a sus datos desde múltiples dispositivos de forma segura y confiable.
+
+Es importante señalar que el sistema de guardado local anterior no ha sido eliminado. Si esta funcionalidad te estaba funcionando correctamente, debería seguir haciéndolo. Sin embargo, se recomienda encarecidamente utilizar el guardado en la nube para garantizar la seguridad de tus partidas y minimizar riesgos de pérdida de datos.
+
+¿Qué debo hacer si el guardado local aún funciona bien para mí?
+Puedes seguir usándolo. Sin embargo, es recomendable hacer una copia de seguridad en la nube para evitar problemas futuros.
+
+¿Qué ocurre si no tengo conexión a internet?
+El sistema debería permitirte usarlo de manera local y sincronizar tus datos en la nube cuando recuperes la conexión.
+
+¿Hay algún costo asociado al guardado en la nube?
+No. El guardado en la nube es una funcionalidad gratuita para todos los usuarios registrados en el sistema. No se requiere ningún pago adicional para acceder a esta característica.
+''',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w400,
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
-                            const Text(
-                              'Para guardar las partidas es necesario* iniciar sesión\n En caso de no requerir esta función puedes usarla de forma anonima',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w400,
+                          ),
+                          Row(
+                            children: [
+                              Expanded(
+                                child: TextButton(
+                                  isSemanticButton: true,
+                                  onPressed: () {
+                                    setState(() {
+                                      showWelcomeMessage = false;
+                                    });
+                                    LoginScreen.showLoginBottomSheet(context);
+                                  },
+                                  child: const Text('Iniciar sesión'),
+                                ),
                               ),
-                            ),
-                            TextButton(
-                              onPressed: () {
-                                setState(() {
-                                  showWelcomeMessage = false;
-                                });
-                                LoginScreen.showLoginBottomSheet(context);
-                              },
-                              child: const Text('Iniciar sesión'),
-                            ),
-                            const Spacer(),
-                            const Text(
-                              '*El sistema soportaba guardado local, pero fueron reportadas fallas en la persistencia de datos, por lo que la solución fue directamente implementar el guardado en la nube, que es algo que tenía pendiente hace rato. \n\nNo eliminé el sistema de guardado local anterior, por lo que si te venía funcionando bien, debería seguir haciendolo, aunque recomiendo guardar las partidas en la nube para evitar problemas.',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                fontSize: 12,
-                                fontWeight: FontWeight.w400,
+                              const Spacer(),
+                              Expanded(
+                                child: TextButton(
+                                  onPressed: () {
+                                    setState(() {
+                                      showWelcomeMessage = false;
+                                    });
+                                  },
+                                  child: const Text('Cerrar'),
+                                ),
                               ),
-                            ),
-                            TextButton(
-                              onPressed: () {
-                                setState(() {
-                                  showWelcomeMessage = false;
-                                });
-                              },
-                              child: const Text('Cerrar'),
-                            ),
-                          ],
-                        ),
+                            ],
+                          ),
+                        ]),
                       ),
                     ),
                   ),
