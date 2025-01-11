@@ -5,6 +5,7 @@ import 'dart:math';
 import 'package:amt/firebase_options.dart';
 import 'package:amt/generated/l10n.dart';
 import 'package:amt/models/models.dart';
+import 'package:amt/presentation/components/amt_text.dart';
 import 'package:amt/presentation/login/login_screen.dart';
 import 'package:amt/presentation/presentation.dart';
 import 'package:amt/utils/assets.dart';
@@ -124,7 +125,8 @@ class _MainPageState extends State<MainPage> {
     final snapshot = appState.getJsonSnapshot();
 
     appState.showLoading(message: S.of(context).savingWithBody);
-    await database.saveSnapshot(snapshot, '1');
+    final index = appState.campaignIndex;
+    await database.saveSnapshot(snapshot, index.toString());
     appState.hideLoading();
   }
 
@@ -132,13 +134,25 @@ class _MainPageState extends State<MainPage> {
     final appState = Provider.of<CharactersPageState>(context, listen: false);
     appState.showLoading(message: S.of(context).loadingWithBody);
 
-    final snapshot = await database.getSnapshot('1');
+    await database.obtainSnapshots();
+    final index = appState.campaignIndex;
+
+    final snapshot = await database.getSnapshot(index.toString());
 
     if (snapshot != null) {
       appState.loadJsonSnapshot(snapshot);
+    } else {
+      appState.loadJsonSnapshot(<String, dynamic>{'characters': <Map<String, dynamic>>[]});
     }
 
     appState.hideLoading();
+  }
+
+  Future<void> changeCampaign(int id) async {
+    final appState = Provider.of<CharactersPageState>(context, listen: false);
+    await saveState();
+    appState.changeCampaign(id);
+    await loadState();
   }
 
   @override
@@ -200,7 +214,7 @@ class _MainPageState extends State<MainPage> {
               child: ListView(
                 children: [
                   ListTile(
-                    title: user == null ? const Text('Iniciar sesión') : const Text('Cerrar sesión'),
+                    title: user == null ? const AmtText('Iniciar sesión') : const AmtText('Cerrar sesión'),
                     leading: const Icon(
                       Icons.login,
                       color: Colors.black,
@@ -218,7 +232,7 @@ class _MainPageState extends State<MainPage> {
                   ),
                   if (user != null)
                     ListTile(
-                      title: Text(S.of(context).saveState),
+                      title: AmtText(S.of(context).saveState),
                       leading: const Icon(
                         Icons.cloud_upload,
                         color: Colors.black,
@@ -230,7 +244,7 @@ class _MainPageState extends State<MainPage> {
                     ),
                   if (user != null)
                     ListTile(
-                      title: Text(S.of(context).loadState),
+                      title: AmtText(S.of(context).loadState),
                       leading: const Icon(
                         Icons.cloud_download,
                         color: Colors.black,
@@ -240,8 +254,9 @@ class _MainPageState extends State<MainPage> {
                         await loadState();
                       },
                     ),
+                  Divider(),
                   ListTile(
-                    title: Text(S.of(context).seeSourceCode),
+                    title: AmtText(S.of(context).seeSourceCode),
                     leading: SizedBox(
                       width: 24,
                       height: 24,
@@ -253,7 +268,7 @@ class _MainPageState extends State<MainPage> {
                     },
                   ),
                   ListTile(
-                    title: Text(S.of(context).convertExcelToJson),
+                    title: AmtText(S.of(context).convertExcelToJson),
                     leading: SizedBox(
                       width: 24,
                       height: 24,
@@ -265,7 +280,7 @@ class _MainPageState extends State<MainPage> {
                     },
                   ),
                   ListTile(
-                    title: Text(S.of(context).addNPC),
+                    title: AmtText(S.of(context).addNPC),
                     leading: const Icon(
                       Icons.group,
                       color: Colors.black,
@@ -283,6 +298,43 @@ class _MainPageState extends State<MainPage> {
                         onAddNpc: nonCharactersState.getCharacters,
                         onRemove: nonCharactersState.removeNPC,
                       );
+                    },
+                  ),
+                  Divider(),
+                  ListTile(
+                    title: AmtText(
+                      database.getCampaignName('1'),
+                      style: AmtTextStyles.subtitle,
+                    ),
+                    subtitle: AmtText(
+                      'Slot de guardado 1',
+                    ),
+                    leading: const Icon(
+                      Icons.groups,
+                      color: Colors.black,
+                    ),
+                    onTap: () async {
+                      Navigator.pop(context);
+
+                      changeCampaign(1);
+                    },
+                  ),
+                  ListTile(
+                    title: AmtText(
+                      database.getCampaignName('2'),
+                      style: AmtTextStyles.subtitle,
+                    ),
+                    subtitle: AmtText(
+                      'Slot de guardado 2',
+                    ),
+                    leading: const Icon(
+                      Icons.groups,
+                      color: Colors.black,
+                    ),
+                    onTap: () async {
+                      Navigator.pop(context);
+
+                      changeCampaign(2);
                     },
                   ),
                 ],
@@ -305,29 +357,62 @@ class _MainPageState extends State<MainPage> {
                       color: Colors.white,
                     ),
                     Center(
-                      child: Text(
-                        '${(appState.sheetsLoadingPercentage * 100).toInt()}',
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 10,
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
+                      child: AmtText('${(appState.sheetsLoadingPercentage * 100).toInt()}', style: AmtTextStyles.title),
                     ),
                   ],
                 ),
               ),
             if (appState.sheetsLoadingPercentage != -1) const SizedBox.square(dimension: 8),
-            if (appState.sheetsLoadingPercentage != -1) Text(S.of(context).loadingSheets),
-            if (appState.sheetsLoadingPercentage == -1)
-              Text(
-                S.of(context).appNameWithUser + (user?.displayName ?? user?.email ?? S.of(context).anonymousUser),
-                style: TextStyle(fontFamily: 'Metamorphous'),
+            if (appState.sheetsLoadingPercentage != -1) AmtText(S.of(context).loadingSheets),
+            if (appState.sheetsLoadingPercentage == -1 && user != null)
+              AmtText(
+                appState.campaignName ?? 'Nombre de la campaña',
+                style: AmtTextStyles.title,
               ),
+            if (appState.sheetsLoadingPercentage == -1 && user != null)
+              IconButton(
+                  onPressed: () {
+                    final name = appState.campaignName;
+
+                    showDialog(
+                      context: context,
+                      builder: (context) {
+                        final controller = TextEditingController(text: name);
+                        return AlertDialog(
+                          title: AmtText(S.of(context).changeCampaignNameTitle, style: AmtTextStyles.title),
+                          content: TextField(
+                            controller: controller,
+                          ),
+                          actions: [
+                            TextButton(
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                              child: AmtText(S.of(context).close),
+                            ),
+                            TextButton(
+                              onPressed: () {
+                                appState.changeCampaignName(controller.text);
+                                saveState();
+
+                                Navigator.pop(context);
+                              },
+                              child: AmtText(S.of(context).save),
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                  },
+                  icon: Icon(Icons.edit)),
+            if (user == null) AmtText(S.of(context).anonymousUser),
             const Spacer(),
             // Show time of last save is available:
             if (database.lastUpdatedTime != null)
-              Text(S.of(context).lastSave + '${database.lastUpdatedTime!.hour}:${database.lastUpdatedTime!.minute}'),
+              AmtText(
+                S.of(context).lastSave + '\n${database.lastUpdatedTime!.dateTimeReadable()}',
+                textAlign: TextAlign.center,
+              ),
           ],
         ),
         backgroundColor: theme.primaryColor,
@@ -366,52 +451,43 @@ class _MainPageState extends State<MainPage> {
                       child: Padding(
                         padding: const EdgeInsets.all(16),
                         child: Column(children: [
-                          Text(
-                            S.of(context).welcomeTitle,
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontFamily: 'Metamorphous',
-                              fontSize: 36,
-                              fontWeight: FontWeight.w700,
-                            ),
-                          ),
+                          AmtText(S.of(context).welcomeTitle, textAlign: TextAlign.center, style: AmtTextStyles.title),
+                          SizedBox(height: 16),
                           Expanded(
                             child: SingleChildScrollView(
                               child: Column(
                                 children: [
-                                  Text(
+                                  AmtText(
                                     S.of(context).welcomeSubtitle,
                                     textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w400,
-                                    ),
+                                    style: AmtTextStyles.emphasis,
                                   ),
                                   SizedBox(height: 16),
-                                  Text(
+                                  AmtText(
                                     S.of(context).welcomeBody,
                                     textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.w400,
-                                    ),
+                                    style: AmtTextStyles.body,
                                   ),
                                 ],
                               ),
                             ),
                           ),
+                          SizedBox(height: 16),
                           Row(
                             children: [
                               Expanded(
                                 child: TextButton(
-                                  isSemanticButton: true,
+                                  style: TextButton.styleFrom(
+                                    foregroundColor: theme.colorScheme.primary,
+                                    backgroundColor: theme.colorScheme.primaryContainer,
+                                  ),
                                   onPressed: () {
                                     setState(() {
                                       showWelcomeMessage = false;
                                     });
                                     LoginScreen.showLoginBottomSheet(context);
                                   },
-                                  child: Text(S.of(context).signIn),
+                                  child: AmtText(S.of(context).signIn),
                                 ),
                               ),
                               const Spacer(),
@@ -422,7 +498,7 @@ class _MainPageState extends State<MainPage> {
                                       showWelcomeMessage = false;
                                     });
                                   },
-                                  child: Text(S.of(context).close),
+                                  child: AmtText(S.of(context).close),
                                 ),
                               ),
                             ],
@@ -502,21 +578,15 @@ class _MainPageState extends State<MainPage> {
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: [
                               const CircularProgressIndicator(),
-                              Text(
+                              AmtText(
                                 message?.split('#').first ?? '',
                                 textAlign: TextAlign.center,
-                                style: const TextStyle(
-                                  fontSize: 24,
-                                  fontWeight: FontWeight.w700,
-                                ),
+                                style: AmtTextStyles.title,
                               ),
-                              Text(
+                              AmtText(
                                 message?.split('#').last ?? '',
                                 textAlign: TextAlign.center,
-                                style: const TextStyle(
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w400,
-                                ),
+                                style: AmtTextStyles.subtitle,
                               ),
                             ],
                           ),
@@ -554,5 +624,11 @@ class CombatSection extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+extension on DateTime {
+  String dateTimeReadable() {
+    return '${day.toString().padLeft(2, '0')}/${month.toString().padLeft(2, '0')}/${year.toString().padLeft(4, '0')} ${hour.toString().padLeft(2, '0')}:${minute.toString().padLeft(2, '0')}';
   }
 }

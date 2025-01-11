@@ -28,6 +28,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Usuario Anonimo"),
         "appNameWithUser":
             MessageLookupByLibrary.simpleMessage("Anima Master Toolkit v3 - "),
+        "changeCampaignNameTitle": MessageLookupByLibrary.simpleMessage(
+            "Cambia el nombre a la campaña actual"),
         "close": MessageLookupByLibrary.simpleMessage("Cerrar"),
         "combat": MessageLookupByLibrary.simpleMessage("Combate"),
         "convertExcelToJson":
@@ -53,6 +55,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Remove 1 TA to all"),
         "replaceForAnother":
             MessageLookupByLibrary.simpleMessage("Replace for another:"),
+        "save": MessageLookupByLibrary.simpleMessage("Guardar"),
         "saveState": MessageLookupByLibrary.simpleMessage("Guardar estado"),
         "savingWithBody": MessageLookupByLibrary.simpleMessage(
             "Guardando...#Sincronizando partida en la nube"),

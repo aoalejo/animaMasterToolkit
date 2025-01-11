@@ -95,7 +95,10 @@ class CharactersTable extends StatelessWidget {
               _header(2, 'Nombre'),
               _header(1, 'HP'),
               _header(2, 'Turno'),
-              _header(1, 'C'),
+              Tooltip(
+                child: _header(1, 'C'),
+                message: 'Aqui se visualiza el primer consumible que tenga el personaje sin ser la vida, puede ser Zeon, Ki o Fatiga por ejemplo',
+              ),
               _header(5, 'Acciones'),
             ],
           ),

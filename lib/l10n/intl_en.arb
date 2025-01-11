@@ -32,5 +32,7 @@
   "savingWithBody": "Guardando...#Sincronizando partida en la nube",
   "loadingWithBody": "Cargando...#Sincronizando partida en la nube",
   "unsavedChanges": "Tienes cambios sin guardar",
-  "title": "Anima Master Toolkit v3"
+  "title": "Anima Master Toolkit v3",
+  "save": "Guardar",
+  "changeCampaignNameTitle": "Cambia el nombre a la campaña actual"
 }

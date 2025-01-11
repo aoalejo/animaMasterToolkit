@@ -56,6 +56,8 @@ class CharactersPageState extends ChangeNotifier {
   int pageSelected = 0;
   bool isLoading = false;
   String? message;
+  String? campaignName;
+  int? campaignIndex = 1;
 
   double sheetsLoadingPercentage = -1;
 
@@ -76,6 +78,16 @@ class CharactersPageState extends ChangeNotifier {
     notifyListeners();
   }
 
+  void changeCampaignName(String name) {
+    campaignName = name;
+    notifyListeners();
+  }
+
+  void changeCampaign(int index) {
+    campaignIndex = index;
+    notifyListeners();
+  }
+
   void updateSheetLoading(double value) {
     sheetsLoadingPercentage = value;
     notifyListeners();
@@ -86,6 +98,7 @@ class CharactersPageState extends ChangeNotifier {
 
     return {
       'characters': charactersJson,
+      'name': campaignName,
     };
   }
 
@@ -93,6 +106,7 @@ class CharactersPageState extends ChangeNotifier {
     final charactersJson = (json['characters'] as List).map((e) => Character.fromJson(e as Map<String, dynamic>)).whereType<Character>().toList();
 
     characters = charactersJson;
+    this.campaignName = json['name'] as String?;
 
     for (final element in characters) {
       _box.add(element);

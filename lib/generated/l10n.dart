@@ -389,6 +389,26 @@ class S {
       args: [],
     );
   }
+
+  /// `Guardar`
+  String get save {
+    return Intl.message(
+      'Guardar',
+      name: 'save',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Cambia el nombre a la campaña actual`
+  String get changeCampaignNameTitle {
+    return Intl.message(
+      'Cambia el nombre a la campaña actual',
+      name: 'changeCampaignNameTitle',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {
