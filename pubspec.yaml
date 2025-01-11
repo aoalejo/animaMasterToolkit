@@ -73,5 +73,14 @@ flutter:
   uses-material-design: true
   assets:
     - assets/
+  fonts:
+    - family: NotoSans
+      fonts:
+        - asset: assets/fonts/NotoSans-Regular.ttf
+        - asset: assets/fonts/NotoSans-Bold.ttf
+    - family: Metamorphous
+      fonts:
+        - asset: assets/fonts/Metamorphous-Regular.ttf
+
 flutter_intl:
   enabled: true

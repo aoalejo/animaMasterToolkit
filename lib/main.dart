@@ -49,6 +49,7 @@ void main() async {
   Logger().d('registered adapters');
 
   WidgetsFlutterBinding.ensureInitialized();
+
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
@@ -85,9 +86,10 @@ class MyAppState extends State {
           FirebaseUILocalizations.withDefaultOverrides(const EsLocalizations()),
           S.delegate,
         ],
-        title: 'Anima Master Toolkit v3 - Usuario Anonimo',
+        title: 'Anima Master Toolkit v3',
         theme: ThemeData(
           useMaterial3: true,
+          fontFamily: 'NotoSans',
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepOrangeAccent),
         ),
         home: const MainPage(),
@@ -121,14 +123,14 @@ class _MainPageState extends State<MainPage> {
     final appState = Provider.of<CharactersPageState>(context, listen: false);
     final snapshot = appState.getJsonSnapshot();
 
-    appState.showLoading(message: 'Guardando...#Sincronizando partida en la nube');
+    appState.showLoading(message: S.of(context).savingWithBody);
     await database.saveSnapshot(snapshot, '1');
     appState.hideLoading();
   }
 
   Future<void> loadState() async {
     final appState = Provider.of<CharactersPageState>(context, listen: false);
-    appState.showLoading(message: 'Cargando...#Sincronizando partida en la nube');
+    appState.showLoading(message: S.of(context).loadingWithBody);
 
     final snapshot = await database.getSnapshot('1');
 
@@ -147,7 +149,7 @@ class _MainPageState extends State<MainPage> {
       web.window.onBeforeUnload.listen((e) async {
         final appState = Provider.of<CharactersPageState>(context, listen: false);
         if (user != null && !database.snapshotIsUploaded(appState.getJsonSnapshot())) {
-          (e as web.BeforeUnloadEvent).returnValue = 'Tienes cambios sin guardar';
+          (e as web.BeforeUnloadEvent).returnValue = S.of(context).unsavedChanges;
         }
       });
     }
@@ -216,7 +218,7 @@ class _MainPageState extends State<MainPage> {
                   ),
                   if (user != null)
                     ListTile(
-                      title: const Text('Guardar estado'),
+                      title: Text(S.of(context).saveState),
                       leading: const Icon(
                         Icons.cloud_upload,
                         color: Colors.black,
@@ -228,7 +230,7 @@ class _MainPageState extends State<MainPage> {
                     ),
                   if (user != null)
                     ListTile(
-                      title: const Text('Cargar estado'),
+                      title: Text(S.of(context).loadState),
                       leading: const Icon(
                         Icons.cloud_download,
                         color: Colors.black,
@@ -239,7 +241,7 @@ class _MainPageState extends State<MainPage> {
                       },
                     ),
                   ListTile(
-                    title: const Text('Ver el código fuente'),
+                    title: Text(S.of(context).seeSourceCode),
                     leading: SizedBox(
                       width: 24,
                       height: 24,
@@ -251,7 +253,7 @@ class _MainPageState extends State<MainPage> {
                     },
                   ),
                   ListTile(
-                    title: const Text('Conversor Excel a JSON'),
+                    title: Text(S.of(context).convertExcelToJson),
                     leading: SizedBox(
                       width: 24,
                       height: 24,
@@ -263,7 +265,7 @@ class _MainPageState extends State<MainPage> {
                     },
                   ),
                   ListTile(
-                    title: const Text('Añadir NPC'),
+                    title: Text(S.of(context).addNPC),
                     leading: const Icon(
                       Icons.group,
                       color: Colors.black,
@@ -316,11 +318,16 @@ class _MainPageState extends State<MainPage> {
                 ),
               ),
             if (appState.sheetsLoadingPercentage != -1) const SizedBox.square(dimension: 8),
-            if (appState.sheetsLoadingPercentage != -1) const Text('Cargando planillas...'),
-            if (appState.sheetsLoadingPercentage == -1) Text('Anima Master Toolkit v3 - ${user?.displayName ?? user?.email ?? 'Usuario Anonimo'}'),
+            if (appState.sheetsLoadingPercentage != -1) Text(S.of(context).loadingSheets),
+            if (appState.sheetsLoadingPercentage == -1)
+              Text(
+                S.of(context).appNameWithUser + (user?.displayName ?? user?.email ?? S.of(context).anonymousUser),
+                style: TextStyle(fontFamily: 'Metamorphous'),
+              ),
             const Spacer(),
             // Show time of last save is available:
-            if (database.lastUpdatedTime != null) Text('Ultimo guardado: ${database.lastUpdatedTime!.hour}:${database.lastUpdatedTime!.minute}'),
+            if (database.lastUpdatedTime != null)
+              Text(S.of(context).lastSave + '${database.lastUpdatedTime!.hour}:${database.lastUpdatedTime!.minute}'),
           ],
         ),
         backgroundColor: theme.primaryColor,
@@ -334,10 +341,10 @@ class _MainPageState extends State<MainPage> {
               Expanded(child: _content(theme, screenSize, small, appState.pageSelected, appState.isLoading, appState.message)),
               if (small)
                 BottomNavigationBar(
-                  items: const [
-                    BottomNavigationBarItem(icon: Icon(Icons.list), label: 'Listado'),
-                    BottomNavigationBarItem(icon: Icon(Icons.receipt), label: 'Detalle'),
-                    BottomNavigationBarItem(icon: Icon(Icons.bolt), label: 'Combate'),
+                  items: [
+                    BottomNavigationBarItem(icon: Icon(Icons.list), label: S.of(context).list),
+                    BottomNavigationBarItem(icon: Icon(Icons.receipt), label: S.of(context).detail),
+                    BottomNavigationBarItem(icon: Icon(Icons.bolt), label: S.of(context).combat),
                   ],
                   onTap: appState.updatePageSelected,
                   currentIndex: appState.pageSelected,
@@ -359,11 +366,12 @@ class _MainPageState extends State<MainPage> {
                       child: Padding(
                         padding: const EdgeInsets.all(16),
                         child: Column(children: [
-                          const Text(
-                            '¡Bienvenido a Anima Master Toolkit!',
+                          Text(
+                            S.of(context).welcomeTitle,
                             textAlign: TextAlign.center,
                             style: TextStyle(
-                              fontSize: 24,
+                              fontFamily: 'Metamorphous',
+                              fontSize: 36,
                               fontWeight: FontWeight.w700,
                             ),
                           ),
@@ -371,34 +379,17 @@ class _MainPageState extends State<MainPage> {
                             child: SingleChildScrollView(
                               child: Column(
                                 children: [
-                                  const Text(
-                                    '''
-Para acceder a la funcionalidad de guardado de partidas, es necesario iniciar sesión en el sistema. Esto garantiza que tus datos estén seguros y disponibles en cualquier dispositivo que utilices.
-                                
-Si no deseas utilizar esta función, puedes acceder al sistema de forma anónima. Sin embargo, debes tener en cuenta que no podrás guardar tus avances de manera persistente, ya que esta opción está disponible exclusivamente para los usuarios registrados.''',
+                                  Text(
+                                    S.of(context).welcomeSubtitle,
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
                                       fontSize: 16,
                                       fontWeight: FontWeight.w400,
                                     ),
                                   ),
-                                  const Text(
-                                    '''
-*El sistema anteriormente soportaba el guardado de partidas de forma local. Sin embargo, se identificaron problemas de persistencia en esta modalidad, lo que generaba riesgos para la integridad de los datos almacenados.
-
-Para abordar esta situación, se implementó el guardado en la nube como solución principal. Este enfoque no solo resuelve los problemas previos, sino que también permite que los usuarios accedan a sus datos desde múltiples dispositivos de forma segura y confiable.
-
-Es importante señalar que el sistema de guardado local anterior no ha sido eliminado. Si esta funcionalidad te estaba funcionando correctamente, debería seguir haciéndolo. Sin embargo, se recomienda encarecidamente utilizar el guardado en la nube para garantizar la seguridad de tus partidas y minimizar riesgos de pérdida de datos.
-
-¿Qué debo hacer si el guardado local aún funciona bien para mí?
-Puedes seguir usándolo. Sin embargo, es recomendable hacer una copia de seguridad en la nube para evitar problemas futuros.
-
-¿Qué ocurre si no tengo conexión a internet?
-El sistema debería permitirte usarlo de manera local y sincronizar tus datos en la nube cuando recuperes la conexión.
-
-¿Hay algún costo asociado al guardado en la nube?
-No. El guardado en la nube es una funcionalidad gratuita para todos los usuarios registrados en el sistema. No se requiere ningún pago adicional para acceder a esta característica.
-''',
+                                  SizedBox(height: 16),
+                                  Text(
+                                    S.of(context).welcomeBody,
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
                                       fontSize: 12,
@@ -420,7 +411,7 @@ No. El guardado en la nube es una funcionalidad gratuita para todos los usuarios
                                     });
                                     LoginScreen.showLoginBottomSheet(context);
                                   },
-                                  child: const Text('Iniciar sesión'),
+                                  child: Text(S.of(context).signIn),
                                 ),
                               ),
                               const Spacer(),
@@ -431,7 +422,7 @@ No. El guardado en la nube es una funcionalidad gratuita para todos los usuarios
                                       showWelcomeMessage = false;
                                     });
                                   },
-                                  child: const Text('Cerrar'),
+                                  child: Text(S.of(context).close),
                                 ),
                               ),
                             ],

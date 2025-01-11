@@ -179,6 +179,216 @@ class S {
       args: [],
     );
   }
+
+  /// `Guardar estado`
+  String get saveState {
+    return Intl.message(
+      'Guardar estado',
+      name: 'saveState',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Cargar estado`
+  String get loadState {
+    return Intl.message(
+      'Cargar estado',
+      name: 'loadState',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Ver el código fuente`
+  String get seeSourceCode {
+    return Intl.message(
+      'Ver el código fuente',
+      name: 'seeSourceCode',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Conversor Excel a JSON`
+  String get convertExcelToJson {
+    return Intl.message(
+      'Conversor Excel a JSON',
+      name: 'convertExcelToJson',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Añadir NPC`
+  String get addNPC {
+    return Intl.message(
+      'Añadir NPC',
+      name: 'addNPC',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Cargando planillas...`
+  String get loadingSheets {
+    return Intl.message(
+      'Cargando planillas...',
+      name: 'loadingSheets',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Anima Master Toolkit v3 - `
+  String get appNameWithUser {
+    return Intl.message(
+      'Anima Master Toolkit v3 - ',
+      name: 'appNameWithUser',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Usuario Anonimo`
+  String get anonymousUser {
+    return Intl.message(
+      'Usuario Anonimo',
+      name: 'anonymousUser',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Ultimo guardado: `
+  String get lastSave {
+    return Intl.message(
+      'Ultimo guardado: ',
+      name: 'lastSave',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Listado`
+  String get list {
+    return Intl.message(
+      'Listado',
+      name: 'list',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Detalle`
+  String get detail {
+    return Intl.message(
+      'Detalle',
+      name: 'detail',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Combate`
+  String get combat {
+    return Intl.message(
+      'Combate',
+      name: 'combat',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `¡Bienvenido a Anima Master Toolkit!`
+  String get welcomeTitle {
+    return Intl.message(
+      '¡Bienvenido a Anima Master Toolkit!',
+      name: 'welcomeTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `\nPara acceder a la funcionalidad de guardado de partidas, es necesario iniciar sesión en el sistema. Esto garantiza que tus datos estén seguros y disponibles en cualquier dispositivo que utilices.\n                                \nSi no deseas utilizar esta función, puedes acceder al sistema de forma anónima. Sin embargo, debes tener en cuenta que no podrás guardar tus avances de manera persistente, ya que esta opción está disponible exclusivamente para los usuarios registrados.`
+  String get welcomeSubtitle {
+    return Intl.message(
+      '\nPara acceder a la funcionalidad de guardado de partidas, es necesario iniciar sesión en el sistema. Esto garantiza que tus datos estén seguros y disponibles en cualquier dispositivo que utilices.\n                                \nSi no deseas utilizar esta función, puedes acceder al sistema de forma anónima. Sin embargo, debes tener en cuenta que no podrás guardar tus avances de manera persistente, ya que esta opción está disponible exclusivamente para los usuarios registrados.',
+      name: 'welcomeSubtitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `\n*El sistema anteriormente soportaba el guardado de partidas de forma local. Sin embargo, se identificaron problemas de persistencia en esta modalidad, lo que generaba riesgos para la integridad de los datos almacenados.\n\nPara abordar esta situación, se implementó el guardado en la nube como solución principal. Este enfoque no solo resuelve los problemas previos, sino que también permite que los usuarios accedan a sus datos desde múltiples dispositivos de forma segura y confiable.\n\nEs importante señalar que el sistema de guardado local anterior no ha sido eliminado. Si esta funcionalidad te estaba funcionando correctamente, debería seguir haciéndolo. Sin embargo, se recomienda encarecidamente utilizar el guardado en la nube para garantizar la seguridad de tus partidas y minimizar riesgos de pérdida de datos.\n\n¿Qué debo hacer si el guardado local aún funciona bien para mí?\nPuedes seguir usándolo. Sin embargo, es recomendable hacer una copia de seguridad en la nube para evitar problemas futuros, ya que cambiaré en un futuro el sistema de guardado local actual para actualizarlo a uno nuevo\n\n¿Qué ocurre si no tengo conexión a internet?\nEl sistema debería permitirte usarlo de manera local y sincronizar tus datos en la nube cuando recuperes la conexión.\n\n¿Hay algún costo asociado al guardado en la nube?\nNo. El guardado en la nube es una funcionalidad gratuita para todos los usuarios registrados en el sistema. No se requiere ningún pago adicional para acceder a esta característica.\n`
+  String get welcomeBody {
+    return Intl.message(
+      '\n*El sistema anteriormente soportaba el guardado de partidas de forma local. Sin embargo, se identificaron problemas de persistencia en esta modalidad, lo que generaba riesgos para la integridad de los datos almacenados.\n\nPara abordar esta situación, se implementó el guardado en la nube como solución principal. Este enfoque no solo resuelve los problemas previos, sino que también permite que los usuarios accedan a sus datos desde múltiples dispositivos de forma segura y confiable.\n\nEs importante señalar que el sistema de guardado local anterior no ha sido eliminado. Si esta funcionalidad te estaba funcionando correctamente, debería seguir haciéndolo. Sin embargo, se recomienda encarecidamente utilizar el guardado en la nube para garantizar la seguridad de tus partidas y minimizar riesgos de pérdida de datos.\n\n¿Qué debo hacer si el guardado local aún funciona bien para mí?\nPuedes seguir usándolo. Sin embargo, es recomendable hacer una copia de seguridad en la nube para evitar problemas futuros, ya que cambiaré en un futuro el sistema de guardado local actual para actualizarlo a uno nuevo\n\n¿Qué ocurre si no tengo conexión a internet?\nEl sistema debería permitirte usarlo de manera local y sincronizar tus datos en la nube cuando recuperes la conexión.\n\n¿Hay algún costo asociado al guardado en la nube?\nNo. El guardado en la nube es una funcionalidad gratuita para todos los usuarios registrados en el sistema. No se requiere ningún pago adicional para acceder a esta característica.\n',
+      name: 'welcomeBody',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Iniciar sesión`
+  String get signIn {
+    return Intl.message(
+      'Iniciar sesión',
+      name: 'signIn',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Cerrar`
+  String get close {
+    return Intl.message(
+      'Cerrar',
+      name: 'close',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Guardando...#Sincronizando partida en la nube`
+  String get savingWithBody {
+    return Intl.message(
+      'Guardando...#Sincronizando partida en la nube',
+      name: 'savingWithBody',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Cargando...#Sincronizando partida en la nube`
+  String get loadingWithBody {
+    return Intl.message(
+      'Cargando...#Sincronizando partida en la nube',
+      name: 'loadingWithBody',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Tienes cambios sin guardar`
+  String get unsavedChanges {
+    return Intl.message(
+      'Tienes cambios sin guardar',
+      name: 'unsavedChanges',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Anima Master Toolkit v3`
+  String get title {
+    return Intl.message(
+      'Anima Master Toolkit v3',
+      name: 'title',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

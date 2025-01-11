@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -17,12 +18,12 @@ class CloudFirestoreSync implements CloudSync {
   final db = FirebaseFirestore.instance;
   final auth = FirebaseAuth.instance;
   final collectionName = 'campaigns';
-  late SharedPreferencesWithCache sharedPreferences;
+  late SharedPreferences sharedPreferences;
 
   CloudFirestoreSync() {
-    SharedPreferencesWithCache.create(cacheOptions: const SharedPreferencesWithCacheOptions()).then(
-      (value) => sharedPreferences = value,
-    );
+    SharedPreferences.getInstance().then((value) {
+      sharedPreferences = value;
+    });
   }
 
   Map<String, dynamic> lastSnapshotUploaded = {};
@@ -36,19 +37,19 @@ class CloudFirestoreSync implements CloudSync {
       return null;
     }
 
-    DocumentSnapshot<Map<String, dynamic>>? snapshot;
+    DocumentSnapshot<Map<String, dynamic>>? snapshot = null;
 
     try {
-      snapshot = await db.collection('campaigns').doc("${user.uid}_$id").get(
+      snapshot = await db.collection(collectionName).doc("${user.uid}_$id").get(
             GetOptions(source: Source.cache),
           );
     } catch (e) {
       try {
-        snapshot = await db.collection('campaigns').doc("${user.uid}_$id").get(
-              GetOptions(source: Source.serverAndCache),
+        snapshot = await db.collection(collectionName).doc("${user.uid}_$id").get(
+              GetOptions(source: Source.server),
             );
       } catch (e) {
-        snapshot = null;
+        print(e);
       }
     }
 
@@ -63,7 +64,7 @@ class CloudFirestoreSync implements CloudSync {
       return;
     }
 
-    await db.collection('campaigns').doc("${user.uid}_$id").set(snapshot);
+    await db.collection(collectionName).doc("${user.uid}_$id").set(snapshot);
 
     sharedPreferences.setInt('lastUpdatedTime', DateTime.now().millisecondsSinceEpoch);
     lastSnapshotUploaded = snapshot;
