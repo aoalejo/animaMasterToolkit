@@ -95,9 +95,19 @@ class CharactersTable extends StatelessWidget {
               _header(2, 'Nombre'),
               _header(1, 'HP'),
               _header(2, 'Turno'),
-              Tooltip(
-                child: _header(1, 'C'),
-                message: 'Aqui se visualiza el primer consumible que tenga el personaje sin ser la vida, puede ser Zeon, Ki o Fatiga por ejemplo',
+              Expanded(
+                flex: 1,
+                child: Tooltip(
+                  message: 'Aqui se visualiza el primer consumible que tenga el personaje sin ser la vida, puede ser Zeon, Ki o Fatiga por ejemplo',
+                  child: Card(
+                    child: Text(
+                      '?',
+                      textAlign: TextAlign.center,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                ),
               ),
               _header(5, 'Acciones'),
             ],
@@ -446,7 +456,7 @@ class CharactersTable extends StatelessWidget {
     Character character,
     DefenseType type,
   ) {
-    final physicalResistance = character.resistances.physicalResistance;
+    final physicalResistance = character.resistances?.physicalResistance;
     final surprise = SurpriseType.calculate(
       attacker: appState.combatState.attack.character,
       defendant: character,

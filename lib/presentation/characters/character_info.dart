@@ -10,7 +10,7 @@ class ShowCharacterInfo {
     final theme = Theme.of(context);
     final skills = character.skills.list();
     final attributes = character.attributes.toKeyValue();
-    final resistances = character.resistances.toKeyValue();
+    final resistances = character.resistances?.toKeyValue();
 
     // Optional lists:
 
@@ -40,7 +40,7 @@ class ShowCharacterInfo {
     }
 
     void onResistanceEdit(KeyValue element) {
-      character.resistances.editResistance(element);
+      character.resistances?.editResistance(element);
       onEdit(character);
     }
 

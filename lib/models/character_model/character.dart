@@ -161,7 +161,7 @@ class Character extends HiveObject {
   @HiveField(8)
   late PsychicData? psychic;
   @HiveField(9)
-  late CharacterResistances resistances;
+  late CharacterResistances? resistances;
 
   Map<String, dynamic> toJson() {
     return {
@@ -174,7 +174,7 @@ class Character extends HiveObject {
       'Ki': ki?.toJson(),
       'Misticos': mystical?.toJson(),
       'Psiquicos': psychic?.toJson(),
-      'Resistencias': resistances.toJson(),
+      'Resistencias': resistances?.toJson(),
     };
   }
 
@@ -314,7 +314,7 @@ class Character extends HiveObject {
       ki: ki?.copy(),
       mystical: mystical?.copy(),
       psychic: psychic?.copy(),
-      resistances: resistances.copy(),
+      resistances: resistances?.copy(),
     );
   }
 

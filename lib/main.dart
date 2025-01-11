@@ -113,13 +113,6 @@ class _MainPageState extends State<MainPage> {
   final excelToJsonRelease = Uri.parse('https://github.com/aoalejo/animaExcelToJson/releases');
   bool showWelcomeMessage = false;
 
-  @override
-  void dispose() {
-    // Optionally clean up if necessary
-    web.window.onBeforeUnload.drain<void>();
-    super.dispose();
-  }
-
   Future<void> saveState() async {
     final appState = Provider.of<CharactersPageState>(context, listen: false);
     final snapshot = appState.getJsonSnapshot();
@@ -301,42 +294,44 @@ class _MainPageState extends State<MainPage> {
                     },
                   ),
                   Divider(),
-                  ListTile(
-                    title: AmtText(
-                      database.getCampaignName('1'),
-                      style: AmtTextStyles.subtitle,
-                    ),
-                    subtitle: AmtText(
-                      'Slot de guardado 1',
-                    ),
-                    leading: const Icon(
-                      Icons.groups,
-                      color: Colors.black,
-                    ),
-                    onTap: () async {
-                      Navigator.pop(context);
+                  if (user != null)
+                    ListTile(
+                      title: AmtText(
+                        database.getCampaignName('1'),
+                        style: AmtTextStyles.subtitle,
+                      ),
+                      subtitle: AmtText(
+                        'Slot de guardado 1',
+                      ),
+                      leading: const Icon(
+                        Icons.groups,
+                        color: Colors.black,
+                      ),
+                      onTap: () async {
+                        Navigator.pop(context);
 
-                      changeCampaign(1);
-                    },
-                  ),
-                  ListTile(
-                    title: AmtText(
-                      database.getCampaignName('2'),
-                      style: AmtTextStyles.subtitle,
+                        changeCampaign(1);
+                      },
                     ),
-                    subtitle: AmtText(
-                      'Slot de guardado 2',
-                    ),
-                    leading: const Icon(
-                      Icons.groups,
-                      color: Colors.black,
-                    ),
-                    onTap: () async {
-                      Navigator.pop(context);
+                  if (user != null)
+                    ListTile(
+                      title: AmtText(
+                        database.getCampaignName('2'),
+                        style: AmtTextStyles.subtitle,
+                      ),
+                      subtitle: AmtText(
+                        'Slot de guardado 2',
+                      ),
+                      leading: const Icon(
+                        Icons.groups,
+                        color: Colors.black,
+                      ),
+                      onTap: () async {
+                        Navigator.pop(context);
 
-                      changeCampaign(2);
-                    },
-                  ),
+                        changeCampaign(2);
+                      },
+                    ),
                 ],
               ),
             ),
@@ -405,7 +400,11 @@ class _MainPageState extends State<MainPage> {
                     );
                   },
                   icon: Icon(Icons.edit)),
-            if (user == null) AmtText(S.of(context).anonymousUser),
+            if (user == null)
+              AmtText(
+                S.of(context).title,
+                style: AmtTextStyles.title,
+              ),
             const Spacer(),
             // Show time of last save is available:
             if (database.lastUpdatedTime != null)
@@ -522,8 +521,7 @@ class _MainPageState extends State<MainPage> {
         alignment: Alignment.topLeft,
         child: Stack(
           children: [
-            Flex(
-              direction: Axis.horizontal,
+            Row(
               children: [
                 if (pageSelected == 0 || !small)
                   SizedBox(
