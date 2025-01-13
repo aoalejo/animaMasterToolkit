@@ -34,5 +34,13 @@
   "unsavedChanges": "Tienes cambios sin guardar",
   "title": "Anima Master Toolkit v3",
   "save": "Guardar",
-  "changeCampaignNameTitle": "Cambia el nombre a la campaña actual"
+  "changeCampaignNameTitle": "Cambia el nombre a la campaña actual",
+  "warning": "¡Advertencia!",
+  "replacesCurrentCampaign": "Esto reemplazará la campaña actual",
+  "import": "Importar",
+  "export": "Exportar",
+  "saveSlotNumber": "Slot de guardado ",
+  "logIn": "Iniciar sesión",
+  "logOut": "Cerrar sesión",
+  "nameOfTheCampaign": "Nombre de la campaña"
 }

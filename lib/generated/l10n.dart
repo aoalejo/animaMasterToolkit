@@ -409,6 +409,86 @@ class S {
       args: [],
     );
   }
+
+  /// `¡Advertencia!`
+  String get warning {
+    return Intl.message(
+      '¡Advertencia!',
+      name: 'warning',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Esto reemplazará la campaña actual`
+  String get replacesCurrentCampaign {
+    return Intl.message(
+      'Esto reemplazará la campaña actual',
+      name: 'replacesCurrentCampaign',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Importar`
+  String get import {
+    return Intl.message(
+      'Importar',
+      name: 'import',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Exportar`
+  String get export {
+    return Intl.message(
+      'Exportar',
+      name: 'export',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Slot de guardado `
+  String get saveSlotNumber {
+    return Intl.message(
+      'Slot de guardado ',
+      name: 'saveSlotNumber',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Iniciar sesión`
+  String get logIn {
+    return Intl.message(
+      'Iniciar sesión',
+      name: 'logIn',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Cerrar sesión`
+  String get logOut {
+    return Intl.message(
+      'Cerrar sesión',
+      name: 'logOut',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Nombre de la campaña`
+  String get nameOfTheCampaign {
+    return Intl.message(
+      'Nombre de la campaña',
+      name: 'nameOfTheCampaign',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

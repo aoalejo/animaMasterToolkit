@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:html' as web;
 import 'dart:math';
 
@@ -10,6 +11,8 @@ import 'package:amt/presentation/login/login_screen.dart';
 import 'package:amt/presentation/presentation.dart';
 import 'package:amt/utils/assets.dart';
 import 'package:amt/utils/cloud_firestore_sync.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:file_saver/file_saver.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_ui_localizations/firebase_ui_localizations.dart';
@@ -207,7 +210,7 @@ class _MainPageState extends State<MainPage> {
               child: ListView(
                 children: [
                   ListTile(
-                    title: user == null ? const AmtText('Iniciar sesión') : const AmtText('Cerrar sesión'),
+                    title: user == null ? AmtText(S.of(context).logIn) : AmtText(S.of(context).logOut),
                     leading: const Icon(
                       Icons.login,
                       color: Colors.black,
@@ -293,7 +296,7 @@ class _MainPageState extends State<MainPage> {
                       );
                     },
                   ),
-                  Divider(),
+                  if (user != null) Divider(),
                   if (user != null)
                     ListTile(
                       title: AmtText(
@@ -301,7 +304,7 @@ class _MainPageState extends State<MainPage> {
                         style: AmtTextStyles.subtitle,
                       ),
                       subtitle: AmtText(
-                        'Slot de guardado 1',
+                        S.of(context).saveSlotNumber + '1',
                       ),
                       leading: const Icon(
                         Icons.groups,
@@ -320,7 +323,7 @@ class _MainPageState extends State<MainPage> {
                         style: AmtTextStyles.subtitle,
                       ),
                       subtitle: AmtText(
-                        'Slot de guardado 2',
+                        S.of(context).saveSlotNumber + '2',
                       ),
                       leading: const Icon(
                         Icons.groups,
@@ -332,6 +335,87 @@ class _MainPageState extends State<MainPage> {
                         changeCampaign(2);
                       },
                     ),
+                  Divider(),
+                  ListTile(
+                    title: AmtText(
+                      S.of(context).import,
+                    ),
+                    leading: const Icon(
+                      Icons.upload,
+                      color: Colors.black,
+                    ),
+                    onTap: () async {
+                      Navigator.pop(context);
+
+                      await showDialog<void>(
+                          context: context,
+                          builder: (context) {
+                            return AlertDialog(
+                              title: AmtText(
+                                S.of(context).warning,
+                                style: AmtTextStyles.title,
+                              ),
+                              content: AmtText(
+                                S.of(context).replacesCurrentCampaign,
+                                style: AmtTextStyles.subtitle,
+                              ),
+                              actions: [
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  },
+                                  child: AmtText(S.of(context).close),
+                                ),
+                                TextButton(
+                                  onPressed: () {
+                                    FilePicker.platform.pickFiles(allowMultiple: false).then((value) {
+                                      if (value != null) {
+                                        final file = value.files.single;
+                                        final reader = web.FileReader();
+                                        final blob = web.Blob([file.bytes!]);
+                                        reader.readAsText(blob);
+                                        reader.onLoadEnd.listen((event) {
+                                          final json = reader.result as String;
+                                          appState.loadJsonSnapshot(jsonDecode(json) as Map<String, dynamic>);
+                                        });
+                                      }
+                                    });
+                                    Navigator.pop(context);
+                                  },
+                                  child: AmtText(S.of(context).import),
+                                  style: TextButton.styleFrom(
+                                    foregroundColor: theme.colorScheme.primary,
+                                    backgroundColor: theme.colorScheme.primaryContainer,
+                                  ),
+                                ),
+                              ],
+                            );
+                          });
+                    },
+                  ),
+                  ListTile(
+                    title: AmtText(
+                      S.of(context).export,
+                    ),
+                    leading: const Icon(
+                      Icons.download,
+                      color: Colors.black,
+                    ),
+                    onTap: () async {
+                      final name = appState.campaignName ?? 'anima_master_toolkit';
+                      final date = DateTime.now().dateTimeReadable().replaceAll('/', '-').replaceAll(':', ' ');
+
+                      var snapshot = JsonEncoder.withIndent('  ').convert(appState.getJsonSnapshot());
+
+                      await FileSaver.instance.saveFile(
+                        bytes: Uint8List.fromList(snapshot.toString().codeUnits),
+                        name: '$name $date.json',
+                        customMimeType: 'application/json',
+                      );
+
+                      Navigator.pop(context);
+                    },
+                  ),
                 ],
               ),
             ),
@@ -361,7 +445,7 @@ class _MainPageState extends State<MainPage> {
             if (appState.sheetsLoadingPercentage != -1) AmtText(S.of(context).loadingSheets),
             if (appState.sheetsLoadingPercentage == -1 && user != null)
               AmtText(
-                appState.campaignName ?? 'Nombre de la campaña',
+                appState.campaignName ?? S.of(context).nameOfTheCampaign,
                 style: AmtTextStyles.title,
               ),
             if (appState.sheetsLoadingPercentage == -1 && user != null)

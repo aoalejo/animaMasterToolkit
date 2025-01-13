@@ -43,6 +43,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "damageFRI": MessageLookupByLibrary.simpleMessage("Frio"),
         "damagePEN": MessageLookupByLibrary.simpleMessage("Penetrante"),
         "detail": MessageLookupByLibrary.simpleMessage("Detalle"),
+        "export": MessageLookupByLibrary.simpleMessage("Exportar"),
+        "import": MessageLookupByLibrary.simpleMessage("Importar"),
         "lastSave": MessageLookupByLibrary.simpleMessage("Ultimo guardado: "),
         "list": MessageLookupByLibrary.simpleMessage("Listado"),
         "loadState": MessageLookupByLibrary.simpleMessage("Cargar estado"),
@@ -50,14 +52,22 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Cargando planillas..."),
         "loadingWithBody": MessageLookupByLibrary.simpleMessage(
             "Cargando...#Sincronizando partida en la nube"),
+        "logIn": MessageLookupByLibrary.simpleMessage("Iniciar sesión"),
+        "logOut": MessageLookupByLibrary.simpleMessage("Cerrar sesión"),
         "modifyArmor":
             MessageLookupByLibrary.simpleMessage("Modificar Armadura"),
         "name": MessageLookupByLibrary.simpleMessage("Nombre"),
+        "nameOfTheCampaign":
+            MessageLookupByLibrary.simpleMessage("Nombre de la campaña"),
         "removeTAtoAll":
             MessageLookupByLibrary.simpleMessage("Eliminar 1 TA a todo"),
         "replaceForAnother":
             MessageLookupByLibrary.simpleMessage("Reemplazar por otra:"),
+        "replacesCurrentCampaign": MessageLookupByLibrary.simpleMessage(
+            "Esto reemplazará la campaña actual"),
         "save": MessageLookupByLibrary.simpleMessage("Guardar"),
+        "saveSlotNumber":
+            MessageLookupByLibrary.simpleMessage("Slot de guardado "),
         "saveState": MessageLookupByLibrary.simpleMessage("Guardar estado"),
         "savingWithBody": MessageLookupByLibrary.simpleMessage(
             "Guardando...#Sincronizando partida en la nube"),
@@ -68,6 +78,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Anima Master Toolkit v3"),
         "unsavedChanges":
             MessageLookupByLibrary.simpleMessage("Tienes cambios sin guardar"),
+        "warning": MessageLookupByLibrary.simpleMessage("¡Advertencia!"),
         "welcomeBody": MessageLookupByLibrary.simpleMessage(
             "\n*El sistema anteriormente soportaba el guardado de partidas de forma local. Sin embargo, se identificaron problemas de persistencia en esta modalidad, lo que generaba riesgos para la integridad de los datos almacenados.\n\nPara abordar esta situación, se implementó el guardado en la nube como solución principal. Este enfoque no solo resuelve los problemas previos, sino que también permite que los usuarios accedan a sus datos desde múltiples dispositivos de forma segura y confiable.\n\nEs importante señalar que el sistema de guardado local anterior no ha sido eliminado. Si esta funcionalidad te estaba funcionando correctamente, debería seguir haciéndolo. Sin embargo, se recomienda encarecidamente utilizar el guardado en la nube para garantizar la seguridad de tus partidas y minimizar riesgos de pérdida de datos.\n\n¿Qué debo hacer si el guardado local aún funciona bien para mí?\nPuedes seguir usándolo. Sin embargo, es recomendable hacer una copia de seguridad en la nube para evitar problemas futuros, ya que cambiaré en un futuro el sistema de guardado local actual para actualizarlo a uno nuevo\n\n¿Qué ocurre si no tengo conexión a internet?\nEl sistema debería permitirte usarlo de manera local y sincronizar tus datos en la nube cuando recuperes la conexión.\n\n¿Hay algún costo asociado al guardado en la nube?\nNo. El guardado en la nube es una funcionalidad gratuita para todos los usuarios registrados en el sistema. No se requiere ningún pago adicional para acceder a esta característica.\n"),
         "welcomeSubtitle": MessageLookupByLibrary.simpleMessage(
